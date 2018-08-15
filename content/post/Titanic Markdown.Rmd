@@ -1,0 +1,226 @@
+---
+title: "Survive on the Titanic - Case Study"
+author: "Michael Fuchs"
+date: "5 August 2018"
+output:
+  html_document:
+    highlight: textmate
+    number_sections: yes
+    theme: readable
+    toc: yes
+---
+
+
+**Reading** **Time**: **~21** **minutes**
+
+<style>
+  body {background-color:lightblue}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Einf?hrung
+
+In der nachfolgenden Fallstudie geht es um die exemplarische Analyse nominaler Daten anhand des Untergangs der Titanic. Es soll der Hauptfrage nachgegangen werden, ob das Reisen in einer besseren Klasse die ?berlebenschancen auf der Titanic erh?ht hat.
+F?r diese Untersuchung wurde der Datensatz *titanic_train* von der Statsistik-Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/file/d/1Q-ISaCWBl9q2egJgzgkOmWndDeBa5EXT/view?usp=drivesdk> abrufbar.
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library("tidyverse")
+library("compute.es")
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+Titanic <- read_csv("Titanic.csv")
+```
+
+#?bersicht ?ber den vorliegenden Datensatz
+
+Ein erster Blick auf die Daten zeigt uns, welche Variablen mit wie vielen Observations vorliegen.
+```{r}
+glimpse(Titanic)
+```
+
+
+#Bestimmung der univariaten H?ufigkeiten
+
+Der zu Beginn gestellten Hauptfrage nach, sind f?r diese Fallstudie nur zwei von den zw?lf uns vorliegenden Variablen interessant: `Survived` und `Pclass`. Obwohl beide Variablen im Datensatz mit Zahlen hinterlegt sind, handelt es sich um kategorial verteilte Daten (nicht-metrisch). Diese sollen im ersten Schritt ausgez?hlt werden. F?r die nachfolgende Analyse interessiert uns, wie viele Passagiere es pro Klasse gab und wie viele aus der jeweiligen Klasse die Katastrophe ?berlebten.  
+
+```{r error=TRUE}
+Frequency_Class <- count(Titanic, Survived) 
+Frequency_Class
+```
+
+Jetzt ist klar, dass 549 Menschen den Untergang der Titanic nicht ?berlebt haben. Dies in einem Balkendiagramm dargestellt:
+
+```{r error=TRUE}
+ggplot(Titanic, aes(x = Survived)) +
+  geom_bar() +
+  ggtitle("Frequency Survived") + 
+  xlab("Survived, 0 = No / 1 = Yes") + 
+  ylab("Count")
+```
+
+Und wie sieht es mit der Verteilung auf die verschiedenen Klassen aus?
+
+```{r error=TRUE}
+Frequency_Class <- count(Titanic, Pclass) 
+Frequency_Class
+
+ggplot(Frequency_Class, aes(x = factor(Pclass), y = n)) +
+  geom_point(size = 3, colour = "red") +
+  ggtitle("Frequency Class") + 
+  xlab("Class") + 
+  ylab("Count")
+```
+
+Doch 1/4 der Passagiere reisten damals in der ersten Klasse. 
+
+
+#Bestimmung der bivariaten H?ufigkeiten
+
+Nachdem nun die H?ufigkeiten pro Wert von `Survived` und `Pclass` bekannt sind, wird nun der Frage nachgegangen, ob sich die relativen H?ufigkeiten der Stufen der Klasse innerhalb der Stufen der ?berlebenden unterscheidet. Es soll untersucht werden, ob und in wie weit die ?berlebenschancen in der 1. Klasse gr??er als in der 2. oder 3. Klasse sind.  
+
+```{r error=TRUE}
+(Frequency_Survived_Class <- count(Titanic, Survived, Pclass))
+
+ggplot(Frequency_Survived_Class, aes(x = factor(Pclass), y = n, color = factor(Survived))) +
+  geom_point(size = 3) +
+  ggtitle("Frequency Survived & Class") + 
+  xlab("Class") + 
+  ylab("Count") + 
+  guides(color=guide_legend(title = "Survived?\n0 = No / 1 = Yes"))
+```
+
+
+#Signifikanztest
+
+F?r die Untersuchung, ob es einen Unterschied zu den ?berlebenschancen zwischen den verschiedenen Klassen gibt, werden die Variablen `Survived` und `Pclass` einem Signifikanztest unterzogen. An dieser Stelle soll erw?hnt sein, dass ein p-Wert eine Funktion der Stichprobengr??e ist. Er gibt **nicht** die Wahrscheinlichkeit der getesteten Hypothese an. Ein p-Wert gibt lediglich an, wie wahrscheinlich der beobachtete Pr?fgr??enwert oder ein in Richtung der Alternative noch extremerer Wert unter der Nullhypothese ist. F?r die nachfolgende Untersuchung auf Signifikanz bietet sich in diesem Fall der Chi-Quadrat-Test an.
+  
+```{r error=TRUE}
+chisq.test(Titanic$Survived, Titanic$Pclass)
+```
+
+Da der ausgegebene p-Wert unter dem Signifikanzniveau von 5% liegt, kann weiter daran geglaubt werden, dass es einen Unterschied zwischen den Klassen hinsichtlich der ?berlebenschanchen gibt. 
+
+
+#Effektst?rke
+
+Da ein p-Wert alleine nicht besonders stark aussagekr?ftig ist, wird im folgenden Schritt das Chancen Verh?ltnis "Odds Ratio" (OR) errechnet. Das OR ist definiert f?r 2*2 - H?ufigkeitstabellen und errechnet um welchen Faktor die ?berlebenschanche in der einen Klasse gr??er als in der anderen Klasse ist.
+
+##Effektst?rke Klasse 1 und 2
+
+Es wird erneut ein Chi-Quadrat-Test durchgef?hrt, denn durch die Einschr?nkung auf nur zwei Klassen ver?ndert sich der X-squared Wert des Tests.
+
+```{r error=TRUE, warning=FALSE}
+Class1_2 <- Titanic %>% filter(Pclass == 1 | Pclass == 2)
+chisq.test(Class1_2$Survived, Class1_2$Pclass)
+```
+
+Au?erdem wird f?r die Berechnung des Chancen Verh?ltnisses die Anzahl der Personen der beiden Klassen ben?tigt:
+
+```{r error=TRUE}
+nrow(Class1_2)
+```
+
+```{r error=TRUE}
+chies(chi.sq = 9.2775, n = nrow(Class1_2))
+```
+
+Das Odds Ratio f?r Klasse 1 und 2 betr?gt 10,34. Das bedeutet, die ?berlebenschance ist in Klasse 1 ist 10 mal h?her als in Klasse 2. Diese Untersuchung soll im Nachfolgenden f?r die Klassen 2 & 3 und 1 & 3 ebenfalls durchgef?hrt werden. 
+
+
+##Effektst?rke Klasse 2 und 3
+
+```{r error=TRUE}
+Class2_3 <- Titanic %>% filter(Pclass == 2 | Pclass == 3)
+chisq.test(Class2_3$Survived, Class2_3$Pclass)
+```
+```{r error=TRUE}
+nrow(Class2_3)
+```
+```{r error=TRUE}
+chies(chi.sq = 32.447, n = nrow(Class2_3))
+```
+
+Die Chance zu ?berleben ist in Klasse 2 fast 7mal gr??er als in Klasse 3.
+
+
+##Effektst?rke Klasse 1 und 3
+```{r error=TRUE}
+Class1_3 <- Titanic %>% filter(Pclass == 1 | Pclass == 3)
+chisq.test(Class1_3$Survived, Class1_3$Pclass)
+```
+```{r error=TRUE}
+nrow(Class1_3)
+```
+```{r error=TRUE}
+chies(chi.sq = 95.893, n = nrow(Class1_3))
+```
+
+Auch der letzte Test best?tigt einen Unterschied zwischen Klasse 1 und 3 um den Faktor 3,57.
+
+
+#Visualisierung der Effektst?rke
+
+Im nachfolgenden und letzten Schritt sollen die errechneten Effektst?rken f?r die drei Gruppenvergleiche visualisiert werden.
+
+##Visualisierung Effektst?rke Klasse 1 und 2
+
+```{r error=TRUE}
+Visualization_Class1_2 <- Class1_2 %>% count(Pclass, Survived)
+Visualization_Class1_2$proportion <- Visualization_Class1_2$n / nrow(Class1_2)
+Visualization_Class1_2
+```
+
+```{r error=TRUE}
+ggplot(Visualization_Class1_2, aes(x = factor(Pclass), y = n, fill = factor(Survived))) +
+  geom_col(position = "fill") +
+  ggtitle("Visualization effective strength of Class 1 & 2") + 
+  xlab("Class") + 
+  ylab("n") +
+  guides(fill=guide_legend(title = "Survived?\n0 = No / 1 = Yes"))
+```
+
+##Visualisierung Effektst?rke Klasse 2 und 3
+
+```{r error=TRUE}
+Visualization_Class2_3 <- Class2_3 %>% count(Pclass, Survived)
+Visualization_Class2_3$proportion <- Visualization_Class2_3$n / nrow(Class2_3)
+Visualization_Class1_2
+```
+
+```{r error=TRUE}
+ggplot(Visualization_Class2_3, aes(x = factor(Pclass), y = n, fill = factor(Survived))) +
+  geom_col(position = "fill") +
+  ggtitle("Visualization effective strength of Class 2 & 3") + 
+  xlab("Class") + 
+  ylab("n") +
+  guides(fill=guide_legend(title = "Survived?\n0 = No / 1 = Yes"))
+```
+
+##Visualisierung Effektst?rke Klasse 1 und 3
+
+```{r error=TRUE}
+Visualization_Class1_3 <- Class1_3 %>% count(Pclass, Survived)
+Visualization_Class1_3$proportion <- Visualization_Class1_3$n / nrow(Class1_3)
+Visualization_Class1_3
+```
+
+```{r error=TRUE}
+ggplot(Visualization_Class1_3, aes(x = factor(Pclass), y = n, fill = factor(Survived))) +
+  geom_col(position = "fill") +
+  ggtitle("Visualization effective strength of Class 1 & 3") + 
+  xlab("Class") + 
+  ylab("n") +
+  guides(fill=guide_legend(title = "Survived?\n0 = No / 1 = Yes"))
+```
+
+#Fazit
+Zwischen allen drei Klassen der Titanic gibt es erhebliche Unterschiede bei der ?berlebenschance.
+Diese Fallstudie soll eine M?glichkeit der Analyse von nominal skalierten Variablen aufzeigen. Dabei lag der Fokus dieser Case Study mehr auf der deskreptiven und explorativen Datenanalyse. Signifikanztests waren nicht zentral.  
+
+
+
+
