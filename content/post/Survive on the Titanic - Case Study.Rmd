@@ -3,6 +3,7 @@ title: "Survive on the Titanic - Case Study"
 author: "Michael Fuchs"
 date: "5 August 2018"
 categories: ["R"]
+tags: ["R Markdown", "plot", "regression"]
 output:
   html_document:
     highlight: textmate
