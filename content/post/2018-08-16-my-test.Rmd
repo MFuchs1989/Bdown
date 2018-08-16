@@ -145,7 +145,7 @@ nrow(Class2_3)
 chies(chi.sq = 32.447, n = nrow(Class2_3))
 ```
 
-Die Chance zu ?berleben ist in Klasse 2 fast 7mal größer als in Klasse 3.
+Die Chance zu Überleben ist in Klasse 2 fast 7mal größer als in Klasse 3.
 
 
 ##Effektstärke Klasse 1 und 3
