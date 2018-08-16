@@ -1,0 +1,13 @@
+---
+title: my test
+author: Michael Fuchs
+date: '2018-08-16'
+slug: my-test
+categories:
+  - R
+tags: []
+---
+
+**Reading** **Time**: **~21** **minutes**
+
+test test test
