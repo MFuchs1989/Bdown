@@ -6,19 +6,20 @@
     <description>Recent content in Posts on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 16 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 05 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>my test</title>
-      <link>/2018/08/16/my-test/</link>
-      <pubDate>Thu, 16 Aug 2018 00:00:00 +0000</pubDate>
+      <title>Survive on the Titanic - Case Study</title>
+      <link>/2018/08/05/survive-on-the-titanic---case-study/</link>
+      <pubDate>Sun, 05 Aug 2018 00:00:00 +0000</pubDate>
       
-      <guid>/2018/08/16/my-test/</guid>
+      <guid>/2018/08/05/survive-on-the-titanic---case-study/</guid>
       <description>Reading Time: ~21 minutes
-test test test</description>
+body {background-color:lightblue}EinführungIn der nachfolgenden Fallstudie geht es um die exemplarische Analyse nominaler Daten anhand des Untergangs der Titanic. Es soll der Hauptfrage nachgegangen werden, ob das Reisen in einer besseren Klasse die Überlebenschancen auf der Titanic erhöht hat. Für diese Untersuchung wurde der Datensatz titanic_train von der Statsistik-Plattform Kaggle https://www.kaggle.com verwendet. Eine Kopie des Datensatzes ist unter https://drive.google.com/file/d/1Q-ISaCWBl9q2egJgzgkOmWndDeBa5EXT/view?usp=drivesdk abrufbar.
+library(&amp;quot;tidyverse&amp;quot;)library(&amp;quot;compute.es&amp;quot;)Titanic &amp;lt;- read_csv(&amp;quot;Titanic.</description>
     </item>
     
     <item>
