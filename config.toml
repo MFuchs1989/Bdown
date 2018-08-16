@@ -35,5 +35,5 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     url = "MFuchs.jpeg"
     width = 50
     height = 50
-    alt = "Logo"
+    alt = "MFuchs"
 
