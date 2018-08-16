@@ -1,6 +1,7 @@
 ---
 title: "Survive on the Titanic - Case Study"
 author: Michael Fuchs
+date: '2018-08-05'
 categories:
   - R
 output:
@@ -14,9 +15,7 @@ output:
 
 **Reading** **Time**: **~21** **minutes**
 
-<style>
-  body {background-color:lightblue}
-</style>
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
