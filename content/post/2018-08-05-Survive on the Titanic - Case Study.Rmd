@@ -1,5 +1,5 @@
 ---
-title: "Survive on the Titanic - Case Study"
+title: "Survive on the Titanic - Case Study2"
 author: Michael Fuchs
 date: '2018-08-05'
 categories:
