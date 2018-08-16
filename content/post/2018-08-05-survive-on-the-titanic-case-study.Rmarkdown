@@ -5,6 +5,12 @@ date: '2018-08-05'
 slug: survive-on-the-titanic-case-study
 categories: []
 tags: []
+output:
+  html_document:
+    highlight: textmate
+    number_sections: yes
+    theme: readable
+    toc: yes
 ---
 
 
