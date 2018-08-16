@@ -1,7 +1,6 @@
 ---
 title: "Survive on the Titanic - Case Study"
 author: Michael Fuchs
-date: '2018-08-05'
 categories:
   - R
 output:
