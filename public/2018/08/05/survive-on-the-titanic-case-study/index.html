@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Survive on the Titanic - Case Study - Michael Fuchs</title>
+<meta property="og:title" content="Survive on the Titanic - Case Study - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">10 min read</span>
+    
+
+    <h1 class="article-title">Survive on the Titanic - Case Study</h1>
+
+    
+    <span class="article-date">2018/08/05</span>
+    
+
+    <div class="article-content">
+      <div id="einfuhrung" class="section level1">
+<h1>Einführung</h1>
+<p>In der nachfolgenden Fallstudie geht es um die exemplarische Analyse nominaler Daten anhand des Untergangs der Titanic. Es soll der Hauptfrage nachgegangen werden, ob das Reisen in einer besseren Klasse die Überlebenschancen auf der Titanic erhöht hat. Für diese Untersuchung wurde der Datensatz <em>titanic_train</em> von der Statsistik-Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/file/d/1Q-ISaCWBl9q2egJgzgkOmWndDeBa5EXT/view?usp=drivesdk" class="uri">https://drive.google.com/file/d/1Q-ISaCWBl9q2egJgzgkOmWndDeBa5EXT/view?usp=drivesdk</a> abrufbar.</p>
+<pre class="r"><code>library(&quot;tidyverse&quot;)
+library(&quot;compute.es&quot;)</code></pre>
+<pre class="r"><code>Titanic &lt;- read_csv(&quot;Titanic.csv&quot;)</code></pre>
+</div>
+<div id="ubersicht-uber-den-vorliegenden-datensatz" class="section level1">
+<h1>Übersicht über den vorliegenden Datensatz</h1>
+<p>Ein erster Blick auf die Daten zeigt uns, welche Variablen mit wie vielen Observations vorliegen.</p>
+<pre class="r"><code>glimpse(Titanic)</code></pre>
+<pre><code>## Observations: 891
+## Variables: 12
+## $ PassengerId &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,...
+## $ Survived    &lt;int&gt; 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0,...
+## $ Pclass      &lt;int&gt; 3, 1, 3, 1, 3, 3, 1, 3, 3, 2, 3, 1, 3, 3, 3, 2, 3,...
+## $ Name        &lt;chr&gt; &quot;Braund, Mr. Owen Harris&quot;, &quot;Cumings, Mrs. John Bra...
+## $ Sex         &lt;chr&gt; &quot;male&quot;, &quot;female&quot;, &quot;female&quot;, &quot;female&quot;, &quot;male&quot;, &quot;mal...
+## $ Age         &lt;dbl&gt; 22, 38, 26, 35, 35, NA, 54, 2, 27, 14, 4, 58, 20, ...
+## $ SibSp       &lt;int&gt; 1, 1, 0, 1, 0, 0, 0, 3, 0, 1, 1, 0, 0, 1, 0, 0, 4,...
+## $ Parch       &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 1, 0, 0, 5, 0, 0, 1,...
+## $ Ticket      &lt;chr&gt; &quot;A/5 21171&quot;, &quot;PC 17599&quot;, &quot;STON/O2. 3101282&quot;, &quot;1138...
+## $ Fare        &lt;dbl&gt; 7.2500, 71.2833, 7.9250, 53.1000, 8.0500, 8.4583, ...
+## $ Cabin       &lt;chr&gt; NA, &quot;C85&quot;, NA, &quot;C123&quot;, NA, NA, &quot;E46&quot;, NA, NA, NA, ...
+## $ Embarked    &lt;chr&gt; &quot;S&quot;, &quot;C&quot;, &quot;S&quot;, &quot;S&quot;, &quot;S&quot;, &quot;Q&quot;, &quot;S&quot;, &quot;S&quot;, &quot;S&quot;, &quot;C&quot;, ...</code></pre>
+</div>
+<div id="bestimmung-der-univariaten-haufigkeiten" class="section level1">
+<h1>Bestimmung der univariaten Häufigkeiten</h1>
+<p>Der zu Beginn gestellten Hauptfrage nach, sind für diese Fallstudie nur zwei von den zwölf uns vorliegenden Variablen interessant: <code>Survived</code> und <code>Pclass</code>. Obwohl beide Variablen im Datensatz mit Zahlen hinterlegt sind, handelt es sich um kategorial verteilte Daten (nicht-metrisch). Diese sollen im ersten Schritt ausgezählt werden. Für die nachfolgende Analyse interessiert uns, wie viele Passagiere es pro Klasse gab und wie viele aus der jeweiligen Klasse die Katastrophe überlebten.</p>
+<pre class="r"><code>Frequency_Class &lt;- count(Titanic, Survived) 
+Frequency_Class</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   Survived     n
+##      &lt;int&gt; &lt;int&gt;
+## 1        0   549
+## 2        1   342</code></pre>
+<p>Jetzt ist klar, dass 549 Menschen den Untergang der Titanic nicht überlebt haben. Dies in einem Balkendiagramm dargestellt:</p>
+<pre class="r"><code>ggplot(Titanic, aes(x = Survived)) +
+  geom_bar() +
+  ggtitle(&quot;Frequency Survived&quot;) + 
+  xlab(&quot;Survived, 0 = No / 1 = Yes&quot;) + 
+  ylab(&quot;Count&quot;)</code></pre>
+<p><img src="/post/2018-08-05-survive-on-the-titanic-case-study_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Und wie sieht es mit der Verteilung auf die verschiedenen Klassen aus?</p>
+<pre class="r"><code>Frequency_Class &lt;- count(Titanic, Pclass) 
+Frequency_Class</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##   Pclass     n
+##    &lt;int&gt; &lt;int&gt;
+## 1      1   216
+## 2      2   184
+## 3      3   491</code></pre>
+<pre class="r"><code>ggplot(Frequency_Class, aes(x = factor(Pclass), y = n)) +
+  geom_point(size = 3, colour = &quot;red&quot;) +
+  ggtitle(&quot;Frequency Class&quot;) + 
+  xlab(&quot;Class&quot;) + 
+  ylab(&quot;Count&quot;)</code></pre>
+<p><img src="/post/2018-08-05-survive-on-the-titanic-case-study_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Doch 1/4 der Passagiere reisten damals in der ersten Klasse.</p>
+</div>
+<div id="bestimmung-der-bivariaten-haufigkeiten" class="section level1">
+<h1>Bestimmung der bivariaten Häufigkeiten</h1>
+<p>Nachdem nun die Häufigkeiten pro Wert von <code>Survived</code> und <code>Pclass</code> bekannt sind, wird nun der Frage nachgegangen, ob sich die relativen Häufigkeiten der Stufen der Klasse innerhalb der Stufen der Überlebenden unterscheidet. Es soll untersucht werden, ob und in wie weit die Überlebenschancen in der 1. Klasse größer als in der 2. oder 3. Klasse sind.</p>
+<pre class="r"><code>(Frequency_Survived_Class &lt;- count(Titanic, Survived, Pclass))</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Survived Pclass     n
+##      &lt;int&gt;  &lt;int&gt; &lt;int&gt;
+## 1        0      1    80
+## 2        0      2    97
+## 3        0      3   372
+## 4        1      1   136
+## 5        1      2    87
+## 6        1      3   119</code></pre>
+<pre class="r"><code>ggplot(Frequency_Survived_Class, aes(x = factor(Pclass), y = n, color = factor(Survived))) +
+  geom_point(size = 3) +
+  ggtitle(&quot;Frequency Survived &amp; Class&quot;) + 
+  xlab(&quot;Class&quot;) + 
+  ylab(&quot;Count&quot;) + 
+  guides(color=guide_legend(title = &quot;Survived?\n0 = No / 1 = Yes&quot;))</code></pre>
+<p><img src="/post/2018-08-05-survive-on-the-titanic-case-study_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="signifikanztest" class="section level1">
+<h1>Signifikanztest</h1>
+<p>Für die Untersuchung, ob es einen Unterschied zu den Überlebenschancen zwischen den verschiedenen Klassen gibt, werden die Variablen <code>Survived</code> und <code>Pclass</code> einem Signifikanztest unterzogen. An dieser Stelle soll erwähnt sein, dass ein p-Wert eine Funktion der Stichprobengröße ist. Er gibt <strong>nicht</strong> die Wahrscheinlichkeit der getesteten Hypothese an. Ein p-Wert gibt lediglich an, wie wahrscheinlich der beobachtete Prüfgrößenwert oder ein in Richtung der Alternative noch extremerer Wert unter der Nullhypothese ist. Für die nachfolgende Untersuchung auf Signifikanz bietet sich in diesem Fall der Chi-Quadrat-Test an.</p>
+<pre class="r"><code>chisq.test(Titanic$Survived, Titanic$Pclass)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  Titanic$Survived and Titanic$Pclass
+## X-squared = 102.89, df = 2, p-value &lt; 2.2e-16</code></pre>
+<p>Da der ausgegebene p-Wert unter dem Signifikanzniveau von 5% liegt, kann weiter daran geglaubt werden, dass es einen Unterschied zwischen den Klassen hinsichtlich der Überlebenschanchen gibt.</p>
+</div>
+<div id="effektstarke" class="section level1">
+<h1>Effektstärke</h1>
+<p>Da ein p-Wert alleine nicht besonders stark aussagekräftig ist, wird im folgenden Schritt das Chancen Verhältnis “Odds Ratio” (OR) errechnet. Das OR ist definiert für 2*2 - Häufigkeitstabellen und errechnet um welchen Faktor die Überlebenschanche in der einen Klasse größer als in der anderen Klasse ist.</p>
+<div id="effektstarke-klasse-1-und-2" class="section level2">
+<h2>Effektstärke Klasse 1 und 2</h2>
+<p>Es wird erneut ein Chi-Quadrat-Test durchgeführt, denn durch die Einschränkung auf nur zwei Klassen verändert sich der X-squared Wert des Tests.</p>
+<pre class="r"><code>Class1_2 &lt;- Titanic %&gt;% filter(Pclass == 1 | Pclass == 2)
+chisq.test(Class1_2$Survived, Class1_2$Pclass)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+## 
+## data:  Class1_2$Survived and Class1_2$Pclass
+## X-squared = 9.2775, df = 1, p-value = 0.00232</code></pre>
+<p>Außerdem wird für die Berechnung des Chancen Verhältnisses die Anzahl der Personen der beiden Klassen benötigt:</p>
+<pre class="r"><code>nrow(Class1_2)</code></pre>
+<pre><code>## [1] 400</code></pre>
+<pre class="r"><code>chies(chi.sq = 9.2775, n = nrow(Class1_2))</code></pre>
+<pre><code>## Mean Differences ES: 
+##  
+##  d [ 95 %CI] = 0.31 [ 0.11 , 0.51 ] 
+##   var(d) = 0.01 
+##   p-value(d) = 0 
+##   U3(d) = 62.09 % 
+##   CLES(d) = 58.61 % 
+##   Cliff&#39;s Delta = 0.17 
+##  
+##  g [ 95 %CI] = 0.31 [ 0.11 , 0.51 ] 
+##   var(g) = 0.01 
+##   p-value(g) = 0 
+##   U3(g) = 62.07 % 
+##   CLES(g) = 58.6 % 
+##  
+##  Correlation ES: 
+##  
+##  r [ 95 %CI] = 0.15 [ 0.05 , 0.25 ] 
+##   var(r) = 0 
+##   p-value(r) = 0 
+##  
+##  z [ 95 %CI] = 0.15 [ 0.05 , 0.25 ] 
+##   var(z) = 0 
+##   p-value(z) = 0 
+##  
+##  Odds Ratio ES: 
+##  
+##  OR [ 95 %CI] = 1.75 [ 1.22 , 2.51 ] 
+##   p-value(OR) = 0 
+##  
+##  Log OR [ 95 %CI] = 0.56 [ 0.2 , 0.92 ] 
+##   var(lOR) = 0.03 
+##   p-value(Log OR) = 0 
+##  
+##  Other: 
+##  
+##  NNT = 10.34 
+##  Total N = 400</code></pre>
+<p>Das Odds Ratio für Klasse 1 und 2 beträgt 10,34. Das bedeutet, die Überlebenschance ist in Klasse 1 ist 10 mal höher als in Klasse 2. Diese Untersuchung soll im Nachfolgenden für die Klassen 2 &amp; 3 und 1 &amp; 3 ebenfalls durchgeführt werden.</p>
+</div>
+<div id="effektstarke-klasse-2-und-3" class="section level2">
+<h2>Effektstärke Klasse 2 und 3</h2>
+<pre class="r"><code>Class2_3 &lt;- Titanic %&gt;% filter(Pclass == 2 | Pclass == 3)
+chisq.test(Class2_3$Survived, Class2_3$Pclass)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+## 
+## data:  Class2_3$Survived and Class2_3$Pclass
+## X-squared = 32.447, df = 1, p-value = 1.225e-08</code></pre>
+<pre class="r"><code>nrow(Class2_3)</code></pre>
+<pre><code>## [1] 675</code></pre>
+<pre class="r"><code>chies(chi.sq = 32.447, n = nrow(Class2_3))</code></pre>
+<pre><code>## Mean Differences ES: 
+##  
+##  d [ 95 %CI] = 0.45 [ 0.29 , 0.6 ] 
+##   var(d) = 0.01 
+##   p-value(d) = 0 
+##   U3(d) = 67.33 % 
+##   CLES(d) = 62.46 % 
+##   Cliff&#39;s Delta = 0.25 
+##  
+##  g [ 95 %CI] = 0.45 [ 0.29 , 0.6 ] 
+##   var(g) = 0.01 
+##   p-value(g) = 0 
+##   U3(g) = 67.31 % 
+##   CLES(g) = 62.45 % 
+##  
+##  Correlation ES: 
+##  
+##  r [ 95 %CI] = 0.22 [ 0.15 , 0.29 ] 
+##   var(r) = 0 
+##   p-value(r) = 0 
+##  
+##  z [ 95 %CI] = 0.22 [ 0.15 , 0.3 ] 
+##   var(z) = 0 
+##   p-value(z) = 0 
+##  
+##  Odds Ratio ES: 
+##  
+##  OR [ 95 %CI] = 2.26 [ 1.7 , 2.99 ] 
+##   p-value(OR) = 0 
+##  
+##  Log OR [ 95 %CI] = 0.81 [ 0.53 , 1.1 ] 
+##   var(lOR) = 0.02 
+##   p-value(Log OR) = 0 
+##  
+##  Other: 
+##  
+##  NNT = 6.79 
+##  Total N = 675</code></pre>
+<p>Die Chance zu Überleben ist in Klasse 2 fast 7mal größer als in Klasse 3.</p>
+</div>
+<div id="effektstarke-klasse-1-und-3" class="section level2">
+<h2>Effektstärke Klasse 1 und 3</h2>
+<pre class="r"><code>Class1_3 &lt;- Titanic %&gt;% filter(Pclass == 1 | Pclass == 3)
+chisq.test(Class1_3$Survived, Class1_3$Pclass)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+## 
+## data:  Class1_3$Survived and Class1_3$Pclass
+## X-squared = 95.893, df = 1, p-value &lt; 2.2e-16</code></pre>
+<pre class="r"><code>nrow(Class1_3)</code></pre>
+<pre><code>## [1] 707</code></pre>
+<pre class="r"><code>chies(chi.sq = 95.893, n = nrow(Class1_3))</code></pre>
+<pre><code>## Mean Differences ES: 
+##  
+##  d [ 95 %CI] = 0.79 [ 0.63 , 0.95 ] 
+##   var(d) = 0.01 
+##   p-value(d) = 0 
+##   U3(d) = 78.57 % 
+##   CLES(d) = 71.22 % 
+##   Cliff&#39;s Delta = 0.42 
+##  
+##  g [ 95 %CI] = 0.79 [ 0.63 , 0.95 ] 
+##   var(g) = 0.01 
+##   p-value(g) = 0 
+##   U3(g) = 78.55 % 
+##   CLES(g) = 71.2 % 
+##  
+##  Correlation ES: 
+##  
+##  r [ 95 %CI] = 0.37 [ 0.3 , 0.43 ] 
+##   var(r) = 0 
+##   p-value(r) = 0 
+##  
+##  z [ 95 %CI] = 0.39 [ 0.31 , 0.46 ] 
+##   var(z) = 0 
+##   p-value(z) = 0 
+##  
+##  Odds Ratio ES: 
+##  
+##  OR [ 95 %CI] = 4.2 [ 3.15 , 5.61 ] 
+##   p-value(OR) = 0 
+##  
+##  Log OR [ 95 %CI] = 1.44 [ 1.15 , 1.72 ] 
+##   var(lOR) = 0.02 
+##   p-value(Log OR) = 0 
+##  
+##  Other: 
+##  
+##  NNT = 3.57 
+##  Total N = 707</code></pre>
+<p>Auch der letzte Test bestätigt einen Unterschied zwischen Klasse 1 und 3 um den Faktor 3,57.</p>
+</div>
+</div>
+<div id="visualisierung-der-effektstarke" class="section level1">
+<h1>Visualisierung der Effektstärke</h1>
+<p>Im nachfolgenden und letzten Schritt sollen die errechneten Effektstärken für die drei Gruppenvergleiche visualisiert werden.</p>
+<div id="visualisierung-effektstarke-klasse-1-und-2" class="section level2">
+<h2>Visualisierung Effektstärke Klasse 1 und 2</h2>
+<pre class="r"><code>Visualization_Class1_2 &lt;- Class1_2 %&gt;% count(Pclass, Survived)
+Visualization_Class1_2$proportion &lt;- Visualization_Class1_2$n / nrow(Class1_2)
+Visualization_Class1_2</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##   Pclass Survived     n proportion
+##    &lt;int&gt;    &lt;int&gt; &lt;int&gt;      &lt;dbl&gt;
+## 1      1        0    80      0.2  
+## 2      1        1   136      0.34 
+## 3      2        0    97      0.242
+## 4      2        1    87      0.218</code></pre>
+<pre class="r"><code>ggplot(Visualization_Class1_2, aes(x = factor(Pclass), y = n, fill = factor(Survived))) +
+  geom_col(position = &quot;fill&quot;) +
+  ggtitle(&quot;Visualization effective strength of Class 1 &amp; 2&quot;) + 
+  xlab(&quot;Class&quot;) + 
+  ylab(&quot;n&quot;) +
+  guides(fill=guide_legend(title = &quot;Survived?\n0 = No / 1 = Yes&quot;))</code></pre>
+<p><img src="/post/2018-08-05-survive-on-the-titanic-case-study_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+<div id="visualisierung-effektstarke-klasse-2-und-3" class="section level2">
+<h2>Visualisierung Effektstärke Klasse 2 und 3</h2>
+<pre class="r"><code>Visualization_Class2_3 &lt;- Class2_3 %&gt;% count(Pclass, Survived)
+Visualization_Class2_3$proportion &lt;- Visualization_Class2_3$n / nrow(Class2_3)
+Visualization_Class1_2</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##   Pclass Survived     n proportion
+##    &lt;int&gt;    &lt;int&gt; &lt;int&gt;      &lt;dbl&gt;
+## 1      1        0    80      0.2  
+## 2      1        1   136      0.34 
+## 3      2        0    97      0.242
+## 4      2        1    87      0.218</code></pre>
+<pre class="r"><code>ggplot(Visualization_Class2_3, aes(x = factor(Pclass), y = n, fill = factor(Survived))) +
+  geom_col(position = &quot;fill&quot;) +
+  ggtitle(&quot;Visualization effective strength of Class 2 &amp; 3&quot;) + 
+  xlab(&quot;Class&quot;) + 
+  ylab(&quot;n&quot;) +
+  guides(fill=guide_legend(title = &quot;Survived?\n0 = No / 1 = Yes&quot;))</code></pre>
+<p><img src="/post/2018-08-05-survive-on-the-titanic-case-study_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+</div>
+<div id="visualisierung-effektstarke-klasse-1-und-3" class="section level2">
+<h2>Visualisierung Effektstärke Klasse 1 und 3</h2>
+<pre class="r"><code>Visualization_Class1_3 &lt;- Class1_3 %&gt;% count(Pclass, Survived)
+Visualization_Class1_3$proportion &lt;- Visualization_Class1_3$n / nrow(Class1_3)
+Visualization_Class1_3</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##   Pclass Survived     n proportion
+##    &lt;int&gt;    &lt;int&gt; &lt;int&gt;      &lt;dbl&gt;
+## 1      1        0    80      0.113
+## 2      1        1   136      0.192
+## 3      3        0   372      0.526
+## 4      3        1   119      0.168</code></pre>
+<pre class="r"><code>ggplot(Visualization_Class1_3, aes(x = factor(Pclass), y = n, fill = factor(Survived))) +
+  geom_col(position = &quot;fill&quot;) +
+  ggtitle(&quot;Visualization effective strength of Class 1 &amp; 3&quot;) + 
+  xlab(&quot;Class&quot;) + 
+  ylab(&quot;n&quot;) +
+  guides(fill=guide_legend(title = &quot;Survived?\n0 = No / 1 = Yes&quot;))</code></pre>
+<p><img src="/post/2018-08-05-survive-on-the-titanic-case-study_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+</div>
+</div>
+<div id="fazit" class="section level1">
+<h1>Fazit</h1>
+<p>Zwischen allen drei Klassen der Titanic gibt es erhebliche Unterschiede bei der Überlebenschance. Diese Fallstudie soll eine Möglichkeit der Analyse von nominal skalierten Variablen aufzeigen. Dabei lag der Fokus dieser Case Study mehr auf der deskreptiven und explorativen Datenanalyse. Signifikanztests waren nicht zentral.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
