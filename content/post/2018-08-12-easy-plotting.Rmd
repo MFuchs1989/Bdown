@@ -33,7 +33,7 @@ library("mosaic")
 insurance <- read_csv("insurance.csv")
 ```
 
-#Übersicht ?ber die uns vorliegenden Daten
+#Übersicht über die uns vorliegenden Daten
 
 ```{r}
 glimpse(insurance)
@@ -152,7 +152,7 @@ plot(as.factor(insurance$region), insurance$charges)
 Die von R ausgegebenen Beschriftungen sind meist sehr unschön oder fehlen gänzlich. Daher hier noch ein paar Tipps anhand des zuvor erstellten Scatter Plot Beispiels, damit die erstellten Grafiken ein wenig hübscher und aussagekräftiger werden.
 
 ```{r}
-plot(insurance$age, insurance$charges, xlab = "age", ylab = "charges", main = "Scatter Plot")
+plot(insurance$age, insurance$charges)
 ```
 
 Die Befehle *xlab* und *ylab* ermöglichen eine Beschriftung der beiden Achsen. Mit *main* kann eine Überschrift hinzugefügt werden. 
