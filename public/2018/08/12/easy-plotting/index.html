@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Easy Plotting - Data Visualization with R - Michael Fuchs</title>
+<meta property="og:title" content="Easy Plotting - Data Visualization with R - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">7 min read</span>
+    
+
+    <h1 class="article-title">Easy Plotting - Data Visualization with R</h1>
+
+    
+    <span class="article-date">2018/08/12</span>
+    
+
+    <div class="article-content">
+      <div id="einfuhrung" class="section level1">
+<h1>Einführung</h1>
+<p>In dem nachfolgenden Post geht es um eine kurze Einführung zum Thema Visualisierung. Es sollen die am häufigsten verwendeten Grafiken in R vorgestellt werden und wann sie zu verwenden sind. Für diese Arbeit wurde der Datensatz <em>insurance</em> von der Statsistik-Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/file/d/1-DSBcvyFtXrSy1ORb6WOeNenhQ1rxSYu/view?usp=drivesdk" class="uri">https://drive.google.com/file/d/1-DSBcvyFtXrSy1ORb6WOeNenhQ1rxSYu/view?usp=drivesdk</a> abrufbar.</p>
+<pre class="r"><code>library(&quot;tidyverse&quot;)
+library(&quot;mosaic&quot;)</code></pre>
+<pre class="r"><code>insurance &lt;- read_csv(&quot;insurance.csv&quot;)</code></pre>
+</div>
+<div id="bersicht-ber-die-uns-vorliegenden-daten" class="section level1">
+<h1>?bersicht ?ber die uns vorliegenden Daten</h1>
+<pre class="r"><code>glimpse(insurance)</code></pre>
+<pre><code>## Observations: 1,338
+## Variables: 7
+## $ age      &lt;int&gt; 19, 18, 28, 33, 32, 31, 46, 37, 37, 60, 25, 62, 23, 5...
+## $ sex      &lt;chr&gt; &quot;female&quot;, &quot;male&quot;, &quot;male&quot;, &quot;male&quot;, &quot;male&quot;, &quot;female&quot;, &quot;...
+## $ bmi      &lt;dbl&gt; 27.900, 33.770, 33.000, 22.705, 28.880, 25.740, 33.44...
+## $ children &lt;int&gt; 0, 1, 3, 0, 0, 0, 1, 3, 2, 0, 0, 0, 0, 0, 0, 1, 1, 0,...
+## $ smoker   &lt;chr&gt; &quot;yes&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;...
+## $ region   &lt;chr&gt; &quot;southwest&quot;, &quot;southeast&quot;, &quot;southeast&quot;, &quot;northwest&quot;, &quot;...
+## $ charges  &lt;dbl&gt; 16884.924, 1725.552, 4449.462, 21984.471, 3866.855, 3...</code></pre>
+<p>Der Datensatz <em>insurance</em> beinhaltet 7 Variablen. Bis auf die Spalten <code>bmi</code> und <code>children</code> kommen alle Variablen in der weiteren Analyse zur Anwendung.</p>
+</div>
+<div id="type-of-graphs" class="section level1">
+<h1>Type of Graphs</h1>
+<p>Grafiken sind ein wichtiger Bestandteil bei der deskriptiven Untersuchung von Datensätzen. Durch sie können komplizierte und uneinsichtige Sachverhalt einfach beschrieben und dargestellt werden. Jedem sollte jedoch klar sein, dass es sich bei Publikationen oder Bachelorarbeiten um eine wissenschaftliche Arbeit handelt und nicht um ein Bilderbuch. Deshalb empfiehlt es sich, eine Bilderflut möglichst zu vermeiden und nur wirklich aussagekräftige Grafiken zu verwenden.</p>
+<div id="bar-graph" class="section level2">
+<h2>Bar Graph</h2>
+<p>Ein Balkendiagramm eignet sich zur grafischen Darstellung der Häufigkeit von Ausprägungen beliebig skalierter Merkmale. Dabei können sowohl absolute als auch relative Häufigkeiten darstellen werden. Mit dem nachfolgenden Balkendiagramm soll schnell und einfach herausgefunden werden, wie die uns vorliegende Geschlechterverteilung aussieht.</p>
+<pre class="r"><code>qplot(insurance$sex, geom = &quot;bar&quot;)</code></pre>
+<p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Balkendiagramme kann man ab nominalem Skalenniveau für eine anschauliche Darstellung einsetzen. Bei metrischen Datenmaterial ist allerdings für zusätzliche Informationen das Histogramm vorzuziehen. Denn bei diesem stellt der Flächeninhalt einer Säule die Häufigkeit und ihre Höhe die Häufigkeitsdichte dar.</p>
+</div>
+<div id="histogram" class="section level2">
+<h2>Histogram</h2>
+<p>Zur graphischen Darstellung klassierter Daten verwendet man das Histogramm. Ein Histogramm ist nun analog zu einem Balkendiagramm zu sehen, mit dem wesentlichen Unterschied, dass die Flächen der Säulen hier die (absoluten oder relativen) Häufigkeiten widergeben und nicht ihre Höhen.</p>
+<pre class="r"><code>hist(insurance$age)</code></pre>
+<p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Den Unterschied zum Balkendiagramm kann man sehr gut erkennen, wenn man mit dem Befehlt <em>breaks</em> arbeitet. Mit <em>breaks</em> kann man bestimmen, wie viele Balken in der Grafik ausgegeben werden sollen. Kreiert man mehr Balken als es Klassifizierungen gibt, so kann man deren Höhe wiederum an der y Achse ablesen.</p>
+<pre class="r"><code>summary(insurance$age)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   18.00   27.00   39.00   39.21   51.00   64.00</code></pre>
+<pre class="r"><code>par(mfrow=c(1,2))
+hist(insurance$age, breaks=64)
+hist(insurance$age, breaks=80)</code></pre>
+<p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>In der linken Grafik werden die unter 20 jährigen noch in einem Balken zusammengefasst. Daher erhöht sich ihre Gesamtsumme auf knapp 140. Im rechten Bild sind diese bereits getrennt und man erkennt zwei Ausprägungen nahe n = 70. Mit dem tally() Befehlt aus dem <em>mosaic</em> Package, kann man sich die Häufigkeiten auch einfach und schnell ausgeben lassen:</p>
+<pre class="r"><code>tally (~insurance$age)</code></pre>
+<pre><code>## insurance$age
+## 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 
+## 69 68 29 28 28 28 28 28 28 28 28 27 27 27 26 26 26 25 25 25 25 25 27 27 27 
+## 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 
+## 27 27 29 29 29 29 28 29 29 29 28 28 26 26 26 25 25 23 23 23 23 22</code></pre>
+<p>Die obere Zeile gibt das jeweilige Alter aus und die darunter liegende Zeile die entsprechende Häufigkeit. Wir können hier sehen, dass 69 Probanden 18 Jahre alt und 68 Probanden 19 Jahre alt sind. Die restlichen Altersklassen sind alle etwa gleich stark vertreten.</p>
+</div>
+<div id="scatter-plot" class="section level2">
+<h2>Scatter Plot</h2>
+<p>In einem Streudiagramm werden in einem Koordinatensystem die Werte zweier metrischer Merkmale abgetragen, um etwaige Zusammenhänge bzw. Korrelationen erkennen zu können. Üblicherweise wird die unabhängige bzw. erklärende Variable auf der horizontalen x-Achse und die abhängige Variable auf der vertikalen y-Achse abgetragen.</p>
+<pre class="r"><code>par(mfrow=c(1,1))
+plot(insurance$age, insurance$charges)</code></pre>
+<p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Es scheint einen leichten Zusammenhang zwischen dem Lebensalter und der Höhe der Versicherungskosten zu geben. Des Weiteren fällt auf, dass zwei weitere Gruppen vermutlich existieren, welche weitaus höheren Kosten verursachen.</p>
+</div>
+<div id="line-graph" class="section level2">
+<h2>Line Graph</h2>
+<p>Das Liniendiagramm eignet sich hauptsächlich zur Visualisierung von Trends und Entwicklungen im Laufe der Zeit bei gleichmäßig unterteilten Dimensionswerten wie Monaten, Quartalen oder Jahren. Ein Datensatz muss mindestens zwei Datenpunkte enthalten, um eine Linie zu zeichnen. Ein Datensatz mit nur einem einzigen Wert wird als Punkt dargestellt. Im Gegensatz zum Streudiagramm kann es jeweils nur ein Wertepaar bzw. Wertetrio geben. Da der uns vorliegende Datensatz <em>insurance</em> keine geeignete Variablen für diese Grafik bieten kann, wird mittels R ein neuer data.frame erzeugt.</p>
+<pre class="r"><code>x &lt;- c(2, 5, 7, 9, 13, 14, 17, 19, 22, 25, 28, 30)
+y &lt;- c(11, 13, 17, 23, 33, 35, 55, 65, 70, 75, 80, 85)
+example1 &lt;- data.frame(x, y)
+colnames(example1) &lt;- c(&quot;age&quot;, &quot;weight&quot;)
+example1</code></pre>
+<pre><code>##    age weight
+## 1    2     11
+## 2    5     13
+## 3    7     17
+## 4    9     23
+## 5   13     33
+## 6   14     35
+## 7   17     55
+## 8   19     65
+## 9   22     70
+## 10  25     75
+## 11  28     80
+## 12  30     85</code></pre>
+<p>Nun kann graphisch dargestellt werden, wie das Körpergewicht über die Lebensjahre hinweg bei einer Person zunimmt.</p>
+<pre class="r"><code>par(mfrow=c(1,2))
+plot(example1$age, example1$weight, type = &quot;l&quot;)
+
+plot(example1$age, example1$weight, type = &quot;l&quot;) +
+  points(example1$age, example1$weight)</code></pre>
+<p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre><code>## integer(0)</code></pre>
+<p>Dies ist nur ein exemplarisches Beispiel, welches zur Veranschaulichung dienen soll. Möchte man sich die einzelnen Punkte, welche dem Liniendiagramm zu Grunde liegen, zusätzlich ausgeben lassen, so muss die plot Funktion um den Befehlt points() erweitert werden.</p>
+</div>
+<div id="box-plot" class="section level2">
+<h2>Box Plot</h2>
+<p>Ein Boxplot ist eine grafische Zusammenfassung der folgenden fünf Punkte:</p>
+<ul>
+<li>Minimum (= 0%-Quantil)</li>
+<li>25%-Quantil</li>
+<li>Median (= 50%-Quantil)</li>
+<li>75%-Quantil</li>
+<li>Maximum (= 100%-Quantil)</li>
+</ul>
+<p>Da man das Minimum, den Median und das Maximum als 0%-, 50%- bzw. 100%-Quantil ausdrücken kann, zeigt der Boxplot nur fünf häufig verwendete Quantile. Dabei ist die Box und ihre sogenannten “Whiskers”, die Striche außerhalb der Boxen, wie folgt aufgebaut: Die Box spannt sich vom 25%-Quantil bis zum 75%-Quantil auf, in ihr ist der Median durch einen Querstrich markiert. Außerhalb der Boxen spannen sich nach oben und unten die Whiskers zum Minimum bzw. Maximum der Datenreihe. Am Boxplot kann man auch zwei Streuungsmaße ablesen: Die Spannweite ist nämlich der Abstand zwischen den beiden Whiskers (bzw. zwischen den äußersten Ausreißern). Der Interquartilsabstand ist genau die Breite der Box.</p>
+<pre class="r"><code>par(mfrow=c(1,1))
+boxplot(insurance$charges)</code></pre>
+<p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Das Boxplot zu den Versicherungskosten zeigt uns, dass die meisten Gebühren zwischen 5.000$ und 20.000$ liegen. Ebenfalls sind die Ausreißer jenseits der 50.000 Marke gut ersichtlich.</p>
+<p>Man kann sich auch die Verteilung der Versicherungskosten pro Geschlecht…</p>
+<pre class="r"><code>plot(as.factor(insurance$sex), insurance$charges)</code></pre>
+<p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>und pro Region ausgeben lassen.</p>
+<pre class="r"><code>plot(as.factor(insurance$region), insurance$charges)</code></pre>
+<p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+</div>
+<div id="beschriftungen-und-weitere-befehle" class="section level1">
+<h1>Beschriftungen und weitere Befehle</h1>
+<p>Die von R ausgegebenen Beschriftungen sind meist sehr unschön oder fehlen gänzlich. Daher hier noch ein paar Tipps anhand des zuvor erstellten Scatter Plot Beispiels, damit die erstellten Grafiken ein wenig hübscher und aussagekräftiger werden.</p>
+<pre class="r"><code>plot(insurance$age, insurance$charges, xlab = &quot;age&quot;, ylab = &quot;charges&quot;, main = &quot;Scatter Plot&quot;)</code></pre>
+<p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>Die Befehle <em>xlab</em> und <em>ylab</em> ermöglichen eine Beschriftung der beiden Achsen. Mit <em>main</em> kann eine Überschrift hinzugefügt werden.</p>
+<pre class="r"><code>plot(insurance$age, insurance$charges, xlab = &quot;age&quot;, ylab = &quot;charges&quot;, main = &quot;Scatter Plot&quot;, pch=19)</code></pre>
+<p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>Der Zusatzbefehl <em>pch</em> ist von 0 bis 25 möglich. Für jede Zahl werden unterschiedliche Arten von Punkten generiert.</p>
+<pre class="r"><code>plot(insurance$age, insurance$charges, xlab = &quot;age&quot;, ylab = &quot;charges&quot;, main = &quot;Scatter Plot&quot;, pch=19, col=factor(insurance$smoker))</code></pre>
+<p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Wie schon bei <strong>Punkt</strong> <strong>3.3</strong> <strong>Scatter</strong> <strong>Plot</strong> vermutet, exisiteren bei Zusammenhang zwischen Lebensalter und Versicherungskosten weitere Gruppierungen. Durch den Befehl <em>col</em> wurden die Raucher unter den Probanden farblich hervorgehoben. Man erkennt eindeutig, dass Raucher höhere Versicherungskosten verursachen als Nichtraucher. Diese sind ab der 40.000 Marke gar nicht mehr in der Grafik vertreten. Des Weiteren könnte man nun vermuten, dass das mittlere Segment zwischen 10.000$ und 30.000$ nur leichte Raucher beinhaltet und ab 30.000$ Kosten starke Raucher vertreten sind.</p>
+</div>
+<div id="fazit" class="section level1">
+<h1>Fazit</h1>
+<p>Es braucht nicht viel um in R schnell und einfach verschiedene Arten von Grafiken zu erstellen. Grafiken helfen uns dabei einen guten Überblick über die uns vorliegenden Daten zu bekommen. In diesem Post wurde lediglich auf die einfachste Verwendung der Grafiken eingegangen. Bei der Visualizierung ist noch viel mehr möglich und teilweise auch nötig, um aussagekräftige Schaubilder zu generieren.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

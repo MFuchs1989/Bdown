@@ -1,0 +1,183 @@
+---
+title: "Easy Plotting - Data Visualization with R"
+author: Michael Fuchs
+date: '2018-08-12'
+slug: easy-plotting
+categories:
+  - R
+tags:
+  - R Markdown
+output: 
+  html_document: 
+    highlight: textmate
+    number_sections: yes
+    theme: readable
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Einführung
+
+In dem nachfolgenden Post geht es um eine kurze Einführung zum Thema Visualisierung. Es sollen die am häufigsten verwendeten Grafiken in R vorgestellt werden und wann sie zu verwenden sind. Für diese Arbeit wurde der Datensatz *insurance* von der Statsistik-Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/file/d/1-DSBcvyFtXrSy1ORb6WOeNenhQ1rxSYu/view?usp=drivesdk> abrufbar.
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library("tidyverse")
+library("mosaic")
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+insurance <- read_csv("insurance.csv")
+```
+
+#?bersicht ?ber die uns vorliegenden Daten
+
+```{r}
+glimpse(insurance)
+```
+Der Datensatz *insurance* beinhaltet 7 Variablen. Bis auf die Spalten `bmi` und `children` kommen alle Variablen in der weiteren Analyse zur Anwendung. 
+
+
+#Type of Graphs
+Grafiken sind ein wichtiger Bestandteil bei der deskriptiven Untersuchung von Datensätzen. Durch sie können komplizierte und uneinsichtige Sachverhalt einfach beschrieben und dargestellt werden. Jedem sollte jedoch klar sein, dass es sich bei Publikationen oder Bachelorarbeiten um eine wissenschaftliche Arbeit handelt und nicht um ein Bilderbuch. Deshalb empfiehlt es sich, eine Bilderflut möglichst zu vermeiden und nur wirklich aussagekräftige Grafiken zu verwenden.
+
+
+
+##Bar Graph
+Ein Balkendiagramm eignet sich zur grafischen Darstellung der Häufigkeit von Ausprägungen beliebig skalierter Merkmale. Dabei können sowohl absolute als auch relative Häufigkeiten darstellen werden. Mit dem nachfolgenden Balkendiagramm soll schnell und einfach herausgefunden werden, wie die uns vorliegende Geschlechterverteilung aussieht.
+
+```{r}
+qplot(insurance$sex, geom = "bar")
+```
+
+
+Balkendiagramme kann man ab nominalem Skalenniveau für eine anschauliche Darstellung einsetzen. Bei metrischen Datenmaterial ist allerdings für zusätzliche Informationen das Histogramm vorzuziehen. Denn bei diesem stellt der Flächeninhalt einer Säule die Häufigkeit und ihre Höhe die Häufigkeitsdichte dar.
+
+##Histogram
+Zur graphischen Darstellung klassierter Daten verwendet man das Histogramm. Ein Histogramm ist nun analog zu einem Balkendiagramm zu sehen, mit dem wesentlichen Unterschied, dass die Flächen der Säulen hier die (absoluten oder relativen) Häufigkeiten widergeben und nicht ihre Höhen.
+
+
+```{r}
+hist(insurance$age)
+```
+
+Den Unterschied zum Balkendiagramm kann man sehr gut erkennen, wenn man mit dem Befehlt *breaks* arbeitet. Mit *breaks* kann man bestimmen, wie viele Balken in der Grafik ausgegeben werden sollen. Kreiert man mehr Balken als es Klassifizierungen gibt, so kann man deren Höhe wiederum an der y Achse ablesen.  
+
+```{r}
+summary(insurance$age)
+```
+```{r}
+par(mfrow=c(1,2))
+hist(insurance$age, breaks=64)
+hist(insurance$age, breaks=80)
+```
+
+In der linken Grafik werden die unter 20 jährigen noch in einem Balken zusammengefasst. Daher erhöht sich ihre Gesamtsumme auf knapp 140. Im rechten Bild sind diese bereits getrennt und man erkennt zwei Ausprägungen nahe n = 70.
+Mit dem tally() Befehlt aus dem *mosaic* Package, kann man sich die Häufigkeiten auch einfach und schnell ausgeben lassen:
+
+```{r}
+tally (~insurance$age)
+```
+Die obere Zeile gibt das jeweilige Alter aus und die darunter liegende Zeile die entsprechende Häufigkeit. Wir können hier sehen, dass 69 Probanden 18 Jahre alt und 68 Probanden 19 Jahre alt sind. Die restlichen Altersklassen sind alle etwa gleich stark vertreten.  
+
+
+##Scatter Plot
+
+In einem Streudiagramm werden in einem Koordinatensystem die Werte zweier metrischer Merkmale abgetragen, um etwaige Zusammenhänge bzw. Korrelationen erkennen zu können. Üblicherweise wird die unabhängige bzw. erklärende Variable auf der horizontalen x-Achse und die abhängige Variable auf der vertikalen y-Achse abgetragen.
+```{r}
+par(mfrow=c(1,1))
+plot(insurance$age, insurance$charges)
+```
+
+Es scheint einen leichten Zusammenhang zwischen dem Lebensalter und der Höhe der Versicherungskosten zu geben. Des Weiteren fällt auf, dass zwei weitere Gruppen vermutlich existieren, welche weitaus höheren Kosten verursachen.
+
+
+##Line Graph
+Das Liniendiagramm eignet sich hauptsächlich zur Visualisierung von Trends und Entwicklungen im Laufe der Zeit bei gleichmäßig unterteilten Dimensionswerten wie Monaten, Quartalen oder Jahren. Ein Datensatz muss mindestens zwei Datenpunkte enthalten, um eine Linie zu zeichnen. Ein Datensatz mit nur einem einzigen Wert wird als Punkt dargestellt. Im Gegensatz zum Streudiagramm kann es jeweils nur ein Wertepaar bzw. Wertetrio geben. Da der uns vorliegende Datensatz *insurance* keine geeignete Variablen für diese Grafik bieten kann, wird mittels R ein neuer data.frame erzeugt. 
+```{r}
+x <- c(2, 5, 7, 9, 13, 14, 17, 19, 22, 25, 28, 30)
+y <- c(11, 13, 17, 23, 33, 35, 55, 65, 70, 75, 80, 85)
+example1 <- data.frame(x, y)
+colnames(example1) <- c("age", "weight")
+example1
+```
+
+Nun kann graphisch dargestellt werden, wie das Körpergewicht über die Lebensjahre hinweg bei einer Person zunimmt. 
+
+```{r}
+par(mfrow=c(1,2))
+plot(example1$age, example1$weight, type = "l")
+
+plot(example1$age, example1$weight, type = "l") +
+  points(example1$age, example1$weight)
+```
+
+Dies ist nur ein exemplarisches Beispiel, welches zur Veranschaulichung dienen soll.
+Möchte man sich die einzelnen Punkte, welche dem Liniendiagramm zu Grunde liegen, zusätzlich ausgeben lassen, so muss die plot Funktion um den Befehlt points() erweitert werden.
+
+
+##Box Plot
+
+Ein Boxplot ist eine grafische Zusammenfassung der folgenden fünf Punkte:
+
++ Minimum (= 0%-Quantil)
++ 25%-Quantil
++ Median (= 50%-Quantil)
++ 75%-Quantil
++ Maximum (= 100%-Quantil)
+
+Da man das Minimum, den Median und das Maximum als 0%-, 50%- bzw. 100%-Quantil ausdrücken kann, zeigt der Boxplot nur fünf häufig verwendete Quantile. Dabei ist die Box und ihre sogenannten “Whiskers”, die Striche außerhalb der Boxen, wie folgt aufgebaut: Die Box spannt sich vom 25%-Quantil bis zum 75%-Quantil auf, in ihr ist der Median durch einen Querstrich markiert. Außerhalb der Boxen spannen sich nach oben und unten die Whiskers zum Minimum bzw. Maximum der Datenreihe. Am Boxplot kann man auch zwei Streuungsmaße ablesen: Die Spannweite ist nämlich der Abstand zwischen den beiden Whiskers (bzw. zwischen den äußersten Ausreißern). Der Interquartilsabstand ist genau die Breite der Box.
+```{r}
+par(mfrow=c(1,1))
+boxplot(insurance$charges)
+```
+
+Das Boxplot zu den Versicherungskosten zeigt uns, dass die meisten Gebühren zwischen 5.000$ und 20.000$ liegen. Ebenfalls sind die Ausreißer jenseits der 50.000 Marke gut ersichtlich. 
+
+Man kann sich auch die Verteilung der Versicherungskosten pro Geschlecht...
+```{r error=FALSE}
+plot(as.factor(insurance$sex), insurance$charges)
+```
+
+und pro Region ausgeben lassen.
+
+```{r}
+plot(as.factor(insurance$region), insurance$charges)
+```
+
+#Beschriftungen und weitere Befehle
+
+Die von R ausgegebenen Beschriftungen sind meist sehr unschön oder fehlen gänzlich. Daher hier noch ein paar Tipps anhand des zuvor erstellten Scatter Plot Beispiels, damit die erstellten Grafiken ein wenig hübscher und aussagekräftiger werden.
+
+```{r}
+plot(insurance$age, insurance$charges, xlab = "age", ylab = "charges", main = "Scatter Plot")
+```
+
+Die Befehle *xlab* und *ylab* ermöglichen eine Beschriftung der beiden Achsen. Mit *main* kann eine Überschrift hinzugefügt werden. 
+
+```{r}
+plot(insurance$age, insurance$charges, xlab = "age", ylab = "charges", main = "Scatter Plot", pch=19)
+```
+
+Der Zusatzbefehl *pch* ist von 0 bis 25 möglich. Für jede Zahl werden unterschiedliche Arten von Punkten generiert. 
+
+```{r error=FALSE}
+plot(insurance$age, insurance$charges, xlab = "age", ylab = "charges", main = "Scatter Plot", pch=19, col=factor(insurance$smoker))
+```
+
+Wie schon bei **Punkt** **3.3** **Scatter** **Plot** vermutet, exisiteren bei Zusammenhang zwischen Lebensalter und Versicherungskosten weitere Gruppierungen. Durch den Befehl *col* wurden die Raucher unter den Probanden farblich hervorgehoben. Man erkennt eindeutig, dass Raucher höhere Versicherungskosten verursachen als Nichtraucher. Diese sind ab der 40.000 Marke gar nicht mehr in der Grafik vertreten. Des Weiteren könnte man nun vermuten, dass das mittlere Segment zwischen 10.000$ und 30.000$ nur leichte Raucher beinhaltet und ab 30.000$ Kosten starke Raucher vertreten sind. 
+
+#Fazit
+Es braucht nicht viel um in R schnell und einfach verschiedene Arten von Grafiken zu erstellen. Grafiken helfen uns dabei einen guten Überblick über die uns vorliegenden Daten zu bekommen. In diesem Post wurde lediglich auf die einfachste Verwendung der Grafiken eingegangen. Bei der Visualizierung ist noch viel mehr möglich und teilweise auch nötig, um aussagekräftige Schaubilder zu generieren. 
+
+
+
+
+
+
+
+
+
