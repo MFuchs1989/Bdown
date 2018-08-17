@@ -18,7 +18,7 @@
       
       <guid>/2018/08/12/easy-plotting/</guid>
       <description>EinführungIn dem nachfolgenden Post geht es um eine kurze Einführung zum Thema Visualisierung. Es sollen die am häufigsten verwendeten Grafiken in R vorgestellt werden und wann sie zu verwenden sind. Für diese Arbeit wurde der Datensatz insurance von der Statsistik-Plattform Kaggle https://www.kaggle.com verwendet. Eine Kopie des Datensatzes ist unter https://drive.google.com/file/d/1-DSBcvyFtXrSy1ORb6WOeNenhQ1rxSYu/view?usp=drivesdk abrufbar.
-library(&amp;quot;tidyverse&amp;quot;)library(&amp;quot;mosaic&amp;quot;)insurance &amp;lt;- read_csv(&amp;quot;insurance.csv&amp;quot;)Übersicht ?ber die uns vorliegenden Datenglimpse(insurance)## Observations: 1,338## Variables: 7## $ age &amp;lt;int&amp;gt; 19, 18, 28, 33, 32, 31, 46, 37, 37, 60, 25, 62, 23, 5.</description>
+library(&amp;quot;tidyverse&amp;quot;)library(&amp;quot;mosaic&amp;quot;)insurance &amp;lt;- read_csv(&amp;quot;insurance.csv&amp;quot;)Übersicht über die uns vorliegenden Datenglimpse(insurance)## Observations: 1,338## Variables: 7## $ age &amp;lt;int&amp;gt; 19, 18, 28, 33, 32, 31, 46, 37, 37, 60, 25, 62, 23, 5.</description>
     </item>
     
     <item>

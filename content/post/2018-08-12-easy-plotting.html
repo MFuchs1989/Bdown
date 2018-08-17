@@ -24,8 +24,8 @@ output:
 library(&quot;mosaic&quot;)</code></pre>
 <pre class="r"><code>insurance &lt;- read_csv(&quot;insurance.csv&quot;)</code></pre>
 </div>
-<div id="ubersicht-ber-die-uns-vorliegenden-daten" class="section level1">
-<h1>Übersicht ?ber die uns vorliegenden Daten</h1>
+<div id="ubersicht-uber-die-uns-vorliegenden-daten" class="section level1">
+<h1>Übersicht über die uns vorliegenden Daten</h1>
 <pre class="r"><code>glimpse(insurance)</code></pre>
 <pre><code>## Observations: 1,338
 ## Variables: 7
@@ -135,7 +135,7 @@ boxplot(insurance$charges)</code></pre>
 <div id="beschriftungen-und-weitere-befehle" class="section level1">
 <h1>Beschriftungen und weitere Befehle</h1>
 <p>Die von R ausgegebenen Beschriftungen sind meist sehr unschön oder fehlen gänzlich. Daher hier noch ein paar Tipps anhand des zuvor erstellten Scatter Plot Beispiels, damit die erstellten Grafiken ein wenig hübscher und aussagekräftiger werden.</p>
-<pre class="r"><code>plot(insurance$age, insurance$charges, xlab = &quot;age&quot;, ylab = &quot;charges&quot;, main = &quot;Scatter Plot&quot;)</code></pre>
+<pre class="r"><code>plot(insurance$age, insurance$charges)</code></pre>
 <p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>Die Befehle <em>xlab</em> und <em>ylab</em> ermöglichen eine Beschriftung der beiden Achsen. Mit <em>main</em> kann eine Überschrift hinzugefügt werden.</p>
 <pre class="r"><code>plot(insurance$age, insurance$charges, xlab = &quot;age&quot;, ylab = &quot;charges&quot;, main = &quot;Scatter Plot&quot;, pch=19)</code></pre>
