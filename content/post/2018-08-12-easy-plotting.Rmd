@@ -33,7 +33,7 @@ library("mosaic")
 insurance <- read_csv("insurance.csv")
 ```
 
-#?bersicht ?ber die uns vorliegenden Daten
+#Übersicht ?ber die uns vorliegenden Daten
 
 ```{r}
 glimpse(insurance)
@@ -52,7 +52,6 @@ Ein Balkendiagramm eignet sich zur grafischen Darstellung der Häufigkeit von Au
 ```{r}
 qplot(insurance$sex, geom = "bar")
 ```
-
 
 Balkendiagramme kann man ab nominalem Skalenniveau für eine anschauliche Darstellung einsetzen. Bei metrischen Datenmaterial ist allerdings für zusätzliche Informationen das Histogramm vorzuziehen. Denn bei diesem stellt der Flächeninhalt einer Säule die Häufigkeit und ihre Höhe die Häufigkeitsdichte dar.
 
