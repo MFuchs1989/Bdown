@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
-# Einführung
+# Introduction
 
 In dem nachfolgenden Post geht es um eine kurze Einführung zum Thema Visualisierung. Es sollen die am häufigsten verwendeten Grafiken in R vorgestellt werden und wann sie zu verwenden sind. Für diese Arbeit wurde der Datensatz *insurance* von der Statsistik-Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/file/d/1-DSBcvyFtXrSy1ORb6WOeNenhQ1rxSYu/view?usp=drivesdk> abrufbar.
 
@@ -169,7 +169,7 @@ plot(insurance$age, insurance$charges, xlab = "age", ylab = "charges", main = "S
 
 Wie schon bei **Punkt** **3.3** **Scatter** **Plot** vermutet, exisiteren bei Zusammenhang zwischen Lebensalter und Versicherungskosten weitere Gruppierungen. Durch den Befehl *col* wurden die Raucher unter den Probanden farblich hervorgehoben. Man erkennt eindeutig, dass Raucher höhere Versicherungskosten verursachen als Nichtraucher. Diese sind ab der 40.000 Marke gar nicht mehr in der Grafik vertreten. Des Weiteren könnte man nun vermuten, dass das mittlere Segment zwischen 10.000$ und 30.000$ nur leichte Raucher beinhaltet und ab 30.000$ Kosten starke Raucher vertreten sind. 
 
-#Fazit
+#Conclusion
 Es braucht nicht viel um in R schnell und einfach verschiedene Arten von Grafiken zu erstellen. Grafiken helfen uns dabei einen guten Überblick über die uns vorliegenden Daten zu bekommen. In diesem Post wurde lediglich auf die einfachste Verwendung der Grafiken eingegangen. Bei der Visualizierung ist noch viel mehr möglich und teilweise auch nötig, um aussagekräftige Schaubilder zu generieren. 
 
 

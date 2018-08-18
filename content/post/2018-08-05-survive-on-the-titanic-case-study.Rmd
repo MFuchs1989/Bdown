@@ -18,7 +18,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Einführung
+# Introduction
 
 In der nachfolgenden Fallstudie geht es um die exemplarische Analyse nominaler Daten anhand des Untergangs der Titanic. Es soll der Hauptfrage nachgegangen werden, ob das Reisen in einer besseren Klasse die Überlebenschancen auf der Titanic erhöht hat.
 Für diese Untersuchung wurde der Datensatz *titanic_train* von der Statsistik-Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/file/d/1Q-ISaCWBl9q2egJgzgkOmWndDeBa5EXT/view?usp=drivesdk> abrufbar.
@@ -213,7 +213,7 @@ ggplot(Visualization_Class1_3, aes(x = factor(Pclass), y = n, fill = factor(Surv
   guides(fill=guide_legend(title = "Survived?\n0 = No / 1 = Yes"))
 ```
 
-#Fazit
+#Conclusion
 Zwischen allen drei Klassen der Titanic gibt es erhebliche Unterschiede bei der Überlebenschance.
 Diese Fallstudie soll eine Möglichkeit der Analyse von nominal skalierten Variablen aufzeigen. Dabei lag der Fokus dieser Case Study mehr auf der deskreptiven und explorativen Datenanalyse. Signifikanztests waren nicht zentral.  
 

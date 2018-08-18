@@ -17,8 +17,8 @@ output:
 
 
 
-<div id="einfuhrung" class="section level1">
-<h1>Einführung</h1>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
 <p>In dem nachfolgenden Post geht es um eine kurze Einführung zum Thema Visualisierung. Es sollen die am häufigsten verwendeten Grafiken in R vorgestellt werden und wann sie zu verwenden sind. Für diese Arbeit wurde der Datensatz <em>insurance</em> von der Statsistik-Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/file/d/1-DSBcvyFtXrSy1ORb6WOeNenhQ1rxSYu/view?usp=drivesdk" class="uri">https://drive.google.com/file/d/1-DSBcvyFtXrSy1ORb6WOeNenhQ1rxSYu/view?usp=drivesdk</a> abrufbar.</p>
 <pre class="r"><code>library(&quot;tidyverse&quot;)
 library(&quot;mosaic&quot;)</code></pre>
@@ -145,7 +145,7 @@ boxplot(insurance$charges)</code></pre>
 <p><img src="/post/2018-08-12-easy-plotting_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p>Wie schon bei <strong>Punkt</strong> <strong>3.3</strong> <strong>Scatter</strong> <strong>Plot</strong> vermutet, exisiteren bei Zusammenhang zwischen Lebensalter und Versicherungskosten weitere Gruppierungen. Durch den Befehl <em>col</em> wurden die Raucher unter den Probanden farblich hervorgehoben. Man erkennt eindeutig, dass Raucher höhere Versicherungskosten verursachen als Nichtraucher. Diese sind ab der 40.000 Marke gar nicht mehr in der Grafik vertreten. Des Weiteren könnte man nun vermuten, dass das mittlere Segment zwischen 10.000$ und 30.000$ nur leichte Raucher beinhaltet und ab 30.000$ Kosten starke Raucher vertreten sind.</p>
 </div>
-<div id="fazit" class="section level1">
-<h1>Fazit</h1>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
 <p>Es braucht nicht viel um in R schnell und einfach verschiedene Arten von Grafiken zu erstellen. Grafiken helfen uns dabei einen guten Überblick über die uns vorliegenden Daten zu bekommen. In diesem Post wurde lediglich auf die einfachste Verwendung der Grafiken eingegangen. Bei der Visualizierung ist noch viel mehr möglich und teilweise auch nötig, um aussagekräftige Schaubilder zu generieren.</p>
 </div>
