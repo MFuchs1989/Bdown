@@ -164,7 +164,7 @@ olympics %>% filter(NOC == "GER") %>%
 ```
 
 Was haben wir hierbei mit einem einzigen Befehl alles gemacht?
-Als Ergebnis sehen wir den durchschnittlichen BMI Wert von allen deutschen Olympiateilnehmer aufgeteilt nach Jahren.
+Als Ergebnis sehen wir den durchschnittlichen BMI Wert von allen deutschen Olympiateilnehmern aufgeteilt nach Jahren.
 
 Das ganze ist auch ziemlich leicht und schnell graphisch dargestellt:
 ```{r}

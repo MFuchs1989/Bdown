@@ -274,7 +274,7 @@ tags:
 ##  9  1936   648    22.9
 ## 10  1952   442    22.8
 ## # ... with 16 more rows</code></pre>
-<p>Was haben wir hierbei mit einem einzigen Befehl alles gemacht? Als Ergebnis sehen wir den durchschnittlichen BMI Wert von allen deutschen Olympiateilnehmer aufgeteilt nach Jahren.</p>
+<p>Was haben wir hierbei mit einem einzigen Befehl alles gemacht? Als Ergebnis sehen wir den durchschnittlichen BMI Wert von allen deutschen Olympiateilnehmern aufgeteilt nach Jahren.</p>
 <p>Das ganze ist auch ziemlich leicht und schnell graphisch dargestellt:</p>
 <pre class="r"><code>all&lt;- olympics %&gt;% filter(NOC == &quot;GER&quot;) %&gt;%
         select(Age, Height, Weight, Year) %&gt;%
