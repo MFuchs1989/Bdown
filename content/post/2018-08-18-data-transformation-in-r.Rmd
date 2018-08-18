@@ -31,7 +31,7 @@ Für diese Arbeit wurde der Datensatz *olympics* von der Statsistik-Plattform *K
 library("tidyverse")
 ```
 ```{r results='hide', message=FALSE, warning=FALSE}
-insurance <- read_csv("olympics.csv")
+olympics <- read_csv("olympics.csv")
 ```
 
 #Overview
