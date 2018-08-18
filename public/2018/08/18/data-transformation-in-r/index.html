@@ -19,6 +19,11 @@
 
 
 
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
 <link rel="stylesheet" href="/css/fonts.css" media="all">
 <link rel="stylesheet" href="/css/main.css" media="all">
 
@@ -54,7 +59,7 @@
 
   <article class="article">
     
-    <span class="article-duration">0 min read</span>
+    <span class="article-duration">13 min read</span>
     
 
     <h1 class="article-title">Data Transformation in R</h1>
@@ -64,7 +69,285 @@
     
 
     <div class="article-content">
-      
+      <div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In dem nachfolgenden Post geht es um das Thema Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration.</p>
+<p>Hadley Wickham, einer der Autoren des Packages <code>dplyr</code>, definierte hierbei die folgenden 5 Verben:</p>
+<ul>
+<li>filter()</li>
+<li>select()</li>
+<li>mutate()</li>
+<li>arrange()</li>
+<li>summarize()</li>
+</ul>
+<p>Für diese Arbeit wurde der Datensatz <em>olympics</em> von der Statsistik-Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38" class="uri">https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38</a> abrufbar.</p>
+<pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
+<pre class="r"><code>olympics &lt;- read_csv(&quot;olympics.csv&quot;)</code></pre>
+</div>
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<pre class="r"><code>glimpse(olympics)</code></pre>
+<pre><code>## Observations: 271,116
+## Variables: 15
+## $ ID     &lt;int&gt; 1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7...
+## $ Name   &lt;chr&gt; &quot;A Dijiang&quot;, &quot;A Lamusi&quot;, &quot;Gunnar Nielsen Aaby&quot;, &quot;Edgar ...
+## $ Sex    &lt;chr&gt; &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;M&quot;, ...
+## $ Age    &lt;int&gt; 24, 23, 24, 34, 21, 21, 25, 25, 27, 27, 31, 31, 31, 31,...
+## $ Height &lt;int&gt; 180, 170, NA, NA, 185, 185, 185, 185, 185, 185, 188, 18...
+## $ Weight &lt;dbl&gt; 80, 60, NA, NA, 82, 82, 82, 82, 82, 82, 75, 75, 75, 75,...
+## $ Team   &lt;chr&gt; &quot;China&quot;, &quot;China&quot;, &quot;Denmark&quot;, &quot;Denmark/Sweden&quot;, &quot;Netherl...
+## $ NOC    &lt;chr&gt; &quot;CHN&quot;, &quot;CHN&quot;, &quot;DEN&quot;, &quot;DEN&quot;, &quot;NED&quot;, &quot;NED&quot;, &quot;NED&quot;, &quot;NED&quot;,...
+## $ Games  &lt;chr&gt; &quot;1992 Summer&quot;, &quot;2012 Summer&quot;, &quot;1920 Summer&quot;, &quot;1900 Summ...
+## $ Year   &lt;int&gt; 1992, 2012, 1920, 1900, 1988, 1988, 1992, 1992, 1994, 1...
+## $ Season &lt;chr&gt; &quot;Summer&quot;, &quot;Summer&quot;, &quot;Summer&quot;, &quot;Summer&quot;, &quot;Winter&quot;, &quot;Wint...
+## $ City   &lt;chr&gt; &quot;Barcelona&quot;, &quot;London&quot;, &quot;Antwerpen&quot;, &quot;Paris&quot;, &quot;Calgary&quot;,...
+## $ Sport  &lt;chr&gt; &quot;Basketball&quot;, &quot;Judo&quot;, &quot;Football&quot;, &quot;Tug-Of-War&quot;, &quot;Speed ...
+## $ Event  &lt;chr&gt; &quot;Basketball Men&#39;s Basketball&quot;, &quot;Judo Men&#39;s Extra-Lightw...
+## $ Medal  &lt;chr&gt; NA, NA, NA, &quot;Gold&quot;, NA, NA, NA, NA, NA, NA, NA, NA, NA,...</code></pre>
+<p>Wie wir sehen können, haben wir es bei diesem Datensatz mit über 271k Observations zu tun. Dabei brauchen wir dieses Mal doch nur ganz ausgewählte Informationen … Mit den 5 oben genannten Befehlen lässt sich dies auch ganz leicht bewerkstelligen.</p>
+</div>
+<div id="filter" class="section level1">
+<h1>filter()</h1>
+<p>Mit dem Befehl filter() bekommen wir von R genau definierte Zeilen aus dem zugrunde liegenden Datensatzes ausgegeben. Es gibt folgende Möglichkeiten zu filtern:</p>
+<ul>
+<li>==</li>
+<li>!=</li>
+<li>&lt;</li>
+<li><blockquote>
+
+</blockquote></li>
+<li>&lt;=</li>
+<li><blockquote>
+<p>=</p>
+</blockquote></li>
+<li>&amp; heißt “und”</li>
+<li>heißt “oder”</li>
+</ul>
+<p>Als anschauliches Beispiel wollen wir nun wissen, wie viele deutsche Olympiateilnahmen es bisher gab.</p>
+<pre class="r"><code>olympics %&gt;% filter(NOC == &quot;GER&quot;)</code></pre>
+<pre><code>## # A tibble: 9,830 x 15
+##       ID Name  Sex     Age Height Weight Team  NOC   Games  Year Season
+##    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; 
+##  1   133 Fran~ M        NA     NA     NA Germ~ GER   1900~  1900 Summer
+##  2   389 Adol~ M        45     NA     NA Germ~ GER   1928~  1928 Summer
+##  3   389 Adol~ M        45     NA     NA Germ~ GER   1928~  1928 Summer
+##  4   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  5   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  6   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  7   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  8   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  9   402 Arth~ M        22    184     85 Germ~ GER   2008~  2008 Summer
+## 10   402 Arth~ M        30    184     85 Germ~ GER   2016~  2016 Summer
+## # ... with 9,820 more rows, and 4 more variables: City &lt;chr&gt;, Sport &lt;chr&gt;,
+## #   Event &lt;chr&gt;, Medal &lt;chr&gt;</code></pre>
+<p>Nicht schlecht, doch fast 10.000 Teilnahmen. Und wie schaut es mit der Geschlechteraufteilung aus? Wir filtern zuerst nach den männlichen Teilnehmern. Dabei kann man den vorherigen Befehl mit einem &amp;-Zeichen um ein weiteres Kriterium erweitern.</p>
+<pre class="r"><code>olympics %&gt;% filter(NOC == &quot;GER&quot; &amp; Sex == &quot;M&quot;)</code></pre>
+<pre><code>## # A tibble: 6,831 x 15
+##       ID Name  Sex     Age Height Weight Team  NOC   Games  Year Season
+##    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; 
+##  1   133 Fran~ M        NA     NA     NA Germ~ GER   1900~  1900 Summer
+##  2   389 Adol~ M        45     NA     NA Germ~ GER   1928~  1928 Summer
+##  3   389 Adol~ M        45     NA     NA Germ~ GER   1928~  1928 Summer
+##  4   402 Arth~ M        22    184     85 Germ~ GER   2008~  2008 Summer
+##  5   402 Arth~ M        30    184     85 Germ~ GER   2016~  2016 Summer
+##  6   505 &quot;Ale~ M        25    186     84 Germ~ GER   1912~  1912 Summer
+##  7   508 Bern~ M        NA     NA     NA Germ~ GER   1906~  1906 Summer
+##  8   561 Thom~ M        26    184     73 Germ~ GER   1994~  1994 Winter
+##  9   561 Thom~ M        26    184     73 Germ~ GER   1994~  1994 Winter
+## 10   586 Tobi~ M        31    178     85 Germ~ GER   2002~  2002 Winter
+## # ... with 6,821 more rows, and 4 more variables: City &lt;chr&gt;, Sport &lt;chr&gt;,
+## #   Event &lt;chr&gt;, Medal &lt;chr&gt;</code></pre>
+<p>6,8k männliche Teilnehmer… und jetzt die weiblichen mit dem gleichen Befehl leicht abgewandelt:</p>
+<pre class="r"><code>olympics %&gt;% filter(NOC == &quot;GER&quot; &amp; Sex != &quot;M&quot;)</code></pre>
+<pre><code>## # A tibble: 2,999 x 15
+##       ID Name  Sex     Age Height Weight Team  NOC   Games  Year Season
+##    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; 
+##  1   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  2   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  3   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  4   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  5   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  6   769 Leon~ F        23    162     54 Germ~ GER   2016~  2016 Summer
+##  7   796 Sabi~ F        32    172     68 Germ~ GER   1992~  1992 Summer
+##  8   827 Mare~ F        26    174     73 Germ~ GER   2016~  2016 Summer
+##  9   893 Ulri~ F        23    170     60 Germ~ GER   1994~  1994 Winter
+## 10   981 Katr~ F        29    177     62 Germ~ GER   1996~  1996 Summer
+## # ... with 2,989 more rows, and 4 more variables: City &lt;chr&gt;, Sport &lt;chr&gt;,
+## #   Event &lt;chr&gt;, Medal &lt;chr&gt;</code></pre>
+<p>!= bedeutet “nicht”. Wir sehen fast 3k weibliche Teilnehmer bisher an Olympia. Nun möchten wir wissen, wie viele deutsche Teilnehmer zwischen 20 und 30 Jahre alt waren:</p>
+<pre class="r"><code>olympics %&gt;% filter(NOC == &quot;GER&quot; &amp; Age &gt;= 20 &amp; Age &lt;= 30)</code></pre>
+<pre><code>## # A tibble: 7,113 x 15
+##       ID Name  Sex     Age Height Weight Team  NOC   Games  Year Season
+##    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; 
+##  1   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  2   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  3   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  4   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  5   396 Katj~ F        25    165     55 Germ~ GER   2008~  2008 Summer
+##  6   402 Arth~ M        22    184     85 Germ~ GER   2008~  2008 Summer
+##  7   402 Arth~ M        30    184     85 Germ~ GER   2016~  2016 Summer
+##  8   505 &quot;Ale~ M        25    186     84 Germ~ GER   1912~  1912 Summer
+##  9   561 Thom~ M        26    184     73 Germ~ GER   1994~  1994 Winter
+## 10   561 Thom~ M        26    184     73 Germ~ GER   1994~  1994 Winter
+## # ... with 7,103 more rows, and 4 more variables: City &lt;chr&gt;, Sport &lt;chr&gt;,
+## #   Event &lt;chr&gt;, Medal &lt;chr&gt;</code></pre>
+</div>
+<div id="select" class="section level1">
+<h1>select()</h1>
+<p>Im Vergleich zu dem filter() Befehlt wählt select() nicht einzelne Zeilen, sondern ganze Spalten aus. Sehr häufig kommt es vor, dass Datensätze ganz viele Spalten besitzen, die man für die anstehende Analyse überhaupt nicht braucht. Um den Datensatz übersichtlicher zu gestalten hat man mit select() die Möglichkeit, einzelne Spalten gezielt auszuwählen.</p>
+<p>Nachfolgend interessiert mich, ob es einen Zusammenhang zwischen der Körpergröße und dem Körpergewicht gibt. Daführ wähle ich genau diese beiden Spalten aus:</p>
+<pre class="r"><code>olympics %&gt;% select(Height, Weight)</code></pre>
+<pre><code>## # A tibble: 271,116 x 2
+##    Height Weight
+##     &lt;int&gt;  &lt;dbl&gt;
+##  1    180     80
+##  2    170     60
+##  3     NA     NA
+##  4     NA     NA
+##  5    185     82
+##  6    185     82
+##  7    185     82
+##  8    185     82
+##  9    185     82
+## 10    185     82
+## # ... with 271,106 more rows</code></pre>
+<p>Da ich bei Korrelationen keine fehlenden Werte gebrauchen kann, lösche ich diese mit na.omit raus und lasse mir mit cor() die Stärke des Zusammenhanges ausgeben:</p>
+<pre class="r"><code>olympics %&gt;% select(Height, Weight) %&gt;% na.omit() %&gt;% cor()</code></pre>
+<pre><code>##           Height    Weight
+## Height 1.0000000 0.7962131
+## Weight 0.7962131 1.0000000</code></pre>
+<p>Alterntiv kann der Befehl auch so geschrieben werden:</p>
+<pre class="r"><code>olympics %&gt;% select(Height, Weight) %&gt;% cor(use = &quot;complete.obs&quot;)</code></pre>
+<pre><code>##           Height    Weight
+## Height 1.0000000 0.7962131
+## Weight 0.7962131 1.0000000</code></pre>
+<p>Bei r=0,8 kann man von einem starken Zusammenhang sprechen.</p>
+</div>
+<div id="mutate" class="section level1">
+<h1>mutate()</h1>
+<p>Für und während des Analyseprozesses werden wir kaum drum herum kommen, neue Variablen aus dem Datensatz heraus zu kreieren. Der mutate() Befehl tut genau dies. Die Funktion ist wie folgt aufgebaut: mutate(“Name neuer Variable” = “Var1” plus/minus/geteilt “Var2”). Benutzt man nicht wie wir im nachfolgenden Beispiel die Pipe Funktion (%&gt;%), muss vor dem Namen der neuen Variable der zugrunde liegende Datensatz genannt werden. Nachfolgend interessiert mich nun, welchen BMI (Body-Mass-Index) die Sportler hatten. Da der Datensatz diese Variable (noch) nicht hat, erzeugen wir sie eben selbst:</p>
+<pre class="r"><code>olympics %&gt;% mutate(bmi = Weight / (Height/100)^2)</code></pre>
+<pre><code>## # A tibble: 271,116 x 16
+##       ID Name  Sex     Age Height Weight Team  NOC   Games  Year Season
+##    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; 
+##  1     1 A Di~ M        24    180     80 China CHN   1992~  1992 Summer
+##  2     2 A La~ M        23    170     60 China CHN   2012~  2012 Summer
+##  3     3 Gunn~ M        24     NA     NA Denm~ DEN   1920~  1920 Summer
+##  4     4 Edga~ M        34     NA     NA Denm~ DEN   1900~  1900 Summer
+##  5     5 Chri~ F        21    185     82 Neth~ NED   1988~  1988 Winter
+##  6     5 Chri~ F        21    185     82 Neth~ NED   1988~  1988 Winter
+##  7     5 Chri~ F        25    185     82 Neth~ NED   1992~  1992 Winter
+##  8     5 Chri~ F        25    185     82 Neth~ NED   1992~  1992 Winter
+##  9     5 Chri~ F        27    185     82 Neth~ NED   1994~  1994 Winter
+## 10     5 Chri~ F        27    185     82 Neth~ NED   1994~  1994 Winter
+## # ... with 271,106 more rows, and 5 more variables: City &lt;chr&gt;,
+## #   Sport &lt;chr&gt;, Event &lt;chr&gt;, Medal &lt;chr&gt;, bmi &lt;dbl&gt;</code></pre>
+</div>
+<div id="arrange" class="section level1">
+<h1>arrange()</h1>
+<p>Für die Erläuterung des arrange() Befehls bleiben wir in unserer Analyse noch ein wenig bei der gerade neu erzeugten Variable ‘bmi’. Arrange() sortiert einen Vektor neu. Dies kann aufsteigend oder absteigend erfolgen:</p>
+<pre class="r"><code>olympics %&gt;% mutate(bmi = Weight / (Height/100)^2) %&gt;% arrange(bmi)</code></pre>
+<pre><code>## # A tibble: 271,116 x 16
+##        ID Name  Sex     Age Height Weight Team  NOC   Games  Year Season
+##     &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; 
+##  1 134370 &quot;Alb~ M        24    183     28 Unit~ USA   1956~  1956 Summer
+##  2 110533 Lia ~ F        31    169     30 Braz~ BRA   2016~  2016 Summer
+##  3  33539 Bndi~ F        17    176     38 Belg~ BEL   1992~  1992 Summer
+##  4  33539 Bndi~ F        17    176     38 Belg~ BEL   1992~  1992 Summer
+##  5  33539 Bndi~ F        17    176     38 Belg~ BEL   1992~  1992 Summer
+##  6  33539 Bndi~ F        17    176     38 Belg~ BEL   1992~  1992 Summer
+##  7  33539 Bndi~ F        17    176     38 Belg~ BEL   1992~  1992 Summer
+##  8   5381 Mart~ F        16    160     32 Spain ESP   1984~  1984 Summer
+##  9   5381 Mart~ F        16    160     32 Spain ESP   1984~  1984 Summer
+## 10   5381 Mart~ F        16    160     32 Spain ESP   1984~  1984 Summer
+## # ... with 271,106 more rows, and 5 more variables: City &lt;chr&gt;,
+## #   Sport &lt;chr&gt;, Event &lt;chr&gt;, Medal &lt;chr&gt;, bmi &lt;dbl&gt;</code></pre>
+<p>Mh ein Mann mit 1,83m Körpergröße und nur 28kg Gewicht (bmi = 8,36) … komisch.</p>
+<p>Nun das Ganze für einen absteigenden BMI Wert:</p>
+<pre class="r"><code>olympics %&gt;% mutate(bmi = Weight / (Height/100)^2) %&gt;% arrange(desc(bmi))</code></pre>
+<pre><code>## # A tibble: 271,116 x 16
+##        ID Name  Sex     Age Height Weight Team  NOC   Games  Year Season
+##     &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;chr&gt; 
+##  1  12177 Rica~ M        21    183    214 Guam  GUM   2008~  2008 Summer
+##  2  12177 Rica~ M        25    183    214 Guam  GUM   2012~  2012 Summer
+##  3  87041 Dmit~ M        24    176    175 Russ~ RUS   2004~  2004 Summer
+##  4  45319 Shan~ M        28    173    161 Unit~ USA   2000~  2000 Summer
+##  5  45319 Shan~ M        32    173    161 Unit~ USA   2004~  2004 Summer
+##  6  74435 Holl~ F        22    173    155 Unit~ USA   2012~  2012 Summer
+##  7 103580 Vale~ M        28    187    180 Ukra~ UKR   2000~  2000 Summer
+##  8  62843 Olha~ F        18    181    167 Ukra~ UKR   2004~  2004 Summer
+##  9  62843 Olha~ F        22    181    167 Ukra~ UKR   2008~  2008 Summer
+## 10 103413 Leon~ M        29    187    178 Vene~ VEN   2004~  2004 Summer
+## # ... with 271,106 more rows, and 5 more variables: City &lt;chr&gt;,
+## #   Sport &lt;chr&gt;, Event &lt;chr&gt;, Medal &lt;chr&gt;, bmi &lt;dbl&gt;</code></pre>
+<p>Nicht schlecht, wieder ein 1,83m großer Mann an der Spitze mit 214kg Körpergewicht. Aber dieses Mal handelt es sich um einen Judoka und das ist wiederum schon ein wenig realisitscher.</p>
+</div>
+<div id="summarize" class="section level1">
+<h1>summarize()</h1>
+<p>Der letzte der 5 hier behandelten Befehle für Data Transformation ist summarize(). Er wird fast ausschließlich mit dem group_by() Befehl verwendet. Diese Kombination ermöglicht uns zu vergleichen. Wird summarize() alleine verwendet, bricht er den Dataframe auf eine einzelne Zeile herunter.</p>
+<p>Tipp: Um sicher zu gehen, dass die Aggregation richtig erfolgt, verwende ich n() bei jedem summarize() Befehl:</p>
+<pre class="r"><code>olympics %&gt;% summarize(N = n(), first_year = min(Year), last_year = max(Year), avg_age = mean(na.omit(Age)))</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##        N first_year last_year avg_age
+##    &lt;int&gt;      &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 271116       1896      2016    25.6</code></pre>
+<p>Wir sehen, dass die Olympischen Spiele ab 1896 in unserem Datensatz aufgeführt sind. Die letzten fanden 2016 statt. Durchschnittlich waren die Teilnehmer 25,6 Jahre alt.</p>
+<p>Wie zuvor bereits erwähnt, erlaubt uns der summarize() Befehl in Verbindung mit dem group_by() Befehl zu vergleichen. Mit group_by wird eine Varibale des Datensatzes entsprechend groupiert:</p>
+<pre class="r"><code>olympics %&gt;% group_by(Year) %&gt;% summarize(N = n(), avg_age = mean(na.omit(Age)))</code></pre>
+<pre><code>## # A tibble: 35 x 3
+##     Year     N avg_age
+##    &lt;int&gt; &lt;int&gt;   &lt;dbl&gt;
+##  1  1896   380    23.6
+##  2  1900  1936    29.0
+##  3  1904  1301    26.7
+##  4  1906  1733    27.1
+##  5  1908  3101    27.0
+##  6  1912  4040    27.5
+##  7  1920  4292    29.3
+##  8  1924  5693    28.4
+##  9  1928  5574    29.1
+## 10  1932  3321    32.6
+## # ... with 25 more rows</code></pre>
+<p>Nun können wir das Durchschnittsalter der Athleten pro Jahr vergleichen.</p>
+</div>
+<div id="combinations" class="section level1">
+<h1>Combinations</h1>
+<p>In der Praxis werden meist die Funktionen in Kombination miteinander benutzt:</p>
+<pre class="r"><code>olympics %&gt;% filter(NOC == &quot;GER&quot;) %&gt;%
+  select(Age, Height, Weight, Year) %&gt;%
+    mutate(bmi = Weight / (Height/100)^2) %&gt;%
+      group_by(Year) %&gt;%
+        summarize(N = n(), avg_bmi = mean(na.omit(bmi)))</code></pre>
+<pre><code>## # A tibble: 26 x 3
+##     Year     N avg_bmi
+##    &lt;int&gt; &lt;int&gt;   &lt;dbl&gt;
+##  1  1896    94    24.5
+##  2  1900   103    25.0
+##  3  1904    55    23.9
+##  4  1906   157    23.4
+##  5  1908   148    21.6
+##  6  1912   312    22.2
+##  7  1928   450    22.4
+##  8  1932   225    23.1
+##  9  1936   648    22.9
+## 10  1952   442    22.8
+## # ... with 16 more rows</code></pre>
+<p>Was haben wir hierbei mit einem einzigen Befehl alles gemacht? Als Ergebnis sehen wir den durchschnittlichen BMI Wert von allen deutschen Olympiateilnehmer aufgeteilt nach Jahren.</p>
+<p>Das ganze ist auch ziemlich leicht und schnell graphisch dargestellt:</p>
+<pre class="r"><code>all&lt;- olympics %&gt;% filter(NOC == &quot;GER&quot;) %&gt;%
+        select(Age, Height, Weight, Year) %&gt;%
+          mutate(bmi = Weight / (Height/100)^2) %&gt;%
+           group_by(Year) %&gt;%
+              summarize(N = n(), avg_bmi = mean(na.omit(bmi)))
+
+plot(all$Year, all$avg_bmi, type = &quot;l&quot;)</code></pre>
+<p><img src="/post/2018-08-18-data-transformation-in-r_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Mit nur sehr wenigen Befehlen, kann man schon recht viel in Sachen Datentransformation erreichen. Wie man anhand des letzten Beispiels gesehen hat, harmonieren die Packages ‘dplyr’ und ‘ggplot2’ sehr gut miteinander.</p>
+</div>
+
     </div>
   </article>
 
@@ -87,7 +370,22 @@
     </div>
     
 
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
     
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
 
     
   </body>
