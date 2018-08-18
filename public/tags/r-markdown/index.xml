@@ -18,8 +18,9 @@
       
       <guid>/2018/08/18/data-transformation-in-r/</guid>
       <description>IntroductionIn dem nachfolgenden Post geht es um das Thema Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration.
-Hadley Wickham, einer der Autoren des Packages dplyr, definierte hierbei die folgenden 5 Verben:
-filter()select()mutate()arrange()summarize()Für diese Arbeit wurde der Datensatz olympics von der Statsistik-Plattform Kaggle https://www.kaggle.com verwendet. Eine Kopie des Datensatzes ist unter https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38 abrufbar.</description>
+test
+Hadley Wickham, einer der Autoren des Packages dplyr, definierte hierbei die folgenden 5 Verben:
+filter()select()mutate()arrange()summarize()Für diese Arbeit wurde der Datensatz olympics von der Statsistik-Plattform Kaggle https://www.kaggle.com verwendet. Eine Kopie des Datensatzes ist unter https://drive.</description>
     </item>
     
     <item>

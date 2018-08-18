@@ -16,6 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 # Introduction
 In dem nachfolgenden Post geht es um das Thema Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration.
 
+![test](./pic/Wrangle.jpg)
+
 Hadley Wickham, einer der Autoren des Packages `dplyr`, definierte hierbei die folgenden 5 Verben:
 
 + filter()
