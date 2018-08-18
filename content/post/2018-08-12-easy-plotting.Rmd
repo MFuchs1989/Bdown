@@ -33,7 +33,7 @@ library("mosaic")
 insurance <- read_csv("insurance.csv")
 ```
 
-#Übersicht über die uns vorliegenden Daten
+#Overview
 
 ```{r}
 glimpse(insurance)

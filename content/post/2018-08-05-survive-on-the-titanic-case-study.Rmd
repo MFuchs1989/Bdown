@@ -31,7 +31,7 @@ library("compute.es")
 Titanic <- read_csv("Titanic.csv")
 ```
 
-#Übersicht über den vorliegenden Datensatz
+#Overview
 
 Ein erster Blick auf die Daten zeigt uns, welche Variablen mit wie vielen Observations vorliegen.
 ```{r}
