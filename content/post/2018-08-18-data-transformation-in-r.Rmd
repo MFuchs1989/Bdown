@@ -16,8 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 # Introduction
 In dem nachfolgenden Post geht es um Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration. 
 
-![test](Wrangle.jpg)
-![test i net](https://www.google.de/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjUx6qC_PjcAhWS-aQKHVBkD4cQjRx6BAgBEAU&url=http%3A%2F%2Fr4ds.had.co.nz%2Fwrangle-intro.html&psig=AOvVaw0_z1JOjeJJtlToqzlWN_Jo&ust=1534763039634688)
+![](http://r4ds.had.co.nz/diagrams/data-science-wrangle.png)
+![](http://r4ds.had.co.nz/diagrams/data-science-explore.png)
 
 Hadley Wickham, einer der Autoren des Packages `dplyr`, definierte hierbei die folgenden 5 Verben:
 
