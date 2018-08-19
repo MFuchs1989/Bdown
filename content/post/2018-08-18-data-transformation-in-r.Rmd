@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Introduction
-In dem nachfolgenden Post geht es um Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration. 
+In dem nachfolgenden Post geht es um Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration (Wickham & Grolemund, 2016). 
 
 ![](http://r4ds.had.co.nz/diagrams/data-science-wrangle.png)
 ![](http://r4ds.had.co.nz/diagrams/data-science-explore.png)
@@ -184,4 +184,5 @@ plot(all$Year, all$avg_bmi, type = "l")
 #Conclusion
 Mit nur sehr wenigen Befehlen, kann man schon recht viel in Sachen Datentransformation erreichen. Wie man anhand des letzten Beispiels gesehen hat, harmonieren die Packages 'dplyr' und 'ggplot2' sehr gut miteinander. 
 
-
+#Bibliography
+Wickham, H., & Grolemund, G. (2016). R for data science: import, tidy, transform, visualize, and model data. " O'Reilly Media, Inc.".
