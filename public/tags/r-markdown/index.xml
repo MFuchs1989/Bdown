@@ -18,8 +18,8 @@
       
       <guid>/2018/08/18/data-transformation-in-r/</guid>
       <description>IntroductionIn dem nachfolgenden Post geht es um Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration (Wickham &amp;amp; Grolemund, 2016).
-Hadley Wickham, einer der Autoren des Packages dplyr, definierte hierbei die folgenden 5 Verben:
-filter()select()mutate()arrange()summarize()Für diese Arbeit wurde der Datensatz olympics von der Statistik-Plattform Kaggle https://www.kaggle.com verwendet. Eine Kopie des Datensatzes ist unter https://drive.</description>
+Quelle: Wickham, H., &amp;amp; Grolemund, G. (2016). R for data science: import, tidy, transform, visualize, and model data. &amp;quot; O’Reilly Media, Inc.&amp;quot;
+Quelle: Wickham, H., &amp;amp; Grolemund, G. (2016). R for data science: import, tidy, transform, visualize, and model data.</description>
     </item>
     
     <item>
