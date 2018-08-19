@@ -215,8 +215,7 @@ ggplot(Visualization_Class1_3, aes(x = factor(Pclass), y = n, fill = factor(Surv
 
 #Conclusion
 Zwischen allen drei Klassen der Titanic gibt es erhebliche Unterschiede bei der Überlebenschance.
-Diese Fallstudie soll eine Möglichkeit der Analyse von nominal skalierten Variablen aufzeigen. Dabei lag der Fokus dieser Case Study mehr auf der deskreptiven und explorativen Datenanalyse. Signifikanztests waren nicht zentral.  
-
+Diese Fallstudie soll eine Möglichkeit der Analyse von nominal skalierten Variablen aufzeigen. Dabei lag der Fokus dieser Case Study mehr auf der deskreptiven und explorativen Datenanalyse. 
 
 
 
