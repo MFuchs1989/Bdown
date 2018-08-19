@@ -13,7 +13,7 @@ tags:
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>In dem nachfolgenden Post geht es um das Thema Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration. Hadley Wickham, einer der Autoren des Packages <code>dplyr</code>, definierte hierbei die folgenden 5 Verben:</p>
+<p>In dem nachfolgenden Post geht es um Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration. Hadley Wickham, einer der Autoren des Packages <code>dplyr</code>, definierte hierbei die folgenden 5 Verben:</p>
 <ul>
 <li>filter()</li>
 <li>select()</li>
@@ -21,7 +21,7 @@ tags:
 <li>arrange()</li>
 <li>summarize()</li>
 </ul>
-<p>Für diese Arbeit wurde der Datensatz <em>olympics</em> von der Statsistik-Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38" class="uri">https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38</a> abrufbar.</p>
+<p>Für diese Arbeit wurde der Datensatz <em>olympics</em> von der Statistik-Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38" class="uri">https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38</a> abrufbar.</p>
 <pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
 <pre class="r"><code>olympics &lt;- read_csv(&quot;olympics.csv&quot;)</code></pre>
 </div>
@@ -45,11 +45,11 @@ tags:
 ## $ Sport  &lt;chr&gt; &quot;Basketball&quot;, &quot;Judo&quot;, &quot;Football&quot;, &quot;Tug-Of-War&quot;, &quot;Speed ...
 ## $ Event  &lt;chr&gt; &quot;Basketball Men&#39;s Basketball&quot;, &quot;Judo Men&#39;s Extra-Lightw...
 ## $ Medal  &lt;chr&gt; NA, NA, NA, &quot;Gold&quot;, NA, NA, NA, NA, NA, NA, NA, NA, NA,...</code></pre>
-<p>Wie wir sehen können, haben wir es bei diesem Datensatz mit über 271k Observations zu tun. Dabei brauchen wir dieses Mal doch nur ganz ausgewählte Informationen … Mit den 5 oben genannten Befehlen lässt sich dies auch ganz leicht bewerkstelligen.</p>
+<p>Wir haben es bei diesem Datensatz mit über 271k Observations zu tun. Dabei brauchen wir dieses Mal doch nur ganz ausgewählte Informationen… Mit den 5 oben genannten Befehlen lässt sich dies auch ganz leicht bewerkstelligen.</p>
 </div>
 <div id="filter" class="section level1">
 <h1>filter()</h1>
-<p>Mit dem Befehl filter() bekommen wir von R genau definierte Zeilen aus dem zugrunde liegenden Datensatzes ausgegeben. Es gibt folgende Möglichkeiten zu filtern:</p>
+<p>Mit dem Befehl filter() bekommen wir von R genau definierte Zeilen aus dem zugrunde liegenden Datensatz ausgegeben. Es gibt folgende Möglichkeiten zu filtern:</p>
 <ul>
 <li>==</li>
 <li>!=</li>
@@ -98,7 +98,7 @@ tags:
 ## 10   586 Tobi~ M        31    178     85 Germ~ GER   2002~  2002 Winter
 ## # ... with 6,821 more rows, and 4 more variables: City &lt;chr&gt;, Sport &lt;chr&gt;,
 ## #   Event &lt;chr&gt;, Medal &lt;chr&gt;</code></pre>
-<p>6,8k männliche Teilnehmer… und jetzt die weiblichen mit dem gleichen Befehl leicht abgewandelt:</p>
+<p>6,8k männliche Teilnehmer! Und jetzt die weiblichen mit dem gleichen Befehl leicht abgewandelt:</p>
 <pre class="r"><code>olympics %&gt;% filter(NOC == &quot;GER&quot; &amp; Sex != &quot;M&quot;)</code></pre>
 <pre><code>## # A tibble: 2,999 x 15
 ##       ID Name  Sex     Age Height Weight Team  NOC   Games  Year Season
@@ -115,7 +115,7 @@ tags:
 ## 10   981 Katr~ F        29    177     62 Germ~ GER   1996~  1996 Summer
 ## # ... with 2,989 more rows, and 4 more variables: City &lt;chr&gt;, Sport &lt;chr&gt;,
 ## #   Event &lt;chr&gt;, Medal &lt;chr&gt;</code></pre>
-<p>!= bedeutet “nicht”. Wir sehen fast 3k weibliche Teilnehmer bisher an Olympia. Nun möchten wir wissen, wie viele deutsche Teilnehmer zwischen 20 und 30 Jahre alt waren:</p>
+<p>!= bedeutet “nicht”. Wir sehen fast 3k weibliche Teilnehmer, die bisher an Olympia teilnahmen. Nun möchten wir wissen, wie viele deutsche Teilnehmer zwischen 20 und 30 Jahre alt waren:</p>
 <pre class="r"><code>olympics %&gt;% filter(NOC == &quot;GER&quot; &amp; Age &gt;= 20 &amp; Age &lt;= 30)</code></pre>
 <pre><code>## # A tibble: 7,113 x 15
 ##       ID Name  Sex     Age Height Weight Team  NOC   Games  Year Season
@@ -135,7 +135,7 @@ tags:
 </div>
 <div id="select" class="section level1">
 <h1>select()</h1>
-<p>Im Vergleich zu dem filter() Befehlt wählt select() nicht einzelne Zeilen, sondern ganze Spalten aus. Sehr häufig kommt es vor, dass Datensätze ganz viele Spalten besitzen, die man für die anstehende Analyse überhaupt nicht braucht. Um den Datensatz übersichtlicher zu gestalten hat man mit select() die Möglichkeit, einzelne Spalten gezielt auszuwählen.</p>
+<p>Im Vergleich zu dem filter() Befehlt wählt select() nicht einzelne Zeilen, sondern ganze Spalten aus. Sehr häufig kommt es vor, dass Datensätze ganz viele Spalten besitzen, die man für die anstehende Analyse überhaupt nicht braucht. Um den Datensatz übersichtlicher zu gestalten, hat man mit select() die Möglichkeit einzelne Spalten gezielt auszuwählen.</p>
 <p>Nachfolgend interessiert mich, ob es einen Zusammenhang zwischen der Körpergröße und dem Körpergewicht gibt. Daführ wähle ich genau diese beiden Spalten aus:</p>
 <pre class="r"><code>olympics %&gt;% select(Height, Weight)</code></pre>
 <pre><code>## # A tibble: 271,116 x 2
@@ -203,7 +203,7 @@ tags:
 ## 10   5381 Mart~ F        16    160     32 Spain ESP   1984~  1984 Summer
 ## # ... with 271,106 more rows, and 5 more variables: City &lt;chr&gt;,
 ## #   Sport &lt;chr&gt;, Event &lt;chr&gt;, Medal &lt;chr&gt;, bmi &lt;dbl&gt;</code></pre>
-<p>Mh ein Mann mit 1,83m Körpergröße und nur 28kg Gewicht (bmi = 8,36) … komisch.</p>
+<p>Oh! Ein Mann mit 1,83m Körpergröße und nur 28kg Gewicht (bmi = 8,36) … komisch, das kann wohl nicht sein.</p>
 <p>Nun das Ganze für einen absteigenden BMI Wert:</p>
 <pre class="r"><code>olympics %&gt;% mutate(bmi = Weight / (Height/100)^2) %&gt;% arrange(desc(bmi))</code></pre>
 <pre><code>## # A tibble: 271,116 x 16
@@ -225,7 +225,7 @@ tags:
 </div>
 <div id="summarize" class="section level1">
 <h1>summarize()</h1>
-<p>Der letzte der 5 hier behandelten Befehle für Data Transformation ist summarize(). Er wird fast ausschließlich mit dem group_by() Befehl verwendet. Diese Kombination ermöglicht uns zu vergleichen. Wird summarize() alleine verwendet, bricht er den Dataframe auf eine einzelne Zeile herunter.</p>
+<p>Der Letzte der 5 hier behandelten Befehle für Data Transformation ist summarize(). Er wird fast ausschließlich mit dem group_by() Befehl verwendet. Diese Kombination ermöglicht Vergleiche. Wird summarize() alleine verwendet, bricht er den Dataframe auf eine einzelne Zeile herunter.</p>
 <p>Tipp: Um sicher zu gehen, dass die Aggregation richtig erfolgt, verwende ich n() bei jedem summarize() Befehl:</p>
 <pre class="r"><code>olympics %&gt;% summarize(N = n(), first_year = min(Year), last_year = max(Year), avg_age = mean(na.omit(Age)))</code></pre>
 <pre><code>## # A tibble: 1 x 4
@@ -274,7 +274,7 @@ tags:
 ## 10  1952   442    22.8
 ## # ... with 16 more rows</code></pre>
 <p>Was haben wir hierbei mit einem einzigen Befehl alles gemacht? Als Ergebnis sehen wir den durchschnittlichen BMI Wert von allen deutschen Olympiateilnehmern aufgeteilt nach Jahren.</p>
-<p>Das ganze ist auch ziemlich leicht und schnell graphisch dargestellt:</p>
+<p>Das Ganze ist auch ziemlich leicht und schnell graphisch dargestellt:</p>
 <pre class="r"><code>all&lt;- olympics %&gt;% filter(NOC == &quot;GER&quot;) %&gt;%
         select(Age, Height, Weight, Year) %&gt;%
           mutate(bmi = Weight / (Height/100)^2) %&gt;%

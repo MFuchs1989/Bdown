@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Introduction
-In dem nachfolgenden Post geht es um das Thema Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration. Hadley Wickham, einer der Autoren des Packages `dplyr`, definierte hierbei die folgenden 5 Verben:
+In dem nachfolgenden Post geht es um Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration. Hadley Wickham, einer der Autoren des Packages `dplyr`, definierte hierbei die folgenden 5 Verben:
 
 + filter()
 + select()
@@ -22,7 +22,7 @@ In dem nachfolgenden Post geht es um das Thema Data Transformation in R. Je nach
 + arrange()
 + summarize() 
 
-Für diese Arbeit wurde der Datensatz *olympics* von der Statsistik-Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38> abrufbar.
+Für diese Arbeit wurde der Datensatz *olympics* von der Statistik-Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38> abrufbar.
 
 
 ```{r results='hide', message=FALSE, warning=FALSE}
@@ -38,13 +38,13 @@ olympics <- read_csv("olympics.csv")
 glimpse(olympics)
 ```
 
-Wie wir sehen können, haben wir es bei diesem Datensatz mit über 271k Observations zu tun.
-Dabei brauchen wir dieses Mal doch nur ganz ausgewählte Informationen ...
+Wir haben es bei diesem Datensatz mit über 271k Observations zu tun.
+Dabei brauchen wir dieses Mal doch nur ganz ausgewählte Informationen...
 Mit den 5 oben genannten Befehlen lässt sich dies auch ganz leicht bewerkstelligen.
 
 # filter()
 
-Mit dem Befehl filter() bekommen wir von R genau definierte Zeilen aus dem zugrunde liegenden Datensatzes ausgegeben. Es gibt folgende Möglichkeiten zu filtern:
+Mit dem Befehl filter() bekommen wir von R genau definierte Zeilen aus dem zugrunde liegenden Datensatz ausgegeben. Es gibt folgende Möglichkeiten zu filtern:
 
 + ==
 + !=
@@ -66,12 +66,12 @@ Und wie schaut es mit der Geschlechteraufteilung aus? Wir filtern zuerst nach de
 olympics %>% filter(NOC == "GER" & Sex == "M")
 ```
 
-6,8k männliche Teilnehmer... und jetzt die weiblichen mit dem gleichen Befehl leicht abgewandelt: 
+6,8k männliche Teilnehmer! Und jetzt die weiblichen mit dem gleichen Befehl leicht abgewandelt: 
 ```{r}
 olympics %>% filter(NOC == "GER" & Sex != "M")
 ```
 
-!= bedeutet "nicht". Wir sehen fast 3k weibliche Teilnehmer bisher an Olympia. 
+!= bedeutet "nicht". Wir sehen fast 3k weibliche Teilnehmer, die bisher an Olympia teilnahmen. 
 Nun möchten wir wissen, wie viele deutsche Teilnehmer zwischen 20 und 30 Jahre alt waren:
 ```{r}
 olympics %>% filter(NOC == "GER" & Age >= 20 & Age <= 30)
@@ -81,7 +81,7 @@ olympics %>% filter(NOC == "GER" & Age >= 20 & Age <= 30)
 # select()
 
 Im Vergleich zu dem filter() Befehlt wählt select() nicht einzelne Zeilen, sondern ganze Spalten aus.
-Sehr häufig kommt es vor, dass Datensätze ganz viele Spalten besitzen, die man für die anstehende Analyse überhaupt nicht braucht. Um den Datensatz übersichtlicher zu gestalten hat man mit select() die Möglichkeit, einzelne Spalten gezielt auszuwählen. 
+Sehr häufig kommt es vor, dass Datensätze ganz viele Spalten besitzen, die man für die anstehende Analyse überhaupt nicht braucht. Um den Datensatz übersichtlicher zu gestalten, hat man mit select() die Möglichkeit einzelne Spalten gezielt auszuwählen. 
 
 Nachfolgend interessiert mich, ob es einen Zusammenhang zwischen der Körpergröße und dem Körpergewicht gibt. Daführ wähle ich genau diese beiden Spalten aus: 
 
@@ -118,7 +118,7 @@ Arrange() sortiert einen Vektor neu. Dies kann aufsteigend oder absteigend erfol
 olympics %>% mutate(bmi = Weight / (Height/100)^2) %>% arrange(bmi)
 ```
 
-Mh ein Mann mit 1,83m Körpergröße und nur 28kg Gewicht (bmi = 8,36) ... komisch.
+Oh! Ein Mann mit 1,83m Körpergröße und nur 28kg Gewicht (bmi = 8,36) ... komisch, das kann wohl nicht sein.
 
 Nun das Ganze für einen absteigenden BMI Wert:
 
@@ -131,7 +131,7 @@ Nicht schlecht, wieder ein 1,83m großer Mann an der Spitze mit 214kg Körpergew
 
 #summarize()
 
-Der letzte der 5 hier behandelten Befehle für Data Transformation ist summarize(). Er wird fast ausschließlich mit dem group_by() Befehl verwendet. Diese Kombination ermöglicht uns zu vergleichen.
+Der Letzte der 5 hier behandelten Befehle für Data Transformation ist summarize(). Er wird fast ausschließlich mit dem group_by() Befehl verwendet. Diese Kombination ermöglicht Vergleiche.
 Wird summarize() alleine verwendet, bricht er den Dataframe auf eine einzelne Zeile herunter. 
 
 Tipp: Um sicher zu gehen, dass die Aggregation richtig erfolgt, verwende ich n() bei jedem summarize() Befehl: 
@@ -164,7 +164,7 @@ olympics %>% filter(NOC == "GER") %>%
 Was haben wir hierbei mit einem einzigen Befehl alles gemacht?
 Als Ergebnis sehen wir den durchschnittlichen BMI Wert von allen deutschen Olympiateilnehmern aufgeteilt nach Jahren.
 
-Das ganze ist auch ziemlich leicht und schnell graphisch dargestellt:
+Das Ganze ist auch ziemlich leicht und schnell graphisch dargestellt:
 ```{r}
 all<- olympics %>% filter(NOC == "GER") %>%
         select(Age, Height, Weight, Year) %>%
