@@ -16,8 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 # Introduction
 In dem nachfolgenden Post geht es um Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration (Wickham & Grolemund, 2016). 
 
-![](http://r4ds.had.co.nz/diagrams/data-science-wrangle.png)
-![](http://r4ds.had.co.nz/diagrams/data-science-explore.png)
+![Quelle: Wickham, H., & Grolemund, G. (2016). R for data science: import, tidy, transform, visualize, and model data. " O'Reilly Media, Inc."](http://r4ds.had.co.nz/diagrams/data-science-wrangle.png)
+![Quelle: Wickham, H., & Grolemund, G. (2016). R for data science: import, tidy, transform, visualize, and model data. " O'Reilly Media, Inc."](http://r4ds.had.co.nz/diagrams/data-science-explore.png)
 
 Hadley Wickham, einer der Autoren des Packages `dplyr`, definierte hierbei die folgenden 5 Verben:
 
