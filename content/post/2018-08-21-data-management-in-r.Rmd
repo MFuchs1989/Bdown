@@ -45,7 +45,7 @@ Datensatz1
 Datensatz2
 ```
 
-Die beiden Data Frames 'Datensatz1' und 'Datensatz2' können nun mit dem Befehl *rbind()* in einem neuen Objekt mit dem Namen 'Beide_Gruppen' zusammengefügt werden:
+Die beiden Data Frames `Datensatz1` und `Datensatz2` können nun mit dem Befehl *rbind()* in einem neuen Objekt mit dem Namen `Beide_Gruppen` zusammengefügt werden:
 ```{r}
 Beide_Gruppen <- rbind(Datensatz1, Datensatz2)
 Beide_Gruppen
@@ -72,7 +72,7 @@ Datensatz3
 Datensatz4
 ```
 
-In unserem Beispiel enthalten beide Data Frames die Variablen 'Name' und 'Größe'. Unterscheiden tun sie sich bei ihrer dritten Variable. Data Frame "Datensatz3" beinhaltet noch die Variable 'Gewicht' und Data Frame "Datensatz4" beinhaltet zusätzlich noch die Variable 'BMI'.
+In unserem Beispiel enthalten beide Data Frames die Variablen `Name` und `Größe`. Unterscheiden tun sie sich bei ihrer dritten Variable. Data Frame "Datensatz3" beinhaltet noch die Variable `Gewicht` und Data Frame "Datensatz4" beinhaltet zusätzlich noch die Variable `BMI`.
 Durch die Anpassung des *rbind()* Befehls durch den Zusatz .fill ist es möglich, dennoch beide Datensätze zusammen zu fügen. Die Fälle aus dem Data Frame, in dem die Variablen fehlten, erhalten auf diesen Variablen fehlende Werte (NA).
 
 ```{r}
@@ -88,7 +88,7 @@ Um zwei Data Frames mit unterschiedlichen Spaltennamen zusammen fügen zu könne
 #3 Combine Variables
 
 Nun möchten wir zwei Data Frames zusammenfügen, welche dieselben Personen aber unterschiedliche Variablen enthalten. Dies ist häufig bei Längsschnittstudien mit unterschiedlichen Messzeitpunkten (Mzp) der Fall. Wichtig dabei ist, dass mindestens eine gleiche Variable in beiden Datensätzen vorkommt. Dies könnte beispielsweise eine ID Nummer sein, welche bei Studien pro Person vergeben werden. 
-Wir kreieren für das nachfolgende Beispiel die beiden Datensätze 'Mzp1' und 'Mzp2':
+Wir kreieren für das nachfolgende Beispiel die beiden Datensätze `Mzp1` und `Mzp2`:
 
 ```{r}
 a2 <- c("Martin", "Veronika", "Susanne")
@@ -112,7 +112,7 @@ Beide_Mzp
 
 ##3.1 Special case 1: Combine variables by one variable with different spellings
 
-Es kann vorkommen, dass die Variable, über die man die Fälle aus beiden Datensätzen miteinander in Verbindung bringen möchte, unterschiedlich benannt ist. Im nachfolgenden Beispiel wird die Namensspalte im Data Frame 'Mzp3' mit "Name" bezeichnet und im Data Frame 'Mzp4' mit "first_name". 
+Es kann vorkommen, dass die Variable, über die man die Fälle aus beiden Datensätzen miteinander in Verbindung bringen möchte, unterschiedlich benannt ist. Im nachfolgenden Beispiel wird die Namensspalte im Data Frame "Mzp3" mit `Name` bezeichnet und im Data Frame "Mzp4" mit `first_name`. 
 ```{r}
 a3 <- c("Martin", "Veronika", "Susanne")
 b3 <- c(80, 60, 65)
@@ -126,7 +126,7 @@ Mzp3
 Mzp4
 ```
 
-Anstelle des by - Argumentes gibt es nun die Zusatzargumente *by.x* und *by.y*.  Mit *by.x* wird die Schreibweise der Namesspalte aus Dataframe "Mzp32 festgelegt und mit *by.y* die Schreibweise aus Dataframe "Mzp4". 
+Anstelle des *by* - Argumentes gibt es nun die Zusatzargumente *by.x* und *by.y*.  Mit *by.x* wird die Schreibweise der Namesspalte aus Dataframe "Mzp3" festgelegt und mit *by.y* die Schreibweise aus Dataframe "Mzp4". 
 ```{r}
 Beide_Mzp2 <- merge(Mzp3, Mzp4, by.x = "Name", by.y = "first_name")
 colnames(Beide_Mzp2) <- c("Name", "Gewicht_Mzp1", "Gewicht_Mzp2")
