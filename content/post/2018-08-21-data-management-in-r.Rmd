@@ -13,13 +13,13 @@ tags:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Introduction
+#1 Introduction
 In dem nachfolgenden Post geht es um Data Management in R. Häufig sind Daten, die für eine Analyse benötigt werden, in unterschiedlichen Data Frames abgespeichert. Es ist daher notwendig, alle benötigten Daten in einem Data Frame zusammen zu fassen. Dabei unterscheidet man zwischen zwei Fällen:
 
 + Die Data Frames enthalten dieselben Variablen aber unterschiedliche Observations
 + Die Data Frames enthalten dieselben Observations aber unterschiedliche Variablen 
 
-# Combine Observations
+#2 Combine Observations
 
 ```{r results='hide', message=FALSE, warning=FALSE}
 library("tidyverse")
@@ -53,7 +53,7 @@ Beide_Gruppen
 
 Voraussetzung für diese Funktion ist, dass die beiden Data Frames dieselben Variablen enthalten. Die Reihenfolge der Variablen kann innerhalb der Data Frames beliebig sein. Wichtig ist, dass die Anzahl und die Namen der Variablen genau übereinstimmen.
 
-##Special Case 1: Different variables within a Data Frame
+##2.1 Special Case 1: Different variables within a Data Frame
 
 Es kann natürlich vorkommen, dass die unterschiedlichen Data Frames unterschiedliche Variablen enthalten. Dennoch können sie mit einer kleinen Anpassung des *rbind()* Befehls zusammengefügt werden. 
 ```{r}

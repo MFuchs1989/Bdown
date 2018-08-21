@@ -12,7 +12,7 @@ tags:
 
 
 <div id="introduction" class="section level1">
-<h1>Introduction</h1>
+<h1>1 Introduction</h1>
 <p>In dem nachfolgenden Post geht es um Data Management in R. Häufig sind Daten, die für eine Analyse benötigt werden, in unterschiedlichen Data Frames abgespeichert. Es ist daher notwendig, alle benötigten Daten in einem Data Frame zusammen zu fassen. Dabei unterscheidet man zwischen zwei Fällen:</p>
 <ul>
 <li>Die Data Frames enthalten dieselben Variablen aber unterschiedliche Observations</li>
@@ -20,7 +20,7 @@ tags:
 </ul>
 </div>
 <div id="combine-observations" class="section level1">
-<h1>Combine Observations</h1>
+<h1>2 Combine Observations</h1>
 <pre class="r"><code>library(&quot;tidyverse&quot;)
 library(&quot;plyr&quot;)</code></pre>
 <p>Wir möchten zwei Data Frames zusammenfügen, die dieselben Variablen, aber unterschiedliche Observations enthalten. Wir kreieren hierfür zwei Data Frames:</p>
@@ -57,7 +57,7 @@ Beide_Gruppen</code></pre>
 ## 6   Andreas   170      72</code></pre>
 <p>Voraussetzung für diese Funktion ist, dass die beiden Data Frames dieselben Variablen enthalten. Die Reihenfolge der Variablen kann innerhalb der Data Frames beliebig sein. Wichtig ist, dass die Anzahl und die Namen der Variablen genau übereinstimmen.</p>
 <div id="special-case-1-different-variables-within-a-data-frame" class="section level2">
-<h2>Special Case 1: Different variables within a Data Frame</h2>
+<h2>2.1 Special Case 1: Different variables within a Data Frame</h2>
 <p>Es kann natürlich vorkommen, dass die unterschiedlichen Data Frames unterschiedliche Variablen enthalten. Dennoch können sie mit einer kleinen Anpassung des <em>rbind()</em> Befehls zusammengefügt werden.</p>
 <pre class="r"><code>a5 &lt;- c(&quot;Martin&quot;, &quot;Veronika&quot;, &quot;Susanne&quot;)
 b5 &lt;- c(180, 160, 165)
