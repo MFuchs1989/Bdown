@@ -6,10 +6,20 @@
     <description>Recent content in R Markdown on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 21 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data Management in R</title>
+      <link>/2018/08/21/data-management-in-r/</link>
+      <pubDate>Tue, 21 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/08/21/data-management-in-r/</guid>
+      <description>IntroductionIn dem nachfolgenden Post geht es um Data Management in R. Häufig sind Daten, die für eine Analyse benötigt werden, in unterschiedlichen Data Frames abgespeichert. Es ist daher notwendig, alle benötigten Daten in einem Data Frame zusammen zu fassen. Dabei unterscheidet man zwischen zwei Fällen:
+Die Data Frames enthalten dieselben Variablen aber unterschiedliche ObservationsDie Data Frames enthalten dieselben Observations aber unterschiedliche VariablenCombine Observationslibrary(&amp;quot;tidyverse&amp;quot;)library(&amp;quot;plyr&amp;quot;)Wir möchten zwei Data Frames zusammenfügen, die dieselben Variablen, aber unterschiedliche Observations enthalten.</description>
+    </item>
     
     <item>
       <title>Data Transformation in R</title>
