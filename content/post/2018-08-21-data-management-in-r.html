@@ -191,7 +191,7 @@ Beide_Mzp4</code></pre>
 ## 2 Veronika           60           57
 ## 3   Walter           65           NA
 ## 4     Sven           NA           61</code></pre>
-<p>Der neue Data Frame enthält nun 6 Observations. Für die Namen, welche nur in einem der ursprünglichen Data Frames vertreten waren, werden die Daten auf den Variablen des anderen Data Frames mit NA angegeben. Der Befehl kann noch weiter verfeinert werden, wenn man beispielsweise alle Personen aus dem ersten Data Frame “Mzp5” im neuen Data Frame behalten, aber keinen neuen Fall aus Data Frame “Mzp6” in den neuen Data Fram mit aufnehmen möchte.</p>
+<p>Der neue Data Frame enthält nun 4 Observations. Für die Namen, welche nur in einem der ursprünglichen Data Frames vertreten waren, werden die Daten auf den Variablen des anderen Data Frames mit NA angegeben. Der Befehl kann noch weiter verfeinert werden, wenn man beispielsweise alle Personen aus dem ersten Data Frame “Mzp5” im neuen Data Frame behalten, aber keinen neuen Fall aus Data Frame “Mzp6” in den neuen Data Fram mit aufnehmen möchte.</p>
 <pre class="r"><code>Beide_Mzp5 &lt;- merge(Mzp5, Mzp6, by = &quot;Name&quot;, all.x = TRUE)
 colnames(Beide_Mzp5) &lt;- c(&quot;Name&quot;, &quot;Gewicht_Mzp1&quot;, &quot;Gewicht_Mzp2&quot;)
 Beide_Mzp5</code></pre>

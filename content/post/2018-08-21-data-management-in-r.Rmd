@@ -162,7 +162,7 @@ colnames(Beide_Mzp4) <- c("Name", "Gewicht_Mzp1", "Gewicht_Mzp2")
 Beide_Mzp4
 ```
 
-Der neue Data Frame enthält nun 6 Observations. Für die Namen, welche nur in einem der ursprünglichen Data Frames vertreten waren, werden die Daten auf den Variablen des anderen Data Frames mit NA angegeben. 
+Der neue Data Frame enthält nun 4 Observations. Für die Namen, welche nur in einem der ursprünglichen Data Frames vertreten waren, werden die Daten auf den Variablen des anderen Data Frames mit NA angegeben. 
 Der Befehl kann noch weiter verfeinert werden, wenn man beispielsweise alle Personen aus dem ersten Data Frame "Mzp5" im neuen Data Frame behalten, aber keinen neuen Fall aus Data Frame "Mzp6" in den neuen Data Fram mit aufnehmen möchte. 
 ```{r}
 Beide_Mzp5 <- merge(Mzp5, Mzp6, by = "Name", all.x = TRUE)
