@@ -150,12 +150,12 @@ Beide_Gruppen2</code></pre>
 ## 6   Andreas   170      NA  27</code></pre>
 </div>
 <div id="special-case-2-combine-observations-with-different-colnames" class="section level2">
-<h2>special case 2: Combine Observations with different colnames</h2>
+<h2>2.2 special case 2: Combine Observations with different colnames</h2>
 <p>Um zwei Data Frames mit unterschiedlichen Spaltennamen zusammen fügen zu können, müssen diese vereinheitlicht werden. Die kann man entweder mit dem gezeigten <em>colnames()</em> Befehl machen oder über eine R Funktion (siehe dazu Abschnitt: “Special case 2: Combine variables with with different number of observations”)</p>
 </div>
 </div>
 <div id="combine-variables" class="section level1">
-<h1>Combine Variables</h1>
+<h1>3 Combine Variables</h1>
 <p>Nun möchten wir zwei Data Frames zusammenfügen, welche dieselben Personen aber unterschiedliche Variablen enthalten. Dies ist häufig bei Längsschnittstudien mit unterschiedlichen Messzeitpunkten (Mzp) der Fall. Wichtig dabei ist, dass mindestens eine gleiche Variable in beiden Datensätzen vorkommt. Dies könnte beispielsweise eine ID Nummer sein, welche bei Studien pro Person vergeben werden. Wir kreieren für das nachfolgende Beispiel die beiden Datensätze ‘Mzp1’ und ‘Mzp2’:</p>
 <pre class="r"><code>a2 &lt;- c(&quot;Martin&quot;, &quot;Veronika&quot;, &quot;Susanne&quot;)
 b2 &lt;- c(80, 60, 65)
@@ -184,7 +184,7 @@ Beide_Mzp</code></pre>
 ## 2  Susanne           65           61
 ## 3 Veronika           60           57</code></pre>
 <div id="special-case-1-combine-variables-by-one-variable-with-different-spellings" class="section level2">
-<h2>Special case 1: Combine variables by one variable with different spellings</h2>
+<h2>3.1 Special case 1: Combine variables by one variable with different spellings</h2>
 <p>Es kann vorkommen, dass die Variable, über die man die Fälle aus beiden Datensätzen miteinander in Verbindung bringen möchte, unterschiedlich benannt ist. Im nachfolgenden Beispiel wird die Namensspalte im Data Frame ‘Mzp3’ mit “Name” bezeichnet und im Data Frame ‘Mzp4’ mit “first_name”.</p>
 <pre class="r"><code>a3 &lt;- c(&quot;Martin&quot;, &quot;Veronika&quot;, &quot;Susanne&quot;)
 b3 &lt;- c(80, 60, 65)
@@ -214,7 +214,7 @@ Beide_Mzp2</code></pre>
 ## 3 Veronika           60           57</code></pre>
 </div>
 <div id="special-case-2-combine-variables-with-with-different-number-of-observations" class="section level2">
-<h2>Special case 2: Combine variables with with different number of observations</h2>
+<h2>3.2 Special case 2: Combine variables with with different number of observations</h2>
 <p>Bis jetzt sind wir davon ausgegangen, dass beide Dataframes dieselbe Anzahl an Personen beinhaltet. Was passiert, wenn wie im nachfolgenden Beispiel zwei gleiche Namen und jeweils ein neuer Name enthalten ist?</p>
 <pre class="r"><code>a4 &lt;- c(&quot;Martin&quot;, &quot;Veronika&quot;, &quot;Walter&quot;)
 b4 &lt;- c(80, 60, 65)
@@ -261,7 +261,7 @@ Beide_Mzp5</code></pre>
 </div>
 </div>
 <div id="conclusion" class="section level1">
-<h1>Conclusion</h1>
+<h1>4 Conclusion</h1>
 <p>Für die Arbeit mit Big Data ist die Beherrschung von Data Management Befehlen wie <em>rbind()</em> oder <em>merge()</em> unerlässlich aber auch relativ einfach anzuwenden.</p>
 </div>
 
