@@ -1,5 +1,5 @@
 ---
-title: Edit Variables in R
+title: Change Variables in R
 author: Michael Fuchs
 date: '2018-08-24'
 slug: edit-variables-in-r
@@ -239,12 +239,14 @@ Manchmal möchte man nur einzelne Werte oder Wertebereiche innerhalb einer Varia
 
 Die *which* Funktion gibt die Position von Observations aus, auf die eine bestimmte Bedingung zutrifft. Wir können uns beispielsweise mit folgender Syntax alle Goldmedaillen Gewinner aufführen lassen:
 ```{r}
-which(olympics$Medal == "Gold")
+a<-which(olympics$Medal == "Gold")
+head(a)
 ```
 
 Wichtig! Die ausgegebenen Werte beziehen sich auf die Zeilen, in denen die Daten der Person gespeichert sind. Man kann daher diese Ausgabe auch in der Index Funktion verwenden. Mit der Index Funktion werden gezielt bestimmte Zeilen und Spalten ausgewählt. Mit folgenden Befehl werden die Werte für die oben aufgeführte Zeilen ausgegeben. Natürlich handelt es sich bei jedem Wert um das Wort „Gold“, denn genau das war ja auch unsere Bedingung.
 ```{r}
-olympics$Medal[which(olympics$Medal == "Gold")]
+b<- olympics$Medal[which(olympics$Medal == "Gold")]
+head(b)
 ```
 
 Nun kommt der Trick: Man kann nun jedes Wort durch ein beliebiges anders Wort oder beliebigen anderen Wert ersetzten, indem man hinter dem obigen Befehl den Zuweisungspfeil und dann das neue Wort/ den neuen Wert aufführt. Wir ersetzen nun das Wort „Gold“ durch „First_Place“:
@@ -257,6 +259,9 @@ head(olympics$Medal)
 
 Wie die *which* Funktion verwendet auch die *ifelse* Funktion logische Abfragen. Die *which* Funktion wird allerdings nur auf der linken Seite des Zuweisungspfeils angewandt und dient damit dem Auswählen bestimmter Fälle. Nur für diese bestimmte Auswahl wird eine Operation durchgeführt, alle anderen bleiben unberührt. Bei der *ifelse* Funktion ist das anders. Diese Funktion wird auf der rechten Seite des Zuweisungspfeils angewandt und ermöglicht es uns dadurch, für alle Fälle gleichzeitig verschiedene Operationen durchzuführen. 
 Der Unterschied zwischen der *which* Funktion und der *ifelse* Funktion wird mit dem folgenden Beispiel verständlich: 
+
+olympics$Altersgruppe1[which(olympics$Age < 25)] <- 0
+olympics$Altersgruppe1[which(olympics$Age >= 25)] <- 1
 
 Wir haben nun mit zwei *which* Funktionen die Athleten in einer neuen Variablen `Altersgruppe` in zwei Untergruppen unterteilt. Die unter 25 jähren erhielten den Wert 0, die über 25 jähren den Wert 1. Verwendet man stattdessen die *ifelse* Funktion, kann man die gleiche Operation in nur einem Befehl ausführen lassen:
 ```{r}
