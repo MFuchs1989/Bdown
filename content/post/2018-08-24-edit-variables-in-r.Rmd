@@ -261,6 +261,7 @@ Wie die *which* Funktion verwendet auch die *ifelse* Funktion logische Abfragen.
 Der Unterschied zwischen der *which* Funktion und der *ifelse* Funktion wird mit dem folgenden Beispiel verständlich: 
 
 olympics$Altersgruppe1[which(olympics$Age < 25)] <- 0
+
 olympics$Altersgruppe1[which(olympics$Age >= 25)] <- 1
 
 Wir haben nun mit zwei *which* Funktionen die Athleten in einer neuen Variablen `Altersgruppe` in zwei Untergruppen unterteilt. Die unter 25 jähren erhielten den Wert 0, die über 25 jähren den Wert 1. Verwendet man stattdessen die *ifelse* Funktion, kann man die gleiche Operation in nur einem Befehl ausführen lassen:

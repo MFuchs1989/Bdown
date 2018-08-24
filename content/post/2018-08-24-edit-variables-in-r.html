@@ -286,7 +286,8 @@ head(olympics$Medal)</code></pre>
 <div id="via-ifelse-function" class="section level3">
 <h3>4.6.2 via ifelse function</h3>
 <p>Wie die <em>which</em> Funktion verwendet auch die <em>ifelse</em> Funktion logische Abfragen. Die <em>which</em> Funktion wird allerdings nur auf der linken Seite des Zuweisungspfeils angewandt und dient damit dem Auswählen bestimmter Fälle. Nur für diese bestimmte Auswahl wird eine Operation durchgeführt, alle anderen bleiben unberührt. Bei der <em>ifelse</em> Funktion ist das anders. Diese Funktion wird auf der rechten Seite des Zuweisungspfeils angewandt und ermöglicht es uns dadurch, für alle Fälle gleichzeitig verschiedene Operationen durchzuführen. Der Unterschied zwischen der <em>which</em> Funktion und der <em>ifelse</em> Funktion wird mit dem folgenden Beispiel verständlich:</p>
-<p>olympics<span class="math inline">\(Altersgruppe1[which(olympics\)</span>Age &lt; 25)] &lt;- 0 olympics<span class="math inline">\(Altersgruppe1[which(olympics\)</span>Age &gt;= 25)] &lt;- 1</p>
+<p>olympics<span class="math inline">\(Altersgruppe1[which(olympics\)</span>Age &lt; 25)] &lt;- 0</p>
+<p>olympics<span class="math inline">\(Altersgruppe1[which(olympics\)</span>Age &gt;= 25)] &lt;- 1</p>
 <p>Wir haben nun mit zwei <em>which</em> Funktionen die Athleten in einer neuen Variablen <code>Altersgruppe</code> in zwei Untergruppen unterteilt. Die unter 25 jähren erhielten den Wert 0, die über 25 jähren den Wert 1. Verwendet man stattdessen die <em>ifelse</em> Funktion, kann man die gleiche Operation in nur einem Befehl ausführen lassen:</p>
 <pre class="r"><code>olympics$Altersgruppe2 &lt;- ifelse(olympics$Age &gt;= 25, 1, 0)</code></pre>
 <p>Man sieht, die Aufteilung von 0 und 1 ist bei beiden Variablen („Altersgruppe1“ und „Altersgruppe2“ gleich.</p>
