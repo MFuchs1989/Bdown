@@ -12,7 +12,7 @@ tags:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
+test test test
 
 #1 Introduction
 Datenaufbereitung ist ein zentrales und zeitintensives Thema in der Datenanalyse. Als erstes wird in diesem Post auf die Auswahl einzelner Variablen eingegangen, sodass man weitere Operationen mit ihnen durchführen kann. Anschließend werden die unterschiedlichen Möglichkeiten der Bearbeitung von Variablen vorgestellt. Für diesen Post wurde der Datensatz *olympics* von der Statsistik Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38> abrufbar.
