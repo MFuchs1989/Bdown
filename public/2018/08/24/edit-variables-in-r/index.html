@@ -347,12 +347,8 @@ head(olympics$Medal)</code></pre>
 <p>olympics<span class="math inline">\(Altersgruppe1[which(olympics\)</span>Age &lt; 25)] &lt;- 0</p>
 <p>olympics<span class="math inline">\(Altersgruppe1[which(olympics\)</span>Age &gt;= 25)] &lt;- 1</p>
 <p>Wir haben nun mit zwei <em>which</em> Funktionen die Athleten in einer neuen Variablen <code>Altersgruppe</code> in zwei Untergruppen unterteilt. Die unter 25 jähren erhielten den Wert 0, die über 25 jähren den Wert 1. Verwendet man stattdessen die <em>ifelse</em> Funktion, kann man die gleiche Operation in nur einem Befehl ausführen lassen:</p>
-<pre class="r"><code>olympics$Altersgruppe2 &lt;- ifelse(olympics$Age &gt;= 25, 1, 0)</code></pre>
-<p>Man sieht, die Aufteilung von 0 und 1 ist bei beiden Variablen („Altersgruppe1“ und „Altersgruppe2“ gleich.</p>
-<pre class="r"><code>glimpse(olympics$Altersgruppe1)</code></pre>
-<pre><code>## Warning: Unknown or uninitialised column: &#39;Altersgruppe1&#39;.</code></pre>
-<pre><code>##  NULL</code></pre>
-<pre class="r"><code>glimpse(olympics$Altersgruppe2)</code></pre>
+<pre class="r"><code>olympics$Altersgruppe2 &lt;- ifelse(olympics$Age &gt;= 25, 1, 0)
+glimpse(olympics$Altersgruppe2)</code></pre>
 <pre><code>##  num [1:271116] 0 0 0 1 0 0 1 1 1 1 ...</code></pre>
 <p>Es ist des Weiteren möglich, mehrere <em>ifelse</em> Funktionen ineinander zu schachteln:</p>
 <pre class="r"><code>olympics$Altersgruppe3 &lt;- ifelse(olympics$Age &gt;= 30, &quot;alt&quot;, ifelse(olympics$Age &lt; 20, &quot;jung&quot;, &quot;mittel&quot;))

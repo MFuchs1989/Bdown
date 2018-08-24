@@ -267,13 +267,9 @@ olympics$Altersgruppe1[which(olympics$Age >= 25)] <- 1
 Wir haben nun mit zwei *which* Funktionen die Athleten in einer neuen Variablen `Altersgruppe` in zwei Untergruppen unterteilt. Die unter 25 jähren erhielten den Wert 0, die über 25 jähren den Wert 1. Verwendet man stattdessen die *ifelse* Funktion, kann man die gleiche Operation in nur einem Befehl ausführen lassen:
 ```{r}
 olympics$Altersgruppe2 <- ifelse(olympics$Age >= 25, 1, 0)
-```
-
-Man sieht, die Aufteilung von 0 und 1 ist bei beiden Variablen („Altersgruppe1“ und „Altersgruppe2“ gleich. 
-```{r}
-glimpse(olympics$Altersgruppe1)
 glimpse(olympics$Altersgruppe2)
 ```
+
 
 Es ist des Weiteren möglich, mehrere *ifelse* Funktionen ineinander zu schachteln:
 ```{r}
