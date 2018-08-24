@@ -17,7 +17,8 @@
       <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/08/24/edit-variables-in-r/</guid>
-      <description></description>
+      <description>1 IntroductionDatenaufbereitung ist ein zentrales und zeitintensives Thema in der Datenanalyse. Als erstes wird in diesem Post auf die Auswahl einzelner Variablen eingegangen, sodass man weitere Operationen mit ihnen durchführen kann. Anschließend werden die unterschiedlichen Möglichkeiten der Bearbeitung von Variablen vorgestellt. Für diesen Post wurde der Datensatz olympics von der Statsistik Plattform Kaggle https://www.kaggle.com verwendet. Eine Kopie des Datensatzes ist unter https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38 abrufbar.
+library(&amp;quot;tidyverse&amp;quot;)olympics &amp;lt;- read_csv(&amp;quot;olympics.csv&amp;quot;)2 Choose variablesDie meisten Funktionen, die wir durchführen, beziehen sich auf Teilmengen aus den Variablen in unserem Datensatz.</description>
     </item>
     
     <item>

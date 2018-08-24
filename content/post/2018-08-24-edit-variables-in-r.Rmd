@@ -257,10 +257,6 @@ head(olympics$Medal)
 
 Wie die *which* Funktion verwendet auch die *ifelse* Funktion logische Abfragen. Die *which* Funktion wird allerdings nur auf der linken Seite des Zuweisungspfeils angewandt und dient damit dem Auswählen bestimmter Fälle. Nur für diese bestimmte Auswahl wird eine Operation durchgeführt, alle anderen bleiben unberührt. Bei der *ifelse* Funktion ist das anders. Diese Funktion wird auf der rechten Seite des Zuweisungspfeils angewandt und ermöglicht es uns dadurch, für alle Fälle gleichzeitig verschiedene Operationen durchzuführen. 
 Der Unterschied zwischen der *which* Funktion und der *ifelse* Funktion wird mit dem folgenden Beispiel verständlich: 
-```{r}
-olympics$Altersgruppe1[which(olympics$Age < 25)] <- 0
-olympics$Altersgruppe1[which(olympics$Age >= 25)] <- 1
-```
 
 Wir haben nun mit zwei *which* Funktionen die Athleten in einer neuen Variablen `Altersgruppe` in zwei Untergruppen unterteilt. Die unter 25 jähren erhielten den Wert 0, die über 25 jähren den Wert 1. Verwendet man stattdessen die *ifelse* Funktion, kann man die gleiche Operation in nur einem Befehl ausführen lassen:
 ```{r}
