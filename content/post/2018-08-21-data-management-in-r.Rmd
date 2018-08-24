@@ -12,7 +12,7 @@ tags:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
+test
 #1 Introduction
 In dem nachfolgenden Post geht es um Data Management in R. Häufig sind Daten, die für eine Analyse benötigt werden, in unterschiedlichen Data Frames abgespeichert. Es ist daher notwendig, alle benötigten Daten in einem Data Frame zusammen zu fassen. Dabei unterscheidet man zwischen zwei Fällen:
 
