@@ -15,28 +15,28 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #Table of Content
 
-1 Introduction
-2 Choose variables
-2.1 $ sign
-2.2  Index Function
-2.3 Mulitble choose of variables
-2.3.1 via data.frame function
-2.3.2 via index function
-2.3.3 via subset function
-3 Change object'charactersitics
-3.1 character to factores	
-3.2 factores to vectores
-4 Create new variables
-4.1 Transformation of two single variables
-4.2 Transformation of multible variables
-4.3 rowSums and rowMeans function
-4.4 Center and standardize variables
-4.5 Turn over variables
-4.6 turn over single values
-4.6.1 via which function
-4.6.2 via ifelse function
-4.6.3 recode function
-5 Conclusion
++ 1 Introduction
++ 2 Choose variables
++ 2.1 $ sign
++ 2.2  Index Function
++ 2.3 Mulitble choose of variables
++ 2.3.1 via data.frame function
++ 2.3.2 via index function
++ 2.3.3 via subset function
++ 3 Change object'charactersitics
++ 3.1 character to factores	
++ 3.2 factores to vectores
++ 4 Create new variables
++ 4.1 Transformation of two single variables
++ 4.2 Transformation of multible variables
++ 4.3 rowSums and rowMeans function
++ 4.4 Center and standardize variables
++ 4.5 Turn over variables
++ 4.6 turn over single values
++ 4.6.1 via which function
++ 4.6.2 via ifelse function
++ 4.6.3 recode function
++ 5 Conclusion
 
 
 #1 Introduction
