@@ -1,0 +1,347 @@
+---
+title: Change Variables in R
+author: Michael Fuchs
+date: '2018-08-24'
+slug: edit-variables-in-r
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Choose variables</li>
+<li>2.1 $ sign</li>
+<li>2.2 Index Function</li>
+<li>2.3 Mulitble choose of variables</li>
+<li>2.3.1 via data.frame function</li>
+<li>2.3.2 via index function</li>
+<li>2.3.3 via subset function</li>
+<li>3 Change object’s charactersitics</li>
+<li>3.1 character to factores</li>
+<li>3.2 factores to vectores</li>
+<li>4 Create new variables</li>
+<li>4.1 Transformation of two single variables</li>
+<li>4.2 Transformation of multible variables</li>
+<li>4.3 rowSums and rowMeans function</li>
+<li>4.4 Center and standardize variables</li>
+<li>4.5 Turn over variables</li>
+<li>4.6 turn over single values</li>
+<li>4.6.1 via which function</li>
+<li>4.6.2 via ifelse function</li>
+<li>4.6.3 recode function</li>
+<li>5 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Datenaufbereitung ist ein zentrales und zeitintensives Thema in der Datenanalyse. Als erstes wird in diesem Post auf die Auswahl einzelner Variablen eingegangen, sodass man weitere Operationen mit ihnen durchführen kann. Anschließend werden die unterschiedlichen Möglichkeiten der Bearbeitung von Variablen vorgestellt. Für diesen Post wurde der Datensatz <em>olympics</em> von der Statsistik Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38" class="uri">https://drive.google.com/open?id=1XsV3WVTb0EXjd9LhlpN2PkvUKJU8iY38</a> abrufbar.</p>
+<pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
+<pre class="r"><code>olympics &lt;- read_csv(&quot;olympics.csv&quot;)</code></pre>
+</div>
+<div id="choose-variables" class="section level1">
+<h1>2 Choose variables</h1>
+<p>Die meisten Funktionen, die wir durchführen, beziehen sich auf Teilmengen aus den Variablen in unserem Datensatz. In R gibt es verschiedene Wege bestimmte Variablen auszuwählen. Die wichtigsten sollen hier vorgestellt werden.</p>
+<div id="sign" class="section level2">
+<h2>2.1 $ sign</h2>
+<p>Bei dieser Möglichkeit nennt man zunächst den Namen des Data Frames und anschließend den Namen der Variablen: <code>olympics$Age</code>. Das Dollarzeichen $ wird dabei als Trennzeichen verwendet. Einen guten Überblick über eine metrische Variable bekommt man in Verbindung mit der summary() Funktion.</p>
+<pre class="r"><code>summary(olympics$Age)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##   10.00   21.00   24.00   25.56   28.00   97.00    9474</code></pre>
+</div>
+<div id="index-function" class="section level2">
+<h2>2.2 Index Function</h2>
+<p>Bei Objekten mit einer definierten Anzahl an Dimensionen (Data Frame oder Tabellen), können einzelne Elemente über eckige Klammern [] ausgewählt werden. Verwendet man die Option mit dem Dollarzeichen in Verbindung mit der Indexfunktion, so gibt R den Wert der angegebenen Zeile aus der definierten Spalte aus (hier: Zeile 2 aus der Variablen „Height“).</p>
+<pre class="r"><code>olympics$Height[2]</code></pre>
+<pre><code>## [1] 170</code></pre>
+<p>Es besteht auch die Möglichkeit, einen Index für jede Dimension direkt in die eckige Klammer zu schreiben und sich so den Wert aus der zweiten Zeile aus der fünften Spalte ausgeben zu lassen.</p>
+<pre class="r"><code>olympics[2,5]</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   Height
+##    &lt;int&gt;
+## 1    170</code></pre>
+<p>Des Weiteren ist es möglich, einen dieser Indizes einfach weg zu lassen. Lässt man beispielsweise den ersten Index weg, so wird anstelle einer einzelnen Zeile einfach alle Zeilen hergenommen. Im nachfolgenden Beispiel wird der Summenwert aller Zeilen für die Spalte vier (Alter) berechnet:</p>
+<pre class="r"><code>sum(na.omit(olympics[,4]))</code></pre>
+<pre><code>## [1] 6686758</code></pre>
+<p>Die Indexfunktion lässt sich auch nutzen, um bestimmte Zeilen oder Spalten auszuschließen. Dafür schreibt man vor dem Index ein Minuszeichen. Zuvor haben wir den Summenwert aller Altersangaben ausgeben lassen. Nun möchten wir dieselbe Summe ohne der ersten Person (24 Jahre alt) berechnen:</p>
+<pre class="r"><code>sum(na.omit(olympics[-1,4]))</code></pre>
+<pre><code>## [1] 6686734</code></pre>
+<p>Man sieht die Differenz zwischen Summe 1 (6.686.758) und Summe 2 (6.686.734) beträgt genau das Alter (24) der Person, welche wir gerade ausgeschlossen hatten.</p>
+</div>
+<div id="mulitble-choose-of-variables" class="section level2">
+<h2>2.3 Mulitble choose of variables</h2>
+<p>Häufig wird nicht nur ein Wert (zB. Mittelwert) für eine Variable benötigt, sondern die Werte für mehrere Spalten. Die dazugehörige Funktion lautet <em>colMeans</em>. Für die Auswahl mehrerer Variablen in R gibt es diverse Möglichkeiten:</p>
+<div id="via-data.frame-function" class="section level3">
+<h3>2.3.1 via data.frame function</h3>
+<p>Im nachfolgenden Beispiel erstellen wir einen neuen Data Frame mit dem Namen „Auswahl1“, welcher die Variablen <code>Height</code> und <code>Weight</code> enthält.</p>
+<pre class="r"><code>Auswahl1 &lt;- data.frame(olympics$Height, olympics$Weight)</code></pre>
+<p>Nun kann auch die Funktion <em>colMeans</em> angewandt werden. Durch das Zusatzargument <em>na.omit</em> werden fehlende Werte (NAs) nicht berücksichtigt.</p>
+<pre class="r"><code>colMeans(na.omit(Auswahl1))</code></pre>
+<pre><code>## olympics.Height olympics.Weight 
+##       175.35910        70.67737</code></pre>
+<p>Innerhalb der Data Frame Funktion kann man auch eigene Variablennamen definieren:</p>
+<pre class="r"><code>Auswahl2 &lt;- data.frame(Groesse = olympics$Height, Gewicht = olympics$Weight)
+colMeans(na.omit(Auswahl2))</code></pre>
+<pre><code>##   Groesse   Gewicht 
+## 175.35910  70.67737</code></pre>
+</div>
+<div id="via-index-function" class="section level3">
+<h3>2.3.2 via index function</h3>
+<p>Es lassen sich auch via der Indexfunktion mit dem Zusatzargument <em>c()</em> mehrere Spalten gleichzeitig auswählen. Im nachfolgenden Beispiel werden die Spalten fünf und sechs dem Objekt „Auswahl3“ zugeordnet.</p>
+<pre class="r"><code>Auswahl3 &lt;- olympics[, c(5,6)]</code></pre>
+<p>Anstelle der Indizes kann man auch die Variablennamen direkt angeben:</p>
+<pre class="r"><code>Auswahl4 &lt;- olympics[, c(&quot;Height&quot;, &quot;Weight&quot;)]</code></pre>
+<pre class="r"><code>colMeans(na.omit(Auswahl3))</code></pre>
+<pre><code>##    Height    Weight 
+## 175.35910  70.67737</code></pre>
+<pre class="r"><code>colMeans(na.omit(Auswahl4))</code></pre>
+<pre><code>##    Height    Weight 
+## 175.35910  70.67737</code></pre>
+</div>
+<div id="via-subset-function" class="section level3">
+<h3>2.3.3 via subset function</h3>
+<p>Die <em>subset</em> Funktion ist sehr flexibel, da man mit ihr nicht nur Variablen, sondern auch Untergruppen von Observations auswählen kann. Zudem lässt sich der Befehl auch abkürzen, wenn man Variablen auswählt, die in dem Data Frame unmittelbar hintereinanderstehen. Im nachfolgenden Beispiel wählen wir die Spalten „Sex“(3) bis „Weight“(6) aus.</p>
+<pre class="r"><code>Auswahl5 &lt;- subset(olympics, select = Sex:Weight)</code></pre>
+<p>Mit dem Befehl <em>glimpse</em> sehen wir, dass das neue Objekt „Auswahl5“ vier Variablen (von „Sex“ bis „Weight“) hat.</p>
+<pre class="r"><code>glimpse(Auswahl5)</code></pre>
+<pre><code>## Observations: 271,116
+## Variables: 4
+## $ Sex    &lt;chr&gt; &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;M&quot;, ...
+## $ Age    &lt;int&gt; 24, 23, 24, 34, 21, 21, 25, 25, 27, 27, 31, 31, 31, 31,...
+## $ Height &lt;int&gt; 180, 170, NA, NA, 185, 185, 185, 185, 185, 185, 188, 18...
+## $ Weight &lt;dbl&gt; 80, 60, NA, NA, 82, 82, 82, 82, 82, 82, 75, 75, 75, 75,...</code></pre>
+</div>
+</div>
+</div>
+<div id="change-objects-charactersitics" class="section level1">
+<h1>3 Change object’s charactersitics</h1>
+<p>Objekte spielen eine zentrale Rolle bei der Arbeit mit R. Es gibt unterschiedliche Objekttypen: Beispielsweise Vektoren, Faktoren oder Data Frames. Numerische Variablen können in R sowohl als Vektoren, als auch in Faktoren gespeichert werden. Wohingegen Vektoren ordinalskalierte oder metrische Daten enthalten, beinhalten Faktoren nominalskalierte Variablen. Werden nummerische Daten in R eingelesen, werden diese meist als numerischen Vektor gespeichert, unabhängig vom tatsächlichen Skalenniveau. Es ist daher manchmal notwendig, die Objekteigenschaften zu konvertieren.</p>
+<div id="character-to-factores" class="section level2">
+<h2>3.1 character to factores</h2>
+<pre class="r"><code>class(olympics$Sex)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>Wir sehen, dass die Variable <code>Sex</code> in diesem Fall als „character“ gespeichert ist. Um diese nun in einen Faktor zu konvertieren verwendet man die <em>factor</em> Funktion:</p>
+<pre class="r"><code>olympics.sex.factor &lt;- factor(olympics$Sex)
+head(olympics.sex.factor)</code></pre>
+<pre><code>## [1] M M M M F F
+## Levels: F M</code></pre>
+<p>Vor dem Zuweisungspfeil steht der Name des neuen Faktors. Wenn der neue und alte Name identisch ist, wird der alte überschrieben. Wenn wir ihn beibehalten möchten, empfiehlt es sich (wie im Beispiel) ein neues, zusätzliches Objekt anzulegen. Betrachtet man den neuen Data Frame, sehen wir, dass die Variable <code>Sex</code> weiterhin als „M“ und „F“ ausgegeben wird. Es ist manchmal sinnvoll, Abkürzungen oder Zahlen in aussagekräftigere Begriffe umzuwandeln. Wir modifizieren daher den Befehl wie folgt:</p>
+<pre class="r"><code>olympics.sex.factor &lt;- factor(olympics$Sex, levels = c(&quot;F&quot;, &quot;M&quot;), labels = c(&quot;weiblich&quot;, &quot;m?nnlich&quot;))
+head(olympics.sex.factor)</code></pre>
+<pre><code>## [1] m?nnlich m?nnlich m?nnlich m?nnlich weiblich weiblich
+## Levels: weiblich m?nnlich</code></pre>
+<p>Man erkennt eine erfolgreiche Konvertierung in einen Faktor unter anderem daran, dass bei dem Output des <em>head</em> Befehls die levels „weiblich“ „männlich“ ausgegeben werden.</p>
+</div>
+<div id="factores-to-vectores" class="section level2">
+<h2>3.2 factores to vectores</h2>
+<p>Manchmal ist es aber auch sinnvoll einen Faktor in einen Vektor zu konvertieren. Wir überprüfen die Objekteigenschaft nochmals mit dem <em>class</em> Befehl:</p>
+<pre class="r"><code>class(olympics.sex.factor)</code></pre>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<p>Bevor die Konvertierung von einem Faktor in einen Vektor erfolgt, sollte man sich nochmal die Faktorstufen mit dem Befehl <em>levels</em> ausgeben lassen:</p>
+<pre class="r"><code>levels(olympics.sex.factor)</code></pre>
+<pre><code>## [1] &quot;weiblich&quot; &quot;m?nnlich&quot;</code></pre>
+<p>Wir sehen, dass die Faktorstufe „weiblich“ zuerst aufgeführt wird. Nun wird mittels der <em>as.numeric</em> Funktion der Faktor in ein Vektor umgewandelt:</p>
+<pre class="r"><code>olympics.sex.vector &lt;- as.numeric(olympics.sex.factor)
+class(olympics.sex.vector)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code>head(olympics.sex.vector)</code></pre>
+<pre><code>## [1] 2 2 2 2 1 1</code></pre>
+<p>Die Werte der neuen Variablen sind nun 1 und 2. Doch was ist nun was? Aus diesem Grund wurden zuvor nochmals die Faktorstufen abgefragt. Da „weiblich“ an erster Stelle Stand, steht die 1 in der neuen Variablen nun für „weiblich“ und die 2 für „männlich“.</p>
+</div>
+</div>
+<div id="create-new-variables" class="section level1">
+<h1>4 Create new variables</h1>
+<p>Es gibt viele Gründe, warum man aus vorhandenen Variablen neue erstellen muss. So ist es manchmal notwendig, eine Variable zu zentrieren oder zu standardisieren oder bei Auswertungen von Fragebögen die Variablen umzukodieren.</p>
+<div id="transformation-of-two-single-variables" class="section level2">
+<h2>4.1 Transformation of two single variables</h2>
+<p>In dem Datensatz ist das Jahr in dem die Spiele statt fanden angegeben und das Alter der jeweiligen Athleten. Mittels dieser beiden Angaben, kann man das jeweilige Geburtsjahr berechnen:</p>
+<pre class="r"><code>olympics$GebJahr &lt;- olympics$Year - olympics$Age</code></pre>
+<p>Vor dem Zuweisungspfeil steht der Name der neuen Variable, hier „GebJahr“. Durch den Ausdruck olympics$ wird diese Variable automatisch den olympics-Daten hinzugefügt.</p>
+<pre class="r"><code>glimpse(olympics)</code></pre>
+<pre><code>## Observations: 271,116
+## Variables: 16
+## $ ID      &lt;int&gt; 1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, ...
+## $ Name    &lt;chr&gt; &quot;A Dijiang&quot;, &quot;A Lamusi&quot;, &quot;Gunnar Nielsen Aaby&quot;, &quot;Edgar...
+## $ Sex     &lt;chr&gt; &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;M&quot;,...
+## $ Age     &lt;int&gt; 24, 23, 24, 34, 21, 21, 25, 25, 27, 27, 31, 31, 31, 31...
+## $ Height  &lt;int&gt; 180, 170, NA, NA, 185, 185, 185, 185, 185, 185, 188, 1...
+## $ Weight  &lt;dbl&gt; 80, 60, NA, NA, 82, 82, 82, 82, 82, 82, 75, 75, 75, 75...
+## $ Team    &lt;chr&gt; &quot;China&quot;, &quot;China&quot;, &quot;Denmark&quot;, &quot;Denmark/Sweden&quot;, &quot;Nether...
+## $ NOC     &lt;chr&gt; &quot;CHN&quot;, &quot;CHN&quot;, &quot;DEN&quot;, &quot;DEN&quot;, &quot;NED&quot;, &quot;NED&quot;, &quot;NED&quot;, &quot;NED&quot;...
+## $ Games   &lt;chr&gt; &quot;1992 Summer&quot;, &quot;2012 Summer&quot;, &quot;1920 Summer&quot;, &quot;1900 Sum...
+## $ Year    &lt;int&gt; 1992, 2012, 1920, 1900, 1988, 1988, 1992, 1992, 1994, ...
+## $ Season  &lt;chr&gt; &quot;Summer&quot;, &quot;Summer&quot;, &quot;Summer&quot;, &quot;Summer&quot;, &quot;Winter&quot;, &quot;Win...
+## $ City    &lt;chr&gt; &quot;Barcelona&quot;, &quot;London&quot;, &quot;Antwerpen&quot;, &quot;Paris&quot;, &quot;Calgary&quot;...
+## $ Sport   &lt;chr&gt; &quot;Basketball&quot;, &quot;Judo&quot;, &quot;Football&quot;, &quot;Tug-Of-War&quot;, &quot;Speed...
+## $ Event   &lt;chr&gt; &quot;Basketball Men&#39;s Basketball&quot;, &quot;Judo Men&#39;s Extra-Light...
+## $ Medal   &lt;chr&gt; NA, NA, NA, &quot;Gold&quot;, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ GebJahr &lt;int&gt; 1968, 1989, 1896, 1866, 1967, 1967, 1967, 1967, 1967, ...</code></pre>
+</div>
+<div id="transformation-of-multible-variables" class="section level2">
+<h2>4.2 Transformation of multible variables</h2>
+<p>Für das nachfolgende Beispiel erstellen wir kurz einen eigenen Data Frame:</p>
+<pre class="r"><code>a &lt;- c(&quot;Christian&quot;, &quot;Maria&quot;, &quot;Andreas&quot;)
+b &lt;- c(2, 3, 1)
+c &lt;- c(3, 1, 5)
+d &lt;- c(2, 4, 1)
+e &lt;- c(1, 2, 2)
+f &lt;- c(2, 4, 3)
+Noten &lt;- data.frame(a, b, c, d, e, f)
+colnames(Noten) &lt;- c(&quot;Gewicht&quot;, &quot;Note1&quot;, &quot;Note2&quot;, &quot;Note3&quot;, &quot;Note4&quot;, &quot;Note5&quot;)
+Noten</code></pre>
+<pre><code>##     Gewicht Note1 Note2 Note3 Note4 Note5
+## 1 Christian     2     3     2     1     2
+## 2     Maria     3     1     4     2     4
+## 3   Andreas     1     5     1     2     3</code></pre>
+<p>Wir möchten nun eine neue Variable mit der Summe aller Noten erstellen:</p>
+<pre class="r"><code>Noten$Summe_Noten &lt;- Noten$Note1 + Noten$Note2 + Noten$Note3 + Noten$Note4 + Noten$Note5
+Noten</code></pre>
+<pre><code>##     Gewicht Note1 Note2 Note3 Note4 Note5 Summe_Noten
+## 1 Christian     2     3     2     1     2          10
+## 2     Maria     3     1     4     2     4          14
+## 3   Andreas     1     5     1     2     3          12</code></pre>
+<p>Und nun eine Weitere mit dem Notendurchschnitt:</p>
+<pre class="r"><code>Noten$Notendurchschnitt &lt;- (Noten$Note1 + Noten$Note2 + Noten$Note3 + Noten$Note4 + Noten$Note5) / 5
+Noten</code></pre>
+<pre><code>##     Gewicht Note1 Note2 Note3 Note4 Note5 Summe_Noten Notendurchschnitt
+## 1 Christian     2     3     2     1     2          10               2.0
+## 2     Maria     3     1     4     2     4          14               2.8
+## 3   Andreas     1     5     1     2     3          12               2.4</code></pre>
+</div>
+<div id="rowsums-and-rowmeans-function" class="section level2">
+<h2>4.3 rowSums and rowMeans function</h2>
+<p>Für die Berechnung von Mittelwerten oder Summenwerten gibt es in R eigene Funktionen.</p>
+<pre class="r"><code>Noten$rowSums &lt;- rowSums(Noten[c(&quot;Note1&quot;,&quot;Note2&quot;,&quot;Note3&quot;,&quot;Note4&quot;,&quot;Note5&quot;)], na.rm=TRUE)
+Noten$rowMeans &lt;- rowMeans(Noten[c(&quot;Note1&quot;,&quot;Note2&quot;,&quot;Note3&quot;,&quot;Note4&quot;,&quot;Note5&quot;)], na.rm=TRUE)
+Noten</code></pre>
+<pre><code>##     Gewicht Note1 Note2 Note3 Note4 Note5 Summe_Noten Notendurchschnitt
+## 1 Christian     2     3     2     1     2          10               2.0
+## 2     Maria     3     1     4     2     4          14               2.8
+## 3   Andreas     1     5     1     2     3          12               2.4
+##   rowSums rowMeans
+## 1      10      2.0
+## 2      14      2.8
+## 3      12      2.4</code></pre>
+<p>Wir erkennen, dass die Werte von Summe_Noten und Notendurchschnitt gleich sind mit rowSums und rowMeans.</p>
+</div>
+<div id="center-and-standardize-variables" class="section level2">
+<h2>4.4 Center and standardize variables</h2>
+<p>Für viele statistische Analysen ist das Zentrieren oder Standardisieren von Variablen wichtig. Bei der Zentrierung von Variablen zieht man von jedem einzelnen Wert den Mittelwert der Variablen ab. Die zentrierte Variable hat dann den Mittelwert 0. Dies ist beispielsweise sinnvoll, wenn man eine Regressionsanalyse mit den Variablen Einkommen und Alter durchführt. Ein Einkommen bei einem einjährigen Kind macht dabei wenig Sinn, daher die Zentrierung des Alters. Um eine Variable zu standardisieren, teilt man zusätzlich noch durch die Standardabweichung der Variablen. Die standardisierte Variable hat dann den Mittelwert 0 und die Standardabweichung 1. Die einzelnen Werte der standardisierten Werte nennt man dann z-Werte. Eine Standardisierung ist oft notwendig, um Stichprobenwerte vergleichbar zu machen. Um Variablen zu zentrieren oder standardisieren, kann man in R die <em>scale</em> Funktion anwenden:</p>
+<pre class="r"><code>olympics$Age.z &lt;- scale(olympics$Age)
+glimpse(olympics)</code></pre>
+<pre><code>## Observations: 271,116
+## Variables: 17
+## $ ID      &lt;int&gt; 1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, ...
+## $ Name    &lt;chr&gt; &quot;A Dijiang&quot;, &quot;A Lamusi&quot;, &quot;Gunnar Nielsen Aaby&quot;, &quot;Edgar...
+## $ Sex     &lt;chr&gt; &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;M&quot;,...
+## $ Age     &lt;int&gt; 24, 23, 24, 34, 21, 21, 25, 25, 27, 27, 31, 31, 31, 31...
+## $ Height  &lt;int&gt; 180, 170, NA, NA, 185, 185, 185, 185, 185, 185, 188, 1...
+## $ Weight  &lt;dbl&gt; 80, 60, NA, NA, 82, 82, 82, 82, 82, 82, 75, 75, 75, 75...
+## $ Team    &lt;chr&gt; &quot;China&quot;, &quot;China&quot;, &quot;Denmark&quot;, &quot;Denmark/Sweden&quot;, &quot;Nether...
+## $ NOC     &lt;chr&gt; &quot;CHN&quot;, &quot;CHN&quot;, &quot;DEN&quot;, &quot;DEN&quot;, &quot;NED&quot;, &quot;NED&quot;, &quot;NED&quot;, &quot;NED&quot;...
+## $ Games   &lt;chr&gt; &quot;1992 Summer&quot;, &quot;2012 Summer&quot;, &quot;1920 Summer&quot;, &quot;1900 Sum...
+## $ Year    &lt;int&gt; 1992, 2012, 1920, 1900, 1988, 1988, 1992, 1992, 1994, ...
+## $ Season  &lt;chr&gt; &quot;Summer&quot;, &quot;Summer&quot;, &quot;Summer&quot;, &quot;Summer&quot;, &quot;Winter&quot;, &quot;Win...
+## $ City    &lt;chr&gt; &quot;Barcelona&quot;, &quot;London&quot;, &quot;Antwerpen&quot;, &quot;Paris&quot;, &quot;Calgary&quot;...
+## $ Sport   &lt;chr&gt; &quot;Basketball&quot;, &quot;Judo&quot;, &quot;Football&quot;, &quot;Tug-Of-War&quot;, &quot;Speed...
+## $ Event   &lt;chr&gt; &quot;Basketball Men&#39;s Basketball&quot;, &quot;Judo Men&#39;s Extra-Light...
+## $ Medal   &lt;chr&gt; NA, NA, NA, &quot;Gold&quot;, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ GebJahr &lt;int&gt; 1968, 1989, 1896, 1866, 1967, 1967, 1967, 1967, 1967, ...
+## $ Age.z   &lt;dbl&gt; -0.2435104, -0.3999177, -0.2435104, 1.3205633, -0.7127...</code></pre>
+<p>Um die Variable zu zentrieren, muss das Zusatzargument <em>scale=FALSE</em> verwendet werden. Mit diesem Argument wird das Dividieren durch die Standardabweichung unterdrückt.</p>
+<pre class="r"><code>olympics$Age.cen &lt;- scale(olympics$Age, scale = FALSE)
+glimpse(olympics)</code></pre>
+<pre><code>## Observations: 271,116
+## Variables: 18
+## $ ID      &lt;int&gt; 1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, ...
+## $ Name    &lt;chr&gt; &quot;A Dijiang&quot;, &quot;A Lamusi&quot;, &quot;Gunnar Nielsen Aaby&quot;, &quot;Edgar...
+## $ Sex     &lt;chr&gt; &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;M&quot;,...
+## $ Age     &lt;int&gt; 24, 23, 24, 34, 21, 21, 25, 25, 27, 27, 31, 31, 31, 31...
+## $ Height  &lt;int&gt; 180, 170, NA, NA, 185, 185, 185, 185, 185, 185, 188, 1...
+## $ Weight  &lt;dbl&gt; 80, 60, NA, NA, 82, 82, 82, 82, 82, 82, 75, 75, 75, 75...
+## $ Team    &lt;chr&gt; &quot;China&quot;, &quot;China&quot;, &quot;Denmark&quot;, &quot;Denmark/Sweden&quot;, &quot;Nether...
+## $ NOC     &lt;chr&gt; &quot;CHN&quot;, &quot;CHN&quot;, &quot;DEN&quot;, &quot;DEN&quot;, &quot;NED&quot;, &quot;NED&quot;, &quot;NED&quot;, &quot;NED&quot;...
+## $ Games   &lt;chr&gt; &quot;1992 Summer&quot;, &quot;2012 Summer&quot;, &quot;1920 Summer&quot;, &quot;1900 Sum...
+## $ Year    &lt;int&gt; 1992, 2012, 1920, 1900, 1988, 1988, 1992, 1992, 1994, ...
+## $ Season  &lt;chr&gt; &quot;Summer&quot;, &quot;Summer&quot;, &quot;Summer&quot;, &quot;Summer&quot;, &quot;Winter&quot;, &quot;Win...
+## $ City    &lt;chr&gt; &quot;Barcelona&quot;, &quot;London&quot;, &quot;Antwerpen&quot;, &quot;Paris&quot;, &quot;Calgary&quot;...
+## $ Sport   &lt;chr&gt; &quot;Basketball&quot;, &quot;Judo&quot;, &quot;Football&quot;, &quot;Tug-Of-War&quot;, &quot;Speed...
+## $ Event   &lt;chr&gt; &quot;Basketball Men&#39;s Basketball&quot;, &quot;Judo Men&#39;s Extra-Light...
+## $ Medal   &lt;chr&gt; NA, NA, NA, &quot;Gold&quot;, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ GebJahr &lt;int&gt; 1968, 1989, 1896, 1866, 1967, 1967, 1967, 1967, 1967, ...
+## $ Age.z   &lt;dbl&gt; -0.2435104, -0.3999177, -0.2435104, 1.3205633, -0.7127...
+## $ Age.cen &lt;dbl&gt; -1.5568984, -2.5568984, -1.5568984, 8.4431016, -4.5568...</code></pre>
+</div>
+<div id="turn-over-variables" class="section level2">
+<h2>4.5 Turn over variables</h2>
+<p>Skalen werden bei Umfragen häufig sowohl positiv als auch negativ verwendet. Bevor man nun einen Skalenscore zusammenfasst, müssen einzelne Items umgepolt werden. Einfach geschieht das, wenn man alle einzelnen Werte der Variablen vom theoretischen Maximum + 1 subtrahiert. Nehmen wir dazu nochmal unser Data Frame mit den Noten her. Nehmen wir an, dass die Note5 umkodiert werden soll. Das theoretische Maximum von den Noten her wäre 6. Dies + 1 ergibt 7. Die Umpolung von Note5 geschieht nun wie folgt:</p>
+<pre class="r"><code>Noten$Note5.r &lt;- 7 - Noten$Note5
+Noten</code></pre>
+<pre><code>##     Gewicht Note1 Note2 Note3 Note4 Note5 Summe_Noten Notendurchschnitt
+## 1 Christian     2     3     2     1     2          10               2.0
+## 2     Maria     3     1     4     2     4          14               2.8
+## 3   Andreas     1     5     1     2     3          12               2.4
+##   rowSums rowMeans Note5.r
+## 1      10      2.0       5
+## 2      14      2.8       3
+## 3      12      2.4       4</code></pre>
+</div>
+<div id="turn-over-single-values" class="section level2">
+<h2>4.6 turn over single values</h2>
+<p>Manchmal möchte man nur einzelne Werte oder Wertebereiche innerhalb einer Variablen umkodieren. Dafür bietet sich die <em>which</em> Funktion an.</p>
+<div id="via-which-function" class="section level3">
+<h3>4.6.1 via which function</h3>
+<p>Die <em>which</em> Funktion gibt die Position von Observations aus, auf die eine bestimmte Bedingung zutrifft. Wir können uns beispielsweise mit folgender Syntax alle Goldmedaillen Gewinner aufführen lassen:</p>
+<pre class="r"><code>a&lt;-which(olympics$Medal == &quot;Gold&quot;)
+head(a)</code></pre>
+<pre><code>## [1]  4 43 45 49 61 74</code></pre>
+<p>Wichtig! Die ausgegebenen Werte beziehen sich auf die Zeilen, in denen die Daten der Person gespeichert sind. Man kann daher diese Ausgabe auch in der Index Funktion verwenden. Mit der Index Funktion werden gezielt bestimmte Zeilen und Spalten ausgewählt. Mit folgendem Befehl werden die Werte für die oben aufgeführten Zeilen ausgegeben. Natürlich handelt es sich bei jedem Wert um das Wort „Gold“, denn genau das war ja auch unsere Bedingung.</p>
+<pre class="r"><code>b&lt;- olympics$Medal[which(olympics$Medal == &quot;Gold&quot;)]
+head(b)</code></pre>
+<pre><code>## [1] &quot;Gold&quot; &quot;Gold&quot; &quot;Gold&quot; &quot;Gold&quot; &quot;Gold&quot; &quot;Gold&quot;</code></pre>
+<p>Nun kommt der Trick: Man kann nun jedes Wort durch ein beliebiges anderes Wort oder beliebigen anderen Wert ersetzten, indem man hinter dem obigen Befehl den Zuweisungspfeil und dann das neue Wort/ den neuen Wert aufführt. Wir ersetzen nun das Wort „Gold“ durch „First_Place“:</p>
+<pre class="r"><code>olympics$Medal[which(olympics$Medal == &quot;Gold&quot;)] &lt;- &quot;First Place&quot;
+head(olympics$Medal)</code></pre>
+<pre><code>## [1] NA            NA            NA            &quot;First Place&quot; NA           
+## [6] NA</code></pre>
+</div>
+<div id="via-ifelse-function" class="section level3">
+<h3>4.6.2 via ifelse function</h3>
+<p>Wie die <em>which</em> Funktion verwendet auch die <em>ifelse</em> Funktion logische Abfragen. Die <em>which</em> Funktion wird allerdings nur auf der linken Seite des Zuweisungspfeils angewandt und dient damit dem Auswählen bestimmter Fälle. Nur für diese bestimmte Auswahl wird eine Operation durchgeführt, alle anderen bleiben unberührt. Bei der <em>ifelse</em> Funktion ist das anders. Diese Funktion wird auf der rechten Seite des Zuweisungspfeils angewandt und ermöglicht es uns dadurch, für alle Fälle gleichzeitig verschiedene Operationen durchzuführen. Der Unterschied zwischen der <em>which</em> Funktion und der <em>ifelse</em> Funktion wird mit dem folgenden Beispiel verständlich:</p>
+<p>olympics<span class="math inline">\(Altersgruppe1[which(olympics\)</span>Age &lt; 25)] &lt;- 0</p>
+<p>olympics<span class="math inline">\(Altersgruppe1[which(olympics\)</span>Age &gt;= 25)] &lt;- 1</p>
+<p>Wir haben nun mit zwei <em>which</em> Funktionen die Athleten in einer neuen Variablen <code>Altersgruppe</code> in zwei Untergruppen unterteilt. Die unter 25 Jährigen erhielten den Wert 0, die über 25 Jährigen den Wert 1. Verwendet man stattdessen die <em>ifelse</em> Funktion, kann man die gleiche Operation in nur einem Befehl ausführen lassen:</p>
+<pre class="r"><code>olympics$Altersgruppe2 &lt;- ifelse(olympics$Age &gt;= 25, 1, 0)
+glimpse(olympics$Altersgruppe2)</code></pre>
+<pre><code>##  num [1:271116] 0 0 0 1 0 0 1 1 1 1 ...</code></pre>
+<p>Es ist des Weiteren möglich, mehrere <em>ifelse</em> Funktionen ineinander zu schachteln:</p>
+<pre class="r"><code>olympics$Altersgruppe3 &lt;- ifelse(olympics$Age &gt;= 30, &quot;alt&quot;, ifelse(olympics$Age &lt; 20, &quot;jung&quot;, &quot;mittel&quot;))
+glimpse(olympics$Altersgruppe3)</code></pre>
+<pre><code>##  chr [1:271116] &quot;mittel&quot; &quot;mittel&quot; &quot;mittel&quot; &quot;alt&quot; &quot;mittel&quot; &quot;mittel&quot; ...</code></pre>
+<p>Ist die Person über 30 Jahre alt, erhält sie den Wert „alt“ und ist sie unter 20 Jahre alt, erhält sie den Wert „jung“. Trifft keines der beiden Argumente auf die Person zu (also die Person ist zwischen 20 und 29 Jahre alt) erhält sie den Wert „mittel“.</p>
+</div>
+<div id="recode-function" class="section level3">
+<h3>4.6.3 recode function</h3>
+<p>Ist man mit logischen Abfragen noch nicht so vertraut, kann man stattdessen auch die <em>recode</em> Funktion verwenden. Dazu erstellen wir in dem Noten Data Frame nochmals eine recode Variable für Note 5: <code>Note5.r2</code> Wir können sehen, dass auch hier die Umkodierung geklappt hat, da die Variable <code>Note5.r2</code> und die Variable <code>Note5.r</code> gleiche Werte enthält.</p>
+<pre class="r"><code>Noten$Note5.r2 &lt;- recode(Noten$Note5, `1`=&quot;6&quot;, `2`=&quot;5&quot;, `3`=&quot;4&quot;, `4`=&quot;3&quot;, `5`=&quot;2&quot;, `6`=&quot;1&quot;)
+Noten</code></pre>
+<pre><code>##     Gewicht Note1 Note2 Note3 Note4 Note5 Summe_Noten Notendurchschnitt
+## 1 Christian     2     3     2     1     2          10               2.0
+## 2     Maria     3     1     4     2     4          14               2.8
+## 3   Andreas     1     5     1     2     3          12               2.4
+##   rowSums rowMeans Note5.r Note5.r2
+## 1      10      2.0       5        5
+## 2      14      2.8       3        3
+## 3      12      2.4       4        4</code></pre>
+</div>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>5 Conclusion</h1>
+<p>In diesem Post bin ich auf die Standardfunktionen der Datenaufbereitung eingegangen. Datenaufbereitung ist eine der Hauptaufgaben in der Datenanalyse. Daher sollten die jeweiligen Möglichkeiten zur Aufbereitung vollumfänglich bekannt sein. Es gibt jedoch Funktionen und Pakete, die speziell für die Datenaufbereitung programmiert wurden und teilweise einfacher anzuwenden sind als die hier vorgestellten Funktionen. Das <code>dplyr</code> Paket von Hadley Wickham zählt beispielsweise zu einem der beliebtesten R Pakete für diese Zwecke. In meinem vorangegangenen Post <em>Data</em> <em>Transformation</em> <em>in</em> <em>R</em> <a href="https://michael-fuchs.netlify.com/2018/08/18/data-transformation-in-r/" class="uri">https://michael-fuchs.netlify.com/2018/08/18/data-transformation-in-r/</a> habe ich bereits einige Funktionen aus diesem Paket vorgestellt.</p>
+</div>

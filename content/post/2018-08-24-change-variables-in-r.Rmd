@@ -23,7 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 + 2.3.1 via data.frame function
 + 2.3.2 via index function
 + 2.3.3 via subset function
-+ 3 Change object'charactersitics
++ 3 Change object's charactersitics
 + 3.1 character to factores	
 + 3.2 factores to vectores
 + 4 Create new variables
@@ -84,7 +84,7 @@ Man sieht die Differenz zwischen Summe 1 (6.686.758) und Summe 2 (6.686.734) bet
 
 ##2.3 Mulitble choose of variables
 
-Häufig wird nicht nur ein Wert (zB. Mittelwert) für eine Variable benötigt, sondern die Werte für mehrere Spalten. Die dazugehörige Funktion lautet *colMeans*. Für die Auswahl mehrerer Variablen in R gibt es mehrere Möglichkeiten:
+Häufig wird nicht nur ein Wert (zB. Mittelwert) für eine Variable benötigt, sondern die Werte für mehrere Spalten. Die dazugehörige Funktion lautet *colMeans*. Für die Auswahl mehrerer Variablen in R gibt es diverse Möglichkeiten:
 
 ###2.3.1 via data.frame function
 
@@ -106,7 +106,7 @@ colMeans(na.omit(Auswahl2))
 
 ###2.3.2 via index function
 
-Es lassen sich auch via der Indexfunktion mit dem Zusatzargument *c()* mehrere Spalten geleichzeitig auswählen. Im nachfolgenden Beispiel werden die Spalten fünf und sechs dem Objekt „Auswahl3“ zugeordnet.
+Es lassen sich auch via der Indexfunktion mit dem Zusatzargument *c()* mehrere Spalten gleichzeitig auswählen. Im nachfolgenden Beispiel werden die Spalten fünf und sechs dem Objekt „Auswahl3“ zugeordnet.
 ```{r}
 Auswahl3 <- olympics[, c(5,6)]
 ```
@@ -127,15 +127,15 @@ Die *subset* Funktion ist sehr flexibel, da man mit ihr nicht nur Variablen, son
 Auswahl5 <- subset(olympics, select = Sex:Weight)
 ```
 
-Mit dem Befehl *glimpse* sehe wir, dass das neue Objekt „Auswahl5“ vier Variablen (von „Sex“ bis „Weight“) hat. 
+Mit dem Befehl *glimpse* sehen wir, dass das neue Objekt „Auswahl5“ vier Variablen (von „Sex“ bis „Weight“) hat. 
 
 ```{r}
 glimpse(Auswahl5)
 ```
 
-#3 Change object'charactersitics
+#3 Change object's charactersitics
 
-Objekte spielen eine zentrale Rolle bei der Arbeit mit R. Es gibt unterschiedlich Objekttypen: Beispielsweise Vektoren, Faktoren oder Data Frames. Numerische Variablen können in R sowohl als Vektoren als auch in Faktoren gespeichert werden. Wohingegen Vektoren ordinalskalierte oder metrische Daten enthalten, beinhalten Faktoren nominalskalierte Variablen. Werden nummerische Daten in R eingelesen, werden diese meiste als numerischen Vektor gespeichert, unabhängig vom tatsächlichen Skalenniveau. Es ist daher manchmal notwendig, die Objekteigenschaften zu konvertieren.  
+Objekte spielen eine zentrale Rolle bei der Arbeit mit R. Es gibt unterschiedliche Objekttypen: Beispielsweise Vektoren, Faktoren oder Data Frames. Numerische Variablen können in R sowohl als Vektoren, als auch in Faktoren gespeichert werden. Wohingegen Vektoren ordinalskalierte oder metrische Daten enthalten, beinhalten Faktoren nominalskalierte Variablen. Werden nummerische Daten in R eingelesen, werden diese meist als numerischen Vektor gespeichert, unabhängig vom tatsächlichen Skalenniveau. Es ist daher manchmal notwendig, die Objekteigenschaften zu konvertieren.  
 
 ##3.1 character to factores	
 ```{r}
@@ -147,7 +147,7 @@ olympics.sex.factor <- factor(olympics$Sex)
 head(olympics.sex.factor)
 ```
 
-Vor dem Zuweisungspfeil steht der Name des neuen Faktors. Wenn der neue und alte Name identisch ist, wird der alte überschrieben. Wenn wir in beibehalten möchten, empfiehlt es sich (wie im Beispiel) ein neues, zusätzliches Objekt anzulegen. Betrachtet man den neuen Data Frame, sehen wir, dass die Variable `Sex` weiterhin als „M“ und „F“ ausgegeben wird. Es ist manchmal sinnvoll, Abkürzungen oder Zahlen in aussagekräftigere Begriffe umzuwandeln. Wir modifizieren daher den Befehl wie folgt: 
+Vor dem Zuweisungspfeil steht der Name des neuen Faktors. Wenn der neue und alte Name identisch ist, wird der alte überschrieben. Wenn wir ihn beibehalten möchten, empfiehlt es sich (wie im Beispiel) ein neues, zusätzliches Objekt anzulegen. Betrachtet man den neuen Data Frame, sehen wir, dass die Variable `Sex` weiterhin als „M“ und „F“ ausgegeben wird. Es ist manchmal sinnvoll, Abkürzungen oder Zahlen in aussagekräftigere Begriffe umzuwandeln. Wir modifizieren daher den Befehl wie folgt: 
 ```{r}
 olympics.sex.factor <- factor(olympics$Sex, levels = c("F", "M"), labels = c("weiblich", "m?nnlich"))
 head(olympics.sex.factor)
@@ -188,7 +188,7 @@ In dem Datensatz ist das Jahr in dem die Spiele statt fanden angegeben und das A
 olympics$GebJahr <- olympics$Year - olympics$Age
 ```
 
-Vor dem Zuweisungspfeil steht der Name der neuen Variable, hier „GebJahr“. Durch den Ausdruck olympics$ wird diese Variable automaisch den olympics-Daten hinzugefügt. 
+Vor dem Zuweisungspfeil steht der Name der neuen Variable, hier „GebJahr“. Durch den Ausdruck olympics$ wird diese Variable automatisch den olympics-Daten hinzugefügt. 
 ```{r}
 glimpse(olympics)
 ```
@@ -214,7 +214,7 @@ Noten$Summe_Noten <- Noten$Note1 + Noten$Note2 + Noten$Note3 + Noten$Note4 + Not
 Noten
 ```
 
-Und nun eine weiter mit dem Notendurchschnitt:
+Und nun eine Weitere mit dem Notendurchschnitt:
 ```{r}
 Noten$Notendurchschnitt <- (Noten$Note1 + Noten$Note2 + Noten$Note3 + Noten$Note4 + Noten$Note5) / 5
 Noten
@@ -233,8 +233,8 @@ Wir erkennen, dass die Werte von Summe_Noten und Notendurchschnitt gleich sind m
 
 ##4.4 Center and standardize variables
 
-Für viele statistische Analysen ist das Zentrieren oder Standardisieren von Variablen wichtig. Bei der Zentrierung von Variablen zieht man von jedem einzelnen Wert den Mittelwert der Variablen ab. Die zentrierte Variable hat dann den Mittelwert 0. Dies ist beispielsweise sinnvoll, wenn man eine Regressionsanalyse mit den Variablen Einkommen und Alter durchführt. Ein Einkommen bei einem einjährigen Kind macht dabei wenig sinn, daher die Zentrierung des Alters. 
-Um eine Variable zu standardisieren, teilt man zusätzlich noch durch die Standardabweichung der Variablen. Die standardisierte Variable hat dann den Mittelwert 0 und die Standardabweichung 1. Die einzelnen Werte der standardisierten Werte nennt man dann z-Werte. Eine Standardisierung macht dann Sinn, wenn man sprichwörtlich Äpfel mit Birnen vergleichen möchte. So hat man beispielsweise bei einer Umfrage das Lebensalter von Kindern in einer Familie in Jahren erhoben. Bei weiteren Umfrage geschah das gleiche nur in Monaten und Wochen. Durch eine Standardisierung lassen sich die Kinder dennoch miteinander vergleichen ohne einzelne Werte umrechnen zu müssen. 
+Für viele statistische Analysen ist das Zentrieren oder Standardisieren von Variablen wichtig. Bei der Zentrierung von Variablen zieht man von jedem einzelnen Wert den Mittelwert der Variablen ab. Die zentrierte Variable hat dann den Mittelwert 0. Dies ist beispielsweise sinnvoll, wenn man eine Regressionsanalyse mit den Variablen Einkommen und Alter durchführt. Ein Einkommen bei einem einjährigen Kind macht dabei wenig Sinn, daher die Zentrierung des Alters. 
+Um eine Variable zu standardisieren, teilt man zusätzlich noch durch die Standardabweichung der Variablen. Die standardisierte Variable hat dann den Mittelwert 0 und die Standardabweichung 1. Die einzelnen Werte der standardisierten Werte nennt man dann z-Werte. Eine Standardisierung ist oft notwendig, um Stichprobenwerte vergleichbar zu machen.
 Um Variablen zu zentrieren oder standardisieren, kann man in R die *scale* Funktion anwenden:
 ```{r}
 olympics$Age.z <- scale(olympics$Age)
@@ -268,13 +268,13 @@ a<-which(olympics$Medal == "Gold")
 head(a)
 ```
 
-Wichtig! Die ausgegebenen Werte beziehen sich auf die Zeilen, in denen die Daten der Person gespeichert sind. Man kann daher diese Ausgabe auch in der Index Funktion verwenden. Mit der Index Funktion werden gezielt bestimmte Zeilen und Spalten ausgewählt. Mit folgenden Befehl werden die Werte für die oben aufgeführte Zeilen ausgegeben. Natürlich handelt es sich bei jedem Wert um das Wort „Gold“, denn genau das war ja auch unsere Bedingung.
+Wichtig! Die ausgegebenen Werte beziehen sich auf die Zeilen, in denen die Daten der Person gespeichert sind. Man kann daher diese Ausgabe auch in der Index Funktion verwenden. Mit der Index Funktion werden gezielt bestimmte Zeilen und Spalten ausgewählt. Mit folgendem Befehl werden die Werte für die oben aufgeführten Zeilen ausgegeben. Natürlich handelt es sich bei jedem Wert um das Wort „Gold“, denn genau das war ja auch unsere Bedingung.
 ```{r}
 b<- olympics$Medal[which(olympics$Medal == "Gold")]
 head(b)
 ```
 
-Nun kommt der Trick: Man kann nun jedes Wort durch ein beliebiges anders Wort oder beliebigen anderen Wert ersetzten, indem man hinter dem obigen Befehl den Zuweisungspfeil und dann das neue Wort/ den neuen Wert aufführt. Wir ersetzen nun das Wort „Gold“ durch „First_Place“:
+Nun kommt der Trick: Man kann nun jedes Wort durch ein beliebiges anderes Wort oder beliebigen anderen Wert ersetzten, indem man hinter dem obigen Befehl den Zuweisungspfeil und dann das neue Wort/ den neuen Wert aufführt. Wir ersetzen nun das Wort „Gold“ durch „First_Place“:
 ```{r}
 olympics$Medal[which(olympics$Medal == "Gold")] <- "First Place"
 head(olympics$Medal)
@@ -289,7 +289,7 @@ olympics$Altersgruppe1[which(olympics$Age < 25)] <- 0
 
 olympics$Altersgruppe1[which(olympics$Age >= 25)] <- 1
 
-Wir haben nun mit zwei *which* Funktionen die Athleten in einer neuen Variablen `Altersgruppe` in zwei Untergruppen unterteilt. Die unter 25 jähren erhielten den Wert 0, die über 25 jähren den Wert 1. Verwendet man stattdessen die *ifelse* Funktion, kann man die gleiche Operation in nur einem Befehl ausführen lassen:
+Wir haben nun mit zwei *which* Funktionen die Athleten in einer neuen Variablen `Altersgruppe` in zwei Untergruppen unterteilt. Die unter 25 Jährigen erhielten den Wert 0, die über 25 Jährigen den Wert 1. Verwendet man stattdessen die *ifelse* Funktion, kann man die gleiche Operation in nur einem Befehl ausführen lassen:
 ```{r}
 olympics$Altersgruppe2 <- ifelse(olympics$Age >= 25, 1, 0)
 glimpse(olympics$Altersgruppe2)
@@ -302,12 +302,12 @@ olympics$Altersgruppe3 <- ifelse(olympics$Age >= 30, "alt", ifelse(olympics$Age 
 glimpse(olympics$Altersgruppe3)
 ```
 
-Ist die Person über 30 Jahre alt erhält sie den Wert „alt“ und ist sie unter 20 Jahre alt erhält sie den Wert „jung“. Trifft keines der beiden Argumente auf die Person zu (also die Person ist zwischen 20 und 29 Jahre alt) erhält sie den Wert „mittel“. 
+Ist die Person über 30 Jahre alt, erhält sie den Wert „alt“ und ist sie unter 20 Jahre alt, erhält sie den Wert „jung“. Trifft keines der beiden Argumente auf die Person zu (also die Person ist zwischen 20 und 29 Jahre alt) erhält sie den Wert „mittel“. 
 
 ###4.6.3 recode function
 
 Ist man mit logischen Abfragen noch nicht so vertraut, kann man stattdessen auch die *recode* Funktion verwenden. Dazu erstellen wir in dem Noten Data Frame nochmals eine recode Variable für Note 5: `Note5.r2`
-Wir können sehen, dass auch hier die Umkodierung gekappt hat, da die Variable `Note5.r2` und die Variable `Note5.r` gleiche Werte enthält. 
+Wir können sehen, dass auch hier die Umkodierung geklappt hat, da die Variable `Note5.r2` und die Variable `Note5.r` gleiche Werte enthält. 
 ```{r}
 Noten$Note5.r2 <- recode(Noten$Note5, `1`="6", `2`="5", `3`="4", `4`="3", `5`="2", `6`="1")
 Noten
