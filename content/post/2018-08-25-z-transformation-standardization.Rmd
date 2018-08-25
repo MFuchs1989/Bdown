@@ -46,7 +46,7 @@ Die Lösung besteht darin, die Daten auf eine einheitliche Skala zu transformier
 
 Für unser Beispiel mit Stefan und Susi nehmen wir folgende Mittelwerte und Standardabweichung der Abiturpunkte an:
 
-   | *m* | *sd*
+ Bundesland  | *m* | *sd*
 ---|---|---
 Bayern|570|75
 Sachsen|575|105
