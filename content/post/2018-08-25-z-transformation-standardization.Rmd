@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #1 Introduction
 
-Durch eine z-Transformation / Standardisierung von Merkmalen / Variablen werden diese in der Statistik in eine andere Form überführt. Dies ist beispielsweise notwendig, um unterschiedlich verteilte Zufallsvariablen miteinander vergleichen zu können. Dazu subtrahiert man von jedem Messwert den arithmetischen Mittelwert, teilt die resultierende Differenz durch die Standardabweichung und erhählt dadurch die sogenannten z-scores (z-Werte).
+Durch eine z-Transformation / Standardisierung von Merkmalen / Variablen werden diese in der Statistik in eine andere Form überführt. Dies ist beispielsweise notwendig, um unterschiedlich verteilte Zufallsvariablen miteinander vergleichen zu können. Dazu subtrahiert man von jedem Messwert den arithmetischen Mittelwert, teilt die resultierende Differenz durch die Standardabweichung und erhält dadurch die sogenannten z-scores (z-Werte).
 
 $$  z = \frac{x-m}{sd}  $$
 
@@ -27,7 +27,7 @@ $$  z = \frac{x-m}{sd}  $$
 
 Nach der z-Transformation ist 
 
-+ das arithmetische Mittel der transformierten Messeihe immer Null und
++ das arithmetische Mittel der transformierten Messreihe immer Null und
 + die Varianz sowie die Standardabweichung sind immer 1.
 
 Liegt eine Normalverteilung vor, können auf Basis der z-Werte die entsprechenden Wahrscheinlichkeiten in einer Tabelle für die [Standardnormalverteilung](https://drive.google.com/file/d/1ArvgNzMQ_84QcWk1NW9EZ4NiOOeF1EGn/view?usp=drivesdk) abgelesen werden.
@@ -38,11 +38,11 @@ Liegt eine Normalverteilung vor, können auf Basis der z-Werte die entsprechende
 Einzelne Messwerte lassen sich schwer miteinander vergleichen, wenn sie von verschiedenen Messinstrumenten stammen. Dies kann man an einem einfachen Beispiel darstellen:
 
 + Stefan hat sein Abitur in Bayern mit 620 Punkte abgeschlossen
-+ Susi hat in ihrem Abitur in Sachsen 640 Puntkte erreicht
++ Susi hat in ihrem Abitur in Sachsen 640 Punkte erreicht
 
 Die entscheidende Frage ist nun: Hat Susi wirklich das bessere Abitur geschrieben? Wie wir wissen, sind die Aufgaben in Bayern meist ein wenig schwieriger als in anderen Bundesländern...
 
-Die Lösung besteht darin, die Daten auf eine einheitliche Skala zu transformieren. Bei einer z-Transformation bekommt jede Person einen nuen Wert zugewiesen, der nun vergleichbar ist. Diesem z-Wert kann ein bestimmter Flächenanteil der Standardnormalverteilung zugeordnet werden. Der Flächenanteil entspricht der Auftretenswahrscheinlichkeit für diesen Wert und alle kleineren Werte. 
+Die Lösung besteht darin, die Daten auf eine einheitliche Skala zu transformieren. Bei einer z-Transformation bekommt jede Person einen neuen Wert zugewiesen, der nun vergleichbar ist. Diesem z-Wert kann ein bestimmter Flächenanteil der Standardnormalverteilung zugeordnet werden. Der Flächenanteil entspricht der Auftretenswahrscheinlichkeit für diesen Wert und alle kleineren Werte. 
 
 Für unser Beispiel mit Stefan und Susi nehmen wir folgende Mittelwerte und Standardabweichung der Abiturpunkte an:
 

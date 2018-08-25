@@ -80,7 +80,7 @@
 <li>2.3.1 via data.frame function</li>
 <li>2.3.2 via index function</li>
 <li>2.3.3 via subset function</li>
-<li>3 Change object’charactersitics</li>
+<li>3 Change object’s charactersitics</li>
 <li>3.1 character to factores</li>
 <li>3.2 factores to vectores</li>
 <li>4 Create new variables</li>
@@ -133,7 +133,7 @@
 </div>
 <div id="mulitble-choose-of-variables" class="section level2">
 <h2>2.3 Mulitble choose of variables</h2>
-<p>Häufig wird nicht nur ein Wert (zB. Mittelwert) für eine Variable benötigt, sondern die Werte für mehrere Spalten. Die dazugehörige Funktion lautet <em>colMeans</em>. Für die Auswahl mehrerer Variablen in R gibt es mehrere Möglichkeiten:</p>
+<p>Häufig wird nicht nur ein Wert (zB. Mittelwert) für eine Variable benötigt, sondern die Werte für mehrere Spalten. Die dazugehörige Funktion lautet <em>colMeans</em>. Für die Auswahl mehrerer Variablen in R gibt es diverse Möglichkeiten:</p>
 <div id="via-data.frame-function" class="section level3">
 <h3>2.3.1 via data.frame function</h3>
 <p>Im nachfolgenden Beispiel erstellen wir einen neuen Data Frame mit dem Namen „Auswahl1“, welcher die Variablen <code>Height</code> und <code>Weight</code> enthält.</p>
@@ -150,7 +150,7 @@ colMeans(na.omit(Auswahl2))</code></pre>
 </div>
 <div id="via-index-function" class="section level3">
 <h3>2.3.2 via index function</h3>
-<p>Es lassen sich auch via der Indexfunktion mit dem Zusatzargument <em>c()</em> mehrere Spalten geleichzeitig auswählen. Im nachfolgenden Beispiel werden die Spalten fünf und sechs dem Objekt „Auswahl3“ zugeordnet.</p>
+<p>Es lassen sich auch via der Indexfunktion mit dem Zusatzargument <em>c()</em> mehrere Spalten gleichzeitig auswählen. Im nachfolgenden Beispiel werden die Spalten fünf und sechs dem Objekt „Auswahl3“ zugeordnet.</p>
 <pre class="r"><code>Auswahl3 &lt;- olympics[, c(5,6)]</code></pre>
 <p>Anstelle der Indizes kann man auch die Variablennamen direkt angeben:</p>
 <pre class="r"><code>Auswahl4 &lt;- olympics[, c(&quot;Height&quot;, &quot;Weight&quot;)]</code></pre>
@@ -165,7 +165,7 @@ colMeans(na.omit(Auswahl2))</code></pre>
 <h3>2.3.3 via subset function</h3>
 <p>Die <em>subset</em> Funktion ist sehr flexibel, da man mit ihr nicht nur Variablen, sondern auch Untergruppen von Observations auswählen kann. Zudem lässt sich der Befehl auch abkürzen, wenn man Variablen auswählt, die in dem Data Frame unmittelbar hintereinanderstehen. Im nachfolgenden Beispiel wählen wir die Spalten „Sex“(3) bis „Weight“(6) aus.</p>
 <pre class="r"><code>Auswahl5 &lt;- subset(olympics, select = Sex:Weight)</code></pre>
-<p>Mit dem Befehl <em>glimpse</em> sehe wir, dass das neue Objekt „Auswahl5“ vier Variablen (von „Sex“ bis „Weight“) hat.</p>
+<p>Mit dem Befehl <em>glimpse</em> sehen wir, dass das neue Objekt „Auswahl5“ vier Variablen (von „Sex“ bis „Weight“) hat.</p>
 <pre class="r"><code>glimpse(Auswahl5)</code></pre>
 <pre><code>## Observations: 271,116
 ## Variables: 4
@@ -176,9 +176,9 @@ colMeans(na.omit(Auswahl2))</code></pre>
 </div>
 </div>
 </div>
-<div id="change-objectcharactersitics" class="section level1">
-<h1>3 Change object’charactersitics</h1>
-<p>Objekte spielen eine zentrale Rolle bei der Arbeit mit R. Es gibt unterschiedlich Objekttypen: Beispielsweise Vektoren, Faktoren oder Data Frames. Numerische Variablen können in R sowohl als Vektoren als auch in Faktoren gespeichert werden. Wohingegen Vektoren ordinalskalierte oder metrische Daten enthalten, beinhalten Faktoren nominalskalierte Variablen. Werden nummerische Daten in R eingelesen, werden diese meiste als numerischen Vektor gespeichert, unabhängig vom tatsächlichen Skalenniveau. Es ist daher manchmal notwendig, die Objekteigenschaften zu konvertieren.</p>
+<div id="change-objects-charactersitics" class="section level1">
+<h1>3 Change object’s charactersitics</h1>
+<p>Objekte spielen eine zentrale Rolle bei der Arbeit mit R. Es gibt unterschiedliche Objekttypen: Beispielsweise Vektoren, Faktoren oder Data Frames. Numerische Variablen können in R sowohl als Vektoren, als auch in Faktoren gespeichert werden. Wohingegen Vektoren ordinalskalierte oder metrische Daten enthalten, beinhalten Faktoren nominalskalierte Variablen. Werden nummerische Daten in R eingelesen, werden diese meist als numerischen Vektor gespeichert, unabhängig vom tatsächlichen Skalenniveau. Es ist daher manchmal notwendig, die Objekteigenschaften zu konvertieren.</p>
 <div id="character-to-factores" class="section level2">
 <h2>3.1 character to factores</h2>
 <pre class="r"><code>class(olympics$Sex)</code></pre>
@@ -188,7 +188,7 @@ colMeans(na.omit(Auswahl2))</code></pre>
 head(olympics.sex.factor)</code></pre>
 <pre><code>## [1] M M M M F F
 ## Levels: F M</code></pre>
-<p>Vor dem Zuweisungspfeil steht der Name des neuen Faktors. Wenn der neue und alte Name identisch ist, wird der alte überschrieben. Wenn wir in beibehalten möchten, empfiehlt es sich (wie im Beispiel) ein neues, zusätzliches Objekt anzulegen. Betrachtet man den neuen Data Frame, sehen wir, dass die Variable <code>Sex</code> weiterhin als „M“ und „F“ ausgegeben wird. Es ist manchmal sinnvoll, Abkürzungen oder Zahlen in aussagekräftigere Begriffe umzuwandeln. Wir modifizieren daher den Befehl wie folgt:</p>
+<p>Vor dem Zuweisungspfeil steht der Name des neuen Faktors. Wenn der neue und alte Name identisch ist, wird der alte überschrieben. Wenn wir ihn beibehalten möchten, empfiehlt es sich (wie im Beispiel) ein neues, zusätzliches Objekt anzulegen. Betrachtet man den neuen Data Frame, sehen wir, dass die Variable <code>Sex</code> weiterhin als „M“ und „F“ ausgegeben wird. Es ist manchmal sinnvoll, Abkürzungen oder Zahlen in aussagekräftigere Begriffe umzuwandeln. Wir modifizieren daher den Befehl wie folgt:</p>
 <pre class="r"><code>olympics.sex.factor &lt;- factor(olympics$Sex, levels = c(&quot;F&quot;, &quot;M&quot;), labels = c(&quot;weiblich&quot;, &quot;m?nnlich&quot;))
 head(olympics.sex.factor)</code></pre>
 <pre><code>## [1] m?nnlich m?nnlich m?nnlich m?nnlich weiblich weiblich
@@ -219,7 +219,7 @@ class(olympics.sex.vector)</code></pre>
 <h2>4.1 Transformation of two single variables</h2>
 <p>In dem Datensatz ist das Jahr in dem die Spiele statt fanden angegeben und das Alter der jeweiligen Athleten. Mittels dieser beiden Angaben, kann man das jeweilige Geburtsjahr berechnen:</p>
 <pre class="r"><code>olympics$GebJahr &lt;- olympics$Year - olympics$Age</code></pre>
-<p>Vor dem Zuweisungspfeil steht der Name der neuen Variable, hier „GebJahr“. Durch den Ausdruck olympics$ wird diese Variable automaisch den olympics-Daten hinzugefügt.</p>
+<p>Vor dem Zuweisungspfeil steht der Name der neuen Variable, hier „GebJahr“. Durch den Ausdruck olympics$ wird diese Variable automatisch den olympics-Daten hinzugefügt.</p>
 <pre class="r"><code>glimpse(olympics)</code></pre>
 <pre><code>## Observations: 271,116
 ## Variables: 16
@@ -263,7 +263,7 @@ Noten</code></pre>
 ## 1 Christian     2     3     2     1     2          10
 ## 2     Maria     3     1     4     2     4          14
 ## 3   Andreas     1     5     1     2     3          12</code></pre>
-<p>Und nun eine weiter mit dem Notendurchschnitt:</p>
+<p>Und nun eine Weitere mit dem Notendurchschnitt:</p>
 <pre class="r"><code>Noten$Notendurchschnitt &lt;- (Noten$Note1 + Noten$Note2 + Noten$Note3 + Noten$Note4 + Noten$Note5) / 5
 Noten</code></pre>
 <pre><code>##     Gewicht Note1 Note2 Note3 Note4 Note5 Summe_Noten Notendurchschnitt
@@ -289,7 +289,7 @@ Noten</code></pre>
 </div>
 <div id="center-and-standardize-variables" class="section level2">
 <h2>4.4 Center and standardize variables</h2>
-<p>Für viele statistische Analysen ist das Zentrieren oder Standardisieren von Variablen wichtig. Bei der Zentrierung von Variablen zieht man von jedem einzelnen Wert den Mittelwert der Variablen ab. Die zentrierte Variable hat dann den Mittelwert 0. Dies ist beispielsweise sinnvoll, wenn man eine Regressionsanalyse mit den Variablen Einkommen und Alter durchführt. Ein Einkommen bei einem einjährigen Kind macht dabei wenig sinn, daher die Zentrierung des Alters. Um eine Variable zu standardisieren, teilt man zusätzlich noch durch die Standardabweichung der Variablen. Die standardisierte Variable hat dann den Mittelwert 0 und die Standardabweichung 1. Die einzelnen Werte der standardisierten Werte nennt man dann z-Werte. Eine Standardisierung macht dann Sinn, wenn man sprichwörtlich Äpfel mit Birnen vergleichen möchte. So hat man beispielsweise bei einer Umfrage das Lebensalter von Kindern in einer Familie in Jahren erhoben. Bei weiteren Umfrage geschah das gleiche nur in Monaten und Wochen. Durch eine Standardisierung lassen sich die Kinder dennoch miteinander vergleichen ohne einzelne Werte umrechnen zu müssen. Um Variablen zu zentrieren oder standardisieren, kann man in R die <em>scale</em> Funktion anwenden:</p>
+<p>Für viele statistische Analysen ist das Zentrieren oder Standardisieren von Variablen wichtig. Bei der Zentrierung von Variablen zieht man von jedem einzelnen Wert den Mittelwert der Variablen ab. Die zentrierte Variable hat dann den Mittelwert 0. Dies ist beispielsweise sinnvoll, wenn man eine Regressionsanalyse mit den Variablen Einkommen und Alter durchführt. Ein Einkommen bei einem einjährigen Kind macht dabei wenig Sinn, daher die Zentrierung des Alters. Um eine Variable zu standardisieren, teilt man zusätzlich noch durch die Standardabweichung der Variablen. Die standardisierte Variable hat dann den Mittelwert 0 und die Standardabweichung 1. Die einzelnen Werte der standardisierten Werte nennt man dann z-Werte. Eine Standardisierung ist oft notwendig, um Stichprobenwerte vergleichbar zu machen. Um Variablen zu zentrieren oder standardisieren, kann man in R die <em>scale</em> Funktion anwenden:</p>
 <pre class="r"><code>olympics$Age.z &lt;- scale(olympics$Age)
 glimpse(olympics)</code></pre>
 <pre><code>## Observations: 271,116
@@ -358,11 +358,11 @@ Noten</code></pre>
 <pre class="r"><code>a&lt;-which(olympics$Medal == &quot;Gold&quot;)
 head(a)</code></pre>
 <pre><code>## [1]  4 43 45 49 61 74</code></pre>
-<p>Wichtig! Die ausgegebenen Werte beziehen sich auf die Zeilen, in denen die Daten der Person gespeichert sind. Man kann daher diese Ausgabe auch in der Index Funktion verwenden. Mit der Index Funktion werden gezielt bestimmte Zeilen und Spalten ausgewählt. Mit folgenden Befehl werden die Werte für die oben aufgeführte Zeilen ausgegeben. Natürlich handelt es sich bei jedem Wert um das Wort „Gold“, denn genau das war ja auch unsere Bedingung.</p>
+<p>Wichtig! Die ausgegebenen Werte beziehen sich auf die Zeilen, in denen die Daten der Person gespeichert sind. Man kann daher diese Ausgabe auch in der Index Funktion verwenden. Mit der Index Funktion werden gezielt bestimmte Zeilen und Spalten ausgewählt. Mit folgendem Befehl werden die Werte für die oben aufgeführten Zeilen ausgegeben. Natürlich handelt es sich bei jedem Wert um das Wort „Gold“, denn genau das war ja auch unsere Bedingung.</p>
 <pre class="r"><code>b&lt;- olympics$Medal[which(olympics$Medal == &quot;Gold&quot;)]
 head(b)</code></pre>
 <pre><code>## [1] &quot;Gold&quot; &quot;Gold&quot; &quot;Gold&quot; &quot;Gold&quot; &quot;Gold&quot; &quot;Gold&quot;</code></pre>
-<p>Nun kommt der Trick: Man kann nun jedes Wort durch ein beliebiges anders Wort oder beliebigen anderen Wert ersetzten, indem man hinter dem obigen Befehl den Zuweisungspfeil und dann das neue Wort/ den neuen Wert aufführt. Wir ersetzen nun das Wort „Gold“ durch „First_Place“:</p>
+<p>Nun kommt der Trick: Man kann nun jedes Wort durch ein beliebiges anderes Wort oder beliebigen anderen Wert ersetzten, indem man hinter dem obigen Befehl den Zuweisungspfeil und dann das neue Wort/ den neuen Wert aufführt. Wir ersetzen nun das Wort „Gold“ durch „First_Place“:</p>
 <pre class="r"><code>olympics$Medal[which(olympics$Medal == &quot;Gold&quot;)] &lt;- &quot;First Place&quot;
 head(olympics$Medal)</code></pre>
 <pre><code>## [1] NA            NA            NA            &quot;First Place&quot; NA           
@@ -373,7 +373,7 @@ head(olympics$Medal)</code></pre>
 <p>Wie die <em>which</em> Funktion verwendet auch die <em>ifelse</em> Funktion logische Abfragen. Die <em>which</em> Funktion wird allerdings nur auf der linken Seite des Zuweisungspfeils angewandt und dient damit dem Auswählen bestimmter Fälle. Nur für diese bestimmte Auswahl wird eine Operation durchgeführt, alle anderen bleiben unberührt. Bei der <em>ifelse</em> Funktion ist das anders. Diese Funktion wird auf der rechten Seite des Zuweisungspfeils angewandt und ermöglicht es uns dadurch, für alle Fälle gleichzeitig verschiedene Operationen durchzuführen. Der Unterschied zwischen der <em>which</em> Funktion und der <em>ifelse</em> Funktion wird mit dem folgenden Beispiel verständlich:</p>
 <p>olympics<span class="math inline">\(Altersgruppe1[which(olympics\)</span>Age &lt; 25)] &lt;- 0</p>
 <p>olympics<span class="math inline">\(Altersgruppe1[which(olympics\)</span>Age &gt;= 25)] &lt;- 1</p>
-<p>Wir haben nun mit zwei <em>which</em> Funktionen die Athleten in einer neuen Variablen <code>Altersgruppe</code> in zwei Untergruppen unterteilt. Die unter 25 jähren erhielten den Wert 0, die über 25 jähren den Wert 1. Verwendet man stattdessen die <em>ifelse</em> Funktion, kann man die gleiche Operation in nur einem Befehl ausführen lassen:</p>
+<p>Wir haben nun mit zwei <em>which</em> Funktionen die Athleten in einer neuen Variablen <code>Altersgruppe</code> in zwei Untergruppen unterteilt. Die unter 25 Jährigen erhielten den Wert 0, die über 25 Jährigen den Wert 1. Verwendet man stattdessen die <em>ifelse</em> Funktion, kann man die gleiche Operation in nur einem Befehl ausführen lassen:</p>
 <pre class="r"><code>olympics$Altersgruppe2 &lt;- ifelse(olympics$Age &gt;= 25, 1, 0)
 glimpse(olympics$Altersgruppe2)</code></pre>
 <pre><code>##  num [1:271116] 0 0 0 1 0 0 1 1 1 1 ...</code></pre>
@@ -381,11 +381,11 @@ glimpse(olympics$Altersgruppe2)</code></pre>
 <pre class="r"><code>olympics$Altersgruppe3 &lt;- ifelse(olympics$Age &gt;= 30, &quot;alt&quot;, ifelse(olympics$Age &lt; 20, &quot;jung&quot;, &quot;mittel&quot;))
 glimpse(olympics$Altersgruppe3)</code></pre>
 <pre><code>##  chr [1:271116] &quot;mittel&quot; &quot;mittel&quot; &quot;mittel&quot; &quot;alt&quot; &quot;mittel&quot; &quot;mittel&quot; ...</code></pre>
-<p>Ist die Person über 30 Jahre alt erhält sie den Wert „alt“ und ist sie unter 20 Jahre alt erhält sie den Wert „jung“. Trifft keines der beiden Argumente auf die Person zu (also die Person ist zwischen 20 und 29 Jahre alt) erhält sie den Wert „mittel“.</p>
+<p>Ist die Person über 30 Jahre alt, erhält sie den Wert „alt“ und ist sie unter 20 Jahre alt, erhält sie den Wert „jung“. Trifft keines der beiden Argumente auf die Person zu (also die Person ist zwischen 20 und 29 Jahre alt) erhält sie den Wert „mittel“.</p>
 </div>
 <div id="recode-function" class="section level3">
 <h3>4.6.3 recode function</h3>
-<p>Ist man mit logischen Abfragen noch nicht so vertraut, kann man stattdessen auch die <em>recode</em> Funktion verwenden. Dazu erstellen wir in dem Noten Data Frame nochmals eine recode Variable für Note 5: <code>Note5.r2</code> Wir können sehen, dass auch hier die Umkodierung gekappt hat, da die Variable <code>Note5.r2</code> und die Variable <code>Note5.r</code> gleiche Werte enthält.</p>
+<p>Ist man mit logischen Abfragen noch nicht so vertraut, kann man stattdessen auch die <em>recode</em> Funktion verwenden. Dazu erstellen wir in dem Noten Data Frame nochmals eine recode Variable für Note 5: <code>Note5.r2</code> Wir können sehen, dass auch hier die Umkodierung geklappt hat, da die Variable <code>Note5.r2</code> und die Variable <code>Note5.r</code> gleiche Werte enthält.</p>
 <pre class="r"><code>Noten$Note5.r2 &lt;- recode(Noten$Note5, `1`=&quot;6&quot;, `2`=&quot;5&quot;, `3`=&quot;4&quot;, `4`=&quot;3&quot;, `5`=&quot;2&quot;, `6`=&quot;1&quot;)
 Noten</code></pre>
 <pre><code>##     Gewicht Note1 Note2 Note3 Note4 Note5 Summe_Noten Notendurchschnitt
