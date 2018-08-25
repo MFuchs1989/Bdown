@@ -46,10 +46,10 @@ Die Lösung besteht darin, die Daten auf eine einheitliche Skala zu transformier
 
 Für unser Beispiel mit Stefan und Susi nehmen wir folgende Mittelwerte und Standardabweichung der Abiturpunkte an:
 
- *Bundesland* | *m* | *sd*
----|---|---
-Bayern|570|75
-Sachsen|575|105
+ *Bundesland:* | *m* |-| *sd*
+---|---|---|---
+Bayern| 570  |-| 75
+Sachsen| 575  |-| 105
 
 
 Somit können wir folgende z Werte berechnen:
@@ -61,4 +61,4 @@ $$ Susi: z = \frac{640-575}{105}  = 0,62$$
 #3 Conclusion
 Obwohl Susi mehr Punkte im Abitur bekam, hat Stefan im standardisierten Vergleich die bessere Leistung erreicht.
 
-Natürlich muss man in R nicht alle seine Werte "manuell" umformen, sondern kann dafür die Funktion *scale* verwenden. Wie dieser Befehl anzuwenden ist, habe ich bereits im Post [Change Variables in R]() unter Punkt 4.4 beschrieben.
+Natürlich muss man in R nicht alle seine Werte "manuell" umformen, sondern kann dafür die Funktion *scale* verwenden. Wie dieser Befehl anzuwenden ist, habe ich bereits im Post [Change Variables in R](https://michael-fuchs.netlify.com/2018/08/24/edit-variables-in-r/) unter Punkt 4.4 beschrieben.
