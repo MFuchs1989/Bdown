@@ -46,10 +46,10 @@ Die Lösung besteht darin, die Daten auf eine einheitliche Skala zu transformier
 
 Für unser Beispiel mit Stefan und Susi nehmen wir folgende Mittelwerte und Standardabweichung der Abiturpunkte an:
 
- *Bundesland:* | *m* |-| *sd*
----|---|---|---
-Bayern| 570  |-| 75
-Sachsen| 575  |-| 105
+ *Bundesland:* | *Bayern* | *Sachsen*
+---|---|---
+m| 570  | 575
+sd| 75  | 105
 
 
 Somit können wir folgende z Werte berechnen:
