@@ -9,6 +9,19 @@ tags:
   - R Markdown
 ---
 
+# Table of Content
+
++ 1 Introduction
++ 2 Dispersion
++ 2.1 Mean absolute deviation
++ 2.2 Variance
++ 2.3 Standard deviation
++ 2.4 Variation coefficient
++ 2.5 Range
++ 2.6 Interquartile range
++ 3 Conclusion
+
+
 # 1 Introduction
 
 Nehmen wir an, wir wollen für ein Jahr in ein uns unbekanntes Land reisen und wir müssten nun unseren Kleidungskoffer packen. Als einzige Information zu dem Land haben wir die Durchschnittstemperatur von 18 Grad Celsius. Reicht uns diese Angabe aus, um eine vernünftige Einschätzung treffen zu können?
@@ -50,7 +63,8 @@ Die Varianz misst die mittlere quadratische Abweichung vom arithmetischen Mittel
 
 Als Beispiel nehmen wir wieder die Familie mit den fünf Kindern her. Zur Berechnung der Varianz wird wieder der arithmetische Mittelwert benötigt. Dieser war in unserem Beispiel: 6 [(1+3+5+9+12)/5].
 
-$$  Varianz  = \frac{((1-6)^2+(3-6)^2+(5-6)^2+(9-6)^2+(12-6)^2)}{5} =\frac{(25+9+1+9+36)}{5} =16  $$
+$$  Varianz  = \frac{((1-6)^2+(3-6)^2+(5-6)^2+(9-6)^2+(12-6)^2)}{5}  $$
+$$  Varianz  = \frac{(25+9+1+9+36)}{5} =16  $$
 
 In der Formel zur Varianz werden die Abweichungen aller Werte (Alter) vom arithmetischen Mittelwert (durchschnittliches Alter) quadriert, aufsummiert und anschließend durch die Anzahl der Merkmalsträge (Kinder) geteilt. 
 
@@ -62,7 +76,8 @@ Wohingegen die Varianz wenig aussagekräftig ist, hat es den Vorteil, dass aus i
 
 Bei dem vorangegangenen Beispiel sind wir von einer Vollerhebung ausgegangen. Dies bedeuten, dass wir alle Kinder der Familie erfasst haben. Handelt es sich jedoch nur um eine Stichprobe, wird nicht durch die Anzahl der Erfassten (hier: 5 Kinder), sondern durch die Stichprobenzahl minus 1 geteilt!
 Die Stichprobenvarianz wird mit s² abgekürzt und wäre dann im obigen Beispiel:
-$$  s^2  = \frac{((1-6)^2+(3-6)^2+(5-6)^2+(9-6)^2+(12-6)^2)}{5-1} =\frac{(80)}{4} =20  $$
+$$  s^2  = \frac{((1-6)^2+(3-6)^2+(5-6)^2+(9-6)^2+(12-6)^2)}{5-1}  $$
+$$  s^2  = \frac{(80)}{4} =20  $$
 
 ##2.3 Standard deviation
 
@@ -70,13 +85,15 @@ Die Standardabweichung ist die Quadratwurzel aus der Varianz
 
 *Berechnung:*
 
-$$  Standardabweichung  = \frac{(\sqrt{(1-6)^2}+\sqrt{(3-6)^2}+\sqrt{(5-6)^2}+\sqrt{(9-6)^2}+\sqrt{(12-6)^2})}{\sqrt{5}} =\frac{\sqrt{80}}{\sqrt{5}} =4  $$
+$$  Standardabweichung  = \frac{(\sqrt{(1-6)^2}+\sqrt{(3-6)^2}+\sqrt{(5-6)^2}+\sqrt{(9-6)^2}+\sqrt{(12-6)^2})}{\sqrt{5}}  $$
+$$  Standardabweichung  = \frac{\sqrt{80}}{\sqrt{5}} =4  $$
 
 *Empirische Standardabweichung*
 
 Wie auch im Beispiel zur Varianz, sind wir zunächst einmal von einer Vollerhebung ausgegangen. Handelt es sich hingegen um eine Stichprobe, wird wieder durch die Anzahl der Erfassten minus 1 geteilt:
 
-$$  \sqrt{s^2}  = \frac{(\sqrt{(1-6)^2}+\sqrt{(3-6)^2}+\sqrt{(5-6)^2}+\sqrt{(9-6)^2}+\sqrt{(12-6)^2})}{\sqrt{(5-1)}} =\frac{\sqrt{80}}{\sqrt{4}} =4,47  $$
+$$  \sqrt{s^2}  = \frac{(\sqrt{(1-6)^2}+\sqrt{(3-6)^2}+\sqrt{(5-6)^2}+\sqrt{(9-6)^2}+\sqrt{(12-6)^2})}{\sqrt{(5-1)}} $$
+$$  \sqrt{s^2}  =\frac{\sqrt{80}}{\sqrt{4}} =4,47  $$
 
 *Standardabweichungen* *vergleichen*
 
@@ -91,7 +108,8 @@ Der Variationskoeffizient ist der Quotient aus Standardabweichung und dem arithm
 
 Zur Berechnung des Variationskoeffizienten nehmen wir die Beispieldaten unserer Familie mit den fünf Kindern her. Dabei hatten wir einen arithmetischen Mittelwert von 6 Jahren, die Varianz war 16 Jahre und die Standardabweichung betrug 4 Jahre (Vollerhebung). Die Formel des Variationskoeffizienten lautet:
 
-$$  Variationskoeffizient  = \frac{Standardabweichung}{Mittelwet} =\frac{4}{6} =0,67 = 66,7\%  $$
+$$  Variationskoeffizient  = \frac{Standardabweichung}{Mittelwet}  $$
+$$  Variationskoeffizient  =\frac{4}{6} =0,67 = 66,7\%  $$
 
 Der Variationskoeffizient von 66,7% zeigt an, dass die Streuung bezogen auf den Mittelwert relativ groß ist.
 
@@ -106,7 +124,8 @@ Die Spannweite gilt in der Statistik als einfachstes Streuungsmaß und ist die D
 
 Bei der Familie mit fünf Kinder im Alter von 1, 3, 5, 9 und 12 Jahren, ist das Minimum 1 Jahr und das Maximum 12 Jahre. Die Spannweite errechnet sich wie folgt:
 
-$$  Spannweite  = Maximum - Minimum = 12 - 1 = 11  $$
+$$  Spannweite  = Maximum - Minimum  $$
+$$  Spannweite = 12 - 1 = 11  $$
 
 Die Spannweite bei unserem Beispiel beträgt 11 Jahre. Der Median liegt bei 5 Jahren. Dieser wäre auch 5 Jahre gewesen, wenn das älteste Kind statt 12 Jahren 20 Jahre alt gewesen wäre. Die Spannweite wäre dann jedoch mit 19 (20-1) viel größer gewesen. Die Angabe eines Lageparameters (z.B. der Mittelwert oder der Median) ist daher in Kombination mit einem Streuungsparameter viel aussagekräftiger als ohne. Allerdings kann die Angabe der Spannweite auch irreführend sein. Nehmen wir an, dass ein kompletter Monat nur um die 10 Grad Celsius hatte und nur am letzten Tag einen Höchstwert von 30 Grad Celsius erreicht hat. Demzufolge wäre die Spannweite 20 Grad Celsius (30-10) obwohl es jedoch sich eher um einen sehr kalten Monat gehandelt hat. Die Spannweite betrachtet eben nur zwei Werte aus allen Werten und diese könnten extreme Ausreißer sein. 
 
@@ -128,7 +147,8 @@ summary(BigFamilie$Alter_Kinder)
 
 Die Formel für den IQR lautet:
 
-$$  IQR  = 3.Quartil - 1.Quartil = 11,75-5,50 = 6,25  $$
+$$  IQR  = 3.Quartil - 1.Quartil  $$
+$$  IQR  = 11,75-5,50 = 6,25  $$
 
 In einem Boxplot ist der Interquartilsabstand durch die Kantenlänge der "Box" gekennzeichnet. 
 

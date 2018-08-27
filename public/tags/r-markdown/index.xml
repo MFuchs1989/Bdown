@@ -17,9 +17,7 @@
       <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/08/26/measures-of-dispersion/</guid>
-      <description>1 IntroductionNehmen wir an, wir wollen für ein Jahr in ein uns unbekanntes Land reisen und wir müssten nun unseren Kleidungskoffer packen. Als einzige Information zu dem Land haben wir die Durchschnittstemperatur von 18 Grad Celsius. Reicht uns diese Angabe aus, um eine vernünftige Einschätzung treffen zu können?
-Zur Beantwortung dieser Frage werden in diesem Post verschiedenen Streuungsmaße vorgestellt und ihre Berechnungen beispielhaft dargelegt.
-2 DispersionStreuungsmaße in der Statistik geben uns an, wie stark die einzelnen Messwerte streuen.</description>
+      <description>Table of Content1 Introduction2 Dispersion2.1 Mean absolute deviation2.2 Variance2.3 Standard deviation2.4 Variation coefficient2.5 Range2.6 Interquartile range3 Conclusion1 IntroductionNehmen wir an, wir wollen für ein Jahr in ein uns unbekanntes Land reisen und wir müssten nun unseren Kleidungskoffer packen. Als einzige Information zu dem Land haben wir die Durchschnittstemperatur von 18 Grad Celsius. Reicht uns diese Angabe aus, um eine vernünftige Einschätzung treffen zu können?</description>
     </item>
     
     <item>
