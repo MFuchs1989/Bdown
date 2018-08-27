@@ -35,7 +35,9 @@ Nehmen wir an, eine Familie hat fünf Kinder im Alter von 1, 3, 5, 9 und 12 Jahr
 $$  Mittelwert = \frac{1+3+5+9+12}{5} = 6  $$
 
 Die mittlere absolute Abweichung ist:
-$$  s = \frac{|1-6|+|3-6|+|5-6|+|9-6|+|12-6|}{5} =\frac{(5+3+1+3+6)}{5} =3,6  $$
+$$  s = \frac{|1-6|+|3-6|+|5-6|+|9-6|+|12-6|}{5}  $$
+$$  s = \frac{(5+3+1+3+6)}{5} =3,6  $$
+
 
 Die mittlere absolute Abweichung beträgt 3,6 Jahre.
 
