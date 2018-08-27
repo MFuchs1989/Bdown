@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 25 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 26 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Measures of Dispersion</title>
+      <link>/2018/08/26/measures-of-dispersion/</link>
+      <pubDate>Sun, 26 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/08/26/measures-of-dispersion/</guid>
+      <description>1 IntroductionNehmen wir an, wir wollen für ein Jahr in ein uns unbekanntes Land reisen und wir müssten nun unseren Kleidungskoffer packen. Als einzige Information zu dem Land haben wir die Durchschnittstemperatur von 18 Grad Celsius. Reicht uns diese Angabe aus, um eine vernünftige Einschätzung treffen zu können?
+Zur Beantwortung dieser Frage werden in diesem Post verschiedenen Streuungsmaße vorgestellt und ihre Berechnungen beispielhaft dargelegt.
+2 DispersionStreuungsmaße in der Statistik geben uns an, wie stark die einzelnen Messwerte streuen.</description>
+    </item>
     
     <item>
       <title>z-Transformation / Standardization</title>
