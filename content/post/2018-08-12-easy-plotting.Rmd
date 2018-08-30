@@ -19,9 +19,21 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+#Table of Content
+
++ 1 Introduction
++ 2 Overview
++ 3 Type of Graphs
++ 3.1 Bar Graph
++ 3.2 Histogram
++ 3.3 Scatter Plot
++ 3.4 Line Graph
++ 3.5 Box Plot
++ 4 Labeling and further commands
++ 5 Conclusion
 
 
-# Introduction
+#1 Introduction
 
 In dem nachfolgenden Post geht es um eine kurze Einführung zum Thema Visualisierung. Es sollen die am häufigsten verwendeten Grafiken in R vorgestellt werden und wann sie zu verwenden sind. Für diese Arbeit wurde der Datensatz *insurance* von der Statsistik-Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/file/d/1-DSBcvyFtXrSy1ORb6WOeNenhQ1rxSYu/view?usp=drivesdk> abrufbar.
 
@@ -33,7 +45,7 @@ library("mosaic")
 insurance <- read_csv("insurance.csv")
 ```
 
-#Overview
+#2 Overview
 
 ```{r}
 glimpse(insurance)
@@ -41,12 +53,12 @@ glimpse(insurance)
 Der Datensatz *insurance* beinhaltet 7 Variablen. Bis auf die Spalten `bmi` und `children` kommen alle Variablen in der weiteren Analyse zur Anwendung. 
 
 
-#Type of Graphs
+#3 Type of Graphs
 Grafiken sind ein wichtiger Bestandteil bei der deskriptiven Untersuchung von Datensätzen. Durch sie können komplizierte und uneinsichtige Sachverhalt einfach beschrieben und dargestellt werden. Jedem sollte jedoch klar sein, dass es sich bei Publikationen oder Bachelorarbeiten um eine wissenschaftliche Arbeit handelt und nicht um ein Bilderbuch. Deshalb empfiehlt es sich, eine Bilderflut möglichst zu vermeiden und nur wirklich aussagekräftige Grafiken zu verwenden.
 
 
 
-##Bar Graph
+##3.1 Bar Graph
 Ein Balkendiagramm eignet sich zur grafischen Darstellung der Häufigkeit von Ausprägungen beliebig skalierter Merkmale. Dabei können sowohl absolute als auch relative Häufigkeiten darstellen werden. Mit dem nachfolgenden Balkendiagramm soll schnell und einfach herausgefunden werden, wie die uns vorliegende Geschlechterverteilung aussieht.
 
 ```{r}
@@ -55,7 +67,7 @@ qplot(insurance$sex, geom = "bar")
 
 Balkendiagramme kann man ab nominalem Skalenniveau für eine anschauliche Darstellung einsetzen. Bei metrischen Datenmaterial ist allerdings für zusätzliche Informationen das Histogramm vorzuziehen. Denn bei diesem stellt der Flächeninhalt einer Säule die Häufigkeit und ihre Höhe die Häufigkeitsdichte dar.
 
-##Histogram
+##3.2 Histogram
 Zur graphischen Darstellung klassierter Daten verwendet man das Histogramm. Ein Histogramm ist nun analog zu einem Balkendiagramm zu sehen, mit dem wesentlichen Unterschied, dass die Flächen der Säulen hier die (absoluten oder relativen) Häufigkeiten widergeben und nicht ihre Höhen.
 
 
@@ -83,7 +95,7 @@ tally (~insurance$age)
 Die obere Zeile gibt das jeweilige Alter aus und die darunter liegende Zeile die entsprechende Häufigkeit. Wir können hier sehen, dass 69 Probanden 18 Jahre alt und 68 Probanden 19 Jahre alt sind. Die restlichen Altersklassen sind alle etwa gleich stark vertreten.  
 
 
-##Scatter Plot
+##3.3 Scatter Plot
 
 In einem Streudiagramm werden in einem Koordinatensystem die Werte zweier metrischer Merkmale abgetragen, um etwaige Zusammenhänge bzw. Korrelationen erkennen zu können. Üblicherweise wird die unabhängige bzw. erklärende Variable auf der horizontalen x-Achse und die abhängige Variable auf der vertikalen y-Achse abgetragen.
 ```{r}
@@ -94,7 +106,7 @@ plot(insurance$age, insurance$charges)
 Es scheint einen leichten Zusammenhang zwischen dem Lebensalter und der Höhe der Versicherungskosten zu geben. Des Weiteren fällt auf, dass zwei weitere Gruppen vermutlich existieren, welche weitaus höheren Kosten verursachen.
 
 
-##Line Graph
+##3.4 Line Graph
 Das Liniendiagramm eignet sich hauptsächlich zur Visualisierung von Trends und Entwicklungen im Laufe der Zeit bei gleichmäßig unterteilten Dimensionswerten wie Monaten, Quartalen oder Jahren. Ein Datensatz muss mindestens zwei Datenpunkte enthalten, um eine Linie zu zeichnen. Ein Datensatz mit nur einem einzigen Wert wird als Punkt dargestellt. Im Gegensatz zum Streudiagramm kann es jeweils nur ein Wertepaar bzw. Wertetrio geben. Da der uns vorliegende Datensatz *insurance* keine geeignete Variablen für diese Grafik bieten kann, wird mittels R ein neuer data.frame erzeugt. 
 ```{r}
 x <- c(2, 5, 7, 9, 13, 14, 17, 19, 22, 25, 28, 30)
@@ -118,7 +130,7 @@ Dies ist nur ein exemplarisches Beispiel, welches zur Veranschaulichung dienen s
 Möchte man sich die einzelnen Punkte, welche dem Liniendiagramm zu Grunde liegen, zusätzlich ausgeben lassen, so muss die plot Funktion um den Befehlt points() erweitert werden.
 
 
-##Box Plot
+##3.5 Box Plot
 
 Ein Boxplot ist eine grafische Zusammenfassung der folgenden fünf Punkte:
 
@@ -147,7 +159,7 @@ und pro Region ausgeben lassen.
 plot(as.factor(insurance$region), insurance$charges)
 ```
 
-#Beschriftungen und weitere Befehle
+#4 Labeling and further commands
 
 Die von R ausgegebenen Beschriftungen sind meist sehr unschön oder fehlen gänzlich. Daher hier noch ein paar Tipps anhand des zuvor erstellten Scatter Plot Beispiels, damit die erstellten Grafiken ein wenig hübscher und aussagekräftiger werden.
 
@@ -169,7 +181,7 @@ plot(insurance$age, insurance$charges, xlab = "age", ylab = "charges", main = "S
 
 Wie schon bei **Punkt** **3.3** **Scatter** **Plot** vermutet, exisiteren bei Zusammenhang zwischen Lebensalter und Versicherungskosten weitere Gruppierungen. Durch den Befehl *col* wurden die Raucher unter den Probanden farblich hervorgehoben. Man erkennt eindeutig, dass Raucher höhere Versicherungskosten verursachen als Nichtraucher. Diese sind ab der 40.000 Marke gar nicht mehr in der Grafik vertreten. Des Weiteren könnte man nun vermuten, dass das mittlere Segment zwischen 10.000$ und 30.000$ nur leichte Raucher beinhaltet und ab 30.000$ Kosten starke Raucher vertreten sind. 
 
-#Conclusion
+#5 Conclusion
 Es braucht nicht viel um in R schnell und einfach verschiedene Arten von Grafiken zu erstellen. Grafiken helfen uns dabei einen guten Überblick über die uns vorliegenden Daten zu bekommen. In diesem Post wurde lediglich auf die einfachste Verwendung der Grafiken eingegangen. Bei der Visualizierung ist noch viel mehr möglich und teilweise auch nötig, um aussagekräftige Schaubilder zu generieren. 
 
 

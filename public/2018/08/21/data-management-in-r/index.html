@@ -69,7 +69,20 @@
     
 
     <div class="article-content">
-      <div id="introduction" class="section level1">
+      <div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Combine Observations</li>
+<li>2.1 Special Case 1: Different variables within a Data Frame</li>
+<li>2.2 special case 2: Combine Observations with different colnames</li>
+<li>3 Combine Variables</li>
+<li>3.1 Special case 1: Combine variables by one variable with different spellings</li>
+<li>3.2 Special case 2: Combine variables with different number of observations</li>
+<li>4 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
 <h1>1 Introduction</h1>
 <p>In dem nachfolgenden Post geht es um Data Management in R. Häufig sind Daten, die für eine Analyse benötigt werden, in unterschiedlichen Data Frames abgespeichert. Es ist daher notwendig, alle benötigten Daten in einem Data Frame zusammen zu fassen. Dabei unterscheidet man zwischen zwei Fällen:</p>
 <ul>
@@ -213,8 +226,8 @@ Beide_Mzp2</code></pre>
 ## 2  Susanne           65           61
 ## 3 Veronika           60           57</code></pre>
 </div>
-<div id="special-case-2-combine-variables-with-with-different-number-of-observations" class="section level2">
-<h2>3.2 Special case 2: Combine variables with with different number of observations</h2>
+<div id="special-case-2-combine-variables-with-different-number-of-observations" class="section level2">
+<h2>3.2 Special case 2: Combine variables with different number of observations</h2>
 <p>Bis jetzt sind wir davon ausgegangen, dass beide Dataframes dieselbe Anzahl an Personen beinhaltet. Was passiert, wenn wie im nachfolgenden Beispiel zwei gleiche Namen und jeweils ein neuer Name enthalten ist?</p>
 <pre class="r"><code>a4 &lt;- c(&quot;Martin&quot;, &quot;Veronika&quot;, &quot;Walter&quot;)
 b4 &lt;- c(80, 60, 65)

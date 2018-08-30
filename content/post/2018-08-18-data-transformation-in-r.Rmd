@@ -12,8 +12,21 @@ tags:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+#Table of Content
 
-# Introduction
++ 1 Introduction
++ 2 Overview
++ 2.1 filter()
++ 2.2 select()
++ 2.3 mutate()
++ 2.4 arrange()
++ 2.5 summarize()
++ 3 Combinations
++ 4 Conclusion
++ 5 Bibliography
+
+
+#1 Introduction
 In dem nachfolgenden Post geht es um Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration (Wickham & Grolemund, 2016). 
 
 ![](http://r4ds.had.co.nz/diagrams/data-science-wrangle.png)
@@ -43,7 +56,7 @@ library("tidyverse")
 olympics <- read_csv("olympics.csv")
 ```
 
-#Overview
+#2 Overview
 
 ```{r}
 glimpse(olympics)
@@ -53,7 +66,7 @@ Wir haben es bei diesem Datensatz mit über 271k Observations zu tun.
 Dabei brauchen wir dieses Mal doch nur ganz ausgewählte Informationen...
 Mit den 5 oben genannten Befehlen lässt sich dies auch ganz leicht bewerkstelligen.
 
-# filter()
+#2.1 filter()
 
 Mit dem Befehl filter() bekommen wir von R genau definierte Zeilen aus dem zugrunde liegenden Datensatz ausgegeben. Es gibt folgende Möglichkeiten zu filtern:
 
@@ -89,7 +102,7 @@ olympics %>% filter(NOC == "GER" & Age >= 20 & Age <= 30)
 ```
 
 
-# select()
+#2.2 select()
 
 Im Vergleich zu dem filter() Befehlt wählt select() nicht einzelne Zeilen, sondern ganze Spalten aus.
 Sehr häufig kommt es vor, dass Datensätze ganz viele Spalten besitzen, die man für die anstehende Analyse überhaupt nicht braucht. Um den Datensatz übersichtlicher zu gestalten, hat man mit select() die Möglichkeit einzelne Spalten gezielt auszuwählen. 
@@ -112,7 +125,7 @@ olympics %>% select(Height, Weight) %>% cor(use = "complete.obs")
 Bei r=0,8 kann man von einem starken Zusammenhang sprechen.
 
 
-#mutate()
+#2.3 mutate()
 
 Für und während des Analyseprozesses werden wir kaum drum herum kommen, neue Variablen aus dem Datensatz heraus zu kreieren. Der mutate() Befehl tut genau dies. Die Funktion ist wie folgt aufgebaut: mutate("Name neuer Variable" = "Var1" plus/minus/geteilt "Var2"). Benutzt man nicht wie wir im nachfolgenden Beispiel die Pipe Funktion (%>%), muss vor dem Namen der neuen Variable der zugrunde liegende Datensatz genannt werden.
 Nachfolgend interessiert mich nun, welchen BMI (Body-Mass-Index) die Sportler hatten. Da der Datensatz diese Variable (noch) nicht hat, erzeugen wir sie eben selbst:
@@ -121,7 +134,7 @@ olympics %>% mutate(bmi = Weight / (Height/100)^2)
 ```
 
 
-#arrange()
+#2.4 arrange()
 
 Für die Erläuterung des arrange() Befehls bleiben wir in unserer Analyse noch ein wenig bei der gerade neu erzeugten Variable 'bmi'.
 Arrange() sortiert einen Vektor neu. Dies kann aufsteigend oder absteigend erfolgen:
@@ -140,7 +153,7 @@ olympics %>% mutate(bmi = Weight / (Height/100)^2) %>% arrange(desc(bmi))
 Nicht schlecht, wieder ein 1,83m großer Mann an der Spitze mit 214kg Körpergewicht. Aber dieses Mal handelt es sich um einen Judoka und das ist wiederum schon ein wenig realisitscher. 
 
 
-#summarize()
+#2.5 summarize()
 
 Der Letzte der 5 hier behandelten Befehle für Data Transformation ist summarize(). Er wird fast ausschließlich mit dem group_by() Befehl verwendet. Diese Kombination ermöglicht Vergleiche.
 Wird summarize() alleine verwendet, bricht er den Dataframe auf eine einzelne Zeile herunter. 
@@ -161,7 +174,7 @@ olympics %>% group_by(Year) %>% summarize(N = n(), avg_age = mean(na.omit(Age)))
 Nun können wir das Durchschnittsalter der Athleten pro Jahr vergleichen.
 
 
-#Combinations
+#3 Combinations
 
 In der Praxis werden meist die Funktionen in Kombination miteinander benutzt:
 ```{r}
@@ -187,8 +200,8 @@ plot(all$Year, all$avg_bmi, type = "l")
 ```
 
 
-#Conclusion
+#4 Conclusion
 Mit nur sehr wenigen Befehlen, kann man schon recht viel in Sachen Datentransformation erreichen. Wie man anhand des letzten Beispiels gesehen hat, harmonieren die Packages 'dplyr' und 'ggplot2' sehr gut miteinander. 
 
-#Bibliography
+#5 Bibliography
 Wickham, H., & Grolemund, G. (2016). R for data science: import, tidy, transform, visualize, and model data. " O'Reilly Media, Inc.".

@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 + 2.3.2 via index function
 + 2.3.3 via subset function
 + 3 Change object's charactersitics
-+ 3.1 character to factores	
++ 3.1 characters to factores	
 + 3.2 factores to vectores
 + 4 Create new variables
 + 4.1 Transformation of two single variables
@@ -137,7 +137,7 @@ glimpse(Auswahl5)
 
 Objekte spielen eine zentrale Rolle bei der Arbeit mit R. Es gibt unterschiedliche Objekttypen: Beispielsweise Vektoren, Faktoren oder Data Frames. Numerische Variablen können in R sowohl als Vektoren, als auch in Faktoren gespeichert werden. Wohingegen Vektoren ordinalskalierte oder metrische Daten enthalten, beinhalten Faktoren nominalskalierte Variablen. Werden nummerische Daten in R eingelesen, werden diese meist als numerischen Vektor gespeichert, unabhängig vom tatsächlichen Skalenniveau. Es ist daher manchmal notwendig, die Objekteigenschaften zu konvertieren.  
 
-##3.1 character to factores	
+##3.1 characters to factores	
 ```{r}
 class(olympics$Sex)
 ```

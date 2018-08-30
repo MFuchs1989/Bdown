@@ -23,7 +23,8 @@ tags:
 <li>2.3.2 via index function</li>
 <li>2.3.3 via subset function</li>
 <li>3 Change object’s charactersitics</li>
-<li>3.1 character to factores</li>
+<li>3.1 characters to factores<br />
+</li>
 <li>3.2 factores to vectores</li>
 <li>4 Create new variables</li>
 <li>4.1 Transformation of two single variables</li>
@@ -121,8 +122,8 @@ colMeans(na.omit(Auswahl2))</code></pre>
 <div id="change-objects-charactersitics" class="section level1">
 <h1>3 Change object’s charactersitics</h1>
 <p>Objekte spielen eine zentrale Rolle bei der Arbeit mit R. Es gibt unterschiedliche Objekttypen: Beispielsweise Vektoren, Faktoren oder Data Frames. Numerische Variablen können in R sowohl als Vektoren, als auch in Faktoren gespeichert werden. Wohingegen Vektoren ordinalskalierte oder metrische Daten enthalten, beinhalten Faktoren nominalskalierte Variablen. Werden nummerische Daten in R eingelesen, werden diese meist als numerischen Vektor gespeichert, unabhängig vom tatsächlichen Skalenniveau. Es ist daher manchmal notwendig, die Objekteigenschaften zu konvertieren.</p>
-<div id="character-to-factores" class="section level2">
-<h2>3.1 character to factores</h2>
+<div id="characters-to-factores" class="section level2">
+<h2>3.1 characters to factores</h2>
 <pre class="r"><code>class(olympics$Sex)</code></pre>
 <pre><code>## [1] &quot;character&quot;</code></pre>
 <p>Wir sehen, dass die Variable <code>Sex</code> in diesem Fall als „character“ gespeichert ist. Um diese nun in einen Faktor zu konvertieren verwendet man die <em>factor</em> Funktion:</p>

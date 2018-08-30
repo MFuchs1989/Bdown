@@ -12,6 +12,17 @@ tags:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+#Table of Content
+
++ 1 Introduction
++ 2 Combine Observations
++ 2.1 Special Case 1: Different variables within a Data Frame
++ 2.2 special case 2: Combine Observations with different colnames
++ 3 Combine Variables
++ 3.1 Special case 1: Combine variables by one variable with different spellings
++ 3.2 Special case 2: Combine variables with different number of observations
++ 4 Conclusion
+
 
 #1 Introduction
 In dem nachfolgenden Post geht es um Data Management in R. Häufig sind Daten, die für eine Analyse benötigt werden, in unterschiedlichen Data Frames abgespeichert. Es ist daher notwendig, alle benötigten Daten in einem Data Frame zusammen zu fassen. Dabei unterscheidet man zwischen zwei Fällen:
@@ -133,7 +144,7 @@ colnames(Beide_Mzp2) <- c("Name", "Gewicht_Mzp1", "Gewicht_Mzp2")
 Beide_Mzp2
 ```
 
-##3.2 Special case 2: Combine variables with with different number of observations 
+##3.2 Special case 2: Combine variables with different number of observations 
 
 Bis jetzt sind wir davon ausgegangen, dass beide Dataframes dieselbe Anzahl an Personen beinhaltet. Was passiert, wenn wie im nachfolgenden Beispiel zwei gleiche Namen und jeweils ein neuer Name enthalten ist?
 

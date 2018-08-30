@@ -11,8 +11,23 @@ tags:
 
 
 
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Overview</li>
+<li>2.1 filter()</li>
+<li>2.2 select()</li>
+<li>2.3 mutate()</li>
+<li>2.4 arrange()</li>
+<li>2.5 summarize()</li>
+<li>3 Combinations</li>
+<li>4 Conclusion</li>
+<li>5 Bibliography</li>
+</ul>
+</div>
 <div id="introduction" class="section level1">
-<h1>Introduction</h1>
+<h1>1 Introduction</h1>
 <p>In dem nachfolgenden Post geht es um Data Transformation in R. Je nach Blickwinkel fällt dieses Thema in den Bereich Data Data Wrangling oder Data Exploration (Wickham &amp; Grolemund, 2016).</p>
 <div class="figure">
 <img src="http://r4ds.had.co.nz/diagrams/data-science-wrangle.png" />
@@ -37,7 +52,7 @@ tags:
 <pre class="r"><code>olympics &lt;- read_csv(&quot;olympics.csv&quot;)</code></pre>
 </div>
 <div id="overview" class="section level1">
-<h1>Overview</h1>
+<h1>2 Overview</h1>
 <pre class="r"><code>glimpse(olympics)</code></pre>
 <pre><code>## Observations: 271,116
 ## Variables: 15
@@ -59,7 +74,7 @@ tags:
 <p>Wir haben es bei diesem Datensatz mit über 271k Observations zu tun. Dabei brauchen wir dieses Mal doch nur ganz ausgewählte Informationen… Mit den 5 oben genannten Befehlen lässt sich dies auch ganz leicht bewerkstelligen.</p>
 </div>
 <div id="filter" class="section level1">
-<h1>filter()</h1>
+<h1>2.1 filter()</h1>
 <p>Mit dem Befehl filter() bekommen wir von R genau definierte Zeilen aus dem zugrunde liegenden Datensatz ausgegeben. Es gibt folgende Möglichkeiten zu filtern:</p>
 <ul>
 <li>==</li>
@@ -145,7 +160,7 @@ tags:
 ## #   Event &lt;chr&gt;, Medal &lt;chr&gt;</code></pre>
 </div>
 <div id="select" class="section level1">
-<h1>select()</h1>
+<h1>2.2 select()</h1>
 <p>Im Vergleich zu dem filter() Befehlt wählt select() nicht einzelne Zeilen, sondern ganze Spalten aus. Sehr häufig kommt es vor, dass Datensätze ganz viele Spalten besitzen, die man für die anstehende Analyse überhaupt nicht braucht. Um den Datensatz übersichtlicher zu gestalten, hat man mit select() die Möglichkeit einzelne Spalten gezielt auszuwählen.</p>
 <p>Nachfolgend interessiert mich, ob es einen Zusammenhang zwischen der Körpergröße und dem Körpergewicht gibt. Daführ wähle ich genau diese beiden Spalten aus:</p>
 <pre class="r"><code>olympics %&gt;% select(Height, Weight)</code></pre>
@@ -176,7 +191,7 @@ tags:
 <p>Bei r=0,8 kann man von einem starken Zusammenhang sprechen.</p>
 </div>
 <div id="mutate" class="section level1">
-<h1>mutate()</h1>
+<h1>2.3 mutate()</h1>
 <p>Für und während des Analyseprozesses werden wir kaum drum herum kommen, neue Variablen aus dem Datensatz heraus zu kreieren. Der mutate() Befehl tut genau dies. Die Funktion ist wie folgt aufgebaut: mutate(“Name neuer Variable” = “Var1” plus/minus/geteilt “Var2”). Benutzt man nicht wie wir im nachfolgenden Beispiel die Pipe Funktion (%&gt;%), muss vor dem Namen der neuen Variable der zugrunde liegende Datensatz genannt werden. Nachfolgend interessiert mich nun, welchen BMI (Body-Mass-Index) die Sportler hatten. Da der Datensatz diese Variable (noch) nicht hat, erzeugen wir sie eben selbst:</p>
 <pre class="r"><code>olympics %&gt;% mutate(bmi = Weight / (Height/100)^2)</code></pre>
 <pre><code>## # A tibble: 271,116 x 16
@@ -196,7 +211,7 @@ tags:
 ## #   Sport &lt;chr&gt;, Event &lt;chr&gt;, Medal &lt;chr&gt;, bmi &lt;dbl&gt;</code></pre>
 </div>
 <div id="arrange" class="section level1">
-<h1>arrange()</h1>
+<h1>2.4 arrange()</h1>
 <p>Für die Erläuterung des arrange() Befehls bleiben wir in unserer Analyse noch ein wenig bei der gerade neu erzeugten Variable ‘bmi’. Arrange() sortiert einen Vektor neu. Dies kann aufsteigend oder absteigend erfolgen:</p>
 <pre class="r"><code>olympics %&gt;% mutate(bmi = Weight / (Height/100)^2) %&gt;% arrange(bmi)</code></pre>
 <pre><code>## # A tibble: 271,116 x 16
@@ -235,7 +250,7 @@ tags:
 <p>Nicht schlecht, wieder ein 1,83m großer Mann an der Spitze mit 214kg Körpergewicht. Aber dieses Mal handelt es sich um einen Judoka und das ist wiederum schon ein wenig realisitscher.</p>
 </div>
 <div id="summarize" class="section level1">
-<h1>summarize()</h1>
+<h1>2.5 summarize()</h1>
 <p>Der Letzte der 5 hier behandelten Befehle für Data Transformation ist summarize(). Er wird fast ausschließlich mit dem group_by() Befehl verwendet. Diese Kombination ermöglicht Vergleiche. Wird summarize() alleine verwendet, bricht er den Dataframe auf eine einzelne Zeile herunter.</p>
 <p>Tipp: Um sicher zu gehen, dass die Aggregation richtig erfolgt, verwende ich n() bei jedem summarize() Befehl:</p>
 <pre class="r"><code>olympics %&gt;% summarize(N = n(), first_year = min(Year), last_year = max(Year), avg_age = mean(na.omit(Age)))</code></pre>
@@ -263,7 +278,7 @@ tags:
 <p>Nun können wir das Durchschnittsalter der Athleten pro Jahr vergleichen.</p>
 </div>
 <div id="combinations" class="section level1">
-<h1>Combinations</h1>
+<h1>3 Combinations</h1>
 <p>In der Praxis werden meist die Funktionen in Kombination miteinander benutzt:</p>
 <pre class="r"><code>olympics %&gt;% filter(NOC == &quot;GER&quot;) %&gt;%
   select(Age, Height, Weight, Year) %&gt;%
@@ -296,10 +311,10 @@ plot(all$Year, all$avg_bmi, type = &quot;l&quot;)</code></pre>
 <p><img src="/post/2018-08-18-data-transformation-in-r_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 </div>
 <div id="conclusion" class="section level1">
-<h1>Conclusion</h1>
+<h1>4 Conclusion</h1>
 <p>Mit nur sehr wenigen Befehlen, kann man schon recht viel in Sachen Datentransformation erreichen. Wie man anhand des letzten Beispiels gesehen hat, harmonieren die Packages ‘dplyr’ und ‘ggplot2’ sehr gut miteinander.</p>
 </div>
 <div id="bibliography" class="section level1">
-<h1>Bibliography</h1>
+<h1>5 Bibliography</h1>
 <p>Wickham, H., &amp; Grolemund, G. (2016). R for data science: import, tidy, transform, visualize, and model data. &quot; O’Reilly Media, Inc.“.</p>
 </div>
