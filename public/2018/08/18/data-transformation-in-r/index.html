@@ -135,18 +135,15 @@
 <h1>2.1 filter()</h1>
 <p>Mit dem Befehl filter() bekommen wir von R genau definierte Zeilen aus dem zugrunde liegenden Datensatz ausgegeben. Es gibt folgende Möglichkeiten zu filtern:</p>
 <ul>
-<li>==</li>
-<li>!=</li>
-<li>&lt;</li>
-<li><blockquote>
-
-</blockquote></li>
-<li>&lt;=</li>
-<li><blockquote>
-<p>=</p>
-</blockquote></li>
+<li>‘==’</li>
+<li>‘!=’</li>
+<li>‘&lt;’</li>
+<li>‘&gt;’<br />
+</li>
+<li>‘&lt;=’</li>
+<li><p>‘&gt;=’</p></li>
 <li>&amp; heißt “und”</li>
-<li>heißt “oder”</li>
+<li><p>heißt “oder”</p></li>
 </ul>
 <p>Als anschauliches Beispiel wollen wir nun wissen, wie viele deutsche Olympiateilnahmen es bisher gab.</p>
 <pre class="r"><code>olympics %&gt;% filter(NOC == &quot;GER&quot;)</code></pre>

@@ -70,12 +70,12 @@ Mit den 5 oben genannten Befehlen lässt sich dies auch ganz leicht bewerkstelli
 
 Mit dem Befehl filter() bekommen wir von R genau definierte Zeilen aus dem zugrunde liegenden Datensatz ausgegeben. Es gibt folgende Möglichkeiten zu filtern:
 
-+ ==
-+ !=
-+ <
-+ >
-+ <=
-+ >=
++ '=='
++ '!='
++ '<'
++ '>'   
++ '<='
++ '>='
 
 + & heißt "und"
 + | heißt "oder"
