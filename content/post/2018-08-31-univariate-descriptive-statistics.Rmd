@@ -276,12 +276,6 @@ Ein kurtosis Wert kleiner Null deutet auf eine flache Verteilung hin.
 Ein kurtosis Wert von Null deutet auf eine Normalverteilung hin.
 
 
-Schiefe und Exzess lassen sich noch besser interpretieren, wenn man zusätzlich die Verteilung graphisch darstellt.
-```{r}
-mittelwert<- mean(world$Birthrate, na.rm = TRUE)
-sd<- sd(world$Birthrate, na.rm = TRUE)
-hist(world$Birthrate, freq = FALSE) + curve(dnorm(x, mittelwert, sd), add = TRUE)
-```
 
 ##5.4 describe function
 
