@@ -16,12 +16,84 @@ tags:
 </div>
 <div id="introduction" class="section level1">
 <h1>1 Introduction</h1>
+</div>
+<div id="frequency-tables" class="section level1">
+<h1>2 Frequency Tables</h1>
+<div id="absolute-frequency" class="section level2">
+<h2>2.1 Absolute Frequency</h2>
+</div>
+<div id="relative-frequency" class="section level2">
+<h2>2.2 Relative Frequency</h2>
+</div>
+<div id="cumulate-frequency" class="section level2">
+<h2>2.3 Cumulate Frequency</h2>
+</div>
+<div id="integration-of-frequencies-within-a-single-table" class="section level2">
+<h2>2.4 Integration of frequencies within a single table</h2>
+</div>
+</div>
+<div id="description-of-nominal-data" class="section level1">
+<h1>3 Description of nominal data</h1>
+<div id="mode" class="section level2">
+<h2>3.1 Mode</h2>
+</div>
+<div id="relative-information-content" class="section level2">
+<h2>3.2 Relative information content</h2>
+</div>
+</div>
+<div id="description-of-ordinal-data" class="section level1">
+<h1>4 Description of ordinal data</h1>
+<div id="percentile-ranks" class="section level2">
+<h2>4.1 Percentile ranks</h2>
+</div>
+<div id="median" class="section level2">
+<h2>4.2 Median</h2>
+</div>
+<div id="range" class="section level2">
+<h2>4.3 Range</h2>
+</div>
+<div id="quantile" class="section level2">
+<h2>4.4 Quantile</h2>
+</div>
+</div>
+<div id="description-of-interval-data" class="section level1">
+<h1>5 Description of interval data</h1>
+<div id="arithmetical-mean" class="section level2">
+<h2>5.1 Arithmetical mean</h2>
+</div>
+<div id="standard-deviation" class="section level2">
+<h2>5.2 Standard deviation</h2>
+</div>
+<div id="skewness-and-kurtosis" class="section level2">
+<h2>5.3 Skewness and Kurtosis</h2>
+</div>
+<div id="describe-function" class="section level2">
+<h2>5.4 describe function</h2>
+</div>
+<div id="summary-function" class="section level2">
+<h2>5.5 summary function</h2>
+</div>
+<div id="group-comparisons" class="section level2">
+<h2>5.6 Group comparisons</h2>
+<div id="describeby-function" class="section level3">
+<h3>5.6.1 describeBy function</h3>
+</div>
+<div id="tapply-function" class="section level3">
+<h3>5.6.2 tapply function</h3>
+</div>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>6 Conclusion</h1>
+</div>
+<div id="introduction-1" class="section level1">
+<h1>1 Introduction</h1>
 <p>Die univariate deskriptive Statistik ist die Beschreibung einzelner Variablen. Abhängig von der jeweiligen Skalierung, können unterschiedliche Lage- und Streumaße verwendet werden. Aufbauend auf dem vorangegangenen Post <a href="https://michael-fuchs.netlify.com/2018/08/24/measures-of-dispersion/">“Measures of Dispersion”</a>, in dem hauptsächlich die mathematische Betrachtung der verschiedenen Streumaße behandelt wurde, ist hier die praktische Anwendung zentral.<br />
-Für diesen Post wurde der Datensatz <em>countries of the world</em> von der Statsistik Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter &lt;???????????????&gt; abrufbar.</p>
-<pre class="r"><code>library(&quot;tidyverse&quot;)
-library(psych)
-library(CTT)
-library(QuantPsyc)</code></pre>
+Für diesen Post wurde der Datensatz <em>countries of the world</em> von der Statsistik Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006" class="uri">https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006</a> abrufbar.</p>
+<pre class="r"><code>library(&quot;psych&quot;)
+library(&quot;CTT&quot;)
+library(&quot;QuantPsyc&quot;)
+library(&quot;tidyverse&quot;)</code></pre>
 <pre class="r"><code>world &lt;- read_csv(&quot;countries of the world.csv&quot;)</code></pre>
 <pre class="r"><code>glimpse(world)</code></pre>
 <pre><code>## Observations: 227
@@ -47,12 +119,12 @@ library(QuantPsyc)</code></pre>
 ## $ Industry                             &lt;chr&gt; &quot;0,24&quot;, &quot;0,188&quot;, &quot;0,6&quot;, N...
 ## $ Service                              &lt;chr&gt; &quot;0,38&quot;, &quot;0,579&quot;, &quot;0,298&quot;,...</code></pre>
 </div>
-<div id="haufigkeitstabellen" class="section level1">
-<h1>2 Häufigkeitstabellen</h1>
+<div id="frequency-tables-1" class="section level1">
+<h1>2 Frequency Tables</h1>
 <p>Häufigkeitstabellen sind eine gute Darstellungsform, um einen ersten Eindruck von der Verteilung der zu beschreibenden Variablen zu bekommen. Man unterscheidet zwischen absoluten und relativen Häufigkeiten. Die absolute Häufigkeit bezeichnet die Anzahl der Ausprägung, beispielsweise 4 Männer und 6 Frauen. Die relative Häufigkeit dagegen beschreibt den Anteil der jeweiligen Ausprägung an der gesamten Stichprobe, zum Beispiel 40% Männer und 60% Frauen.</p>
-<div id="absolute-haufigkeiten" class="section level2">
-<h2>2.1 Absolute Häufigkeiten</h2>
-<p>Wir möchten uns die absoluten Häufigkeiten der Variable <code>Region</code> ausgeben lassen. Wie wir mittels dem Befehl <em>glimpse</em> sehen können, beinhaltet der Datensatz <em>countries of the world</em> verschiedene Informationen über diverse Länder. Unter der Variable <code>Region</code> sind mehrere Ländern nach “Region” zusammengefasst.</p>
+<div id="absolute-frequency-1" class="section level2">
+<h2>2.1 Absolute Frequency</h2>
+<p>Wir möchten uns die absoluten Häufigkeiten der Variable <code>Region</code> ausgeben lassen. Wie wir mittels des Befehles <em>glimpse</em> sehen können, beinhaltet der Datensatz <em>countries of the world</em> verschiedene Informationen über diverse Länder. Unter der Variable <code>Region</code> sind mehrere Länder nach “Region” zusammengefasst.</p>
 <p>Eine Tabelle mit den absoluten Häufigkeiten kann mit der <em>table</em> Funktion angefordert werden:</p>
 <pre class="r"><code>table(world$Region)</code></pre>
 <pre><code>## 
@@ -86,8 +158,8 @@ library(QuantPsyc)</code></pre>
 ##     NORTHERN AMERICA              BALTICS 
 ##                    5                    3</code></pre>
 </div>
-<div id="relative-haufigkeiten" class="section level2">
-<h2>2.2 Relative Häufigkeiten</h2>
+<div id="relative-frequency-1" class="section level2">
+<h2>2.2 Relative Frequency</h2>
 <p>Die relativen Häufigkeiten können mit der <em>prop.table</em> Funktion angefordert werden:</p>
 <pre class="r"><code>prop.table(table(world$Region))</code></pre>
 <pre><code>## 
@@ -110,7 +182,7 @@ library(QuantPsyc)</code></pre>
 ##             2.643172             2.202643             9.251101 
 ##   SUB-SAHARAN AFRICA       WESTERN EUROPE 
 ##            22.466960            12.334802</code></pre>
-<p>Zur Besseren Übersicht, kann man sich das Ergebnis auch gerundet ausgeben lassen. Dies geht mit dem Befehl <em>round</em>, wobei die Ziffer am Ende der Syntax die Anzahl der Nachkommastellen angibt.</p>
+<p>Zur besseren Übersicht, kann man sich das Ergebnis auch gerundet ausgeben lassen. Dies geht mit dem Befehl <em>round</em>, wobei die Ziffer am Ende der Syntax die Anzahl der Nachkommastellen angibt.</p>
 <pre class="r"><code>round(100*prop.table(table(world$Region)), 2)</code></pre>
 <pre><code>## 
 ## ASIA (EX. NEAR EAST)              BALTICS  C.W. OF IND. STATES 
@@ -122,9 +194,9 @@ library(QuantPsyc)</code></pre>
 ##   SUB-SAHARAN AFRICA       WESTERN EUROPE 
 ##                22.47                12.33</code></pre>
 </div>
-<div id="kumulierte-haufigkeiten" class="section level2">
-<h2>2.3 Kumulierte Häufigkeiten</h2>
-<p>Zusätzlich zu den absoluten und relativen Häufigkeiten, kann man sich auch noch die kumulierten Häufigkeiten ausgeben lassen. Dabei wird die relative Häufigkeit zu den vorangegangenen relativen Häufigkeiten hinzu addiert.</p>
+<div id="cumulate-frequency-1" class="section level2">
+<h2>2.3 Cumulate Frequency</h2>
+<p>Zusätzlich zu den absoluten und relativen Häufigkeiten, kann man sich auch noch die kumulierten Häufigkeiten ausgeben lassen. Dabei wird die relative Häufigkeit zu den vorangegangenen relativen Häufigkeiten hinzuaddiert.</p>
 <p>Zur besseren Veranschaulichung werden die relativen Häufigkeiten der Regionen aufsteigend sortiert und auf zwei Nachkommastellen gerundet:</p>
 <pre class="r"><code>sort(round(100*prop.table(table(world$Region)), 2))</code></pre>
 <pre><code>## 
@@ -146,10 +218,10 @@ library(QuantPsyc)</code></pre>
 ##                33.04                45.37                57.70 
 ##  LATIN AMER. &amp; CARIB   SUB-SAHARAN AFRICA 
 ##                77.52                99.99</code></pre>
-<p>Wir sehen, dass die “Baltics” Region mit 1,32% bei der kumulierten Ausgabe zu den 2,20% der “Northern America” Region hinzu addiert wurde. Das Ergebnis von 3,52% unter “Northern America” sagt nun aus, dass “Baltics” und “Northern America” zusammen einen Anteil von 3,52% an der Stichprobe ausmachen.</p>
+<p>Wir sehen, dass die “Baltics” Region mit 1,32% bei der kumulierten Ausgabe zu den 2,20% der “Northern America” Region hinzuaddiert wurde. Das Ergebnis von 3,52% unter “Northern America” sagt nun aus, dass “Baltics” und “Northern America” zusammen einen Anteil von 3,52% an der Stichprobe ausmachen.</p>
 </div>
-<div id="integration-der-haufigkeiten-in-einer-tabelle" class="section level2">
-<h2>2.4 Integration der Häufigkeiten in einer Tabelle</h2>
+<div id="integration-of-frequencies-within-a-single-table-1" class="section level2">
+<h2>2.4 Integration of frequencies within a single table</h2>
 <p>Die vier verschiedenen Arten von Häufigkeiten (absolute, relative, prozentuale und kumulierte) können auch gemeinsam in einer Tabelle ausgegeben werden. Allerdings muss man hierfür mehrere Befehle ausführen:</p>
 <pre class="r"><code>absolut &lt;- table(world$Region)
 relativ &lt;- prop.table(absolut)
@@ -172,11 +244,11 @@ round(haeufigkeiten, 2)</code></pre>
 ## WESTERN EUROPE            28    0.12   12.33    100.00</code></pre>
 </div>
 </div>
-<div id="beschreibung-nominaldaten" class="section level1">
-<h1>3 Beschreibung Nominaldaten</h1>
+<div id="description-of-nominal-data-1" class="section level1">
+<h1>3 Description of nominal data</h1>
 <p>Von Nominaldaten wird gesprochen, wenn mögliche Ausprägungen zwar unterschieden werden können, aber diese keine natürliche Rangfolge aufweisen.</p>
-<div id="modalwert" class="section level2">
-<h2>3.1 Modalwert</h2>
+<div id="mode-1" class="section level2">
+<h2>3.1 Mode</h2>
 <p>Der Modalwert, auch Modus genannt, ist definiert als der häufigste Wert, der in der Stichprobe vorkommt. Dieser kann entweder einer absoluten Häufigkeitstabelle entnommen werden oder mit der <em>which.max</em> Funktion angefordert werden:</p>
 <pre class="r"><code>table(world$Region)</code></pre>
 <pre><code>## 
@@ -195,30 +267,292 @@ round(haeufigkeiten, 2)</code></pre>
 <pre class="r"><code>max(table(world$Region))</code></pre>
 <pre><code>## [1] 51</code></pre>
 </div>
-<div id="relativer-informationsgehalt" class="section level2">
-<h2>3.2 Relativer Informationsgehalt</h2>
-<p>Ein gutes Streuungsmaß für Nominaldaten ist der relative Informationsgehalt. Dieser sagt aus, wie sehr sich die Personen auf eine der möglichen Kategorien konzentrieren. Der Wertebereich des relativen Informationsgehalt reicht von Null bis Eins. Null bedeutet, dass alle Peronen nur eine mögliche Antwortkategorie gewählt haben. Die Stichprobe ist daher sehr homogen. Eins bedeutet, dass alle Antwortkategorien gleich häufig gewählt wurden und die Stichprobe daher sehr heterogen ist. Für die Berechnung des relativen Informationsgehalts sind mehrer Schritte notwendig:</p>
+<div id="relative-information-content-1" class="section level2">
+<h2>3.2 Relative information content</h2>
+<p>Ein gutes Streuungsmaß für Nominaldaten ist der relative Informationsgehalt. Dieser sagt aus, wie sehr sich die Personen auf eine der möglichen Kategorien konzentrieren. Der Wertebereich des relativen Informationsgehalts reicht von Null bis Eins. Null bedeutet, dass alle Personen nur eine mögliche Antwortkategorie gewählt haben. Die Stichprobe ist daher sehr homogen. Eins bedeutet, dass alle Antwortkategorien gleich häufig gewählt wurden und die Stichprobe daher sehr heterogen ist. Für die Berechnung des relativen Informationsgehalts sind mehrere Schritte notwendig:</p>
 <p>Als erstes wird eine relative Häufigkeitstabelle der zu untersuchenden Variablen in ein separates Objekt gespeichert (hier: “relhaeufig”).</p>
 <pre class="r"><code>relhaeufig &lt;- prop.table(table(world$Region))</code></pre>
 <p>Anschließend wird jeder Wert aus der Tabelle mit seinem logarithmierten Wert multipliziert.</p>
 <pre class="r"><code>logarithm &lt;- relhaeufig*log(relhaeufig)</code></pre>
 <p>Nun werden die 11 Werte (wg 11 Regionen/Antwortmöglichkeiten) zusammen addiert.</p>
 <pre class="r"><code>Summe &lt;- sum(logarithm)</code></pre>
-<p>Als vorletzen Schritt müssen die Anzahl der Antwortkategorien (hier unsere 11 Regionen) logarithmiert werden und von diesem Wert muss der negative Kehrwert gebildet werden.</p>
+<p>Als verletzen Schritt müssen die Anzahl der Antwortkategorien (hier unsere 11 Regionen) logarithmiert werden und von diesem Wert muss der negative Kehrwert gebildet werden.</p>
 <pre class="r"><code>Kehrwert &lt;- -1/log(11)</code></pre>
 <p>Um den relativen Informationsgehalt zu bekommen muss im letzten Schritt die gebildete Summe mit dem Kehrwert multipliziert werden.</p>
 <pre class="r"><code>Summe*Kehrwert</code></pre>
 <pre><code>## [1] 0.8873596</code></pre>
-<p>Diese fünf Schritte können auch in einem Befehl zusammen gefasst werden:</p>
+<p>Diese fünf Schritte können auch in einem Befehl zusammengefasst werden:</p>
 <pre class="r"><code>(-1/log(11)) * sum(prop.table(table(world$Region)) * log(prop.table(table(world$Region))))</code></pre>
 <pre><code>## [1] 0.8873596</code></pre>
 <p>Der Wert von .89 zeigt uns, dass die Variable <code>Region</code> sehr heterogen gewählt wurde. Dies ist in unserem Beispiel nicht verwunderlich, da die Regionen zwar unterschiedlich viele Länder beinhalten aber die Länder dennoch über alle Regionen verteilt liegen.</p>
 </div>
 </div>
-<div id="beschreibung-ordinaldaten" class="section level1">
-<h1>4 Beschreibung Ordinaldaten</h1>
-<p>Ordinal skalierte Daten können entgegen Nominaldaten in eine natürliche Reihenfolge gebracht werden. Allerdings sind die Abstände zwischen den einzelnen Werten nicht quantifizierbar. Natürlich könnten wir wieder den Modalwert und den relativen Informationsgehalt ausrechnen, allerdings steigt mit dem informationsgehalts des Skalenniveaus auch die statistischen Möglichkeiten, welche für Nominaldaten nicht zugelassen sind.</p>
-<div id="prozentrange" class="section level2">
-<h2>4.1 Prozentränge</h2>
+<div id="description-of-ordinal-data-1" class="section level1">
+<h1>4 Description of ordinal data</h1>
+<p>Ordinal skalierte Daten können entgegen Nominaldaten in eine natürliche Reihenfolge gebracht werden. Allerdings sind die Abstände zwischen den einzelnen Werten nicht quantifizierbar. Natürlich könnten wir wieder den Modalwert und den relativen Informationsgehalt ausrechnen, allerdings steigt mit dem Informationsgehaltes des Skalenniveaus auch die statistischen Möglichkeiten, welche für Nominaldaten nicht zugelassen sind.</p>
+<div id="percentile-ranks-1" class="section level2">
+<h2>4.1 Percentile ranks</h2>
+<p>Prozentränge (z.B. von Personen) drücken aus, wie viel Prozent der Stichprobe diesen oder einen geringeren Wert auf der Variablen haben. Mit der <em>score.transform</em> Funktion (Paket “CTT”) wird die zu untersuchende Variable in zwei neue Variablen transformiert. In der neuen Variable <code>$new.scores</code> sind die standardisierten Werte enthalten und in <code>$p.scores</code> die berechneten Prozentränge.</p>
+<pre class="r"><code>birthrate.transf &lt;- score.transform(world$Birthrate)
+head(birthrate.transf$p.scores)</code></pre>
+<pre><code>## [1] 0.08810573 0.39647577 0.47577093 0.62995595 0.10572687 0.95594714</code></pre>
+<p>Im nächsten Schritt fügen wir die neue Variable <code>$p.scores</code> dem zugrunde liegenden Datensatz hinzu.</p>
+<pre class="r"><code>world$birthrate.transf &lt;- birthrate.transf$p.scores</code></pre>
+<p>Nun können wir uns beispielsweise die Prozentränge für die Länder der Region “Northern Africa” ausgeben lassen:</p>
+<pre class="r"><code>percentile.ranks.africa &lt;- world %&gt;% filter(Region == &quot;NORTHERN AFRICA&quot;)
+subset(percentile.ranks.africa, select = c(&quot;Country&quot;, &quot;Birthrate&quot;, &quot;birthrate.transf&quot;))</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Country        Birthrate birthrate.transf
+##   &lt;chr&gt;              &lt;dbl&gt;            &lt;dbl&gt;
+## 1 Algeria             1714            0.476
+## 2 Egypt               2294            0.648
+## 3 Libya               2649            0.700
+## 4 Morocco             2198            0.608
+## 5 Tunisia             1552            0.419
+## 6 Western Sahara        NA            1</code></pre>
+<p>Wir sehen, Algerien hat eine Geburtenrate von 1.714 und einen Prozentrang von 0,48% was bedeutet, dass 0,48% der Länder eine gleich hohe oder niedrigere Geburtenrate hat als Algerien.</p>
 </div>
+<div id="median-1" class="section level2">
+<h2>4.2 Median</h2>
+<p>Der Median, auch Zentralwert genannt, ist bei einer Auflistung von Zahlenwerten der Wert, der an der zentralen Stelle steht, wenn man die Werte der Größe nach sortiert. Anfordern kann man ihn über die Funktion <em>median</em>.</p>
+<pre class="r"><code>median(world$Deathrate, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 713</code></pre>
+</div>
+<div id="range-1" class="section level2">
+<h2>4.3 Range</h2>
+<p>Der Wertebereich berechnet sich aus der Differenz zwischen dem kleinsten Wert und dem größten Wert einer Variablen. Mit dem Befehl <em>range</em> kann man den min-Wert und max-Wert anfordern und mit <em>diff</em> den Wertebereich.</p>
+<pre class="r"><code>range(world$Deathrate, na.rm = TRUE)</code></pre>
+<pre><code>## [1]   22 2974</code></pre>
+<pre class="r"><code>diff(range(world$Deathrate, na.rm = TRUE))</code></pre>
+<pre><code>## [1] 2952</code></pre>
+</div>
+<div id="quantile-1" class="section level2">
+<h2>4.4 Quantile</h2>
+<p>Neben dem Wertebereich kann auch das Dispersionsmaß Quantile für ordinalskalierte Daten verwendet werden. Quantile unterteilt die Stichprobe in kleinere Gruppen. Möchte man seine Stichprobe in vier (Quartile) gleich große Gruppen aufteilen, verwendet man die Funktion <em>quantile</em>.</p>
+<pre class="r"><code>quantile(world$Deathrate, na.rm = TRUE)</code></pre>
+<pre><code>##     0%    25%    50%    75%   100% 
+##   22.0  517.5  713.0 1025.5 2974.0</code></pre>
+<p>Mit dem Zusatzargument <em>probs = seq</em>, kann die Anzahl der Aufteilungen beliebig geändert werden. Da die Zahlensequenz nur von 0 bis 1 gehen darf, sind die ersten beiden Argumente (0 &amp; 1) fest vorgegeben. Das dritte Argument (hier 0.1) gibt die gewünschte relative Häufigkeit der einzelnen Teile an.</p>
+<pre class="r"><code>quantile(world$Deathrate, na.rm = TRUE, probs = seq(0, 1, 0.1))</code></pre>
+<pre><code>##     0%    10%    20%    30%    40%    50%    60%    70%    80%    90% 
+##   22.0  241.2  470.2  556.8  640.2  713.0  826.2  955.8 1152.2 1480.2 
+##   100% 
+## 2974.0</code></pre>
+</div>
+</div>
+<div id="description-of-interval-data-1" class="section level1">
+<h1>5 Description of interval data</h1>
+<p>Intervalldaten zählen in der Statistik zu den metrischen Daten. Entgegen ordinalskalierten Merkmalen, lassen sich die Abstände zwischen den Merkmalsausprägungen exakt bestimmen. Alle bisher verwendeten Lage- und Streumaße lassen sich auch für intervallskalierte Daten verwenden. Darüber hinaus kann man für Intervalldaten den Mittelwert als Lagemaß und die Standardabweichung als Streumaß berechnen.</p>
+<div id="arithmetical-mean-1" class="section level2">
+<h2>5.1 Arithmetical mean</h2>
+<p>Im Nachfolgenden wollen wir den Mittelwert mit der <em>mean</em> Funktion für das Bruttoinlandsprodukt (in tausend) berechnen.</p>
+<pre class="r"><code>mean(world$`GDP ($ per capita)`, na.rm = TRUE)/ 1000</code></pre>
+<pre><code>## [1] 9.689823</code></pre>
+</div>
+<div id="standard-deviation-1" class="section level2">
+<h2>5.2 Standard deviation</h2>
+<p>Zusätzlich zum Mittelwert sollte man immer auch die Standardabweichung angeben. Diese wird mit der <em>sd</em> Funktion angefordert.</p>
+<pre class="r"><code>sd(world$`GDP ($ per capita)`, na.rm = TRUE)/ 1000</code></pre>
+<pre><code>## [1] 10.04914</code></pre>
+<pre class="r"><code>round(sd(world$`GDP ($ per capita)`, na.rm = TRUE)/ 1000, 2)</code></pre>
+<pre><code>## [1] 10.05</code></pre>
+</div>
+<div id="skewness-and-kurtosis-1" class="section level2">
+<h2>5.3 Skewness and Kurtosis</h2>
+<p>Normalverteilte Variablen sind Voraussetzung für viele statistische Tests. Sie können auf zwei Arten von der Normalverteilung abweichen. Zum einen können sie asymmetrisch (rechtsschief oder linksschief) sein und zum anderen können Verteilungen zu flach oder zu spitz verlaufen. Die Schiefe (skewness) und der Exzess (kurtosis) kann mit dem Befehl <em>norm</em> aus dem “QuantPsyc” Paket berechnet werden.</p>
+<pre class="r"><code>norm(world$Birthrate)</code></pre>
+<pre><code>##           Statistic        SE     t-val           p
+## Skewness  0.4931583 0.1636634  3.013247 0.001292343
+## Kurtosis -0.6078551 0.3273268 -1.857028 0.031653577</code></pre>
+<p>Interpretation:</p>
+<p>Ein skewness Wert größer Null deutet auf eine rechtsschiefe Verteilung hin. Ein skewness Wert kleiner Null deutet auf eine linksschiefe Verteilung hin. Ein skewness Wert von Null bedeutet, dass die Verteilung symmetrisch ist.</p>
+<p>Ein kurtosis Wert größer Null deutet auf eine spitze Verteilung hin. Ein kurtosis Wert kleiner Null deutet auf eine flache Verteilung hin. Ein kurtosis Wert von Null deutet auf eine Normalverteilung hin.</p>
+</div>
+<div id="describe-function-1" class="section level2">
+<h2>5.4 describe function</h2>
+<p>Mit den bisherigen Funktionen wurden jeweils nur einzelne Kennwerte ausgegeben. Mit der <em>describe</em> Funktion kann man eine ganze Reihe an nützlichen Kennwerten sich ausgeben lassen (hier für die Variablen Geburtenrate und Mortalitätenrate).</p>
+<pre class="r"><code>describe(data.frame(world$Birthrate, world$Deathrate))</code></pre>
+<pre><code>##                 vars   n    mean      sd median trimmed     mad min  max
+## world.Birthrate    1 224 2042.80 1228.92 1799.5 1982.48 1177.93  10 5073
+## world.Deathrate    2 223  818.96  506.71  713.0  772.21  361.75  22 2974
+##                 range skew kurtosis    se
+## world.Birthrate  5063 0.49    -0.64 82.11
+## world.Deathrate  2952 1.18     2.19 33.93</code></pre>
+<ul>
+<li>vars = die Variablen werden durchnummeriert</li>
+<li>n = Anzahl gültiger Fälle</li>
+<li>mean = Mittelwert</li>
+<li>sd = Standardabweichung</li>
+<li>median = Median</li>
+<li>trimmed = getrimmter Mittelwert</li>
+<li>mad = Median Absolut Deviation</li>
+<li>min = Minimum</li>
+<li>max = Maximum</li>
+<li>range = Wertebereich</li>
+<li>skew = Schiefe</li>
+<li>kurtosis = Exzess</li>
+<li>se = Standardfehler des Mittelwerts</li>
+</ul>
+</div>
+<div id="summary-function-1" class="section level2">
+<h2>5.5 summary function</h2>
+<p>Einen schnellen Überblick über die Verteilung von Variablen kann man mit der <em>summary</em> Funktion bekommen.</p>
+<pre class="r"><code>summary(world$Birthrate)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##      10    1077    1800    2043    2934    5073       3</code></pre>
+</div>
+<div id="group-comparisons-1" class="section level2">
+<h2>5.6 Group comparisons</h2>
+<p>Bisher haben wir nur Kennzahlen für die gesamte Stichprobe angeschaut. Man kann aber auch Kennzahlen für Untergruppen anfordern.</p>
+<div id="describeby-function-1" class="section level3">
+<h3>5.6.1 describeBy function</h3>
+<p>Mit der <em>describeBy</em> Funktion werden die gleichen Kennwerte wie mit der <em>describe</em> Funktion ausgegeben, nur getrennt für Untergruppen (hier die Kennwerte für die Geburtenrate aufgeteilt nach Regionen).</p>
+<pre class="r"><code>describeBy(world$Birthrate, world$Region)</code></pre>
+<pre><code>## 
+##  Descriptive statistics by group 
+## group: ASIA (EX. NEAR EAST)
+##    vars  n    mean      sd median trimmed     mad min  max range skew
+## X1    1 28 1688.29 1055.07   1620 1675.62 1080.82  10 3549  3539 0.14
+##    kurtosis     se
+## X1    -1.09 199.39
+## -------------------------------------------------------- 
+## group: BALTICS
+##    vars n   mean    sd median trimmed   mad min  max range skew kurtosis
+## X1    1 3 934.33 65.12    924  934.33 72.65 875 1004   129 0.15    -2.33
+##      se
+## X1 37.6
+## -------------------------------------------------------- 
+## group: C.W. OF IND. STATES
+##    vars  n    mean      sd median trimmed     mad min  max range skew
+## X1    1 12 1364.83 1079.18 1078.5  1309.7 1313.58  16 3265  3249  0.4
+##    kurtosis     se
+## X1    -1.35 311.53
+## -------------------------------------------------------- 
+## group: EASTERN EUROPE
+##    vars  n   mean     sd median trimmed   mad min  max range  skew
+## X1    1 11 949.55 333.84    965  980.78 99.33 107 1511  1404 -0.99
+##    kurtosis     se
+## X1     1.45 100.66
+## -------------------------------------------------------- 
+## group: LATIN AMER. &amp; CARIB
+##    vars  n    mean     sd median trimmed    mad min  max range  skew
+## X1    1 45 1777.51 671.75   1759 1780.86 507.05 129 3644  3515 -0.02
+##    kurtosis     se
+## X1        1 100.14
+## -------------------------------------------------------- 
+## group: NEAR EAST
+##    vars  n    mean      sd median trimmed     mad min  max range  skew
+## X1    1 16 2403.06 1084.56 2159.5 2427.29 1031.15 178 4289  4111 -0.04
+##    kurtosis     se
+## X1     -0.8 271.14
+## -------------------------------------------------------- 
+## group: NORTHERN AFRICA
+##    vars n   mean     sd median trimmed    mad  min  max range  skew
+## X1    1 5 2081.4 446.15   2198  2081.4 668.65 1552 2649  1097 -0.01
+##    kurtosis     se
+## X1    -1.98 199.53
+## -------------------------------------------------------- 
+## group: NORTHERN AMERICA
+##    vars n   mean     sd median trimmed    mad min  max range  skew
+## X1    1 5 1110.2 586.79   1352  1110.2 357.31 114 1593  1479 -0.83
+##    kurtosis     se
+## X1    -1.23 262.42
+## -------------------------------------------------------- 
+## group: OCEANIA
+##    vars  n    mean    sd median trimmed    mad min  max range  skew
+## X1    1 20 2106.85 751.2   2232 2158.25 630.11  21 3305  3284 -0.75
+##    kurtosis     se
+## X1     0.77 167.97
+## -------------------------------------------------------- 
+## group: SUB-SAHARAN AFRICA
+##    vars  n    mean      sd median trimmed    mad min  max range  skew
+## X1    1 51 3459.33 1192.93   3771 3641.93 720.54  41 5073  5032 -1.36
+##    kurtosis     se
+## X1     1.34 167.04
+## -------------------------------------------------------- 
+## group: WESTERN EUROPE
+##    vars  n   mean     sd median trimmed    mad min  max range  skew
+## X1    1 28 990.43 295.26 1024.5 1028.33 143.81  93 1445  1352 -1.63
+##    kurtosis   se
+## X1     3.34 55.8</code></pre>
+<p>Um die Ergebnisse in Tabellenform ausgegeben zu bekommen, muss der Befehl um das Zusatzargument <em>mat = TRUE</em> ergänzt werden.</p>
+<pre class="r"><code>describeBy(world$Birthrate, world$Region, mat = TRUE)</code></pre>
+<pre><code>##      item               group1 vars  n      mean         sd median
+## X11     1 ASIA (EX. NEAR EAST)    1 28 1688.2857 1055.07461 1620.0
+## X12     2              BALTICS    1  3  934.3333   65.11784  924.0
+## X13     3  C.W. OF IND. STATES    1 12 1364.8333 1079.17905 1078.5
+## X14     4       EASTERN EUROPE    1 11  949.5455  333.83959  965.0
+## X15     5  LATIN AMER. &amp; CARIB    1 45 1777.5111  671.74791 1759.0
+## X16     6            NEAR EAST    1 16 2403.0625 1084.55788 2159.5
+## X17     7      NORTHERN AFRICA    1  5 2081.4000  446.15334 2198.0
+## X18     8     NORTHERN AMERICA    1  5 1110.2000  586.79400 1352.0
+## X19     9              OCEANIA    1 20 2106.8500  751.20018 2232.0
+## X110   10   SUB-SAHARAN AFRICA    1 51 3459.3333 1192.93122 3771.0
+## X111   11       WESTERN EUROPE    1 28  990.4286  295.26102 1024.5
+##        trimmed       mad  min  max range         skew   kurtosis        se
+## X11  1675.6250 1080.8154   10 3549  3539  0.140920566 -1.0854801 199.39036
+## X12   934.3333   72.6474  875 1004   129  0.154690706 -2.3333333  37.59580
+## X13  1309.7000 1313.5836   16 3265  3249  0.403874292 -1.3474477 311.53216
+## X14   980.7778   99.3342  107 1511  1404 -0.987271046  1.4469632 100.65642
+## X15  1780.8649  507.0492  129 3644  3515 -0.023822700  0.9988176 100.13827
+## X16  2427.2857 1031.1483  178 4289  4111 -0.036615882 -0.7990198 271.13947
+## X17  2081.4000  668.6526 1552 2649  1097 -0.008797767 -1.9763793 199.52584
+## X18  1110.2000  357.3066  114 1593  1479 -0.825503706 -1.2268100 262.42226
+## X19  2158.2500  630.1050   21 3305  3284 -0.749970784  0.7747050 167.97347
+## X110 3641.9268  720.5436   41 5073  5032 -1.364434519  1.3429081 167.04378
+## X111 1028.3333  143.8122   93 1445  1352 -1.629941719  3.3447423  55.79909</code></pre>
+</div>
+<div id="tapply-function-1" class="section level3">
+<h3>5.6.2 tapply function</h3>
+<p>Benötigen wir Gruppenvergleiche für andere, als in der <em>describeBy</em> Funktion vorhandenen Kennwerte, so können wir die <em>tapply</em> Funktion verwenden. Das erste Argument steht immer für die abhängige Variable, d.h. für die Variable, für die die Kennwerte berechnet werden sollen. Das zweite Argument steht für die unabhängige Variable, d.h. für die Variable, für die die Gruppen definiert werden sollen. Als drittes Argument wird die gewünschte Funktion aufgeführt (hier die Kennwerte der summary Funktion für die Geburtenrate aufgeteilt nach Regionen).</p>
+<pre class="r"><code>tapply(world$Birthrate, world$Region, summary)</code></pre>
+<pre><code>## $`ASIA (EX. NEAR EAST)`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    10.0   912.5  1620.0  1688.3  2336.8  3549.0 
+## 
+## $BALTICS
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   875.0   899.5   924.0   934.3   964.0  1004.0 
+## 
+## $`C.W. OF IND. STATES`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    16.0   718.5  1078.5  1364.8  2214.5  3265.0 
+## 
+## $`EASTERN EUROPE`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##   107.0   900.0   965.0   949.5  1025.0  1511.0       1 
+## 
+## $`LATIN AMER. &amp; CARIB`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     129    1417    1759    1778    2082    3644 
+## 
+## $`NEAR EAST`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     178    1763    2160    2403    3175    4289 
+## 
+## $`NORTHERN AFRICA`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##    1552    1714    2198    2081    2294    2649       1 
+## 
+## $`NORTHERN AMERICA`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     114    1078    1352    1110    1414    1593 
+## 
+## $OCEANIA
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##      21    1769    2232    2107    2491    3305       1 
+## 
+## $`SUB-SAHARAN AFRICA`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##      41    3165    3771    3459    4199    5073 
+## 
+## $`WESTERN EUROPE`
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    93.0   909.5  1024.5   990.4  1107.0  1445.0</code></pre>
+</div>
+</div>
+</div>
+<div id="conclusion-1" class="section level1">
+<h1>6 Conclusion</h1>
+<p>In diesem Post wurden verschiedene Möglichkeiten vorgestellt, einzelne Variablen hinsichtlich ihrer Lage und Verteilung zu beschreiben. Ergänzend zu diesem Beitrag aus der univariaten Statistik, soll in einem Folgebeitrag die bivariate Statistik (Zusammenhänge zwischen zwei Variablen) näher erläutert werden.</p>
 </div>

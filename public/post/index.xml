@@ -17,8 +17,7 @@
       <pubDate>Fri, 31 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/08/31/univariate-descriptive-statistics/</guid>
-      <description>Table of Content1 IntroductionDie univariate deskriptive Statistik ist die Beschreibung einzelner Variablen. Abhängig von der jeweiligen Skalierung, können unterschiedliche Lage- und Streumaße verwendet werden. Aufbauend auf dem vorangegangenen Post “Measures of Dispersion”, in dem hauptsächlich die mathematische Betrachtung der verschiedenen Streumaße behandelt wurde, ist hier die praktische Anwendung zentral.
-Für diesen Post wurde der Datensatz countries of the world von der Statsistik Plattform Kaggle https://www.kaggle.com verwendet. Eine Kopie des Datensatzes ist unter &amp;lt;?</description>
+      <description>Table of Content1 Introduction2 Frequency Tables2.1 Absolute Frequency2.2 Relative Frequency2.3 Cumulate Frequency2.4 Integration of frequencies within a single table3 Description of nominal data3.1 Mode3.2 Relative information content4 Description of ordinal data4.1 Percentile ranks4.2 Median4.3 Range4.4 Quantile5 Description of interval data5.</description>
     </item>
     
     <item>

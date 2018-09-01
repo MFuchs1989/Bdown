@@ -46,10 +46,10 @@ Die univariate deskriptive Statistik ist die Beschreibung einzelner Variablen. A
  Für diesen Post wurde der Datensatz *countries of the world* von der Statsistik Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006> abrufbar.
 
 ```{r results='hide', message=FALSE, warning=FALSE}
-library("tidyverse")
 library("psych")
 library("CTT")
 library("QuantPsyc")
+library("tidyverse")
 ```
 ```{r results='hide', message=FALSE, warning=FALSE}
 world <- read_csv("countries of the world.csv")
@@ -205,7 +205,8 @@ world$birthrate.transf <- birthrate.transf$p.scores
 Nun können wir uns beispielsweise die Prozentränge für die Länder der Region "Northern Africa" ausgeben lassen:
 
 ```{r}
-world %>% filter(Region == "NORTHERN AFRICA") %>% select(Country, Birthrate, birthrate.transf)
+percentile.ranks.africa <- world %>% filter(Region == "NORTHERN AFRICA")
+subset(percentile.ranks.africa, select = c("Country", "Birthrate", "birthrate.transf"))
 ```
 
 Wir sehen, Algerien hat eine Geburtenrate von 1.714 und einen Prozentrang von 0,48% was bedeutet, dass 0,48% der Länder eine gleich hohe oder niedrigere Geburtenrate hat als Algerien.
