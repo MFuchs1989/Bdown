@@ -1,0 +1,224 @@
+---
+title: Univariate descriptive statistics
+author: Michael Fuchs
+date: '2018-08-31'
+slug: univariate-descriptive-statistics
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Die univariate deskriptive Statistik ist die Beschreibung einzelner Variablen. Abhängig von der jeweiligen Skalierung, können unterschiedliche Lage- und Streumaße verwendet werden. Aufbauend auf dem vorangegangenen Post <a href="https://michael-fuchs.netlify.com/2018/08/24/measures-of-dispersion/">“Measures of Dispersion”</a>, in dem hauptsächlich die mathematische Betrachtung der verschiedenen Streumaße behandelt wurde, ist hier die praktische Anwendung zentral.<br />
+Für diesen Post wurde der Datensatz <em>countries of the world</em> von der Statsistik Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter &lt;???????????????&gt; abrufbar.</p>
+<pre class="r"><code>library(&quot;tidyverse&quot;)
+library(psych)
+library(CTT)
+library(QuantPsyc)</code></pre>
+<pre class="r"><code>world &lt;- read_csv(&quot;countries of the world.csv&quot;)</code></pre>
+<pre class="r"><code>glimpse(world)</code></pre>
+<pre><code>## Observations: 227
+## Variables: 20
+## $ Country                              &lt;chr&gt; &quot;Afghanistan&quot;, &quot;Albania&quot;,...
+## $ Region                               &lt;chr&gt; &quot;ASIA (EX. NEAR EAST)&quot;, &quot;...
+## $ Population                           &lt;int&gt; 31056997, 3581655, 329300...
+## $ `Area (sq. mi.)`                     &lt;int&gt; 647500, 28748, 2381740, 1...
+## $ `Pop. Density (per sq. mi.)`         &lt;chr&gt; &quot;48,0&quot;, &quot;124,6&quot;, &quot;13,8&quot;, ...
+## $ `Coastline (coast/area ratio)`       &lt;chr&gt; &quot;0,00&quot;, &quot;1,26&quot;, &quot;0,04&quot;, &quot;...
+## $ `Net migration`                      &lt;chr&gt; &quot;23,06&quot;, &quot;-4,93&quot;, &quot;-0,39&quot;...
+## $ `Infant mortality (per 1000 births)` &lt;dbl&gt; 16307, 2152, 31, 927, 405...
+## $ `GDP ($ per capita)`                 &lt;int&gt; 700, 4500, 6000, 8000, 19...
+## $ `Literacy (%)`                       &lt;dbl&gt; 360, 865, 700, 970, 1000,...
+## $ `Phones (per 1000)`                  &lt;chr&gt; &quot;3,2&quot;, &quot;71,2&quot;, &quot;78,1&quot;, &quot;2...
+## $ `Arable (%)`                         &lt;chr&gt; &quot;12,13&quot;, &quot;21,09&quot;, &quot;3,22&quot;,...
+## $ `Crops (%)`                          &lt;chr&gt; &quot;0,22&quot;, &quot;4,42&quot;, &quot;0,25&quot;, &quot;...
+## $ `Other (%)`                          &lt;dbl&gt; 8765, 7449, 9653, 75, 977...
+## $ Climate                              &lt;dbl&gt; 1, 3, 1, 2, 3, NA, 2, 2, ...
+## $ Birthrate                            &lt;dbl&gt; 466, 1511, 1714, 2246, 87...
+## $ Deathrate                            &lt;dbl&gt; 2034, 522, 461, 327, 625,...
+## $ Agriculture                          &lt;chr&gt; &quot;0,38&quot;, &quot;0,232&quot;, &quot;0,101&quot;,...
+## $ Industry                             &lt;chr&gt; &quot;0,24&quot;, &quot;0,188&quot;, &quot;0,6&quot;, N...
+## $ Service                              &lt;chr&gt; &quot;0,38&quot;, &quot;0,579&quot;, &quot;0,298&quot;,...</code></pre>
+</div>
+<div id="haufigkeitstabellen" class="section level1">
+<h1>2 Häufigkeitstabellen</h1>
+<p>Häufigkeitstabellen sind eine gute Darstellungsform, um einen ersten Eindruck von der Verteilung der zu beschreibenden Variablen zu bekommen. Man unterscheidet zwischen absoluten und relativen Häufigkeiten. Die absolute Häufigkeit bezeichnet die Anzahl der Ausprägung, beispielsweise 4 Männer und 6 Frauen. Die relative Häufigkeit dagegen beschreibt den Anteil der jeweiligen Ausprägung an der gesamten Stichprobe, zum Beispiel 40% Männer und 60% Frauen.</p>
+<div id="absolute-haufigkeiten" class="section level2">
+<h2>2.1 Absolute Häufigkeiten</h2>
+<p>Wir möchten uns die absoluten Häufigkeiten der Variable <code>Region</code> ausgeben lassen. Wie wir mittels dem Befehl <em>glimpse</em> sehen können, beinhaltet der Datensatz <em>countries of the world</em> verschiedene Informationen über diverse Länder. Unter der Variable <code>Region</code> sind mehrere Ländern nach “Region” zusammengefasst.</p>
+<p>Eine Tabelle mit den absoluten Häufigkeiten kann mit der <em>table</em> Funktion angefordert werden:</p>
+<pre class="r"><code>table(world$Region)</code></pre>
+<pre><code>## 
+## ASIA (EX. NEAR EAST)              BALTICS  C.W. OF IND. STATES 
+##                   28                    3                   12 
+##       EASTERN EUROPE  LATIN AMER. &amp; CARIB            NEAR EAST 
+##                   12                   45                   16 
+##      NORTHERN AFRICA     NORTHERN AMERICA              OCEANIA 
+##                    6                    5                   21 
+##   SUB-SAHARAN AFRICA       WESTERN EUROPE 
+##                   51                   28</code></pre>
+<p>Wir sehen, dass die Länder in 11 unterschiedliche Regionen aufgeteilt sind. Die Ergebnisse kann man sich auch sortiert nach aufsteigend oder absteigend ausgeben lassen:</p>
+<pre class="r"><code>sort(table(world$Region))</code></pre>
+<pre><code>## 
+##              BALTICS     NORTHERN AMERICA      NORTHERN AFRICA 
+##                    3                    5                    6 
+##  C.W. OF IND. STATES       EASTERN EUROPE            NEAR EAST 
+##                   12                   12                   16 
+##              OCEANIA ASIA (EX. NEAR EAST)       WESTERN EUROPE 
+##                   21                   28                   28 
+##  LATIN AMER. &amp; CARIB   SUB-SAHARAN AFRICA 
+##                   45                   51</code></pre>
+<pre class="r"><code>sort(table(world$Region), decreasing=TRUE)</code></pre>
+<pre><code>## 
+##   SUB-SAHARAN AFRICA  LATIN AMER. &amp; CARIB ASIA (EX. NEAR EAST) 
+##                   51                   45                   28 
+##       WESTERN EUROPE              OCEANIA            NEAR EAST 
+##                   28                   21                   16 
+##  C.W. OF IND. STATES       EASTERN EUROPE      NORTHERN AFRICA 
+##                   12                   12                    6 
+##     NORTHERN AMERICA              BALTICS 
+##                    5                    3</code></pre>
+</div>
+<div id="relative-haufigkeiten" class="section level2">
+<h2>2.2 Relative Häufigkeiten</h2>
+<p>Die relativen Häufigkeiten können mit der <em>prop.table</em> Funktion angefordert werden:</p>
+<pre class="r"><code>prop.table(table(world$Region))</code></pre>
+<pre><code>## 
+## ASIA (EX. NEAR EAST)              BALTICS  C.W. OF IND. STATES 
+##           0.12334802           0.01321586           0.05286344 
+##       EASTERN EUROPE  LATIN AMER. &amp; CARIB            NEAR EAST 
+##           0.05286344           0.19823789           0.07048458 
+##      NORTHERN AFRICA     NORTHERN AMERICA              OCEANIA 
+##           0.02643172           0.02202643           0.09251101 
+##   SUB-SAHARAN AFRICA       WESTERN EUROPE 
+##           0.22466960           0.12334802</code></pre>
+<p>Möchten wir dieses Ergebnis in Prozent ausgegeben haben, müssen wir den Befehl mit 100 multiplizieren:</p>
+<pre class="r"><code>100*prop.table(table(world$Region))</code></pre>
+<pre><code>## 
+## ASIA (EX. NEAR EAST)              BALTICS  C.W. OF IND. STATES 
+##            12.334802             1.321586             5.286344 
+##       EASTERN EUROPE  LATIN AMER. &amp; CARIB            NEAR EAST 
+##             5.286344            19.823789             7.048458 
+##      NORTHERN AFRICA     NORTHERN AMERICA              OCEANIA 
+##             2.643172             2.202643             9.251101 
+##   SUB-SAHARAN AFRICA       WESTERN EUROPE 
+##            22.466960            12.334802</code></pre>
+<p>Zur Besseren Übersicht, kann man sich das Ergebnis auch gerundet ausgeben lassen. Dies geht mit dem Befehl <em>round</em>, wobei die Ziffer am Ende der Syntax die Anzahl der Nachkommastellen angibt.</p>
+<pre class="r"><code>round(100*prop.table(table(world$Region)), 2)</code></pre>
+<pre><code>## 
+## ASIA (EX. NEAR EAST)              BALTICS  C.W. OF IND. STATES 
+##                12.33                 1.32                 5.29 
+##       EASTERN EUROPE  LATIN AMER. &amp; CARIB            NEAR EAST 
+##                 5.29                19.82                 7.05 
+##      NORTHERN AFRICA     NORTHERN AMERICA              OCEANIA 
+##                 2.64                 2.20                 9.25 
+##   SUB-SAHARAN AFRICA       WESTERN EUROPE 
+##                22.47                12.33</code></pre>
+</div>
+<div id="kumulierte-haufigkeiten" class="section level2">
+<h2>2.3 Kumulierte Häufigkeiten</h2>
+<p>Zusätzlich zu den absoluten und relativen Häufigkeiten, kann man sich auch noch die kumulierten Häufigkeiten ausgeben lassen. Dabei wird die relative Häufigkeit zu den vorangegangenen relativen Häufigkeiten hinzu addiert.</p>
+<p>Zur besseren Veranschaulichung werden die relativen Häufigkeiten der Regionen aufsteigend sortiert und auf zwei Nachkommastellen gerundet:</p>
+<pre class="r"><code>sort(round(100*prop.table(table(world$Region)), 2))</code></pre>
+<pre><code>## 
+##              BALTICS     NORTHERN AMERICA      NORTHERN AFRICA 
+##                 1.32                 2.20                 2.64 
+##  C.W. OF IND. STATES       EASTERN EUROPE            NEAR EAST 
+##                 5.29                 5.29                 7.05 
+##              OCEANIA ASIA (EX. NEAR EAST)       WESTERN EUROPE 
+##                 9.25                12.33                12.33 
+##  LATIN AMER. &amp; CARIB   SUB-SAHARAN AFRICA 
+##                19.82                22.47</code></pre>
+<p>Mit dem Befehl <em>cumsum</em> können wir nun die kumulierten Häufigkeiten anfordern:</p>
+<pre class="r"><code>cumsum(sort(round(100*prop.table(table(world$Region)), 2)))</code></pre>
+<pre><code>##              BALTICS     NORTHERN AMERICA      NORTHERN AFRICA 
+##                 1.32                 3.52                 6.16 
+##  C.W. OF IND. STATES       EASTERN EUROPE            NEAR EAST 
+##                11.45                16.74                23.79 
+##              OCEANIA ASIA (EX. NEAR EAST)       WESTERN EUROPE 
+##                33.04                45.37                57.70 
+##  LATIN AMER. &amp; CARIB   SUB-SAHARAN AFRICA 
+##                77.52                99.99</code></pre>
+<p>Wir sehen, dass die “Baltics” Region mit 1,32% bei der kumulierten Ausgabe zu den 2,20% der “Northern America” Region hinzu addiert wurde. Das Ergebnis von 3,52% unter “Northern America” sagt nun aus, dass “Baltics” und “Northern America” zusammen einen Anteil von 3,52% an der Stichprobe ausmachen.</p>
+</div>
+<div id="integration-der-haufigkeiten-in-einer-tabelle" class="section level2">
+<h2>2.4 Integration der Häufigkeiten in einer Tabelle</h2>
+<p>Die vier verschiedenen Arten von Häufigkeiten (absolute, relative, prozentuale und kumulierte) können auch gemeinsam in einer Tabelle ausgegeben werden. Allerdings muss man hierfür mehrere Befehle ausführen:</p>
+<pre class="r"><code>absolut &lt;- table(world$Region)
+relativ &lt;- prop.table(absolut)
+prozent &lt;- 100*relativ
+kumuliert &lt;- cumsum(prozent)
+haeufigkeiten &lt;- cbind(absolut, relativ, prozent, kumuliert)
+
+round(haeufigkeiten, 2)</code></pre>
+<pre><code>##                      absolut relativ prozent kumuliert
+## ASIA (EX. NEAR EAST)      28    0.12   12.33     12.33
+## BALTICS                    3    0.01    1.32     13.66
+## C.W. OF IND. STATES       12    0.05    5.29     18.94
+## EASTERN EUROPE            12    0.05    5.29     24.23
+## LATIN AMER. &amp; CARIB       45    0.20   19.82     44.05
+## NEAR EAST                 16    0.07    7.05     51.10
+## NORTHERN AFRICA            6    0.03    2.64     53.74
+## NORTHERN AMERICA           5    0.02    2.20     55.95
+## OCEANIA                   21    0.09    9.25     65.20
+## SUB-SAHARAN AFRICA        51    0.22   22.47     87.67
+## WESTERN EUROPE            28    0.12   12.33    100.00</code></pre>
+</div>
+</div>
+<div id="beschreibung-nominaldaten" class="section level1">
+<h1>3 Beschreibung Nominaldaten</h1>
+<p>Von Nominaldaten wird gesprochen, wenn mögliche Ausprägungen zwar unterschieden werden können, aber diese keine natürliche Rangfolge aufweisen.</p>
+<div id="modalwert" class="section level2">
+<h2>3.1 Modalwert</h2>
+<p>Der Modalwert, auch Modus genannt, ist definiert als der häufigste Wert, der in der Stichprobe vorkommt. Dieser kann entweder einer absoluten Häufigkeitstabelle entnommen werden oder mit der <em>which.max</em> Funktion angefordert werden:</p>
+<pre class="r"><code>table(world$Region)</code></pre>
+<pre><code>## 
+## ASIA (EX. NEAR EAST)              BALTICS  C.W. OF IND. STATES 
+##                   28                    3                   12 
+##       EASTERN EUROPE  LATIN AMER. &amp; CARIB            NEAR EAST 
+##                   12                   45                   16 
+##      NORTHERN AFRICA     NORTHERN AMERICA              OCEANIA 
+##                    6                    5                   21 
+##   SUB-SAHARAN AFRICA       WESTERN EUROPE 
+##                   51                   28</code></pre>
+<pre class="r"><code>which.max(table(world$Region))</code></pre>
+<pre><code>## SUB-SAHARAN AFRICA 
+##                 10</code></pre>
+<p>Ergänzend zu der <em>which.max</em> Funktion, kann man mit der <em>max</em> Funktion die absolute Häufigkeit sich ausgeben lassen:</p>
+<pre class="r"><code>max(table(world$Region))</code></pre>
+<pre><code>## [1] 51</code></pre>
+</div>
+<div id="relativer-informationsgehalt" class="section level2">
+<h2>3.2 Relativer Informationsgehalt</h2>
+<p>Ein gutes Streuungsmaß für Nominaldaten ist der relative Informationsgehalt. Dieser sagt aus, wie sehr sich die Personen auf eine der möglichen Kategorien konzentrieren. Der Wertebereich des relativen Informationsgehalt reicht von Null bis Eins. Null bedeutet, dass alle Peronen nur eine mögliche Antwortkategorie gewählt haben. Die Stichprobe ist daher sehr homogen. Eins bedeutet, dass alle Antwortkategorien gleich häufig gewählt wurden und die Stichprobe daher sehr heterogen ist. Für die Berechnung des relativen Informationsgehalts sind mehrer Schritte notwendig:</p>
+<p>Als erstes wird eine relative Häufigkeitstabelle der zu untersuchenden Variablen in ein separates Objekt gespeichert (hier: “relhaeufig”).</p>
+<pre class="r"><code>relhaeufig &lt;- prop.table(table(world$Region))</code></pre>
+<p>Anschließend wird jeder Wert aus der Tabelle mit seinem logarithmierten Wert multipliziert.</p>
+<pre class="r"><code>logarithm &lt;- relhaeufig*log(relhaeufig)</code></pre>
+<p>Nun werden die 11 Werte (wg 11 Regionen/Antwortmöglichkeiten) zusammen addiert.</p>
+<pre class="r"><code>Summe &lt;- sum(logarithm)</code></pre>
+<p>Als vorletzen Schritt müssen die Anzahl der Antwortkategorien (hier unsere 11 Regionen) logarithmiert werden und von diesem Wert muss der negative Kehrwert gebildet werden.</p>
+<pre class="r"><code>Kehrwert &lt;- -1/log(11)</code></pre>
+<p>Um den relativen Informationsgehalt zu bekommen muss im letzten Schritt die gebildete Summe mit dem Kehrwert multipliziert werden.</p>
+<pre class="r"><code>Summe*Kehrwert</code></pre>
+<pre><code>## [1] 0.8873596</code></pre>
+<p>Diese fünf Schritte können auch in einem Befehl zusammen gefasst werden:</p>
+<pre class="r"><code>(-1/log(11)) * sum(prop.table(table(world$Region)) * log(prop.table(table(world$Region))))</code></pre>
+<pre><code>## [1] 0.8873596</code></pre>
+<p>Der Wert von .89 zeigt uns, dass die Variable <code>Region</code> sehr heterogen gewählt wurde. Dies ist in unserem Beispiel nicht verwunderlich, da die Regionen zwar unterschiedlich viele Länder beinhalten aber die Länder dennoch über alle Regionen verteilt liegen.</p>
+</div>
+</div>
+<div id="beschreibung-ordinaldaten" class="section level1">
+<h1>4 Beschreibung Ordinaldaten</h1>
+<p>Ordinal skalierte Daten können entgegen Nominaldaten in eine natürliche Reihenfolge gebracht werden. Allerdings sind die Abstände zwischen den einzelnen Werten nicht quantifizierbar. Natürlich könnten wir wieder den Modalwert und den relativen Informationsgehalt ausrechnen, allerdings steigt mit dem informationsgehalts des Skalenniveaus auch die statistischen Möglichkeiten, welche für Nominaldaten nicht zugelassen sind.</p>
+<div id="prozentrange" class="section level2">
+<h2>4.1 Prozentränge</h2>
+</div>
+</div>
