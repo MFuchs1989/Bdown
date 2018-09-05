@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Bivariate descriptive statistics - Michael Fuchs</title>
+<meta property="og:title" content="Bivariate descriptive statistics - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">11 min read</span>
+    
+
+    <h1 class="article-title">Bivariate descriptive statistics</h1>
+
+    
+    <span class="article-date">2018/09/04</span>
+    
+
+    <div class="article-content">
+      <div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Contingency table</li>
+<li>2.1 Absolute Frequency</li>
+<li>2.2 Relative Frequency</li>
+<li>2.3 Multidimensional contingency tables</li>
+<li>3.1 Pearsons correlation</li>
+<li>3.2 Covariance</li>
+<li>4 Correlations for non-metric variables</li>
+<li>4.1 metric - ordinal</li>
+<li>4.2 ordinal - ordinal</li>
+<li>5 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Aufbauend auf dem vorangegangenen Post <a href="https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/">“Univariate descriptive statistics”</a> wird im folgenden Beitrag die gleichzeitige Betrachtung von zwei Variablen thematisiert. Für diesen Post werde die Datensätze <em>insurance</em> und <em>Automobile_data</em> von der Statsistik Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie der Datensätze ist unter <a href="https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e" class="uri">https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e</a> (insurance) und <a href="https://drive.google.com/open?id=103HRmDLEkGnIizFzIlpErv1uYHiw1DmT" class="uri">https://drive.google.com/open?id=103HRmDLEkGnIizFzIlpErv1uYHiw1DmT</a> (Automobile_data) abrufbar.</p>
+<pre class="r"><code>library(&quot;tidyverse&quot;)
+library(&quot;psych&quot;)</code></pre>
+<pre class="r"><code>insurance &lt;- read_csv(&quot;insurance.csv&quot;)
+Automobile_data &lt;- read_csv(&quot;Automobile_data.csv&quot;)</code></pre>
+</div>
+<div id="contingency-table" class="section level1">
+<h1>2 Contingency table</h1>
+<p>In Kontingenztabellen wird die Häufigkeit für jede mögliche Kombination mehrerer Variablen angegeben. Im nachfolgenden werden absolute und relative Häufigkeiten sowie mehrdimensionale Kontingenztabellen anhand des Datensatzes <em>insurance</em> vorgestellt.</p>
+<pre class="r"><code>glimpse(insurance)</code></pre>
+<pre><code>## Observations: 1,338
+## Variables: 7
+## $ age      &lt;int&gt; 19, 18, 28, 33, 32, 31, 46, 37, 37, 60, 25, 62, 23, 5...
+## $ sex      &lt;chr&gt; &quot;female&quot;, &quot;male&quot;, &quot;male&quot;, &quot;male&quot;, &quot;male&quot;, &quot;female&quot;, &quot;...
+## $ bmi      &lt;dbl&gt; 27.900, 33.770, 33.000, 22.705, 28.880, 25.740, 33.44...
+## $ children &lt;int&gt; 0, 1, 3, 0, 0, 0, 1, 3, 2, 0, 0, 0, 0, 0, 0, 1, 1, 0,...
+## $ smoker   &lt;chr&gt; &quot;yes&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;...
+## $ region   &lt;chr&gt; &quot;southwest&quot;, &quot;southeast&quot;, &quot;southeast&quot;, &quot;northwest&quot;, &quot;...
+## $ charges  &lt;dbl&gt; 16884.924, 1725.552, 4449.462, 21984.471, 3866.855, 3...</code></pre>
+<div id="absolute-frequency" class="section level2">
+<h2>2.1 Absolute Frequency</h2>
+<p>Eindimensionale absolute Häufigkeitstabellen wurden bereits im Post <a href="https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/">“Univariate descriptive statistics”</a> unter Punkt 2.1 beschrieben. Die <em>table</em> Funktion kann allerdings auch auf zwei Variablen angewandt werden.</p>
+<pre class="r"><code>table(insurance$smoker, insurance$sex)</code></pre>
+<pre><code>##      
+##       female male
+##   no     547  517
+##   yes    115  159</code></pre>
+<p>Wir sehen die absoluten Häufigkeiten für Raucher / Nichtraucher aufgeteilt nach Geschlecht. Darüber hinaus kann man in R mit dem Befehl <em>addmargins</em> die Zeilen- und Spaltensummen sowie die Gesamthäufigkeit anfordern.</p>
+<pre class="r"><code>addmargins(table(insurance$smoker, insurance$sex))</code></pre>
+<pre><code>##      
+##       female male  Sum
+##   no     547  517 1064
+##   yes    115  159  274
+##   Sum    662  676 1338</code></pre>
+</div>
+<div id="relative-frequency" class="section level2">
+<h2>2.2 Relative Frequency</h2>
+<p>Im Gegensatz zu Häufigkeitstabellen (<a href="https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/">“Univariate descriptive statistics”</a> Abschnitt 2.2) kommt bei Kontingenztabellen noch eine Besonderheit hinzu. Je nachdem, welchen Wert man als Referenz nimmt, hat man die Auswahl zwischen mehreren verschiedenen relativen Häufigkeiten: + Gesamthäufigkeit + Zeilensumme + Spaltensumme</p>
+<p><strong>Relative Häufigkeiten in Bezug zur Gesamthäufigkeit</strong></p>
+<p>Diese erhählt man wie gewohnt mit der <em>prop.table</em> Funktion.</p>
+<pre class="r"><code>prop.table(table(insurance$smoker, insurance$sex))</code></pre>
+<pre><code>##      
+##           female       male
+##   no  0.40881913 0.38639761
+##   yes 0.08594918 0.11883408</code></pre>
+<p>Die relative Zeilen- uns Spaltenhäufigkeit sowie die relative Gesamthäufigkeit erhält man mit dem Befehl <em>addmargins</em>.</p>
+<pre class="r"><code>addmargins(prop.table(table(insurance$smoker, insurance$sex)))</code></pre>
+<pre><code>##      
+##           female       male        Sum
+##   no  0.40881913 0.38639761 0.79521674
+##   yes 0.08594918 0.11883408 0.20478326
+##   Sum 0.49476831 0.50523169 1.00000000</code></pre>
+<p><strong>Relative Häufigkeiten in Bezug zur Zeilensumme</strong></p>
+<p>Um den Bezug zur Zeilensummer anzufordern, wird der Befehl um das Argument 1 erweitert.</p>
+<pre class="r"><code>prop.table(table(insurance$smoker, insurance$sex), 1)</code></pre>
+<pre><code>##      
+##          female      male
+##   no  0.5140977 0.4859023
+##   yes 0.4197080 0.5802920</code></pre>
+<p><strong>Relative Häufigkeiten in Bezug zur Spaltensumme</strong></p>
+<p>Für den Bezug zur Spaltensumme, muss der Befehl mit dem Zusatzargument 2 ergänzt werden.</p>
+<pre class="r"><code>prop.table(table(insurance$smoker, insurance$sex), 2)</code></pre>
+<pre><code>##      
+##          female      male
+##   no  0.8262840 0.7647929
+##   yes 0.1737160 0.2352071</code></pre>
+</div>
+<div id="multidimensional-contingency-tables" class="section level2">
+<h2>2.3 Multidimensional contingency tables</h2>
+<p>In R besteht auch die Möglichkeit, drei oder mehr Variablen in Kontingenztabellen miteinander zu kombinieren. In der Regel teilt R mehrdimensionale Kontingenztabellen in mehrere zweidimensionale Tabellen auf.</p>
+<pre class="r"><code>table(insurance$smoker, insurance$region, insurance$sex)</code></pre>
+<pre><code>## , ,  = female
+## 
+##      
+##       northeast northwest southeast southwest
+##   no        132       135       139       141
+##   yes        29        29        36        21
+## 
+## , ,  = male
+## 
+##      
+##       northeast northwest southeast southwest
+##   no        125       132       134       126
+##   yes        38        29        55        37</code></pre>
+</div>
+</div>
+<div id="correlations-for-metric-variables" class="section level1">
+<h1>3 Correlations for metric variables</h1>
+<p>Der Zusammenhang zwischen metrischen Variablen kann über die Produkt-Moment-Korrelation (Pearson) oder über die Kovarianz bestimmt werden. Die nachfolgenden Befehle beziehen sich auf die Variablen aus dem Datensatz <em>Automobile_data</em>.</p>
+<pre class="r"><code>glimpse(Automobile_data)</code></pre>
+<pre><code>## Observations: 205
+## Variables: 26
+## $ symboling           &lt;int&gt; 3, 3, 1, 2, 2, 2, 1, 1, 1, 0, 2, 0, 0, 0, ...
+## $ `normalized-losses` &lt;chr&gt; &quot;?&quot;, &quot;?&quot;, &quot;?&quot;, &quot;164&quot;, &quot;164&quot;, &quot;?&quot;, &quot;158&quot;, &quot;...
+## $ make                &lt;chr&gt; &quot;alfa-romero&quot;, &quot;alfa-romero&quot;, &quot;alfa-romero...
+## $ `fuel-type`         &lt;chr&gt; &quot;gas&quot;, &quot;gas&quot;, &quot;gas&quot;, &quot;gas&quot;, &quot;gas&quot;, &quot;gas&quot;, ...
+## $ aspiration          &lt;chr&gt; &quot;std&quot;, &quot;std&quot;, &quot;std&quot;, &quot;std&quot;, &quot;std&quot;, &quot;std&quot;, ...
+## $ `num-of-doors`      &lt;chr&gt; &quot;two&quot;, &quot;two&quot;, &quot;two&quot;, &quot;four&quot;, &quot;four&quot;, &quot;two&quot;...
+## $ `body-style`        &lt;chr&gt; &quot;convertible&quot;, &quot;convertible&quot;, &quot;hatchback&quot;,...
+## $ `drive-wheels`      &lt;chr&gt; &quot;rwd&quot;, &quot;rwd&quot;, &quot;rwd&quot;, &quot;fwd&quot;, &quot;4wd&quot;, &quot;fwd&quot;, ...
+## $ `engine-location`   &lt;chr&gt; &quot;front&quot;, &quot;front&quot;, &quot;front&quot;, &quot;front&quot;, &quot;front...
+## $ `wheel-base`        &lt;dbl&gt; 88.6, 88.6, 94.5, 99.8, 99.4, 99.8, 105.8,...
+## $ length              &lt;dbl&gt; 168.8, 168.8, 171.2, 176.6, 176.6, 177.3, ...
+## $ width               &lt;dbl&gt; 64.1, 64.1, 65.5, 66.2, 66.4, 66.3, 71.4, ...
+## $ height              &lt;dbl&gt; 48.8, 48.8, 52.4, 54.3, 54.3, 53.1, 55.7, ...
+## $ `curb-weight`       &lt;int&gt; 2548, 2548, 2823, 2337, 2824, 2507, 2844, ...
+## $ `engine-type`       &lt;chr&gt; &quot;dohc&quot;, &quot;dohc&quot;, &quot;ohcv&quot;, &quot;ohc&quot;, &quot;ohc&quot;, &quot;ohc...
+## $ `num-of-cylinders`  &lt;chr&gt; &quot;four&quot;, &quot;four&quot;, &quot;six&quot;, &quot;four&quot;, &quot;five&quot;, &quot;fi...
+## $ `engine-size`       &lt;int&gt; 130, 130, 152, 109, 136, 136, 136, 136, 13...
+## $ `fuel-system`       &lt;chr&gt; &quot;mpfi&quot;, &quot;mpfi&quot;, &quot;mpfi&quot;, &quot;mpfi&quot;, &quot;mpfi&quot;, &quot;m...
+## $ bore                &lt;chr&gt; &quot;3.47&quot;, &quot;3.47&quot;, &quot;2.68&quot;, &quot;3.19&quot;, &quot;3.19&quot;, &quot;3...
+## $ stroke              &lt;chr&gt; &quot;2.68&quot;, &quot;2.68&quot;, &quot;3.47&quot;, &quot;3.4&quot;, &quot;3.4&quot;, &quot;3.4...
+## $ `compression-ratio` &lt;dbl&gt; 9.00, 9.00, 9.00, 10.00, 8.00, 8.50, 8.50,...
+## $ horsepower          &lt;chr&gt; &quot;111&quot;, &quot;111&quot;, &quot;154&quot;, &quot;102&quot;, &quot;115&quot;, &quot;110&quot;, ...
+## $ `peak-rpm`          &lt;chr&gt; &quot;5000&quot;, &quot;5000&quot;, &quot;5000&quot;, &quot;5500&quot;, &quot;5500&quot;, &quot;5...
+## $ `city-mpg`          &lt;int&gt; 21, 21, 19, 24, 18, 19, 19, 19, 17, 16, 23...
+## $ `highway-mpg`       &lt;int&gt; 27, 27, 26, 30, 22, 25, 25, 25, 20, 22, 29...
+## $ price               &lt;chr&gt; &quot;13495&quot;, &quot;16500&quot;, &quot;16500&quot;, &quot;13950&quot;, &quot;17450...</code></pre>
+<div id="pearsons-correlation" class="section level2">
+<h2>3.1 Pearsons correlation</h2>
+<p>Im folgenden Abschnitt sollen drei Möglichkeiten, die Pearson Korrelation anzufordern, vorgestellt werden:</p>
+<ul>
+<li>cor - Funktion</li>
+<li>cor.test - Funktion</li>
+<li>corr.test - Funktion</li>
+</ul>
+<p><strong>cor-Funktion</strong></p>
+<p>Die Korrelation zwischen zwei oder mehreren Variablen wird mit der <em>cor</em> Funktion angefordert. In unserem Beispieldatensatz werden dafür die beiden Variablen <code>horsepower</code> und <code>price</code> in metrische Variablen umgewandelt (warum auch immer waren sie als character abgespeichert) und mit der Variablen ´curb-weight´ in den neuen data.frame “Korrelation” abgespeichert. Darauf wird nun die <em>cor</em> Funktion angewandt.</p>
+<pre class="r"><code>Automobile_data$Power &lt;- as.numeric(Automobile_data$horsepower)</code></pre>
+<pre><code>## Warning: NAs durch Umwandlung erzeugt</code></pre>
+<pre class="r"><code>Automobile_data$Car_Price &lt;- as.numeric(Automobile_data$price)</code></pre>
+<pre><code>## Warning: NAs durch Umwandlung erzeugt</code></pre>
+<pre class="r"><code>Korrelation &lt;- data.frame(Automobile_data$Power, Automobile_data$Car_Price, Automobile_data$`curb-weight`)
+cor(Korrelation)</code></pre>
+<pre><code>##                               Automobile_data.Power
+## Automobile_data.Power                             1
+## Automobile_data.Car_Price                        NA
+## Automobile_data..curb.weight.                    NA
+##                               Automobile_data.Car_Price
+## Automobile_data.Power                                NA
+## Automobile_data.Car_Price                             1
+## Automobile_data..curb.weight.                        NA
+##                               Automobile_data..curb.weight.
+## Automobile_data.Power                                    NA
+## Automobile_data.Car_Price                                NA
+## Automobile_data..curb.weight.                             1</code></pre>
+<p>Das Ergebnis ist erstmal unübersichtlich, da die Spaltennamen zu lang ausgegeben werden. Wir benennen sie daher, während der data.frame Zuweisung um.</p>
+<pre class="r"><code>Korrelation2 &lt;- data.frame(Power = Automobile_data$Power, Price = Automobile_data$Car_Price, Weight = Automobile_data$`curb-weight`)
+cor(Korrelation2)</code></pre>
+<pre><code>##        Power Price Weight
+## Power      1    NA     NA
+## Price     NA     1     NA
+## Weight    NA    NA      1</code></pre>
+<p>Schon viel besser. Aber nun besteht das Problem mit den NA’s noch. Natürlich könnte man mit der <em>na.omit</em> Funktion alle leere Spalten löschen aber dabei würde man evtl. wichtige Werte verlieren.<br />
+Bei der <em>cor</em> Funktion kann man stattdessen die beiden Zusatzargumente <em>use=“pairwise”</em> und <em>use=“complete”</em> verwenden.</p>
+<p>Bei dem <em>use=“pairwise”</em> Argument werden alle Fälle für jede bivariate Korrelation verwendet, die gültige Werte auf diesen Variablen haben. Dies geschieht unabhängig davon, ob sie auf den anderen Variablen in der Korrelationsmatrix fehlende Werte haben. Bei dem <em>use=“complete”</em> Argument werden nur die Fälle berücksichtigt, die auf allen in der Korrelationsmatrix enthaltene variablen gültige Werte haben.</p>
+<p>In unserem Beispiel verwenden wir die complete-Variante.</p>
+<pre class="r"><code>cor(Korrelation2, use = &quot;complete&quot;)</code></pre>
+<pre><code>##            Power     Price    Weight
+## Power  1.0000000 0.8105331 0.7580625
+## Price  0.8105331 1.0000000 0.8350904
+## Weight 0.7580625 0.8350904 1.0000000</code></pre>
+<p>Bei den Zusammenhangsmaßen in den Sozialwissenschaften gelten folgende Faustregeln: + r=1 –&gt; perfekter Zusammenhang + 0,7 &lt; r &lt; 0,99 –&gt; sehr starker Zusammenhang + 0,5 &lt; r &lt; 0,69 –&gt; starker Zusammenhang + 0,3 &lt; r &lt; 0,59 –&gt; mittelstarker Zusammenhang + 0,2 &lt; r &lt; 0,29 –&gt; schwacher Zusammenhang + r &lt;= 0,19 –&gt; kein Zusammenhang</p>
+<p>Zusammenhangsmaße lassen sich auch prima plotten.</p>
+<pre class="r"><code>plot(Korrelation2)</code></pre>
+<p><img src="/post/2018-09-04-bivariate-descriptive-statistics_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><strong>corr.test-Funktion</strong></p>
+<p>Als Ergänzung zu der <em>cor</em> Funktion kann die <em>corr.test</em> Funktion angefordert werden. Mit ihr erhalten wir weitere statistische Angaben.</p>
+<pre class="r"><code>corr.test(Korrelation2)</code></pre>
+<pre><code>## Call:corr.test(x = Korrelation2)
+## Correlation matrix 
+##        Power Price Weight
+## Power   1.00  0.81   0.75
+## Price   0.81  1.00   0.83
+## Weight  0.75  0.83   1.00
+## Sample Size 
+##        Power Price Weight
+## Power    203   199    203
+## Price    199   201    201
+## Weight   203   201    205
+## Probability values (Entries above the diagonal are adjusted for multiple tests.) 
+##        Power Price Weight
+## Power      0     0      0
+## Price      0     0      0
+## Weight     0     0      0
+## 
+##  To see confidence intervals of the correlations, print with the short=FALSE option</code></pre>
+<p>Die Ausgabe besteht aus drei Teilen:</p>
+<ul>
+<li>Die Korrelationskoeffizienten für alle bivariaten Variablenkombinationen.</li>
+<li>Die Anzahl der Fälle, die in die Berechnung eingeflossen sind.</li>
+<li>Der p-Wert für den jeweiligen Korrelationskoeffizienten.</li>
+</ul>
+<p>Ergänzend zum letzten Punkt: die p-Werte unterhalb der Diagonalen beruhen auf den normalen bivariaten Tests. Bei den p-Werten oberhalb der Diagonalen wurde eine Korrektur für multiple Tests durchgeführt. Die p-Werte oberhalb der Diagonalen sind daher immer größer als die p-Werte unterhalb der Diagonalen. Deutlich wird dies, wenn man die p-Werte des corr.tests explizit anfordert.</p>
+<pre class="r"><code>corr.test(Korrelation2)$p</code></pre>
+<pre><code>##               Power        Price       Weight
+## Power  0.000000e+00 2.378256e-47 4.321574e-38
+## Price  1.189128e-47 0.000000e+00 6.568732e-53
+## Weight 4.321574e-38 2.189577e-53 0.000000e+00</code></pre>
+<p>Diese Funktion kann man auch für anderweitige statistische Kennwerte anwenden:</p>
+<ul>
+<li>$p = p-Werte</li>
+<li>$t = t-Werte</li>
+<li>$se = Standardfehler</li>
+<li>$ci = Konfidenzintervalle</li>
+</ul>
+<p><strong>cor.test-Funktion</strong></p>
+<p>Die <em>cor.test</em> Funktion hat gegenüber der <em>corr.test</em> Funktion einen entscheidenden Vorteil. Mit ihr kann man auch gerichtete Hypothesen testen. Ein Nachteil ist jedoch, dass man die <em>cor.test Funktion</em> nur zwei Variablen anwenden kann.</p>
+<pre class="r"><code>cor.test(Automobile_data$Power, Automobile_data$Car_Price)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  Automobile_data$Power and Automobile_data$Car_Price
+## t = 19.424, df = 197, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.7567577 0.8534119
+## sample estimates:
+##       cor 
+## 0.8105331</code></pre>
+<p>An dem Satz “alternative hypothesis: true correlation is not equal to 0” erkennt man, dass in dem vorliegenden Beispiel überprüft wurde, ob der Korrelationskoeffizient ungleich Null ist. Mit den Zusatzargumenten <em>alternative=“less”</em> und <em>alternative=“greater”</em> kann geprüft werden (gerichtete Hypothesen), ob die Korrelation kleiner Null (less) ist oder in Variante 2 größer Null (greater) ist.</p>
+<pre class="r"><code>cor.test(Automobile_data$Power, Automobile_data$Car_Price, alternative = &quot;greater&quot;)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  Automobile_data$Power and Automobile_data$Car_Price
+## t = 19.424, df = 197, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is greater than 0
+## 95 percent confidence interval:
+##  0.7662131 1.0000000
+## sample estimates:
+##       cor 
+## 0.8105331</code></pre>
+<pre class="r"><code>cor.test(Automobile_data$Power, Automobile_data$Car_Price, alternative = &quot;less&quot;)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  Automobile_data$Power and Automobile_data$Car_Price
+## t = 19.424, df = 197, p-value = 1
+## alternative hypothesis: true correlation is less than 0
+## 95 percent confidence interval:
+##  -1.0000000  0.8471781
+## sample estimates:
+##       cor 
+## 0.8105331</code></pre>
+<p>Die Stärke des Zusammenhangs (0,81) bleibt dabei gleich. Allerdings ändert sich der p-Wert (1) bei dem zweiten Test zu “nicht signifikant”, da der Zusammenhang schließlich positiv ist.</p>
+</div>
+<div id="covariance" class="section level2">
+<h2>3.2 Covariance</h2>
+<p>Die Kovarianz ist ein unstandardisiertes Zusammenhangsmaß. Im Gegenzug zur Korrelation hat sie keinen festgelegten Wertebereich.</p>
+<pre class="r"><code>cov(Automobile_data$Power, Automobile_data$Car_Price, use = &quot;complete&quot;)</code></pre>
+<pre><code>## [1] 242860.9</code></pre>
+<p>Wir erhalten im Beispiel eine positive Kovarianz. Das bedeutet, dass mit ansteigender PS Zahl der Kaufpreis des Autos ansteigt. Man kann ich auch für die Kovarinz mit einer Kombination von Variablen ausgeben lassen.</p>
+<pre class="r"><code>cov(Korrelation2, use = &quot;pairwise&quot;)</code></pre>
+<pre><code>##             Power      Price     Weight
+## Power    1577.231   242860.9   15605.57
+## Price  242860.944 63155863.4 3430270.94
+## Weight  15605.575  3430270.9  271107.87</code></pre>
+<p>So eine Matrix nennt man auch Varianz-Kovarianz Matrix, da sie sowohl die Kovarianzen der Variablenpaare als auch die Varianzen der einzelnen Variablen enthält. Die Varianzen stehen dabei in der Diagonalen. Überprüfen können wir das, wenn wir gezielt die Varianz für die Variable Power anfordern.</p>
+<pre class="r"><code>var(Automobile_data$Power, use = &quot;complete&quot;)</code></pre>
+<pre><code>## [1] 1577.231</code></pre>
+</div>
+</div>
+<div id="correlations-for-non-metric-variables" class="section level1">
+<h1>4 Correlations for non-metric variables</h1>
+<p>Die Pearson Korrelation sowie die Kovarianz dürfen nur für metrische Variablen berechnet werden, da sie auf den Mittelwerten und Varianzen der Variablen basieren. Haben wir (teilweise) ein anderes Skalenniveau, müssen wir auch andere Tests durchführen.</p>
+<div id="metric---ordinal" class="section level2">
+<h2>4.1 metric - ordinal</h2>
+<p>Möchte man eine metrische Variable und eine ordinalskalierte Variable miteinander korrelieren lassen, so muss man die Korrelation nach “Spearman” durchführen. Für ein anschauliches Beispiel, ergänzen wir den Datensatz <em>Automobile_data</em> um eine ordinalskalierte Variable <code>cylinders.numeric</code>.</p>
+<pre class="r"><code>class(Automobile_data$`num-of-cylinders`)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre class="r"><code>table(Automobile_data$`num-of-cylinders`)</code></pre>
+<pre><code>## 
+##  eight   five   four    six  three twelve    two 
+##      5     11    159     24      1      1      4</code></pre>
+<pre class="r"><code>Automobile_data$cylinders &lt;- recode(Automobile_data$`num-of-cylinders`, `two`=&quot;2&quot;, `four`=&quot;4&quot;, `six`=&quot;6&quot;, `eight`=&quot;8&quot;)
+Automobile_data$cylinders.numeric &lt;- as.numeric(Automobile_data$cylinders)</code></pre>
+<pre><code>## Warning: NAs durch Umwandlung erzeugt</code></pre>
+<pre class="r"><code>summary(Automobile_data$cylinders.numeric)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##   2.000   4.000   4.000   4.312   4.000   8.000      13</code></pre>
+<p>Mit dem Zusatzargument in der <em>cor</em> Funktion <em>method=“spearman”</em> führt man eine Korrelation nach Spearman durch.</p>
+<pre class="r"><code>cor(Automobile_data$cylinders.numeric, Automobile_data$Car_Price, use = &quot;complete&quot;, method = &quot;spearman&quot;)</code></pre>
+<pre><code>## [1] 0.4889311</code></pre>
+</div>
+<div id="ordinal---ordinal" class="section level2">
+<h2>4.2 ordinal - ordinal</h2>
+<p>Möchte man zwei ordinalskalierte Variablen miteinander korrelieren lassen, so muss man die Korrelation nach “Kenall” durchführen. Dafür kreieren wir die ordinalskalierte Variable <code>Power.grouped.num</code>.</p>
+<pre class="r"><code>Automobile_data$Power.grouped &lt;- ifelse(Automobile_data$Power &gt;= 116, &quot;3&quot;, ifelse(Automobile_data$Power &lt; 70, &quot;1&quot;, &quot;2&quot;))
+Automobile_data$Power.grouped.num &lt;- as.numeric(Automobile_data$Power.grouped)</code></pre>
+<p>Mit dem Zusatzargument <em>method=“kendall”</em> führt man nun eine Korrelation nach Kendall durch.</p>
+<pre class="r"><code>cor(Automobile_data$cylinders.numeric, Automobile_data$Power.grouped.num, use = &quot;complete&quot;, method = &quot;kendall&quot;)</code></pre>
+<pre><code>## [1] 0.46938</code></pre>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>5 Conclusion</h1>
+<p>In diesem Post wurden mehrere Möglichkeiten gezeigt, wie der Zusammenhang bivariater Variablen, je nach Skalenniveau, beschrieben werden kann.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

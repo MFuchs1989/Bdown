@@ -1,0 +1,269 @@
+---
+title: Bivariate descriptive statistics
+author: Michael Fuchs
+date: '2018-09-04'
+slug: bivariate-descriptive-statistics
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Table of Content
+
++ 1 Introduction
++ 2 Contingency table
++ 2.1 Absolute Frequency
++ 2.2 Relative Frequency
++ 2.3 Multidimensional contingency tables
++ 3.1 Pearsons correlation
++ 3.2 Covariance
++ 4 Correlations for non-metric variables
++ 4.1 metric - ordinal
++ 4.2 ordinal - ordinal
++ 5 Conclusion
+
+#1 Introduction
+Aufbauend auf dem vorangegangenen Post ["Univariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/) wird im folgenden Beitrag die gleichzeitige Betrachtung von zwei Variablen thematisiert. 
+Für diesen Post werde die Datensätze *insurance* und *Automobile_data* von der Statsistik Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie der Datensätze ist unter <https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e> (insurance) und <https://drive.google.com/open?id=103HRmDLEkGnIizFzIlpErv1uYHiw1DmT> (Automobile_data) abrufbar.
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library("tidyverse")
+library("psych")
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+insurance <- read_csv("insurance.csv")
+Automobile_data <- read_csv("Automobile_data.csv")
+```
+
+#2 Contingency table
+
+In Kontingenztabellen wird die Häufigkeit für jede mögliche Kombination mehrerer Variablen angegeben. Im nachfolgenden werden absolute und relative Häufigkeiten sowie mehrdimensionale Kontingenztabellen anhand des Datensatzes *insurance* vorgestellt.
+```{r}
+glimpse(insurance)
+```
+
+
+##2.1 Absolute Frequency
+
+Eindimensionale absolute Häufigkeitstabellen wurden bereits im Post ["Univariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/) unter Punkt 2.1 beschrieben. Die *table* Funktion kann allerdings auch auf zwei Variablen angewandt werden. 
+```{r}
+table(insurance$smoker, insurance$sex)
+```
+
+Wir sehen die absoluten Häufigkeiten für Raucher / Nichtraucher aufgeteilt nach Geschlecht.
+Darüber hinaus kann man in R mit dem Befehl *addmargins* die Zeilen- und Spaltensummen sowie die Gesamthäufigkeit anfordern.
+
+```{r}
+addmargins(table(insurance$smoker, insurance$sex))
+```
+
+##2.2 Relative Frequency
+
+Im Gegensatz zu Häufigkeitstabellen (["Univariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/) Abschnitt 2.2) kommt bei Kontingenztabellen noch eine Besonderheit hinzu. Je nachdem, welchen Wert man als Referenz nimmt, hat man die Auswahl zwischen mehreren verschiedenen relativen Häufigkeiten:
++ Gesamthäufigkeit
++ Zeilensumme 
++ Spaltensumme
+
+**Relative Häufigkeiten in Bezug zur Gesamthäufigkeit**
+
+Diese erhählt man wie gewohnt mit der *prop.table* Funktion.
+```{r}
+prop.table(table(insurance$smoker, insurance$sex))
+```
+
+Die relative Zeilen- uns Spaltenhäufigkeit sowie die relative Gesamthäufigkeit erhält man mit dem Befehl *addmargins*.
+```{r}
+addmargins(prop.table(table(insurance$smoker, insurance$sex)))
+```
+
+**Relative Häufigkeiten in Bezug zur Zeilensumme**
+
+Um den Bezug zur Zeilensummer anzufordern, wird der Befehl um das Argument 1 erweitert.
+```{r}
+prop.table(table(insurance$smoker, insurance$sex), 1)
+```
+
+**Relative Häufigkeiten in Bezug zur Spaltensumme**
+
+Für den Bezug zur Spaltensumme, muss der Befehl mit dem Zusatzargument 2 ergänzt werden.
+```{r}
+prop.table(table(insurance$smoker, insurance$sex), 2)
+```
+
+##2.3 Multidimensional contingency tables
+
+In R besteht auch die Möglichkeit, drei oder mehr Variablen in Kontingenztabellen miteinander zu kombinieren. In der Regel teilt R mehrdimensionale Kontingenztabellen in mehrere zweidimensionale Tabellen auf.
+```{r}
+table(insurance$smoker, insurance$region, insurance$sex)
+```
+
+#3 Correlations for metric variables
+
+Der Zusammenhang zwischen metrischen Variablen kann über die Produkt-Moment-Korrelation (Pearson) oder über die Kovarianz bestimmt werden. Die nachfolgenden Befehle beziehen sich auf die Variablen aus dem Datensatz *Automobile_data*.
+```{r}
+glimpse(Automobile_data)
+```
+
+
+##3.1 Pearsons correlation
+
+Im folgenden Abschnitt sollen drei Möglichkeiten, die Pearson Korrelation anzufordern, vorgestellt werden:
+
++ cor - Funktion
++ cor.test - Funktion
++ corr.test - Funktion
+
+**cor-Funktion**
+
+Die Korrelation zwischen zwei oder mehreren Variablen wird mit der *cor* Funktion angefordert. In unserem Beispieldatensatz werden dafür die beiden Variablen `horsepower` und `price` in metrische Variablen umgewandelt (warum auch immer waren sie als character abgespeichert) und mit der Variablen ´curb-weight´ in den neuen data.frame "Korrelation" abgespeichert. Darauf wird nun die *cor* Funktion angewandt. 
+```{r}
+Automobile_data$Power <- as.numeric(Automobile_data$horsepower)
+Automobile_data$Car_Price <- as.numeric(Automobile_data$price)
+Korrelation <- data.frame(Automobile_data$Power, Automobile_data$Car_Price, Automobile_data$`curb-weight`)
+cor(Korrelation)
+```
+
+Das Ergebnis ist erstmal unübersichtlich, da die Spaltennamen zu lang ausgegeben werden. Wir benennen sie daher, während der data.frame Zuweisung um.
+```{r}
+Korrelation2 <- data.frame(Power = Automobile_data$Power, Price = Automobile_data$Car_Price, Weight = Automobile_data$`curb-weight`)
+cor(Korrelation2)
+```
+
+Schon viel besser. Aber nun besteht das Problem mit den NA's noch. Natürlich könnte man mit der *na.omit* Funktion alle leere Spalten löschen aber dabei würde man evtl. wichtige Werte verlieren.  
+Bei der *cor* Funktion kann man stattdessen die beiden Zusatzargumente *use="pairwise"* und *use="complete"* verwenden. 
+
+Bei dem *use="pairwise"* Argument werden alle Fälle für jede bivariate Korrelation verwendet, die gültige Werte auf diesen Variablen haben. Dies geschieht unabhängig davon, ob sie auf den anderen Variablen in der Korrelationsmatrix fehlende Werte haben.
+Bei dem *use="complete"* Argument werden nur die Fälle berücksichtigt, die auf allen in der Korrelationsmatrix enthaltene variablen gültige Werte haben. 
+
+In unserem Beispiel verwenden wir die complete-Variante.
+```{r}
+cor(Korrelation2, use = "complete")
+```
+
+Bei den Zusammenhangsmaßen in den Sozialwissenschaften gelten folgende Faustregeln:
++ 	r=1	--> perfekter Zusammenhang
++ 0,7 <	r	< 0,99	--> sehr starker Zusammenhang
++ 0,5 <	r	< 0,69	--> starker Zusammenhang
++ 0,3 <	r	< 0,59	--> mittelstarker Zusammenhang
++ 0,2 <	r	< 0,29	--> schwacher Zusammenhang
++ 	r <= 0,19	--> kein Zusammenhang
+
+Zusammenhangsmaße lassen sich auch prima plotten.
+```{r}
+plot(Korrelation2)
+```
+
+**corr.test-Funktion**
+
+Als Ergänzung zu der *cor* Funktion kann die *corr.test* Funktion angefordert werden. Mit ihr erhalten wir weitere statistische Angaben.
+```{r}
+corr.test(Korrelation2)
+```
+
+Die Ausgabe besteht aus drei Teilen:
+
++ Die Korrelationskoeffizienten für alle bivariaten Variablenkombinationen.
++ Die Anzahl der Fälle, die in die Berechnung eingeflossen sind.
++ Der p-Wert für den jeweiligen Korrelationskoeffizienten. 
+
+Ergänzend zum letzten Punkt: die p-Werte unterhalb der Diagonalen beruhen auf den normalen bivariaten Tests. Bei den p-Werten oberhalb der Diagonalen wurde eine Korrektur für multiple Tests durchgeführt. Die p-Werte oberhalb der Diagonalen sind daher immer größer als die p-Werte unterhalb der Diagonalen. Deutlich wird dies, wenn man die p-Werte des corr.tests explizit anfordert.
+```{r}
+corr.test(Korrelation2)$p
+```
+
+Diese Funktion kann man auch für anderweitige statistische Kennwerte anwenden:
+
++ $p  = p-Werte
++ $t  = t-Werte
++ $se = Standardfehler
++ $ci = Konfidenzintervalle
+
+
+**cor.test-Funktion**
+
+Die *cor.test* Funktion hat gegenüber der *corr.test* Funktion einen entscheidenden Vorteil. Mit ihr kann man auch gerichtete Hypothesen testen. Ein Nachteil ist jedoch, dass man die *cor.test Funktion* nur zwei Variablen anwenden kann.
+```{r}
+cor.test(Automobile_data$Power, Automobile_data$Car_Price)
+```
+
+An dem Satz "alternative hypothesis: true correlation is not equal to 0" erkennt man, dass in dem vorliegenden Beispiel überprüft wurde, ob der Korrelationskoeffizient ungleich Null ist. Mit den Zusatzargumenten *alternative="less"* und *alternative="greater"* kann geprüft werden (gerichtete Hypothesen), ob die Korrelation kleiner Null (less) ist oder in Variante 2 größer Null (greater) ist. 
+```{r}
+cor.test(Automobile_data$Power, Automobile_data$Car_Price, alternative = "greater")
+cor.test(Automobile_data$Power, Automobile_data$Car_Price, alternative = "less")
+```
+
+Die Stärke des Zusammenhangs (0,81) bleibt dabei gleich. Allerdings ändert sich der p-Wert (1) bei dem zweiten Test zu "nicht signifikant", da der Zusammenhang schließlich positiv ist. 
+
+##3.2 Covariance
+
+Die Kovarianz ist ein unstandardisiertes Zusammenhangsmaß. Im Gegenzug zur Korrelation hat sie keinen festgelegten Wertebereich. 
+```{r}
+cov(Automobile_data$Power, Automobile_data$Car_Price, use = "complete")
+```
+Wir erhalten im Beispiel eine positive Kovarianz. Das bedeutet, dass mit ansteigender PS Zahl der Kaufpreis des Autos ansteigt. 
+Man kann ich auch für die Kovarinz mit einer Kombination von Variablen ausgeben lassen. 
+```{r}
+cov(Korrelation2, use = "pairwise")
+```
+
+So eine Matrix nennt man auch Varianz-Kovarianz Matrix, da sie sowohl die Kovarianzen der Variablenpaare als auch die Varianzen der einzelnen Variablen enthält. Die Varianzen stehen dabei in der Diagonalen. Überprüfen können wir das, wenn wir gezielt die Varianz für die Variable Power anfordern.
+```{r}
+var(Automobile_data$Power, use = "complete")
+```
+
+#4 Correlations for non-metric variables
+
+Die Pearson Korrelation sowie die Kovarianz dürfen nur für metrische Variablen berechnet werden, da sie auf den Mittelwerten und Varianzen der Variablen basieren. Haben wir (teilweise) ein anderes Skalenniveau, müssen wir auch andere Tests durchführen. 
+
+##4.1 metric - ordinal
+
+Möchte man eine metrische Variable und eine ordinalskalierte Variable miteinander korrelieren lassen, so muss man die Korrelation nach "Spearman" durchführen. 
+Für ein anschauliches Beispiel, ergänzen wir den Datensatz *Automobile_data* um eine ordinalskalierte Variable `cylinders.numeric`. 
+```{r}
+class(Automobile_data$`num-of-cylinders`)
+table(Automobile_data$`num-of-cylinders`)
+Automobile_data$cylinders <- recode(Automobile_data$`num-of-cylinders`, `two`="2", `four`="4", `six`="6", `eight`="8")
+Automobile_data$cylinders.numeric <- as.numeric(Automobile_data$cylinders)
+summary(Automobile_data$cylinders.numeric)
+```
+
+Mit dem Zusatzargument in der *cor* Funktion *method="spearman"* führt man eine Korrelation nach Spearman durch.
+```{r}
+cor(Automobile_data$cylinders.numeric, Automobile_data$Car_Price, use = "complete", method = "spearman")
+```
+
+##4.2 ordinal - ordinal
+
+Möchte man zwei ordinalskalierte Variablen miteinander korrelieren lassen, so muss man die Korrelation nach "Kenall" durchführen.
+Dafür kreieren wir die ordinalskalierte Variable `Power.grouped.num`. 
+```{r}
+Automobile_data$Power.grouped <- ifelse(Automobile_data$Power >= 116, "3", ifelse(Automobile_data$Power < 70, "1", "2"))
+Automobile_data$Power.grouped.num <- as.numeric(Automobile_data$Power.grouped)
+```
+
+Mit dem Zusatzargument *method="kendall"* führt man nun eine Korrelation nach Kendall durch.
+```{r}
+cor(Automobile_data$cylinders.numeric, Automobile_data$Power.grouped.num, use = "complete", method = "kendall")
+```
+
+#5 Conclusion
+
+In diesem Post wurden mehrere Möglichkeiten gezeigt, wie der Zusammenhang bivariater Variablen, je nach Skalenniveau, beschrieben werden kann. 
+
+
+
+
+
+
+
+
+
+
+
+
