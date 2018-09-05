@@ -146,13 +146,6 @@ In unserem Beispiel verwenden wir die complete-Variante.
 cor(Korrelation2, use = "complete")
 ```
 
-Bei den Zusammenhangsmaßen in den Sozialwissenschaften gelten folgende Faustregeln:
-+ 	r=1	--> perfekter Zusammenhang
-+ 0,7 <	r	< 0,99	--> sehr starker Zusammenhang
-+ 0,5 <	r	< 0,69	--> starker Zusammenhang
-+ 0,3 <	r	< 0,59	--> mittelstarker Zusammenhang
-+ 0,2 <	r	< 0,29	--> schwacher Zusammenhang
-+ 	r <= 0,19	--> kein Zusammenhang
 
 Zusammenhangsmaße lassen sich auch prima plotten.
 ```{r}
