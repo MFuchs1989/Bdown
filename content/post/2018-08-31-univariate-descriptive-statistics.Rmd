@@ -138,13 +138,13 @@ Von Nominaldaten wird gesprochen, wenn mögliche Ausprägungen zwar unterschiede
 
 ##3.1 Mode
 
-Der Modalwert, auch Modus genannt, ist definiert als der häufigste Wert, der in der Stichprobe vorkommt. Dieser kann entweder einer absoluten Häufigkeitstabelle entnommen werden oder mit der *which.max* Funktion angefordert werden:
+Der Modalwert, auch Modus genannt, ist definiert als der häufigste Wert, der in der Stichprobe vorkommt. Dieser kann entweder einer absoluten Häufigkeitstabelle entnommen, oder mit der *which.max* Funktion angefordert werden:
 ```{r}
 table(world$Region)
 which.max(table(world$Region))
 ```
 
-Ergänzend zu der *which.max* Funktion, kann man mit der *max* Funktion die absolute Häufigkeit sich ausgeben lassen:
+Ergänzend zu der *which.max* Funktion, kann man sich mit der *max* Funktion die absolute Häufigkeit ausgeben lassen:
 ```{r}
 max(table(world$Region))
 ```
@@ -188,7 +188,7 @@ Der Wert von .89 zeigt uns, dass die Variable `Region` sehr heterogen gewählt w
 
 #4 Description of ordinal data
 
-Ordinal skalierte Daten können entgegen Nominaldaten in eine natürliche Reihenfolge gebracht werden. Allerdings sind die Abstände zwischen den einzelnen Werten nicht quantifizierbar. Natürlich könnten wir wieder den Modalwert und den relativen Informationsgehalt ausrechnen, allerdings steigt mit dem Informationsgehaltes des Skalenniveaus auch die statistischen Möglichkeiten, welche für Nominaldaten nicht zugelassen sind. 
+Ordinal skalierte Daten können entgegen Nominaldaten in eine natürliche Reihenfolge gebracht werden. Allerdings sind die Abstände zwischen den einzelnen Werten nicht quantifizierbar. Natürlich könnten wir wieder den Modalwert und den relativen Informationsgehalt ausrechnen, allerdings steigen mit dem Informationsgehalt des Skalenniveaus auch die statistischen Möglichkeiten, welche für Nominaldaten nicht zugelassen sind. 
 
 ##4.1 Percentile ranks
 
@@ -282,7 +282,7 @@ Ein kurtosis Wert von Null deutet auf eine Normalverteilung hin.
 
 ##5.4 describe function
 
-Mit den bisherigen Funktionen wurden jeweils nur einzelne Kennwerte ausgegeben. Mit der *describe* Funktion kann man eine ganze Reihe an nützlichen Kennwerten sich ausgeben lassen (hier für die Variablen Geburtenrate und Mortalitätenrate). 
+Mit den bisherigen Funktionen wurden jeweils nur einzelne Kennwerte ausgegeben. Mit der *describe* Funktion kann man sich eine ganze Reihe an nützlichen Kennwerten ausgeben lassen (hier für die Variablen Geburtenrate und Mortalitätenrate). 
 ```{r}
 describe(data.frame(world$Birthrate, world$Deathrate))
 ```

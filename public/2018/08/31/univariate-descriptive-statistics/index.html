@@ -261,7 +261,7 @@ round(haeufigkeiten, 2)</code></pre>
 <p>Von Nominaldaten wird gesprochen, wenn mögliche Ausprägungen zwar unterschieden werden können, aber diese keine natürliche Rangfolge aufweisen.</p>
 <div id="mode" class="section level2">
 <h2>3.1 Mode</h2>
-<p>Der Modalwert, auch Modus genannt, ist definiert als der häufigste Wert, der in der Stichprobe vorkommt. Dieser kann entweder einer absoluten Häufigkeitstabelle entnommen werden oder mit der <em>which.max</em> Funktion angefordert werden:</p>
+<p>Der Modalwert, auch Modus genannt, ist definiert als der häufigste Wert, der in der Stichprobe vorkommt. Dieser kann entweder einer absoluten Häufigkeitstabelle entnommen, oder mit der <em>which.max</em> Funktion angefordert werden:</p>
 <pre class="r"><code>table(world$Region)</code></pre>
 <pre><code>## 
 ## ASIA (EX. NEAR EAST)              BALTICS  C.W. OF IND. STATES 
@@ -275,7 +275,7 @@ round(haeufigkeiten, 2)</code></pre>
 <pre class="r"><code>which.max(table(world$Region))</code></pre>
 <pre><code>## SUB-SAHARAN AFRICA 
 ##                 10</code></pre>
-<p>Ergänzend zu der <em>which.max</em> Funktion, kann man mit der <em>max</em> Funktion die absolute Häufigkeit sich ausgeben lassen:</p>
+<p>Ergänzend zu der <em>which.max</em> Funktion, kann man sich mit der <em>max</em> Funktion die absolute Häufigkeit ausgeben lassen:</p>
 <pre class="r"><code>max(table(world$Region))</code></pre>
 <pre><code>## [1] 51</code></pre>
 </div>
@@ -301,7 +301,7 @@ round(haeufigkeiten, 2)</code></pre>
 </div>
 <div id="description-of-ordinal-data" class="section level1">
 <h1>4 Description of ordinal data</h1>
-<p>Ordinal skalierte Daten können entgegen Nominaldaten in eine natürliche Reihenfolge gebracht werden. Allerdings sind die Abstände zwischen den einzelnen Werten nicht quantifizierbar. Natürlich könnten wir wieder den Modalwert und den relativen Informationsgehalt ausrechnen, allerdings steigt mit dem Informationsgehaltes des Skalenniveaus auch die statistischen Möglichkeiten, welche für Nominaldaten nicht zugelassen sind.</p>
+<p>Ordinal skalierte Daten können entgegen Nominaldaten in eine natürliche Reihenfolge gebracht werden. Allerdings sind die Abstände zwischen den einzelnen Werten nicht quantifizierbar. Natürlich könnten wir wieder den Modalwert und den relativen Informationsgehalt ausrechnen, allerdings steigen mit dem Informationsgehalt des Skalenniveaus auch die statistischen Möglichkeiten, welche für Nominaldaten nicht zugelassen sind.</p>
 <div id="percentile-ranks" class="section level2">
 <h2>4.1 Percentile ranks</h2>
 <p>Prozentränge (z.B. von Personen) drücken aus, wie viel Prozent der Stichprobe diesen oder einen geringeren Wert auf der Variablen haben. Mit der <em>score.transform</em> Funktion (Paket “CTT”) wird die zu untersuchende Variable in zwei neue Variablen transformiert. In der neuen Variable <code>$new.scores</code> sind die standardisierten Werte enthalten und in <code>$p.scores</code> die berechneten Prozentränge.</p>
@@ -382,7 +382,7 @@ subset(percentile.ranks.africa, select = c(&quot;Country&quot;, &quot;Birthrate&
 </div>
 <div id="describe-function" class="section level2">
 <h2>5.4 describe function</h2>
-<p>Mit den bisherigen Funktionen wurden jeweils nur einzelne Kennwerte ausgegeben. Mit der <em>describe</em> Funktion kann man eine ganze Reihe an nützlichen Kennwerten sich ausgeben lassen (hier für die Variablen Geburtenrate und Mortalitätenrate).</p>
+<p>Mit den bisherigen Funktionen wurden jeweils nur einzelne Kennwerte ausgegeben. Mit der <em>describe</em> Funktion kann man sich eine ganze Reihe an nützlichen Kennwerten ausgeben lassen (hier für die Variablen Geburtenrate und Mortalitätenrate).</p>
 <pre class="r"><code>describe(data.frame(world$Birthrate, world$Deathrate))</code></pre>
 <pre><code>##                 vars   n    mean      sd median trimmed     mad min  max
 ## world.Birthrate    1 224 2042.80 1228.92 1799.5 1982.48 1177.93  10 5073

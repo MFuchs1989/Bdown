@@ -30,7 +30,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #1 Introduction
 Aufbauend auf dem vorangegangenen Post ["Univariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/) wird im folgenden Beitrag die gleichzeitige Betrachtung von zwei Variablen thematisiert. 
-Für diesen Post werde die Datensätze *insurance* und *Automobile_data* von der Statsistik Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie der Datensätze ist unter <https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e> (insurance) und <https://drive.google.com/open?id=103HRmDLEkGnIizFzIlpErv1uYHiw1DmT> (Automobile_data) abrufbar.
+Für diesen Post werden die Datensätze *insurance* und *Automobile_data* von der Statsistik Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie der Datensätze ist unter <https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e> (insurance) und <https://drive.google.com/open?id=103HRmDLEkGnIizFzIlpErv1uYHiw1DmT> (Automobile_data) abrufbar.
 
 ```{r results='hide', message=FALSE, warning=FALSE}
 library("tidyverse")
@@ -43,7 +43,7 @@ Automobile_data <- read_csv("Automobile_data.csv")
 
 #2 Contingency table
 
-In Kontingenztabellen wird die Häufigkeit für jede mögliche Kombination mehrerer Variablen angegeben. Im nachfolgenden werden absolute und relative Häufigkeiten sowie mehrdimensionale Kontingenztabellen anhand des Datensatzes *insurance* vorgestellt.
+In Kontingenztabellen wird die Häufigkeit für jede mögliche Kombination mehrerer Variablen angegeben. Im Nachfolgenden werden absolute und relative Häufigkeiten sowie mehrdimensionale Kontingenztabellen anhand des Datensatzes *insurance* vorgestellt.
 ```{r}
 glimpse(insurance)
 ```
@@ -65,7 +65,7 @@ addmargins(table(insurance$smoker, insurance$sex))
 
 ##2.2 Relative Frequency
 
-Im Gegensatz zu Häufigkeitstabellen (["Univariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/) Abschnitt 2.2) kommt bei Kontingenztabellen noch eine Besonderheit hinzu. Je nachdem, welchen Wert man als Referenz nimmt, hat man die Auswahl zwischen mehreren verschiedenen relativen Häufigkeiten:
+Im Gegensatz zu Häufigkeitstabellen (["Univariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/) Abschnitt 2.2) kommt bei Kontingenztabellen noch eine Besonderheit hinzu. Je nachdem welchen Wert man als Referenz nimmt, hat man die Auswahl zwischen mehreren verschiedenen relativen Häufigkeiten:
 + Gesamthäufigkeit
 + Zeilensumme 
 + Spaltensumme
@@ -84,7 +84,7 @@ addmargins(prop.table(table(insurance$smoker, insurance$sex)))
 
 **Relative Häufigkeiten in Bezug zur Zeilensumme**
 
-Um den Bezug zur Zeilensummer anzufordern, wird der Befehl um das Argument 1 erweitert.
+Um den Bezug zur Zeilensumme anzufordern, wird der Befehl um das Argument 1 erweitert.
 ```{r}
 prop.table(table(insurance$smoker, insurance$sex), 1)
 ```
@@ -121,7 +121,7 @@ Im folgenden Abschnitt sollen drei Möglichkeiten, die Pearson Korrelation anzuf
 
 **cor-Funktion**
 
-Die Korrelation zwischen zwei oder mehreren Variablen wird mit der *cor* Funktion angefordert. In unserem Beispieldatensatz werden dafür die beiden Variablen `horsepower` und `price` in metrische Variablen umgewandelt (warum auch immer waren sie als character abgespeichert) und mit der Variablen ´curb-weight´ in den neuen data.frame "Korrelation" abgespeichert. Darauf wird nun die *cor* Funktion angewandt. 
+Die Korrelation zwischen zwei oder mehreren Variablen wird mit der *cor* Funktion angefordert. In unserem Beispieldatensatz werden dafür die beiden Variablen `horsepower` und `price` in metrische Variablen umgewandelt (warum auch immer sie als character abgespeichert waren) und mit der Variablen ´curb-weight´ in den neuen data.frame "Korrelation" abgespeichert. Darauf wird nun die *cor* Funktion angewandt. 
 ```{r}
 Automobile_data$Power <- as.numeric(Automobile_data$horsepower)
 Automobile_data$Car_Price <- as.numeric(Automobile_data$price)
@@ -129,13 +129,13 @@ Korrelation <- data.frame(Automobile_data$Power, Automobile_data$Car_Price, Auto
 cor(Korrelation)
 ```
 
-Das Ergebnis ist erstmal unübersichtlich, da die Spaltennamen zu lang ausgegeben werden. Wir benennen sie daher, während der data.frame Zuweisung um.
+Das Ergebnis ist erst einmal unübersichtlich, da die Spaltennamen zu lang ausgegeben werden. Wir benennen sie daher während der data.frame Zuweisung um.
 ```{r}
 Korrelation2 <- data.frame(Power = Automobile_data$Power, Price = Automobile_data$Car_Price, Weight = Automobile_data$`curb-weight`)
 cor(Korrelation2)
 ```
 
-Schon viel besser. Aber nun besteht das Problem mit den NA's noch. Natürlich könnte man mit der *na.omit* Funktion alle leere Spalten löschen aber dabei würde man evtl. wichtige Werte verlieren.  
+Schon viel besser. Aber nun besteht das Problem mit den NA's noch. Natürlich könnte man mit der *na.omit* Funktion alle leeren Spalten löschen, aber dabei würde man eventuell wichtige Werte verlieren.  
 Bei der *cor* Funktion kann man stattdessen die beiden Zusatzargumente *use="pairwise"* und *use="complete"* verwenden. 
 
 Bei dem *use="pairwise"* Argument werden alle Fälle für jede bivariate Korrelation verwendet, die gültige Werte auf diesen Variablen haben. Dies geschieht unabhängig davon, ob sie auf den anderen Variablen in der Korrelationsmatrix fehlende Werte haben.
@@ -200,7 +200,7 @@ Die Kovarianz ist ein unstandardisiertes Zusammenhangsmaß. Im Gegenzug zur Korr
 cov(Automobile_data$Power, Automobile_data$Car_Price, use = "complete")
 ```
 Wir erhalten im Beispiel eine positive Kovarianz. Das bedeutet, dass mit ansteigender PS Zahl der Kaufpreis des Autos ansteigt. 
-Man kann ich auch für die Kovarinz mit einer Kombination von Variablen ausgeben lassen. 
+Man kann sich auch für die Kovarinz mit einer Kombination von Variablen ausgeben lassen. 
 ```{r}
 cov(Korrelation2, use = "pairwise")
 ```

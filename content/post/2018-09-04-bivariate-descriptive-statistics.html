@@ -29,7 +29,7 @@ tags:
 </div>
 <div id="introduction" class="section level1">
 <h1>1 Introduction</h1>
-<p>Aufbauend auf dem vorangegangenen Post <a href="https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/">“Univariate descriptive statistics”</a> wird im folgenden Beitrag die gleichzeitige Betrachtung von zwei Variablen thematisiert. Für diesen Post werde die Datensätze <em>insurance</em> und <em>Automobile_data</em> von der Statsistik Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie der Datensätze ist unter <a href="https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e" class="uri">https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e</a> (insurance) und <a href="https://drive.google.com/open?id=103HRmDLEkGnIizFzIlpErv1uYHiw1DmT" class="uri">https://drive.google.com/open?id=103HRmDLEkGnIizFzIlpErv1uYHiw1DmT</a> (Automobile_data) abrufbar.</p>
+<p>Aufbauend auf dem vorangegangenen Post <a href="https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/">“Univariate descriptive statistics”</a> wird im folgenden Beitrag die gleichzeitige Betrachtung von zwei Variablen thematisiert. Für diesen Post werden die Datensätze <em>insurance</em> und <em>Automobile_data</em> von der Statsistik Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie der Datensätze ist unter <a href="https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e" class="uri">https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e</a> (insurance) und <a href="https://drive.google.com/open?id=103HRmDLEkGnIizFzIlpErv1uYHiw1DmT" class="uri">https://drive.google.com/open?id=103HRmDLEkGnIizFzIlpErv1uYHiw1DmT</a> (Automobile_data) abrufbar.</p>
 <pre class="r"><code>library(&quot;tidyverse&quot;)
 library(&quot;psych&quot;)</code></pre>
 <pre class="r"><code>insurance &lt;- read_csv(&quot;insurance.csv&quot;)
@@ -37,7 +37,7 @@ Automobile_data &lt;- read_csv(&quot;Automobile_data.csv&quot;)</code></pre>
 </div>
 <div id="contingency-table" class="section level1">
 <h1>2 Contingency table</h1>
-<p>In Kontingenztabellen wird die Häufigkeit für jede mögliche Kombination mehrerer Variablen angegeben. Im nachfolgenden werden absolute und relative Häufigkeiten sowie mehrdimensionale Kontingenztabellen anhand des Datensatzes <em>insurance</em> vorgestellt.</p>
+<p>In Kontingenztabellen wird die Häufigkeit für jede mögliche Kombination mehrerer Variablen angegeben. Im Nachfolgenden werden absolute und relative Häufigkeiten sowie mehrdimensionale Kontingenztabellen anhand des Datensatzes <em>insurance</em> vorgestellt.</p>
 <pre class="r"><code>glimpse(insurance)</code></pre>
 <pre><code>## Observations: 1,338
 ## Variables: 7
@@ -66,7 +66,7 @@ Automobile_data &lt;- read_csv(&quot;Automobile_data.csv&quot;)</code></pre>
 </div>
 <div id="relative-frequency" class="section level2">
 <h2>2.2 Relative Frequency</h2>
-<p>Im Gegensatz zu Häufigkeitstabellen (<a href="https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/">“Univariate descriptive statistics”</a> Abschnitt 2.2) kommt bei Kontingenztabellen noch eine Besonderheit hinzu. Je nachdem, welchen Wert man als Referenz nimmt, hat man die Auswahl zwischen mehreren verschiedenen relativen Häufigkeiten: + Gesamthäufigkeit + Zeilensumme + Spaltensumme</p>
+<p>Im Gegensatz zu Häufigkeitstabellen (<a href="https://michael-fuchs.netlify.com/2018/08/31/univariate-descriptive-statistics/">“Univariate descriptive statistics”</a> Abschnitt 2.2) kommt bei Kontingenztabellen noch eine Besonderheit hinzu. Je nachdem welchen Wert man als Referenz nimmt, hat man die Auswahl zwischen mehreren verschiedenen relativen Häufigkeiten: + Gesamthäufigkeit + Zeilensumme + Spaltensumme</p>
 <p><strong>Relative Häufigkeiten in Bezug zur Gesamthäufigkeit</strong></p>
 <p>Diese erhählt man wie gewohnt mit der <em>prop.table</em> Funktion.</p>
 <pre class="r"><code>prop.table(table(insurance$smoker, insurance$sex))</code></pre>
@@ -82,7 +82,7 @@ Automobile_data &lt;- read_csv(&quot;Automobile_data.csv&quot;)</code></pre>
 ##   yes 0.08594918 0.11883408 0.20478326
 ##   Sum 0.49476831 0.50523169 1.00000000</code></pre>
 <p><strong>Relative Häufigkeiten in Bezug zur Zeilensumme</strong></p>
-<p>Um den Bezug zur Zeilensummer anzufordern, wird der Befehl um das Argument 1 erweitert.</p>
+<p>Um den Bezug zur Zeilensumme anzufordern, wird der Befehl um das Argument 1 erweitert.</p>
 <pre class="r"><code>prop.table(table(insurance$smoker, insurance$sex), 1)</code></pre>
 <pre><code>##      
 ##          female      male
@@ -156,7 +156,7 @@ Automobile_data &lt;- read_csv(&quot;Automobile_data.csv&quot;)</code></pre>
 <li>corr.test - Funktion</li>
 </ul>
 <p><strong>cor-Funktion</strong></p>
-<p>Die Korrelation zwischen zwei oder mehreren Variablen wird mit der <em>cor</em> Funktion angefordert. In unserem Beispieldatensatz werden dafür die beiden Variablen <code>horsepower</code> und <code>price</code> in metrische Variablen umgewandelt (warum auch immer waren sie als character abgespeichert) und mit der Variablen ´curb-weight´ in den neuen data.frame “Korrelation” abgespeichert. Darauf wird nun die <em>cor</em> Funktion angewandt.</p>
+<p>Die Korrelation zwischen zwei oder mehreren Variablen wird mit der <em>cor</em> Funktion angefordert. In unserem Beispieldatensatz werden dafür die beiden Variablen <code>horsepower</code> und <code>price</code> in metrische Variablen umgewandelt (warum auch immer sie als character abgespeichert waren) und mit der Variablen ´curb-weight´ in den neuen data.frame “Korrelation” abgespeichert. Darauf wird nun die <em>cor</em> Funktion angewandt.</p>
 <pre class="r"><code>Automobile_data$Power &lt;- as.numeric(Automobile_data$horsepower)</code></pre>
 <pre><code>## Warning: NAs durch Umwandlung erzeugt</code></pre>
 <pre class="r"><code>Automobile_data$Car_Price &lt;- as.numeric(Automobile_data$price)</code></pre>
@@ -175,14 +175,14 @@ cor(Korrelation)</code></pre>
 ## Automobile_data.Power                                    NA
 ## Automobile_data.Car_Price                                NA
 ## Automobile_data..curb.weight.                             1</code></pre>
-<p>Das Ergebnis ist erstmal unübersichtlich, da die Spaltennamen zu lang ausgegeben werden. Wir benennen sie daher, während der data.frame Zuweisung um.</p>
+<p>Das Ergebnis ist erst einmal unübersichtlich, da die Spaltennamen zu lang ausgegeben werden. Wir benennen sie daher während der data.frame Zuweisung um.</p>
 <pre class="r"><code>Korrelation2 &lt;- data.frame(Power = Automobile_data$Power, Price = Automobile_data$Car_Price, Weight = Automobile_data$`curb-weight`)
 cor(Korrelation2)</code></pre>
 <pre><code>##        Power Price Weight
 ## Power      1    NA     NA
 ## Price     NA     1     NA
 ## Weight    NA    NA      1</code></pre>
-<p>Schon viel besser. Aber nun besteht das Problem mit den NA’s noch. Natürlich könnte man mit der <em>na.omit</em> Funktion alle leere Spalten löschen aber dabei würde man evtl. wichtige Werte verlieren.<br />
+<p>Schon viel besser. Aber nun besteht das Problem mit den NA’s noch. Natürlich könnte man mit der <em>na.omit</em> Funktion alle leeren Spalten löschen, aber dabei würde man eventuell wichtige Werte verlieren.<br />
 Bei der <em>cor</em> Funktion kann man stattdessen die beiden Zusatzargumente <em>use=“pairwise”</em> und <em>use=“complete”</em> verwenden.</p>
 <p>Bei dem <em>use=“pairwise”</em> Argument werden alle Fälle für jede bivariate Korrelation verwendet, die gültige Werte auf diesen Variablen haben. Dies geschieht unabhängig davon, ob sie auf den anderen Variablen in der Korrelationsmatrix fehlende Werte haben. Bei dem <em>use=“complete”</em> Argument werden nur die Fälle berücksichtigt, die auf allen in der Korrelationsmatrix enthaltene variablen gültige Werte haben.</p>
 <p>In unserem Beispiel verwenden wir die complete-Variante.</p>
@@ -280,7 +280,7 @@ Bei der <em>cor</em> Funktion kann man stattdessen die beiden Zusatzargumente <e
 <p>Die Kovarianz ist ein unstandardisiertes Zusammenhangsmaß. Im Gegenzug zur Korrelation hat sie keinen festgelegten Wertebereich.</p>
 <pre class="r"><code>cov(Automobile_data$Power, Automobile_data$Car_Price, use = &quot;complete&quot;)</code></pre>
 <pre><code>## [1] 242860.9</code></pre>
-<p>Wir erhalten im Beispiel eine positive Kovarianz. Das bedeutet, dass mit ansteigender PS Zahl der Kaufpreis des Autos ansteigt. Man kann ich auch für die Kovarinz mit einer Kombination von Variablen ausgeben lassen.</p>
+<p>Wir erhalten im Beispiel eine positive Kovarianz. Das bedeutet, dass mit ansteigender PS Zahl der Kaufpreis des Autos ansteigt. Man kann sich auch für die Kovarinz mit einer Kombination von Variablen ausgeben lassen.</p>
 <pre class="r"><code>cov(Korrelation2, use = &quot;pairwise&quot;)</code></pre>
 <pre><code>##             Power      Price     Weight
 ## Power    1577.231   242860.9   15605.57
