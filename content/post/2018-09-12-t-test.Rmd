@@ -1,0 +1,14 @@
+---
+title: t-Test
+author: Michael Fuchs
+date: '2018-09-12'
+slug: t-test
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+Hie kommt mein t-Test Post
+
+
