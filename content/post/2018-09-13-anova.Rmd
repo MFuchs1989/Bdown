@@ -1,0 +1,324 @@
+---
+title: ANOVA
+author: Michael Fuchs
+date: '2018-09-13'
+slug: anova
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Table of Content
+
++ 1 Introduction
++ 
+
+
+#1 Introduction
+
+Im letzten Post ["t-Test"](https://michael-fuchs.netlify.com/2018/09/12/t-test/) ging es hauptsächlich um die Funktionsweise eines t-Tests für unabhängigen Stichproben. Die einfaktorielle Varianzanalyse ohne Messwiederholung kann als eine Erweiterung des t-Tests für unabhängigen Stichproben angesehen werden, da die unabhängige Variable nicht mehr dichotom sein muss. Sie kann nun auch mehr als zwei Ausprägungen haben. 
+Für diesen Post wurde der Datensatz *countries of the world* von der Statsistik Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006> abrufbar.
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(nortest)
+library(psych)
+library(car)
+library(sjstats)
+library(pwr)
+library(ggpubr)
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+countries <- read_csv("countries of the world.csv")
+```
+
+#2 Preparation
+
+Wie auch beim t-Test wird der Datensatz *countries of the world* für die exemplarische Durchführung der ANOVA zunächst aufbereitet. Da die ANOVA Mittelwerte von mehr als zwei Gruppen vergleicht, werden drei neue Regionen aus der Variablen `Region` kreiert, sowie die abhängigen Variablen `Population` und `Coastline` als nummerische Variablen abgespeichert. 
+
+```{r}
+table(countries$Region)
+
+preparation<- countries %>% filter(Region == "LATIN AMER. & CARIB" | Region == "SUB-SAHARAN AFRICA" | Region == "ASIA (EX. NEAR EAST)" | Region == "NEAR EAST") %>%
+  select(Country, Region, `Coastline (coast/area ratio)`, Population)
+
+preparation$Population.num <- as.numeric(preparation$Population)
+preparation$Coastline.new <- str_replace(preparation$`Coastline (coast/area ratio)`, ",", ".")
+preparation$Coastline.num <- as.numeric(preparation$Coastline.new)
+summary(preparation)
+preparation$region.new <- ifelse(preparation$Region == "SUB-SAHARAN AFRICA", "AFRICA", ifelse(preparation$Region == "LATIN AMER. & CARIB", "LATIN AMER", "Asia"))
+
+levels(as.factor(preparation$region.new))
+```
+
+#3 Essential requirements
+
+Wie bei einem t-Test müssen auch für die Durchführung einer ANOVA gewisse Voraussetzungen überprüft werden:
+
++ Unabhängigkeit der Messungen. Kein Teilnehmer aus einer Gruppe darf auch in einer anderen Gruppe vorkommen.
++ Die abhängige Variable ist metrisch skaliert.
++ Die unabhängige Variable ist unabhängig und nominalskaliert.
++ Normalverteilung der abhängigen Variablen in allen Populationen, wenn gilt N < 30 in jeder Population.
++ Varianzhomogenität der abhängigen Variablen in allen Populationen.
+
+##3.1 Normal distribution
+
+Für die Überprüfung der Normalverteilung wird der Lilliefors-Test angewendet.
+```{r}
+lillie.test(preparation$Coastline.num)
+```
+Da p < .001 liegt keine Normalverteilung der Variable `Coastline` vor.
+
+##3.2 Sampling size
+
+```{r}
+size <- describeBy(preparation$Coastline.num, preparation$region.new, mat = TRUE)
+size
+size$n
+```
+Da alle Gruppen n > 30 besitzen, greift der zentrale Grenzwertsatz. Die ANOVA könnte demnach unter der Voraussetzung von Varianzhomogenität durchgeführt werden.
+
+##3.3 Homogeneity of variance
+```{r}
+round(tapply(preparation$Coastline.num, preparation$region.new, var, na.rm=TRUE), 2)
+```
+
+```{r}
+leveneTest(preparation$Coastline.num ~ preparation$region.new)
+```
+
+Da nun auch Varianzhomogenität (p > .05) nachgewiesen wurde, wird im nachfolgenden Schritt die Varianzanalyse durchgeführt.
+
+
+#4 ANOVA with variance homogeneity
+
+Nun wird überprüft ob die Regionen "AFRICA", "Asia" und "LATIN AMER" sich signifikant in ihrem Küstenanteil unterscheiden. Wir speichern die *aov* Funktion unter dem Objekt "ANOva" ab.
+
+```{r}
+ANOVA <- aov(preparation$Coastline.num ~ preparation$region.new)
+```
+
+Mit der *model.tables* Funktion und dem Zusatzargument *"means"* lassen sich die Mittelwerte pro Gruppe ausgeben.
+```{r}
+model.tables(ANOVA, "means")
+```
+
+Der Mittelwert über alle Gruppen hinweg wird unter **Grand mean** angezeigt. Die zweite Zeile (**rep**) gibt Auskunft über die jeweilige Gruppengröße.
+
+Für die Ausgabe der Standardabweichung (welche immer zu Mittelwertsangaben dazu genannt werden sollte) wird die *describeBy* Funktion verwendet.
+```{r}
+describeBy(preparation$Coastline.num, preparation$region.new, mat = TRUE)
+```
+
+Um das Ergebniss der Varianzanalyse zu erhalten, wird die *summary* Funktion auf das Objekt "ANOVA" angewendet.
+```{r}
+summary(ANOVA)
+```
+
+Das Ergebnis besteht aus zwei Zeilen. Zeile 1 enthält die Angaben zum Effekt des Faktors `region.new` (beziehungsweise zwischen den Gruppen). Zeile 2 steht mit *Residuals* für Rest und bezieht sich auf den Anteil der Varianz des Fehlers (beziehungsweise innerhalb der Gruppen).
+
+**Df** Die Freiheitsgrade des F -Werts.
+
+**Sum Sq** Die Quadratsummen zwischen den Gruppen (Zeile 1) und innerhalb der Gruppen (Zeile 2).
+
+**Mean Sq** Die mittleren Quadratsummen. Diese werden gebildet, indem man die Quadratsummen durch die jeweiligen Freiheitsgrade teilt. 
+
+**F value** Die empirische Prüfgröße F. Sie wird berechnet, indem man die mittleren Quadratsummen zwischen den Gruppen (Zeile 1) durch die mittleren Quadratsummen innerhalb der Gruppen (Zeile 2) dividiert.
+
+**Pr(>F)** Der p-Wert für die Varianzanalyse. Er steht für die Wahrscheinlichkeit, diesen oder einen größeren F-Wert zu finden, wenn die Nullhypothese gilt.
+
+
+Das Ergebnis ist mit p = .135 nicht signifikant. Es gibt also erstmal keinen Unterschied zwischen den Regionen hinsichtlich ihres Küstenanteils.
+
+#5 ANOVA with variance inequality
+
+Es kann auch bei einer Varianzanalyse vorkommen, dass die Varianzen der abhängigen Variablen in einer Populatione nicht gleich verteilt ist. 
+Im Nachfolgenden wollen wir überprüfen, ob die Regionen "AFRICA", "Asia" und "LATIN AMER" sich signifikant in ihrem Populationsanteil unterscheiden.
+
+**Überprüfung der Normalverteilung**
+```{r}
+lillie.test(preparation$Population.num) 
+```
+
+Wir sehen, dass die Variable `Population.num` nicht normalverteilt ist. Nun wird erneut die Stichprobengröße der beiden Gruppen betrachtet.
+
+**Stichprobengröße**
+```{r}
+size2 <- describeBy(preparation$Population.num, preparation$region.new, mat = TRUE)
+size2$n
+```
+
+In allen Populationen gilt n > 30. Es greift erneut der zentrale Grenzwertsatz.
+
+**Überprüfung der Varianzhomogenität**
+```{r}
+leveneTest(preparation$Population.num ~ preparation$region.new)
+```
+
+Wir erhalten ein signifikantes Ergebnis. Dies bedeutet, dass Varianzungleichheit vorliegt. Anstelle der ANOVA wird daher der oneway.test (Welch) durchgeführt. 
+
+**One-way-Test (Welch) bei Varianzungleichheit**
+```{r}
+oneway.test(preparation$Population.num ~ preparation$region.new)
+```
+
+Das Ergebnis ist mit p = .151 nicht signifikant. Es gibt also keinen Unterschied zwischen den Regionen hinsichtlich ihres Populationsanteils.
+
+
+#5 Post-hoc-method
+
+Ein signifikantes / nicht signifikantes Ergebnis besagt lediglich, dass es allgemein Mittelwertsunterschiede / keine Mittelwertsunterschiede in dem Test gibt. Wir wissen jedoch nicht, um welche Mittelwerte es sich handelt. Um dies aufzuklären werden im kommenden Schritt alle Mittelwerte paarweise mit t-Tests für unabhängige Stichproben verglichen. Um die alpha-Fehler Kumulierung zu verhindern, wird eine alpha-Fehler Adjustierung durchgeführt. Für die einfaktorielle Varianzanalyse ohne Messwiederholung bietet sich die **Bonferroni-Korrektur** an. Sie wird mithilfe der *pairwise.t.test* Funktion angefordert.
+```{r}
+pairwise.t.test(preparation$Population.num, preparation$region.new, p.adj= "bonferroni")
+```
+
+Wir sehen, dass es weder bei den Gruppen "AFRICA" und "Asia" noch bei den Gruppen "Asia" und "LATIN AMER" einen signifikanten Unterschied gibt.
+
+
+#6 Effect size
+
+Eine sehr beliebte Effektgröße für die einfaktorielle Varianzanalyse ohne Messwiederholung ist das eta^2.
+
+##6.1 Effect size for ANOVA with variance homogeneity
+
+Das eta^2 wird folgendermaßen berechnet:
+$$\eta^2 = \frac{\mathrm{QS}_\mathrm{Zwischen}}{\mathrm{QS}_\mathrm{Gesamt}}$$
+
+QS steht für Quadratsummen. Diese Werte können wir der Varianzanalysetabelle entnommen werden.
+```{r}
+summary(ANOVA)
+```
+
+$$\eta^2 = \frac{\mathrm{QS}_\mathrm{Zwischen}}{\mathrm{QS}_\mathrm{Gesamt}} = \frac{3014}{101544} \approx 0{,}029$$
+
+Alternativ kann man auch die *eta_sq* Funktion verwenden.
+```{r}
+eta_sq(ANOVA)
+```
+
+##6.2 Effect size for ANOVA with variance inequality
+
+Schwieriger wird die Bestimmung der Effektgröße, wenn man mangels Varianzhomogenität gezwungen war den oneway.test nach Welch durchzuführen. 
+Hier nochmal das Ergebnis des Tests (5 ANOVA with variance inequality/One-way-Test (Welch) bei Varianzungleichheit). 
+```{r}
+oneway.test(preparation$Population.num ~ preparation$region.new)
+```
+
+Hier haben wir keine Quadratsummen angegeben, mit denen wir die Effektgröße berechnen könnten. Auch die *eta_sq* Funktion kann hier nicht angewendet werden, da diese nur bei aov-Modellen funktioniert. Mit ein wenig Aufwand, lassen sich die Quadratsummen und letztendlich die Effektstärke trotzdem berechnen.  
+```{r}
+m.i <- tapply(preparation$Population.num, preparation$region.new, mean)
+v.i <- tapply(preparation$Population.num, preparation$region.new, var)
+n.i <- tapply(preparation$Population.num, preparation$region.new, length)
+
+SS_within <- sum((n.i-1) * v.i)
+SS_between <- sum(n.i * (m.i - mean(preparation$Population.num))^2)
+SS_total <- (length(preparation$Population.num)-1) * var(preparation$Population.num)
+SS_between/SS_total
+```
+
+##6.3 Calculation of Cohens f
+
+Aus dem eta^2 kann nun die Effektgröße f nach Cohen berechnet werden. Im ersten Schritt weisen wir dazu das eta^2 aus der durchgeführten ANOVA dem Objekt "f.ANOVA" zu.
+```{r}
+f.ANOVA <- eta_sq(ANOVA)
+```
+
+Die Formel für Cohens f sieht in R folgendermaßen aus.
+```{r}
+f.1 <- sqrt(as.numeric(f.ANOVA)/(1-as.numeric(f.ANOVA)))
+f.1
+```
+
+Dasselbe wird nun auch für den oneway.test durchgeführt.
+```{r}
+f.oneway.test <- SS_between/SS_total
+f.2 <- sqrt(as.numeric(f.oneway.test)/(1-as.numeric(f.oneway.test)))
+f.2
+```
+
+Wir erhalten für die ANOVA einen f-Wert von 0,17 und für den oneway.test einen f-Wert von 0,24.
+Warum haben wir zusätzlich ein weiteres Maß der Effektgröße berechnet, nachdem wir bereits eta^2 hatten? 
+
+
+#7 Power
+
+Die Frage, warum zusätzlich Cohens f berechnet wurde, klärt sich, wenn die Teststärke berechnet werden soll. Im nachfolgenden soll eine Power Analyse für die ANOVA (4 ANOVA with variance homogeneity) durchgeführt werden. Für die *pwr.anova.test* Funktion werden folgende Parameter benötigt:
+
++ k = Anzahl der Gruppen
++ f = Cohens f
++ sig.level = das Signifikanzniveau
++ n = Gruppengröße (der kleinsten Gruppe)
+
+Für die zu analysierende ANOVA ergibt dies fogende Syntax.
+```{r}
+pwr.anova.test(k=3, f = 0.1722846, sig.level = 0.135, n= 44)
+```
+
+Die ANOVA besitzt eine Teststärke von 0,59. Gewünscht wäre eine Stärke von 0,8. Im Nachgang wird nun berechnet, wie viele Personen man pro Gruppe für die ANOVA bräuchte, um folgende Werte zu erhalten:
+
++ k = 3
++ f = 0,25
++ sig.level = 0,05
++ power = 0,8
+
+```{r}
+pwr.anova.test(k=3, f = 0.25, sig.level = 0.05, power = 0.80)
+```
+Um eine Teststärke von 0,8 bei einem Signifikanzlevel von 0,05 und einer Effektgröße von 0,25 zu bekommen, bedarf es einer Gruppengröße von mindestens 53 in **allen** Gruppen.
+Die Größe der gesamten Stichprobe (für die angegebenen Parameter) lässt sich folgendermaßen berechnen.
+
+```{r}
+pwr.anova.test(k=3, f = 0.25, sig.level = 0.05, power = 0.80)$n * pwr.anova.test(k=3, f = 0.25, sig.level = 0.05, power = 0.80)$k
+```
+
+Es sind insgesamt 158 Observations notwendig.
+
+
+#8 Outliers
+
+Zu einer ANOVA ist ein Boxplot Diagramm immer sehr nützlich, da es viel über die Verteilung der abhängigen Variablen aussagt und etwaige Ausreißer schnell identifiziert werden könne.
+```{r}
+ggboxplot(preparation, x = "region.new", y = "Coastline.num", 
+          color = "region.new", palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+          order = c("AFRICA", "Asia", "LATIN AMER"),
+          ylab = "Coastline", xlab = "Region")
+```
+
+Wie wir sehen können, sind mehrere Ausreißer vorhanden. Nun stellt sich die Frage, ob dies eine Auswirkung auf die durchgeführten Signifikanztests hatte. 
+
+```{r}
+describe(preparation$Coastline.num)
+```
+
+Die *describe* Funktion zeigt, dass der Mittelwert bei 10,99 liegt mit einer Standardabweichung von 27,43.
+Wir schmeißen nun alle Werte größer 70 mit dem *filter* Befehl raus.
+```{r}
+without.outliers<- preparation %>% filter(Coastline.num < 70)
+```
+
+```{r}
+leveneTest(without.outliers$Coastline.num ~ as.factor(without.outliers$region.new))
+```
+
+Der leveneTest zeigt nun ein signifikantes Ergebnis. Es liegt Varianzheterogenität vor. Demnach darf die ANOVA nicht verwendet werden. Wir greifen daher auf den oneway.test (Welch) zurück.
+
+```{r}
+oneway.test(without.outliers$Coastline.num ~ without.outliers$region.new)
+```
+
+Wir sehen, wenn wir die Outlier nicht weiter berücksichtigen, gibt es doch einen signifikanten Unterschied zwischen den Regionen hinsichtlich ihres Küstenanteils.
+
+
+#9 Conclusion
+Wie wir im letzten Abschnitt gesehen haben, ist es zwingend notwendig nicht nur die Voraussetzungen für die statistischen Tests zu beachten, sondern auch die Verteilung der Variablen. Dies kann im Zweifel einen erheblichen Unterschied bei den Ergebnissen und den daraus gezogenen Schlussfolgerungen machen. 
+
+
+
+
+

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>ANOVA - Michael Fuchs</title>
+<meta property="og:title" content="ANOVA - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">12 min read</span>
+    
+
+    <h1 class="article-title">ANOVA</h1>
+
+    
+    <span class="article-date">2018/09/13</span>
+    
+
+    <div class="article-content">
+      <div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li></li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Im letzten Post <a href="https://michael-fuchs.netlify.com/2018/09/12/t-test/">“t-Test”</a> ging es hauptsächlich um die Funktionsweise eines t-Tests für unabhängigen Stichproben. Die einfaktorielle Varianzanalyse ohne Messwiederholung kann als eine Erweiterung des t-Tests für unabhängigen Stichproben angesehen werden, da die unabhängige Variable nicht mehr dichotom sein muss. Sie kann nun auch mehr als zwei Ausprägungen haben. Für diesen Post wurde der Datensatz <em>countries of the world</em> von der Statsistik Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006" class="uri">https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006</a> abrufbar.</p>
+<pre class="r"><code>library(tidyverse)
+library(nortest)
+library(psych)
+library(car)
+library(sjstats)
+library(pwr)
+library(ggpubr)</code></pre>
+<pre class="r"><code>countries &lt;- read_csv(&quot;countries of the world.csv&quot;)</code></pre>
+</div>
+<div id="preparation" class="section level1">
+<h1>2 Preparation</h1>
+<p>Wie auch beim t-Test wird der Datensatz <em>countries of the world</em> für die exemplarische Durchführung der ANOVA zunächst aufbereitet. Da die ANOVA Mittelwerte von mehr als zwei Gruppen vergleicht, werden drei neue Regionen aus der Variablen <code>Region</code> kreiert, sowie die abhängigen Variablen <code>Population</code> und <code>Coastline</code> als nummerische Variablen abgespeichert.</p>
+<pre class="r"><code>table(countries$Region)</code></pre>
+<pre><code>## 
+## ASIA (EX. NEAR EAST)              BALTICS  C.W. OF IND. STATES 
+##                   28                    3                   12 
+##       EASTERN EUROPE  LATIN AMER. &amp; CARIB            NEAR EAST 
+##                   12                   45                   16 
+##      NORTHERN AFRICA     NORTHERN AMERICA              OCEANIA 
+##                    6                    5                   21 
+##   SUB-SAHARAN AFRICA       WESTERN EUROPE 
+##                   51                   28</code></pre>
+<pre class="r"><code>preparation&lt;- countries %&gt;% filter(Region == &quot;LATIN AMER. &amp; CARIB&quot; | Region == &quot;SUB-SAHARAN AFRICA&quot; | Region == &quot;ASIA (EX. NEAR EAST)&quot; | Region == &quot;NEAR EAST&quot;) %&gt;%
+  select(Country, Region, `Coastline (coast/area ratio)`, Population)
+
+preparation$Population.num &lt;- as.numeric(preparation$Population)
+preparation$Coastline.new &lt;- str_replace(preparation$`Coastline (coast/area ratio)`, &quot;,&quot;, &quot;.&quot;)
+preparation$Coastline.num &lt;- as.numeric(preparation$Coastline.new)
+summary(preparation)</code></pre>
+<pre><code>##    Country             Region          Coastline (coast/area ratio)
+##  Length:140         Length:140         Length:140                  
+##  Class :character   Class :character   Class :character            
+##  Mode  :character   Mode  :character   Mode  :character            
+##                                                                    
+##                                                                    
+##                                                                    
+##    Population        Population.num      Coastline.new     
+##  Min.   :7.502e+03   Min.   :7.502e+03   Length:140        
+##  1st Qu.:7.868e+05   1st Qu.:7.868e+05   Class :character  
+##  Median :6.179e+06   Median :6.179e+06   Mode  :character  
+##  Mean   :3.710e+07   Mean   :3.710e+07                     
+##  3rd Qu.:2.169e+07   3rd Qu.:2.169e+07                     
+##  Max.   :1.314e+09   Max.   :1.314e+09                     
+##  Coastline.num     
+##  Min.   :  0.0000  
+##  1st Qu.:  0.1075  
+##  Median :  0.7050  
+##  Mean   : 10.9911  
+##  3rd Qu.:  7.2625  
+##  Max.   :214.6700</code></pre>
+<pre class="r"><code>preparation$region.new &lt;- ifelse(preparation$Region == &quot;SUB-SAHARAN AFRICA&quot;, &quot;AFRICA&quot;, ifelse(preparation$Region == &quot;LATIN AMER. &amp; CARIB&quot;, &quot;LATIN AMER&quot;, &quot;Asia&quot;))
+
+levels(as.factor(preparation$region.new))</code></pre>
+<pre><code>## [1] &quot;AFRICA&quot;     &quot;Asia&quot;       &quot;LATIN AMER&quot;</code></pre>
+</div>
+<div id="essential-requirements" class="section level1">
+<h1>3 Essential requirements</h1>
+<p>Wie bei einem t-Test müssen auch für die Durchführung einer ANOVA gewisse Voraussetzungen überprüft werden:</p>
+<ul>
+<li>Unabhängigkeit der Messungen. Kein Teilnehmer aus einer Gruppe darf auch in einer anderen Gruppe vorkommen.</li>
+<li>Die abhängige Variable ist metrisch skaliert.</li>
+<li>Die unabhängige Variable ist unabhängig und nominalskaliert.</li>
+<li>Normalverteilung der abhängigen Variablen in allen Populationen, wenn gilt N &lt; 30 in jeder Population.</li>
+<li>Varianzhomogenität der abhängigen Variablen in allen Populationen.</li>
+</ul>
+<div id="normal-distribution" class="section level2">
+<h2>3.1 Normal distribution</h2>
+<p>Für die Überprüfung der Normalverteilung wird der Lilliefors-Test angewendet.</p>
+<pre class="r"><code>lillie.test(preparation$Coastline.num)</code></pre>
+<pre><code>## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  preparation$Coastline.num
+## D = 0.3443, p-value &lt; 2.2e-16</code></pre>
+<p>Da p &lt; .001 liegt keine Normalverteilung der Variable <code>Coastline</code> vor.</p>
+</div>
+<div id="sampling-size" class="section level2">
+<h2>3.2 Sampling size</h2>
+<pre class="r"><code>size &lt;- describeBy(preparation$Coastline.num, preparation$region.new, mat = TRUE)
+size</code></pre>
+<pre><code>##     item     group1 vars  n      mean       sd median   trimmed      mad
+## X11    1     AFRICA    1 51  5.106078 16.96183   0.13  1.036585 0.192738
+## X12    2       Asia    1 44 12.717955 39.40667   1.18  2.875556 1.742055
+## X13    3 LATIN AMER    1 45 15.972222 21.52437   3.37 12.293243 4.862928
+##     min    max  range     skew  kurtosis       se
+## X11   0 107.91 107.91 4.748483 24.436128 2.375132
+## X12   0 214.67 214.67 3.987602 15.779160 5.940779
+## X13   0  90.47  90.47 1.447746  1.582381 3.208663</code></pre>
+<pre class="r"><code>size$n</code></pre>
+<pre><code>## [1] 51 44 45</code></pre>
+<p>Da alle Gruppen n &gt; 30 besitzen, greift der zentrale Grenzwertsatz. Die ANOVA könnte demnach unter der Voraussetzung von Varianzhomogenität durchgeführt werden.</p>
+</div>
+<div id="homogeneity-of-variance" class="section level2">
+<h2>3.3 Homogeneity of variance</h2>
+<pre class="r"><code>round(tapply(preparation$Coastline.num, preparation$region.new, var, na.rm=TRUE), 2)</code></pre>
+<pre><code>##     AFRICA       Asia LATIN AMER 
+##     287.70    1552.89     463.30</code></pre>
+<pre class="r"><code>leveneTest(preparation$Coastline.num ~ preparation$region.new)</code></pre>
+<pre><code>## Warning in leveneTest.default(y = y, group = group, ...): group coerced to
+## factor.</code></pre>
+<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
+##        Df F value Pr(&gt;F)
+## group   2   1.846 0.1618
+##       137</code></pre>
+<p>Da nun auch Varianzhomogenität (p &gt; .05) nachgewiesen wurde, wird im nachfolgenden Schritt die Varianzanalyse durchgeführt.</p>
+</div>
+</div>
+<div id="anova-with-variance-homogeneity" class="section level1">
+<h1>4 ANOVA with variance homogeneity</h1>
+<p>Nun wird überprüft ob die Regionen “AFRICA”, “Asia” und “LATIN AMER” sich signifikant in ihrem Küstenanteil unterscheiden. Wir speichern die <em>aov</em> Funktion unter dem Objekt “ANOva” ab.</p>
+<pre class="r"><code>ANOVA &lt;- aov(preparation$Coastline.num ~ preparation$region.new)</code></pre>
+<p>Mit der <em>model.tables</em> Funktion und dem Zusatzargument <em>“means”</em> lassen sich die Mittelwerte pro Gruppe ausgeben.</p>
+<pre class="r"><code>model.tables(ANOVA, &quot;means&quot;)</code></pre>
+<pre><code>## Tables of means
+## Grand mean
+##          
+## 10.99107 
+## 
+##  preparation$region.new 
+##     AFRICA  Asia LATIN AMER
+##      5.106 12.72      15.97
+## rep 51.000 44.00      45.00</code></pre>
+<p>Der Mittelwert über alle Gruppen hinweg wird unter <strong>Grand mean</strong> angezeigt. Die zweite Zeile (<strong>rep</strong>) gibt Auskunft über die jeweilige Gruppengröße.</p>
+<p>Für die Ausgabe der Standardabweichung (welche immer zu Mittelwertsangaben dazu genannt werden sollte) wird die <em>describeBy</em> Funktion verwendet.</p>
+<pre class="r"><code>describeBy(preparation$Coastline.num, preparation$region.new, mat = TRUE)</code></pre>
+<pre><code>##     item     group1 vars  n      mean       sd median   trimmed      mad
+## X11    1     AFRICA    1 51  5.106078 16.96183   0.13  1.036585 0.192738
+## X12    2       Asia    1 44 12.717955 39.40667   1.18  2.875556 1.742055
+## X13    3 LATIN AMER    1 45 15.972222 21.52437   3.37 12.293243 4.862928
+##     min    max  range     skew  kurtosis       se
+## X11   0 107.91 107.91 4.748483 24.436128 2.375132
+## X12   0 214.67 214.67 3.987602 15.779160 5.940779
+## X13   0  90.47  90.47 1.447746  1.582381 3.208663</code></pre>
+<p>Um das Ergebniss der Varianzanalyse zu erhalten, wird die <em>summary</em> Funktion auf das Objekt “ANOVA” angewendet.</p>
+<pre class="r"><code>summary(ANOVA)</code></pre>
+<pre><code>##                         Df Sum Sq Mean Sq F value Pr(&gt;F)
+## preparation$region.new   2   3014  1507.0   2.033  0.135
+## Residuals              137 101544   741.2</code></pre>
+<p>Das Ergebnis besteht aus zwei Zeilen. Zeile 1 enthält die Angaben zum Effekt des Faktors <code>region.new</code> (beziehungsweise zwischen den Gruppen). Zeile 2 steht mit <em>Residuals</em> für Rest und bezieht sich auf den Anteil der Varianz des Fehlers (beziehungsweise innerhalb der Gruppen).</p>
+<p><strong>Df</strong> Die Freiheitsgrade des F -Werts.</p>
+<p><strong>Sum Sq</strong> Die Quadratsummen zwischen den Gruppen (Zeile 1) und innerhalb der Gruppen (Zeile 2).</p>
+<p><strong>Mean Sq</strong> Die mittleren Quadratsummen. Diese werden gebildet, indem man die Quadratsummen durch die jeweiligen Freiheitsgrade teilt.</p>
+<p><strong>F value</strong> Die empirische Prüfgröße F. Sie wird berechnet, indem man die mittleren Quadratsummen zwischen den Gruppen (Zeile 1) durch die mittleren Quadratsummen innerhalb der Gruppen (Zeile 2) dividiert.</p>
+<p><strong>Pr(&gt;F)</strong> Der p-Wert für die Varianzanalyse. Er steht für die Wahrscheinlichkeit, diesen oder einen größeren F-Wert zu finden, wenn die Nullhypothese gilt.</p>
+<p>Das Ergebnis ist mit p = .135 nicht signifikant. Es gibt also erstmal keinen Unterschied zwischen den Regionen hinsichtlich ihres Küstenanteils.</p>
+</div>
+<div id="anova-with-variance-inequality" class="section level1">
+<h1>5 ANOVA with variance inequality</h1>
+<p>Es kann auch bei einer Varianzanalyse vorkommen, dass die Varianzen der abhängigen Variablen in einer Populatione nicht gleich verteilt ist. Im Nachfolgenden wollen wir überprüfen, ob die Regionen “AFRICA”, “Asia” und “LATIN AMER” sich signifikant in ihrem Populationsanteil unterscheiden.</p>
+<p><strong>Überprüfung der Normalverteilung</strong></p>
+<pre class="r"><code>lillie.test(preparation$Population.num) </code></pre>
+<pre><code>## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  preparation$Population.num
+## D = 0.40017, p-value &lt; 2.2e-16</code></pre>
+<p>Wir sehen, dass die Variable <code>Population.num</code> nicht normalverteilt ist. Nun wird erneut die Stichprobengröße der beiden Gruppen betrachtet.</p>
+<p><strong>Stichprobengröße</strong></p>
+<pre class="r"><code>size2 &lt;- describeBy(preparation$Population.num, preparation$region.new, mat = TRUE)
+size2$n</code></pre>
+<pre><code>## [1] 51 44 45</code></pre>
+<p>In allen Populationen gilt n &gt; 30. Es greift erneut der zentrale Grenzwertsatz.</p>
+<p><strong>Überprüfung der Varianzhomogenität</strong></p>
+<pre class="r"><code>leveneTest(preparation$Population.num ~ preparation$region.new)</code></pre>
+<pre><code>## Warning in leveneTest.default(y = y, group = group, ...): group coerced to
+## factor.</code></pre>
+<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
+##        Df F value Pr(&gt;F)  
+## group   2  3.9397 0.0217 *
+##       137                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Wir erhalten ein signifikantes Ergebnis. Dies bedeutet, dass Varianzungleichheit vorliegt. Anstelle der ANOVA wird daher der oneway.test (Welch) durchgeführt.</p>
+<p><strong>One-way-Test (Welch) bei Varianzungleichheit</strong></p>
+<pre class="r"><code>oneway.test(preparation$Population.num ~ preparation$region.new)</code></pre>
+<pre><code>## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  preparation$Population.num and preparation$region.new
+## F = 1.9421, num df = 2.000, denom df = 74.368, p-value = 0.1506</code></pre>
+<p>Das Ergebnis ist mit p = .151 nicht signifikant. Es gibt also keinen Unterschied zwischen den Regionen hinsichtlich ihres Populationsanteils.</p>
+</div>
+<div id="post-hoc-method" class="section level1">
+<h1>5 Post-hoc-method</h1>
+<p>Ein signifikantes / nicht signifikantes Ergebnis besagt lediglich, dass es allgemein Mittelwertsunterschiede / keine Mittelwertsunterschiede in dem Test gibt. Wir wissen jedoch nicht, um welche Mittelwerte es sich handelt. Um dies aufzuklären werden im kommenden Schritt alle Mittelwerte paarweise mit t-Tests für unabhängige Stichproben verglichen. Um die alpha-Fehler Kumulierung zu verhindern, wird eine alpha-Fehler Adjustierung durchgeführt. Für die einfaktorielle Varianzanalyse ohne Messwiederholung bietet sich die <strong>Bonferroni-Korrektur</strong> an. Sie wird mithilfe der <em>pairwise.t.test</em> Funktion angefordert.</p>
+<pre class="r"><code>pairwise.t.test(preparation$Population.num, preparation$region.new, p.adj= &quot;bonferroni&quot;)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  preparation$Population.num and preparation$region.new 
+## 
+##            AFRICA Asia 
+## Asia       0.042  -    
+## LATIN AMER 1.000  0.042
+## 
+## P value adjustment method: bonferroni</code></pre>
+<p>Wir sehen, dass es weder bei den Gruppen “AFRICA” und “Asia” noch bei den Gruppen “Asia” und “LATIN AMER” einen signifikanten Unterschied gibt.</p>
+</div>
+<div id="effect-size" class="section level1">
+<h1>6 Effect size</h1>
+<p>Eine sehr beliebte Effektgröße für die einfaktorielle Varianzanalyse ohne Messwiederholung ist das eta^2.</p>
+<div id="effect-size-for-anova-with-variance-homogeneity" class="section level2">
+<h2>6.1 Effect size for ANOVA with variance homogeneity</h2>
+<p>Das eta^2 wird folgendermaßen berechnet: <span class="math display">\[\eta^2 = \frac{\mathrm{QS}_\mathrm{Zwischen}}{\mathrm{QS}_\mathrm{Gesamt}}\]</span></p>
+<p>QS steht für Quadratsummen. Diese Werte können wir der Varianzanalysetabelle entnommen werden.</p>
+<pre class="r"><code>summary(ANOVA)</code></pre>
+<pre><code>##                         Df Sum Sq Mean Sq F value Pr(&gt;F)
+## preparation$region.new   2   3014  1507.0   2.033  0.135
+## Residuals              137 101544   741.2</code></pre>
+<p><span class="math display">\[\eta^2 = \frac{\mathrm{QS}_\mathrm{Zwischen}}{\mathrm{QS}_\mathrm{Gesamt}} = \frac{3014}{101544} \approx 0{,}029\]</span></p>
+<p>Alternativ kann man auch die <em>eta_sq</em> Funktion verwenden.</p>
+<pre class="r"><code>eta_sq(ANOVA)</code></pre>
+<pre><code>##                     term etasq
+## 1 preparation$region.new 0.029</code></pre>
+</div>
+<div id="effect-size-for-anova-with-variance-inequality" class="section level2">
+<h2>6.2 Effect size for ANOVA with variance inequality</h2>
+<p>Schwieriger wird die Bestimmung der Effektgröße, wenn man mangels Varianzhomogenität gezwungen war den oneway.test nach Welch durchzuführen. Hier nochmal das Ergebnis des Tests (5 ANOVA with variance inequality/One-way-Test (Welch) bei Varianzungleichheit).</p>
+<pre class="r"><code>oneway.test(preparation$Population.num ~ preparation$region.new)</code></pre>
+<pre><code>## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  preparation$Population.num and preparation$region.new
+## F = 1.9421, num df = 2.000, denom df = 74.368, p-value = 0.1506</code></pre>
+<p>Hier haben wir keine Quadratsummen angegeben, mit denen wir die Effektgröße berechnen könnten. Auch die <em>eta_sq</em> Funktion kann hier nicht angewendet werden, da diese nur bei aov-Modellen funktioniert. Mit ein wenig Aufwand, lassen sich die Quadratsummen und letztendlich die Effektstärke trotzdem berechnen.</p>
+<pre class="r"><code>m.i &lt;- tapply(preparation$Population.num, preparation$region.new, mean)
+v.i &lt;- tapply(preparation$Population.num, preparation$region.new, var)
+n.i &lt;- tapply(preparation$Population.num, preparation$region.new, length)
+
+SS_within &lt;- sum((n.i-1) * v.i)
+SS_between &lt;- sum(n.i * (m.i - mean(preparation$Population.num))^2)
+SS_total &lt;- (length(preparation$Population.num)-1) * var(preparation$Population.num)
+SS_between/SS_total</code></pre>
+<pre><code>## [1] 0.0561803</code></pre>
+</div>
+<div id="calculation-of-cohens-f" class="section level2">
+<h2>6.3 Calculation of Cohens f</h2>
+<p>Aus dem eta^2 kann nun die Effektgröße f nach Cohen berechnet werden. Im ersten Schritt weisen wir dazu das eta^2 aus der durchgeführten ANOVA dem Objekt “f.ANOVA” zu.</p>
+<pre class="r"><code>f.ANOVA &lt;- eta_sq(ANOVA)</code></pre>
+<p>Die Formel für Cohens f sieht in R folgendermaßen aus.</p>
+<pre class="r"><code>f.1 &lt;- sqrt(as.numeric(f.ANOVA)/(1-as.numeric(f.ANOVA)))</code></pre>
+<pre><code>## Warning: NAs durch Umwandlung erzeugt
+
+## Warning: NAs durch Umwandlung erzeugt</code></pre>
+<pre class="r"><code>f.1</code></pre>
+<pre><code>## [1]        NA 0.1722846</code></pre>
+<p>Dasselbe wird nun auch für den oneway.test durchgeführt.</p>
+<pre class="r"><code>f.oneway.test &lt;- SS_between/SS_total
+f.2 &lt;- sqrt(as.numeric(f.oneway.test)/(1-as.numeric(f.oneway.test)))
+f.2</code></pre>
+<pre><code>## [1] 0.2439762</code></pre>
+<p>Wir erhalten für die ANOVA einen f-Wert von 0,17 und für den oneway.test einen f-Wert von 0,24. Warum haben wir zusätzlich ein weiteres Maß der Effektgröße berechnet, nachdem wir bereits eta^2 hatten?</p>
+</div>
+</div>
+<div id="power" class="section level1">
+<h1>7 Power</h1>
+<p>Die Frage, warum zusätzlich Cohens f berechnet wurde, klärt sich, wenn die Teststärke berechnet werden soll. Im nachfolgenden soll eine Power Analyse für die ANOVA (4 ANOVA with variance homogeneity) durchgeführt werden. Für die <em>pwr.anova.test</em> Funktion werden folgende Parameter benötigt:</p>
+<ul>
+<li>k = Anzahl der Gruppen</li>
+<li>f = Cohens f</li>
+<li>sig.level = das Signifikanzniveau</li>
+<li>n = Gruppengröße (der kleinsten Gruppe)</li>
+</ul>
+<p>Für die zu analysierende ANOVA ergibt dies fogende Syntax.</p>
+<pre class="r"><code>pwr.anova.test(k=3, f = 0.1722846, sig.level = 0.135, n= 44)</code></pre>
+<pre><code>## 
+##      Balanced one-way analysis of variance power calculation 
+## 
+##               k = 3
+##               n = 44
+##               f = 0.1722846
+##       sig.level = 0.135
+##           power = 0.5901031
+## 
+## NOTE: n is number in each group</code></pre>
+<p>Die ANOVA besitzt eine Teststärke von 0,59. Gewünscht wäre eine Stärke von 0,8. Im Nachgang wird nun berechnet, wie viele Personen man pro Gruppe für die ANOVA bräuchte, um folgende Werte zu erhalten:</p>
+<ul>
+<li>k = 3</li>
+<li>f = 0,25</li>
+<li>sig.level = 0,05</li>
+<li>power = 0,8</li>
+</ul>
+<pre class="r"><code>pwr.anova.test(k=3, f = 0.25, sig.level = 0.05, power = 0.80)</code></pre>
+<pre><code>## 
+##      Balanced one-way analysis of variance power calculation 
+## 
+##               k = 3
+##               n = 52.3966
+##               f = 0.25
+##       sig.level = 0.05
+##           power = 0.8
+## 
+## NOTE: n is number in each group</code></pre>
+<p>Um eine Teststärke von 0,8 bei einem Signifikanzlevel von 0,05 und einer Effektgröße von 0,25 zu bekommen, bedarf es einer Gruppengröße von mindestens 53 in <strong>allen</strong> Gruppen. Die Größe der gesamten Stichprobe (für die angegebenen Parameter) lässt sich folgendermaßen berechnen.</p>
+<pre class="r"><code>pwr.anova.test(k=3, f = 0.25, sig.level = 0.05, power = 0.80)$n * pwr.anova.test(k=3, f = 0.25, sig.level = 0.05, power = 0.80)$k</code></pre>
+<pre><code>## [1] 157.1898</code></pre>
+<p>Es sind insgesamt 158 Observations notwendig.</p>
+</div>
+<div id="outliers" class="section level1">
+<h1>8 Outliers</h1>
+<p>Zu einer ANOVA ist ein Boxplot Diagramm immer sehr nützlich, da es viel über die Verteilung der abhängigen Variablen aussagt und etwaige Ausreißer schnell identifiziert werden könne.</p>
+<pre class="r"><code>ggboxplot(preparation, x = &quot;region.new&quot;, y = &quot;Coastline.num&quot;, 
+          color = &quot;region.new&quot;, palette = c(&quot;#00AFBB&quot;, &quot;#E7B800&quot;, &quot;#FC4E07&quot;),
+          order = c(&quot;AFRICA&quot;, &quot;Asia&quot;, &quot;LATIN AMER&quot;),
+          ylab = &quot;Coastline&quot;, xlab = &quot;Region&quot;)</code></pre>
+<p><img src="/post/2018-09-13-anova_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>Wie wir sehen können, sind mehrere Ausreißer vorhanden. Nun stellt sich die Frage, ob dies eine Auswirkung auf die durchgeführten Signifikanztests hatte.</p>
+<pre class="r"><code>describe(preparation$Coastline.num)</code></pre>
+<pre><code>##    vars   n  mean    sd median trimmed  mad min    max  range skew
+## X1    1 140 10.99 27.43    0.7    4.37 1.05   0 214.67 214.67 4.49
+##    kurtosis   se
+## X1    25.01 2.32</code></pre>
+<p>Die <em>describe</em> Funktion zeigt, dass der Mittelwert bei 10,99 liegt mit einer Standardabweichung von 27,43. Wir schmeißen nun alle Werte größer 70 mit dem <em>filter</em> Befehl raus.</p>
+<pre class="r"><code>without.outliers&lt;- preparation %&gt;% filter(Coastline.num &lt; 70)</code></pre>
+<pre class="r"><code>leveneTest(without.outliers$Coastline.num ~ as.factor(without.outliers$region.new))</code></pre>
+<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
+##        Df F value    Pr(&gt;F)    
+## group   2  9.2706 0.0001702 ***
+##       133                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Der leveneTest zeigt nun ein signifikantes Ergebnis. Es liegt Varianzheterogenität vor. Demnach darf die ANOVA nicht verwendet werden. Wir greifen daher auf den oneway.test (Welch) zurück.</p>
+<pre class="r"><code>oneway.test(without.outliers$Coastline.num ~ without.outliers$region.new)</code></pre>
+<pre><code>## 
+##  One-way analysis of means (not assuming equal variances)
+## 
+## data:  without.outliers$Coastline.num and without.outliers$region.new
+## F = 6.7628, num df = 2.000, denom df = 78.374, p-value = 0.001952</code></pre>
+<p>Wir sehen, wenn wir die Outlier nicht weiter berücksichtigen, gibt es doch einen signifikanten Unterschied zwischen den Regionen hinsichtlich ihres Küstenanteils.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>9 Conclusion</h1>
+<p>Wie wir im letzten Abschnitt gesehen haben, ist es zwingend notwendig nicht nur die Voraussetzungen für die statistischen Tests zu beachten, sondern auch die Verteilung der Variablen. Dies kann im Zweifel einen erheblichen Unterschied bei den Ergebnissen und den daraus gezogenen Schlussfolgerungen machen.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

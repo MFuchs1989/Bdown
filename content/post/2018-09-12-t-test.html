@@ -213,7 +213,7 @@ description2</code></pre>
 <p>Zuvor sollte mittels der <em>levels</em> Funktion überprüft werden, welche “Gruppe” innerhalb der unabhängigen Variablen zuerst genannt wird.</p>
 <pre class="r"><code>levels(as.factor(limitation$Region))</code></pre>
 <pre><code>## [1] &quot;LATIN AMER. &amp; CARIB&quot; &quot;SUB-SAHARAN AFRICA&quot;</code></pre>
-<p>Für eine gerichtete Hypothese muss die Syntax des t-Tests um das Argument <em>alternative = “greater” oder “less”</em> ergänzt werden. Wenn man nun prüfen will, ob “SUB-SAHARAN AFRICA” höhere Werte als “LATIN AMER. &amp; CARIB” hinsichtlich Küstenanteil hat, muss man den t-Test folgendermaßen anfordern.</p>
+<p>Für eine gerichtete Hypothese muss die Syntax des t-Tests um das Argument <em>alternative = “greater” oder “less”</em> ergänzt werden. Möchte man prüfen, ob die Region “SUB-SAHARAN AFRICA” einen höhere Küstenanteil hat als die Region “LATIN AMER. &amp; CARIB”, muss man den t-Test folgendermaßen anfordern.</p>
 <pre class="r"><code>t.test(limitation$Coastline.num ~ limitation$Region, alternative = &quot;less&quot;)</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
@@ -304,7 +304,7 @@ description2</code></pre>
 ##     alternative = two.sided
 ## 
 ## NOTE: n is number in *each* group</code></pre>
-<p>Um eine Teststärke von 0,8 bei einem Signifikanzlevel von 0,05 und einer Effektgröße von 0,5 zu bekommen (bei einem t-Test für unabhängige Stichproben und ungerichteter Hypothese) bedarf es einer Gruppengröße von mindestens 64 in <strong>beiden</strong> Gruppen.</p>
+<p>Um eine Teststärke von 0,8 bei einem Signifikanzlevel von 0,05 und einer Effektgröße von 0,5 zu bekommen (bei einem t-Test für unabhängige Stichproben und ungerichteter Hypothese), bedarf es einer Gruppengröße von mindestens 64 in <strong>beiden</strong> Gruppen.</p>
 </div>
 <div id="conclusion" class="section level1">
 <h1>10 Conclusion</h1>

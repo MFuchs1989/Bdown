@@ -6,10 +6,19 @@
     <description>Recent content in R on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 12 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 13 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ANOVA</title>
+      <link>/2018/09/13/anova/</link>
+      <pubDate>Thu, 13 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/09/13/anova/</guid>
+      <description>Table of Content1 Introduction1 IntroductionIm letzten Post “t-Test” ging es hauptsächlich um die Funktionsweise eines t-Tests für unabhängigen Stichproben. Die einfaktorielle Varianzanalyse ohne Messwiederholung kann als eine Erweiterung des t-Tests für unabhängigen Stichproben angesehen werden, da die unabhängige Variable nicht mehr dichotom sein muss. Sie kann nun auch mehr als zwei Ausprägungen haben. Für diesen Post wurde der Datensatz countries of the world von der Statsistik Plattform Kaggle https://www.</description>
+    </item>
     
     <item>
       <title>t-Test</title>

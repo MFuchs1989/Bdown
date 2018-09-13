@@ -187,7 +187,7 @@ Zuvor sollte mittels der *levels* Funktion überprüft werden, welche "Gruppe" i
 levels(as.factor(limitation$Region))
 ```
 
-Für eine gerichtete Hypothese muss die Syntax des t-Tests um das Argument *alternative = "greater" oder "less"* ergänzt werden. Wenn man nun prüfen will, ob "SUB-SAHARAN AFRICA" höhere Werte als "LATIN AMER. & CARIB" hinsichtlich Küstenanteil hat, muss man den t-Test folgendermaßen anfordern.
+Für eine gerichtete Hypothese muss die Syntax des t-Tests um das Argument *alternative = "greater" oder "less"* ergänzt werden. Möchte man prüfen, ob die Region "SUB-SAHARAN AFRICA" einen höhere Küstenanteil hat als die Region "LATIN AMER. & CARIB", muss man den t-Test folgendermaßen anfordern.
 ```{r}
 t.test(limitation$Coastline.num ~ limitation$Region, alternative = "less")
 ```
@@ -248,7 +248,7 @@ Der Welch-Test besitzt eine Teststärke von 0,47. Gewünscht wäre eine Stärke 
 pwr.t.test(d=0.5, sig.level = 0.05, power=0.8, type="two.sample", alternative="two.sided")
 ```
 
-Um eine Teststärke von 0,8 bei einem Signifikanzlevel von 0,05 und einer Effektgröße von 0,5 zu bekommen (bei einem t-Test für unabhängige Stichproben und ungerichteter Hypothese) bedarf es einer Gruppengröße von mindestens 64 in **beiden** Gruppen.
+Um eine Teststärke von 0,8 bei einem Signifikanzlevel von 0,05 und einer Effektgröße von 0,5 zu bekommen (bei einem t-Test für unabhängige Stichproben und ungerichteter Hypothese), bedarf es einer Gruppengröße von mindestens 64 in **beiden** Gruppen.
 
 
 #10 Conclusion
