@@ -73,7 +73,18 @@
 <h1>Table of Content</h1>
 <ul>
 <li>1 Introduction</li>
-<li></li>
+<li>2 Preparation</li>
+<li>3 Essential requirements</li>
+<li>3.1 Normal distribution</li>
+<li>3.2 Sampling size</li>
+<li>3.3 Homogeneity of variance</li>
+<li>4 t-Test with variance homogeneity</li>
+<li>5 t-Test with variance inequality</li>
+<li>6 Directed hypothesis</li>
+<li>7 Adjust confidence interval</li>
+<li>8 Effect size</li>
+<li>9 Power</li>
+<li>10 Conclusion</li>
 </ul>
 </div>
 <div id="introduction" class="section level1">
@@ -203,7 +214,7 @@ description</code></pre>
 <p>Der durchgeführte t-Test zeigt ein nicht signifikantes Ergebnis (p &gt; .05). Die Alternativhypothese (Es gibt einen Unterschied zwischen den beiden Regionen “LATIN AMER. &amp; CARIB” und “SUB-SAHARAN AFRICA” hinsichtlich dem Populationswertes) kann somit verworfen werden.</p>
 </div>
 <div id="t-test-with-variance-inequality" class="section level1">
-<h1>4 t-Test with variance inequality</h1>
+<h1>5 t-Test with variance inequality</h1>
 <p>Es kann natürlich vorkommen, dass die Varianzen der abhängigen Variablen in beiden Populationen nicht gleich ist. Wir wollen eine Mittelwertsvergleich für die beiden Regionen “LATIN AMER. &amp; CARIB” und “SUB-SAHARAN AFRICA” mittels der abhängigen Variablen <code>Coastline</code> durchführen.</p>
 <p><strong>Überprüfung der Normalverteilung</strong></p>
 <pre class="r"><code>lillie.test(limitation$Coastline.num)</code></pre>
@@ -250,7 +261,7 @@ description2</code></pre>
 <p>Das Ergebnis ist signifikant. Es gibt also einen Unterschied zwischen beiden Regionen hinsichtlich ihres Küstenanteils.</p>
 </div>
 <div id="directed-hypothesis" class="section level1">
-<h1>5 Directed hypothesis</h1>
+<h1>6 Directed hypothesis</h1>
 <p>Bei dem durchgeführten t-Test für unabhängige Stichproben sowie dem Welch-Test handelte es sich um ungerichtete Hypothesen: <span class="math display">\[\begin{equation*} H_0:\mu=\mu_0 \quad \text{gegen} \quad H_1:\mu\neq\mu_0 \end{equation*}\]</span> Man behauptet, es gebe einen Mittelwertsunterschied zwischen zwei Gruppen. Die Nullhypothese besagt demnach, dass die Mittelwerte gleich sind.</p>
 <p>Entgegen ungerichteter Hypothesen besteht die Möglichkeit, diese auch gerichtet zu testen: <span class="math display">\[\begin{equation*} H_0:\mu=\mu_0 \quad \text{gegen} \quad H_1:\mu\geq\mu_0 \end{equation*}\]</span></p>
 <p>Zuvor sollte mittels der <em>levels</em> Funktion überprüft werden, welche “Gruppe” innerhalb der unabhängigen Variablen zuerst genannt wird.</p>
@@ -272,7 +283,7 @@ description2</code></pre>
 <p>Mit p = .996 ist das Ergebnis nicht signifikant. “SUB-SAHARAN AFRICA” hat demnach keinen höheren Küstenanteil als “LATIN AMER. &amp; CARIB”.</p>
 </div>
 <div id="adjust-confidence-interval" class="section level1">
-<h1>6 Adjust confidence interval</h1>
+<h1>7 Adjust confidence interval</h1>
 <p>Standardgemäß wird in R immer 95% Konfidenzintervall ausgegeben. Allerdings kann man mit dem Zusatzargument <em>conf.level =</em> das Konfidenzintervall anpassen. Im folgenden Beispiel wird der Welch-Test aus Punkt 4 <em>t-Test with variance inequality</em> mit einem 99% Konfidenzintervall angefordert.</p>
 <pre class="r"><code>t.test(limitation$Coastline.num ~ limitation$Region, conf.level = 0.99)</code></pre>
 <pre><code>## 
@@ -288,7 +299,7 @@ description2</code></pre>
 ##                         15.972222                          5.106078</code></pre>
 </div>
 <div id="effect-size" class="section level1">
-<h1>7 Effect size</h1>
+<h1>8 Effect size</h1>
 <p>Als standardisierte Effektgröße (SMD: Standardized Mean Difference) für zwei Mittelwerte wird üblicherweise Cohens d angefordert. Cohens d wird berechnet, indem man die Mittelwertsdifferenz durch die gepoolte Standardabweichung teilt. Im folgenden Beispiel wird die Effektgröße für den Vergleich von “SUB-SAHARAN AFRICA” und “LATIN AMER. &amp; CARIB” bezüglich ihres Küstenanteils.</p>
 <pre class="r"><code>ci.smd(ncp = t.test(limitation$Coastline.num ~ limitation$Region)$statistic, n.1 = description2$n[1], n.2 = description2$n[2])</code></pre>
 <pre><code>## $Lower.Conf.Limit.smd
@@ -307,7 +318,7 @@ description2</code></pre>
 <p>Wir erhalten ein Cohens d von 0,56 ($smd).</p>
 </div>
 <div id="power" class="section level1">
-<h1>8 Power</h1>
+<h1>9 Power</h1>
 <p>Im folgenden Beispiel soll die Teststärke für den Welch-Test (4. t-Test with variance inequality/Welch-Test bei Varianzungleichheit) berechnet werden. Folgende Parameter werden daher in den Befehl <em>pwr.t.test</em> eingefügt:</p>
 <ul>
 <li>d = Cohens d</li>
@@ -350,7 +361,7 @@ description2</code></pre>
 <p>Um eine Teststärke von 0,8 bei einem Signifikanzlevel von 0,05 und einer Effektgröße von 0,5 zu bekommen (bei einem t-Test für unabhängige Stichproben und ungerichteter Hypothese) bedarf es einer Gruppengröße von mindestens 64 in <strong>beiden</strong> Gruppen.</p>
 </div>
 <div id="conclusion" class="section level1">
-<h1>9 Conclusion</h1>
+<h1>10 Conclusion</h1>
 <p>Der Vergleich von Mittelwerten zweier Gruppen kommt in der Statistik sehr häufig vor. In diesem Post wurde gezeigt, wie ein t-Test oder Welch-Test für unabhängige Stichproben durchgeführt wird. Es wurde auf die Voraussetzungen des t-Tests eingegangen sowie die Berechnung der Effekt- und der Teststärke. War die Teststärke nicht ausreichend, wurde im Nachgang die erforderte Gruppengröße berechnet.</p>
 </div>
 

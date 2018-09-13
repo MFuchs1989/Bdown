@@ -17,9 +17,18 @@ knitr::opts_chunk$set(echo = TRUE)
 #Table of Content
 
 + 1 Introduction
-+ 
-
-
++ 2 Preparation
++ 3 Essential requirements
++ 3.1 Normal distribution
++ 3.2 Sampling size
++ 3.3 Homogeneity of variance
++ 4 t-Test with variance homogeneity
++ 5 t-Test with variance inequality
++ 6 Directed hypothesis
++ 7 Adjust confidence interval
++ 8 Effect size
++ 9 Power
++ 10 Conclusion
 
 
 #1 Introduction
@@ -125,7 +134,7 @@ Die Bestandteile des Tests sind wie folgt:
 Der durchgeführte t-Test zeigt ein nicht signifikantes Ergebnis (p > .05). Die Alternativhypothese (Es gibt einen Unterschied zwischen den beiden Regionen "LATIN AMER. & CARIB" und "SUB-SAHARAN AFRICA" hinsichtlich dem Populationswertes) kann somit verworfen werden.
 
 
-#4 t-Test with variance inequality
+#5 t-Test with variance inequality
 
 Es kann natürlich vorkommen, dass die Varianzen der abhängigen Variablen in beiden Populationen nicht gleich ist. 
 Wir wollen eine Mittelwertsvergleich für die beiden Regionen "LATIN AMER. & CARIB" und "SUB-SAHARAN AFRICA" mittels der abhängigen Variablen `Coastline` durchführen. 
@@ -160,7 +169,7 @@ t.test(limitation$Coastline.num ~ limitation$Region)
 Das Ergebnis ist signifikant. Es gibt also einen Unterschied zwischen beiden Regionen hinsichtlich ihres Küstenanteils. 
 
 
-#5 Directed hypothesis
+#6 Directed hypothesis
 
 Bei dem durchgeführten t-Test für unabhängige Stichproben sowie dem Welch-Test handelte es sich um ungerichtete Hypothesen:
 $$\begin{equation*} H_0:\mu=\mu_0 \quad \text{gegen} \quad H_1:\mu\neq\mu_0 \end{equation*}$$
@@ -182,7 +191,7 @@ t.test(limitation$Coastline.num ~ limitation$Region, alternative = "less")
 Mit p = .996 ist das Ergebnis nicht signifikant. "SUB-SAHARAN AFRICA" hat demnach keinen höheren Küstenanteil als "LATIN AMER. & CARIB".
 
 
-#6 Adjust confidence interval
+#7 Adjust confidence interval
 
 Standardgemäß wird in R immer 95% Konfidenzintervall ausgegeben. Allerdings kann man mit dem Zusatzargument *conf.level =* das Konfidenzintervall anpassen. Im folgenden Beispiel wird der Welch-Test aus Punkt 4 *t-Test with variance inequality* mit einem 99% Konfidenzintervall angefordert. 
 ```{r}
@@ -190,7 +199,7 @@ t.test(limitation$Coastline.num ~ limitation$Region, conf.level = 0.99)
 ```
 
 
-#7 Effect size
+#8 Effect size
 
 Als standardisierte Effektgröße (SMD: Standardized Mean Difference) für zwei Mittelwerte wird üblicherweise Cohens d angefordert. Cohens d wird berechnet, indem man die Mittelwertsdifferenz durch die gepoolte Standardabweichung teilt. Im folgenden Beispiel wird die Effektgröße für den Vergleich von "SUB-SAHARAN AFRICA" und "LATIN AMER. & CARIB" bezüglich ihres Küstenanteils.
 ```{r}
@@ -208,7 +217,7 @@ Die *ci.smd* Funktion enthält folgende Argumente:
 Wir erhalten ein Cohens d von 0,56 ($smd).
 
 
-#8 Power
+#9 Power
 
 Im folgenden Beispiel soll die Teststärke für den Welch-Test (4. t-Test with variance inequality/Welch-Test bei Varianzungleichheit) berechnet werden. Folgende Parameter werden daher in den Befehl *pwr.t.test* eingefügt:
 
@@ -238,7 +247,7 @@ pwr.t.test(d=0.5, sig.level = 0.05, power=0.8, type="two.sample", alternative="t
 Um eine Teststärke von 0,8 bei einem Signifikanzlevel von 0,05 und einer Effektgröße von 0,5 zu bekommen (bei einem t-Test für unabhängige Stichproben und ungerichteter Hypothese) bedarf es einer Gruppengröße von mindestens 64 in **beiden** Gruppen.
 
 
-#9 Conclusion
+#10 Conclusion
 
 Der Vergleich von Mittelwerten zweier Gruppen kommt in der Statistik sehr häufig vor. In diesem Post wurde gezeigt, wie ein t-Test oder Welch-Test für unabhängige Stichproben durchgeführt wird. Es wurde auf die Voraussetzungen des t-Tests eingegangen sowie die Berechnung der Effekt- und der Teststärke. War die Teststärke nicht ausreichend, wurde im Nachgang die erforderte Gruppengröße berechnet. 
 
