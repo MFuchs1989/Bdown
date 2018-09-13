@@ -17,7 +17,22 @@ knitr::opts_chunk$set(echo = TRUE)
 #Table of Content
 
 + 1 Introduction
-+ 
++ 2 Preparation
++ 3 Essential requirements
++ 3.1 Normal distribution
++ 3.2 Sampling size
++ 3.3 Homogeneity of variance
++ 4 ANOVA with variance homogeneity
++ 5 ANOVA with variance inequality
++ 6 Post-hoc-method
++ 7 Effect size
++ 7.1 Effect size for ANOVA with variance homogeneity
++ 7.2 Effect size for ANOVA with variance inequality
++ 7.3 Calculation of Cohens f
++ 8 Power
++ 9 Outliers
++ 10 Conclusion
+
 
 
 #1 Introduction
@@ -171,7 +186,7 @@ oneway.test(preparation$Population.num ~ preparation$region.new)
 Das Ergebnis ist mit p = .151 nicht signifikant. Es gibt also keinen Unterschied zwischen den Regionen hinsichtlich ihres Populationsanteils.
 
 
-#5 Post-hoc-method
+#6 Post-hoc-method
 
 Ein signifikantes / nicht signifikantes Ergebnis besagt lediglich, dass es allgemein Mittelwertsunterschiede / keine Mittelwertsunterschiede in dem Test gibt. Wir wissen jedoch nicht, um welche Mittelwerte es sich handelt. Um dies aufzuklären werden im kommenden Schritt alle Mittelwerte paarweise mit t-Tests für unabhängige Stichproben verglichen. Um die alpha-Fehler Kumulierung zu verhindern, wird eine alpha-Fehler Adjustierung durchgeführt. Für die einfaktorielle Varianzanalyse ohne Messwiederholung bietet sich die **Bonferroni-Korrektur** an. Sie wird mithilfe der *pairwise.t.test* Funktion angefordert.
 ```{r}
@@ -181,11 +196,11 @@ pairwise.t.test(preparation$Population.num, preparation$region.new, p.adj= "bonf
 Wir sehen, dass es weder bei den Gruppen "AFRICA" und "Asia" noch bei den Gruppen "Asia" und "LATIN AMER" einen signifikanten Unterschied gibt.
 
 
-#6 Effect size
+#7 Effect size
 
-Eine sehr beliebte Effektgröße für die einfaktorielle Varianzanalyse ohne Messwiederholung ist das eta^2.
+Eine sehr beliebte Effektgröße für die einfaktorielle Varianzanalyse ohne Messwiederholung ist das eta**2.
 
-##6.1 Effect size for ANOVA with variance homogeneity
+##7.1 Effect size for ANOVA with variance homogeneity
 
 Das eta^2 wird folgendermaßen berechnet:
 $$\eta^2 = \frac{\mathrm{QS}_\mathrm{Zwischen}}{\mathrm{QS}_\mathrm{Gesamt}}$$
@@ -202,7 +217,7 @@ Alternativ kann man auch die *eta_sq* Funktion verwenden.
 eta_sq(ANOVA)
 ```
 
-##6.2 Effect size for ANOVA with variance inequality
+##7.2 Effect size for ANOVA with variance inequality
 
 Schwieriger wird die Bestimmung der Effektgröße, wenn man mangels Varianzhomogenität gezwungen war den oneway.test nach Welch durchzuführen. 
 Hier nochmal das Ergebnis des Tests (5 ANOVA with variance inequality/One-way-Test (Welch) bei Varianzungleichheit). 
@@ -222,7 +237,7 @@ SS_total <- (length(preparation$Population.num)-1) * var(preparation$Population.
 SS_between/SS_total
 ```
 
-##6.3 Calculation of Cohens f
+##7.3 Calculation of Cohens f
 
 Aus dem eta^2 kann nun die Effektgröße f nach Cohen berechnet werden. Im ersten Schritt weisen wir dazu das eta^2 aus der durchgeführten ANOVA dem Objekt "f.ANOVA" zu.
 ```{r}
@@ -246,7 +261,7 @@ Wir erhalten für die ANOVA einen f-Wert von 0,17 und für den oneway.test einen
 Warum haben wir zusätzlich ein weiteres Maß der Effektgröße berechnet, nachdem wir bereits eta^2 hatten? 
 
 
-#7 Power
+#8 Power
 
 Die Frage, warum zusätzlich Cohens f berechnet wurde, klärt sich, wenn die Teststärke berechnet werden soll. Im nachfolgenden soll eine Power Analyse für die ANOVA (4 ANOVA with variance homogeneity) durchgeführt werden. Für die *pwr.anova.test* Funktion werden folgende Parameter benötigt:
 
@@ -280,7 +295,7 @@ pwr.anova.test(k=3, f = 0.25, sig.level = 0.05, power = 0.80)$n * pwr.anova.test
 Es sind insgesamt 158 Observations notwendig.
 
 
-#8 Outliers
+#9 Outliers
 
 Zu einer ANOVA ist ein Boxplot Diagramm immer sehr nützlich, da es viel über die Verteilung der abhängigen Variablen aussagt und etwaige Ausreißer schnell identifiziert werden könne.
 ```{r}
@@ -315,7 +330,7 @@ oneway.test(without.outliers$Coastline.num ~ without.outliers$region.new)
 Wir sehen, wenn wir die Outlier nicht weiter berücksichtigen, gibt es doch einen signifikanten Unterschied zwischen den Regionen hinsichtlich ihres Küstenanteils.
 
 
-#9 Conclusion
+#10 Conclusion
 Wie wir im letzten Abschnitt gesehen haben, ist es zwingend notwendig nicht nur die Voraussetzungen für die statistischen Tests zu beachten, sondern auch die Verteilung der Variablen. Dies kann im Zweifel einen erheblichen Unterschied bei den Ergebnissen und den daraus gezogenen Schlussfolgerungen machen. 
 
 

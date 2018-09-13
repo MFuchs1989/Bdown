@@ -15,7 +15,21 @@ tags:
 <h1>Table of Content</h1>
 <ul>
 <li>1 Introduction</li>
-<li></li>
+<li>2 Preparation</li>
+<li>3 Essential requirements</li>
+<li>3.1 Normal distribution</li>
+<li>3.2 Sampling size</li>
+<li>3.3 Homogeneity of variance</li>
+<li>4 ANOVA with variance homogeneity</li>
+<li>5 ANOVA with variance inequality</li>
+<li>6 Post-hoc-method</li>
+<li>7 Effect size</li>
+<li>7.1 Effect size for ANOVA with variance homogeneity</li>
+<li>7.2 Effect size for ANOVA with variance inequality</li>
+<li>7.3 Calculation of Cohens f</li>
+<li>8 Power</li>
+<li>9 Outliers</li>
+<li>10 Conclusion</li>
 </ul>
 </div>
 <div id="introduction" class="section level1">
@@ -204,7 +218,7 @@ size2$n</code></pre>
 <p>Das Ergebnis ist mit p = .151 nicht signifikant. Es gibt also keinen Unterschied zwischen den Regionen hinsichtlich ihres Populationsanteils.</p>
 </div>
 <div id="post-hoc-method" class="section level1">
-<h1>5 Post-hoc-method</h1>
+<h1>6 Post-hoc-method</h1>
 <p>Ein signifikantes / nicht signifikantes Ergebnis besagt lediglich, dass es allgemein Mittelwertsunterschiede / keine Mittelwertsunterschiede in dem Test gibt. Wir wissen jedoch nicht, um welche Mittelwerte es sich handelt. Um dies aufzuklären werden im kommenden Schritt alle Mittelwerte paarweise mit t-Tests für unabhängige Stichproben verglichen. Um die alpha-Fehler Kumulierung zu verhindern, wird eine alpha-Fehler Adjustierung durchgeführt. Für die einfaktorielle Varianzanalyse ohne Messwiederholung bietet sich die <strong>Bonferroni-Korrektur</strong> an. Sie wird mithilfe der <em>pairwise.t.test</em> Funktion angefordert.</p>
 <pre class="r"><code>pairwise.t.test(preparation$Population.num, preparation$region.new, p.adj= &quot;bonferroni&quot;)</code></pre>
 <pre><code>## 
@@ -220,10 +234,10 @@ size2$n</code></pre>
 <p>Wir sehen, dass es weder bei den Gruppen “AFRICA” und “Asia” noch bei den Gruppen “Asia” und “LATIN AMER” einen signifikanten Unterschied gibt.</p>
 </div>
 <div id="effect-size" class="section level1">
-<h1>6 Effect size</h1>
-<p>Eine sehr beliebte Effektgröße für die einfaktorielle Varianzanalyse ohne Messwiederholung ist das eta^2.</p>
+<h1>7 Effect size</h1>
+<p>Eine sehr beliebte Effektgröße für die einfaktorielle Varianzanalyse ohne Messwiederholung ist das eta**2.</p>
 <div id="effect-size-for-anova-with-variance-homogeneity" class="section level2">
-<h2>6.1 Effect size for ANOVA with variance homogeneity</h2>
+<h2>7.1 Effect size for ANOVA with variance homogeneity</h2>
 <p>Das eta^2 wird folgendermaßen berechnet: <span class="math display">\[\eta^2 = \frac{\mathrm{QS}_\mathrm{Zwischen}}{\mathrm{QS}_\mathrm{Gesamt}}\]</span></p>
 <p>QS steht für Quadratsummen. Diese Werte können wir der Varianzanalysetabelle entnommen werden.</p>
 <pre class="r"><code>summary(ANOVA)</code></pre>
@@ -237,7 +251,7 @@ size2$n</code></pre>
 ## 1 preparation$region.new 0.029</code></pre>
 </div>
 <div id="effect-size-for-anova-with-variance-inequality" class="section level2">
-<h2>6.2 Effect size for ANOVA with variance inequality</h2>
+<h2>7.2 Effect size for ANOVA with variance inequality</h2>
 <p>Schwieriger wird die Bestimmung der Effektgröße, wenn man mangels Varianzhomogenität gezwungen war den oneway.test nach Welch durchzuführen. Hier nochmal das Ergebnis des Tests (5 ANOVA with variance inequality/One-way-Test (Welch) bei Varianzungleichheit).</p>
 <pre class="r"><code>oneway.test(preparation$Population.num ~ preparation$region.new)</code></pre>
 <pre><code>## 
@@ -257,7 +271,7 @@ SS_between/SS_total</code></pre>
 <pre><code>## [1] 0.0561803</code></pre>
 </div>
 <div id="calculation-of-cohens-f" class="section level2">
-<h2>6.3 Calculation of Cohens f</h2>
+<h2>7.3 Calculation of Cohens f</h2>
 <p>Aus dem eta^2 kann nun die Effektgröße f nach Cohen berechnet werden. Im ersten Schritt weisen wir dazu das eta^2 aus der durchgeführten ANOVA dem Objekt “f.ANOVA” zu.</p>
 <pre class="r"><code>f.ANOVA &lt;- eta_sq(ANOVA)</code></pre>
 <p>Die Formel für Cohens f sieht in R folgendermaßen aus.</p>
@@ -276,7 +290,7 @@ f.2</code></pre>
 </div>
 </div>
 <div id="power" class="section level1">
-<h1>7 Power</h1>
+<h1>8 Power</h1>
 <p>Die Frage, warum zusätzlich Cohens f berechnet wurde, klärt sich, wenn die Teststärke berechnet werden soll. Im nachfolgenden soll eine Power Analyse für die ANOVA (4 ANOVA with variance homogeneity) durchgeführt werden. Für die <em>pwr.anova.test</em> Funktion werden folgende Parameter benötigt:</p>
 <ul>
 <li>k = Anzahl der Gruppen</li>
@@ -320,7 +334,7 @@ f.2</code></pre>
 <p>Es sind insgesamt 158 Observations notwendig.</p>
 </div>
 <div id="outliers" class="section level1">
-<h1>8 Outliers</h1>
+<h1>9 Outliers</h1>
 <p>Zu einer ANOVA ist ein Boxplot Diagramm immer sehr nützlich, da es viel über die Verteilung der abhängigen Variablen aussagt und etwaige Ausreißer schnell identifiziert werden könne.</p>
 <pre class="r"><code>ggboxplot(preparation, x = &quot;region.new&quot;, y = &quot;Coastline.num&quot;, 
           color = &quot;region.new&quot;, palette = c(&quot;#00AFBB&quot;, &quot;#E7B800&quot;, &quot;#FC4E07&quot;),
@@ -352,6 +366,6 @@ f.2</code></pre>
 <p>Wir sehen, wenn wir die Outlier nicht weiter berücksichtigen, gibt es doch einen signifikanten Unterschied zwischen den Regionen hinsichtlich ihres Küstenanteils.</p>
 </div>
 <div id="conclusion" class="section level1">
-<h1>9 Conclusion</h1>
+<h1>10 Conclusion</h1>
 <p>Wie wir im letzten Abschnitt gesehen haben, ist es zwingend notwendig nicht nur die Voraussetzungen für die statistischen Tests zu beachten, sondern auch die Verteilung der Variablen. Dies kann im Zweifel einen erheblichen Unterschied bei den Ergebnissen und den daraus gezogenen Schlussfolgerungen machen.</p>
 </div>
