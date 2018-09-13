@@ -17,7 +17,10 @@
       <pubDate>Wed, 12 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/09/12/t-test/</guid>
-      <description>Hie kommt mein t-Test Bericht</description>
+      <description>Table of Content1 Introduction1 IntroductionEin t-Test kann verwendet werden, um Mittelwertsunterschiede zu überprüfen.
+Wenn man den Stichprobenmittelwert von einer Variablen mit einem bekannten Populationsmittelwert vergleichen möchte, so wird ein t-Test für eine Stichprobe verwendet.
+Möchte man bei beispielsweise Längsschnittstudien (bei denen jede Person zweimal untersucht und somit Wertepaare gebildet wurden) zwei Mittelwerte miteinander vergleichen, so verwendet man t-Tests für abhängige Stichproben.
+Im Folgenden wird die Verwendung des t-Tests für unabhängigen Stichproben behandelt.</description>
     </item>
     
     <item>

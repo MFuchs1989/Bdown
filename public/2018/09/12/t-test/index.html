@@ -19,6 +19,11 @@
 
 
 
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
 <link rel="stylesheet" href="/css/fonts.css" media="all">
 <link rel="stylesheet" href="/css/main.css" media="all">
 
@@ -54,7 +59,7 @@
 
   <article class="article">
     
-    <span class="article-duration">1 min read</span>
+    <span class="article-duration">10 min read</span>
     
 
     <h1 class="article-title">t-Test</h1>
@@ -64,7 +69,290 @@
     
 
     <div class="article-content">
-      <p>Hie kommt mein t-Test Bericht</p>
+      <div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li></li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Ein t-Test kann verwendet werden, um Mittelwertsunterschiede zu überprüfen.</p>
+<p>Wenn man den Stichprobenmittelwert von einer Variablen mit einem bekannten Populationsmittelwert vergleichen möchte, so wird ein <strong>t-Test für eine Stichprobe</strong> verwendet.</p>
+<p>Möchte man bei beispielsweise Längsschnittstudien (bei denen jede Person zweimal untersucht und somit Wertepaare gebildet wurden) zwei Mittelwerte miteinander vergleichen, so verwendet man <strong>t-Tests für abhängige Stichproben</strong>.</p>
+<p>Im Folgenden wird die Verwendung des <strong>t-Tests für unabhängigen Stichproben</strong> behandelt. Dabei vergleicht man zwei Gruppen in Bezug auf den jeweiligen Mittelwert auf der abhängigen Variablen.</p>
+<p>Für diesen Post wurde der Datensatz <em>countries of the world</em> von der Statsistik Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006" class="uri">https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006</a> abrufbar.</p>
+<pre class="r"><code>library(tidyverse)
+library(psych)
+library(MBESS)
+library(nortest)
+library(car)
+library(pwr)</code></pre>
+<pre class="r"><code>countries &lt;- read_csv(&quot;countries of the world.csv&quot;)</code></pre>
+</div>
+<div id="preparation" class="section level1">
+<h1>2 Preparation</h1>
+<p>Für die exemplarische Durchführung der nachfolgenden t-Tests wird der Datensatz <em>countries of the world</em> auf die beiden Regionen “LATIN AMER. &amp; CARIB” und “SUB-SAHARAN AFRICA” reduziert.</p>
+<pre class="r"><code>table(countries$Region)</code></pre>
+<pre><code>## 
+## ASIA (EX. NEAR EAST)              BALTICS  C.W. OF IND. STATES 
+##                   28                    3                   12 
+##       EASTERN EUROPE  LATIN AMER. &amp; CARIB            NEAR EAST 
+##                   12                   45                   16 
+##      NORTHERN AFRICA     NORTHERN AMERICA              OCEANIA 
+##                    6                    5                   21 
+##   SUB-SAHARAN AFRICA       WESTERN EUROPE 
+##                   51                   28</code></pre>
+<pre class="r"><code>limitation&lt;- countries %&gt;% filter(Region == &quot;LATIN AMER. &amp; CARIB&quot; | Region == &quot;SUB-SAHARAN AFRICA&quot;) %&gt;%
+  select(Country, Region, `Coastline (coast/area ratio)`, Population)</code></pre>
+<p>Im nachfolgenden soll untersucht werden, ob sich diese beiden Regionen hinsichtlich den Variablen “Population” und “Coastline” signifikant voneinander unterscheiden. Dafür werden sie im Zuge der Vorbereitung in eine nummerische Variable umgewandelt.</p>
+<pre class="r"><code>limitation$Population.num &lt;- as.numeric(limitation$Population)
+limitation$Coastline.new &lt;- str_replace(limitation$`Coastline (coast/area ratio)`, &quot;,&quot;, &quot;.&quot;)
+limitation$Coastline.num &lt;- as.numeric(limitation$Coastline.new)
+
+summary(limitation)</code></pre>
+<pre><code>##    Country             Region          Coastline (coast/area ratio)
+##  Length:96          Length:96          Length:96                   
+##  Class :character   Class :character   Class :character            
+##  Mode  :character   Mode  :character   Mode  :character            
+##                                                                    
+##                                                                    
+##                                                                    
+##    Population        Population.num      Coastline.new     
+##  Min.   :     7502   Min.   :     7502   Length:96         
+##  1st Qu.:   438370   1st Qu.:   438370   Class :character  
+##  Median :  4189308   Median :  4189308   Mode  :character  
+##  Mean   : 13658975   Mean   : 13658975                     
+##  3rd Qu.: 12351432   3rd Qu.: 12351432                     
+##  Max.   :188078227   Max.   :188078227                     
+##  Coastline.num    
+##  Min.   :  0.000  
+##  1st Qu.:  0.090  
+##  Median :  0.495  
+##  Mean   : 10.200  
+##  3rd Qu.:  9.435  
+##  Max.   :107.910</code></pre>
+</div>
+<div id="essential-requirements" class="section level1">
+<h1>3 Essential requirements</h1>
+<p>Bevor man einen t-Test für unabhängige Stichproben durchführen kann, müssen folgende Voraussetzungen überprüft werden:</p>
+<ul>
+<li>Die abhängige Variable ist metrisch skaliert.</li>
+<li>Normalverteilung der abhängigen Variablen in beiden Populationen wenn N1 &lt; 30 &amp; N2 &lt; 30.</li>
+<li>Varianzhomogenität der abhängigen Variablen in beiden Populationen.</li>
+</ul>
+<p>Sowohl “Population” als auch “Coastline” sind metrisch skalierte Variablen. Damit ist die erste Voraussetzung erfüllt.</p>
+<div id="normal-distribution" class="section level2">
+<h2>3.1 Normal distribution</h2>
+<p>Der Lilliefors-Test prüft die Nullhypothese, dass die Verteilung der Variable einer Normalverteilung entspricht. Dies bedeutet, dass wir von einer Normalverteilung ausgehen, wenn das Ergebnis nicht signifikant ist.</p>
+<pre class="r"><code>lillie.test(limitation$Population.num)</code></pre>
+<pre><code>## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  limitation$Population.num
+## D = 0.311, p-value &lt; 2.2e-16</code></pre>
+<p>Der Test zeigt ein signifikantes Ergebnis. Dies bedeutet, dass die Variable “Population” nicht normalverteilt ist. In Folge dessen, wird die Stichprobengröße untersucht. Falls diese in beiden Gruppen größer 30 ist, greift hier der zentrale Grenzwertsatz, sodass das Ergebnis des t-Tests durch diese Abweichung nicht betroffen ist.</p>
+</div>
+<div id="sampling-size" class="section level2">
+<h2>3.2 Sampling size</h2>
+<p>Die Größe der Stichprobe kann mit der <em>describeBy</em> Funktion ermittelt werden.</p>
+<pre class="r"><code>description &lt;- describeBy(limitation$Population.num, limitation$Region, mat = TRUE)
+description</code></pre>
+<pre><code>##     item              group1 vars  n     mean       sd  median trimmed
+## X11    1 LATIN AMER. &amp; CARIB    1 45 12484991 32353969 1065842 4938238
+## X12    2  SUB-SAHARAN AFRICA    1 51 14694843 23091893 8090068 9605123
+##         mad  min       max     range     skew kurtosis      se
+## X11 1566223 9439 188078227 188068788 4.120954 17.97317 4823045
+## X12 9856383 7502 131859731 131852229 3.103686 11.42630 3233512</code></pre>
+<pre class="r"><code>sum(description$n)</code></pre>
+<pre><code>## [1] 96</code></pre>
+<pre class="r"><code>describeBy(limitation$Population.num, limitation$Region, mat = TRUE)$n</code></pre>
+<pre><code>## [1] 45 51</code></pre>
+<p>Da N1 &amp; N2 &lt; 30 greift der zentrale Grenzwertsatz.</p>
+</div>
+<div id="homogeneity-of-variance" class="section level2">
+<h2>3.3 Homogeneity of variance</h2>
+<p>Der verwendete <em>leveneTest</em> hat zwei Argumente. Das erste ist die abhängige Variable das zweite die unabhängige Variable. Die Nullhypothese besagt Varianzhomogenität.</p>
+<pre class="r"><code>leveneTest(limitation$Population.num, limitation$Region)</code></pre>
+<pre><code>## Warning in leveneTest.default(limitation$Population.num, limitation
+## $Region): limitation$Region coerced to factor.</code></pre>
+<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
+##       Df F value Pr(&gt;F)
+## group  1   6e-04 0.9812
+##       94</code></pre>
+<p>Da p &gt; .05 ist, wird die Nullhypothese beibehalten und wir nehmen Varianzhomogenität an.</p>
+</div>
+</div>
+<div id="t-test-with-variance-homogeneity" class="section level1">
+<h1>4 t-Test with variance homogeneity</h1>
+<pre class="r"><code>t.test(limitation$Population.num ~ limitation$Region, var.equal = TRUE)</code></pre>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  limitation$Population.num by limitation$Region
+## t = -0.38847, df = 94, p-value = 0.6985
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -13504755   9085051
+## sample estimates:
+## mean in group LATIN AMER. &amp; CARIB  mean in group SUB-SAHARAN AFRICA 
+##                          12484991                          14694843</code></pre>
+<p>Die Bestandteile des Tests sind wie folgt:</p>
+<p><em>two sample t-test</em>. Der durchgeführte Test, in diesem Fall der t-Test für unabhängige Stichproben. <em>t = -0.38847, df = 94, p-value = 0.6985</em>. Die empirische Prüfgröße <em>t</em>, die Freiheitsgrade <em>df</em> und der p-Wert <em>p-value</em>. <em>true difference in means is not equal to 0</em>. Die ausformulierte Alternativhypothese des Tests. <em>95 percent confidence interval</em>. Das Konfidenzintervall für den Stichprobenmittelwert. <em>sample estimates</em> Der beobachtete Stichprobenmittelwert für die beiden Ausprägungen der unabhängigen Variablen.</p>
+<p>Der durchgeführte t-Test zeigt ein nicht signifikantes Ergebnis (p &gt; .05). Die Alternativhypothese (Es gibt einen Unterschied zwischen den beiden Regionen “LATIN AMER. &amp; CARIB” und “SUB-SAHARAN AFRICA” hinsichtlich dem Populationswertes) kann somit verworfen werden.</p>
+</div>
+<div id="t-test-with-variance-inequality" class="section level1">
+<h1>4 t-Test with variance inequality</h1>
+<p>Es kann natürlich vorkommen, dass die Varianzen der abhängigen Variablen in beiden Populationen nicht gleich ist. Wir wollen eine Mittelwertsvergleich für die beiden Regionen “LATIN AMER. &amp; CARIB” und “SUB-SAHARAN AFRICA” mittels der abhängigen Variablen <code>Coastline</code> durchführen.</p>
+<p><strong>Überprüfung der Normalverteilung</strong></p>
+<pre class="r"><code>lillie.test(limitation$Coastline.num)</code></pre>
+<pre><code>## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  limitation$Coastline.num
+## D = 0.32731, p-value &lt; 2.2e-16</code></pre>
+<p>Wir sehen, dass die Variable <code>Coastline</code> nicht normalverteilt ist. Nun wird erneut die Stichprobengröße der beiden Gruppen betrachtet.</p>
+<p><strong>Stichprobengröße</strong></p>
+<pre class="r"><code>description2 &lt;- describeBy(limitation$Coastline.num, limitation$Region, mat = TRUE)
+description2</code></pre>
+<pre><code>##     item              group1 vars  n      mean       sd median   trimmed
+## X11    1 LATIN AMER. &amp; CARIB    1 45 15.972222 21.52437   3.37 12.293243
+## X12    2  SUB-SAHARAN AFRICA    1 51  5.106078 16.96183   0.13  1.036585
+##          mad min    max  range     skew  kurtosis       se
+## X11 4.862928   0  90.47  90.47 1.447746  1.582381 3.208663
+## X12 0.192738   0 107.91 107.91 4.748483 24.436128 2.375132</code></pre>
+<p>Da N1 &amp; N2 &lt; 30 greift erneut der zentrale Grenzwertsatz.</p>
+<p><strong>Überprüfung der Varianzhomogenität</strong></p>
+<pre class="r"><code>leveneTest(limitation$Coastline.num, limitation$Region)</code></pre>
+<pre><code>## Warning in leveneTest.default(limitation$Coastline.num, limitation$Region):
+## limitation$Region coerced to factor.</code></pre>
+<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
+##       Df F value   Pr(&gt;F)   
+## group  1  7.1668 0.008764 **
+##       94                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Wir erhalten ein signifikantes Ergebnis. Dies bedeutet, dass Varianzungleichheit vorliegt. Anstelle des t-Tests für unabhängige Stichproben wird daher der Welch Test durchgeführt.</p>
+<p><strong>Welch-Test bei Varianzungleichheit</strong></p>
+<pre class="r"><code>t.test(limitation$Coastline.num ~ limitation$Region)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  limitation$Coastline.num by limitation$Region
+## t = 2.7219, df = 83.395, p-value = 0.0079
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##   2.926597 18.805691
+## sample estimates:
+## mean in group LATIN AMER. &amp; CARIB  mean in group SUB-SAHARAN AFRICA 
+##                         15.972222                          5.106078</code></pre>
+<p>Das Ergebnis ist signifikant. Es gibt also einen Unterschied zwischen beiden Regionen hinsichtlich ihres Küstenanteils.</p>
+</div>
+<div id="directed-hypothesis" class="section level1">
+<h1>5 Directed hypothesis</h1>
+<p>Bei dem durchgeführten t-Test für unabhängige Stichproben sowie dem Welch-Test handelte es sich um ungerichtete Hypothesen: <span class="math display">\[\begin{equation*} H_0:\mu=\mu_0 \quad \text{gegen} \quad H_1:\mu\neq\mu_0 \end{equation*}\]</span> Man behauptet, es gebe einen Mittelwertsunterschied zwischen zwei Gruppen. Die Nullhypothese besagt demnach, dass die Mittelwerte gleich sind.</p>
+<p>Entgegen ungerichteter Hypothesen besteht die Möglichkeit, diese auch gerichtet zu testen: <span class="math display">\[\begin{equation*} H_0:\mu=\mu_0 \quad \text{gegen} \quad H_1:\mu\geq\mu_0 \end{equation*}\]</span></p>
+<p>Zuvor sollte mittels der <em>levels</em> Funktion überprüft werden, welche “Gruppe” innerhalb der unabhängigen Variablen zuerst genannt wird.</p>
+<pre class="r"><code>levels(as.factor(limitation$Region))</code></pre>
+<pre><code>## [1] &quot;LATIN AMER. &amp; CARIB&quot; &quot;SUB-SAHARAN AFRICA&quot;</code></pre>
+<p>Für eine gerichtete Hypothese muss die Syntax des t-Tests um das Argument <em>alternative = “greater” oder “less”</em> ergänzt werden. Wenn man nun prüfen will, ob “SUB-SAHARAN AFRICA” höhere Werte als “LATIN AMER. &amp; CARIB” hinsichtlich Küstenanteil hat, muss man den t-Test folgendermaßen anfordern.</p>
+<pre class="r"><code>t.test(limitation$Coastline.num ~ limitation$Region, alternative = &quot;less&quot;)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  limitation$Coastline.num by limitation$Region
+## t = 2.7219, df = 83.395, p-value = 0.996
+## alternative hypothesis: true difference in means is less than 0
+## 95 percent confidence interval:
+##      -Inf 17.50631
+## sample estimates:
+## mean in group LATIN AMER. &amp; CARIB  mean in group SUB-SAHARAN AFRICA 
+##                         15.972222                          5.106078</code></pre>
+<p>Mit p = .996 ist das Ergebnis nicht signifikant. “SUB-SAHARAN AFRICA” hat demnach keinen höheren Küstenanteil als “LATIN AMER. &amp; CARIB”.</p>
+</div>
+<div id="adjust-confidence-interval" class="section level1">
+<h1>6 Adjust confidence interval</h1>
+<p>Standardgemäß wird in R immer 95% Konfidenzintervall ausgegeben. Allerdings kann man mit dem Zusatzargument <em>conf.level =</em> das Konfidenzintervall anpassen. Im folgenden Beispiel wird der Welch-Test aus Punkt 4 <em>t-Test with variance inequality</em> mit einem 99% Konfidenzintervall angefordert.</p>
+<pre class="r"><code>t.test(limitation$Coastline.num ~ limitation$Region, conf.level = 0.99)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  limitation$Coastline.num by limitation$Region
+## t = 2.7219, df = 83.395, p-value = 0.0079
+## alternative hypothesis: true difference in means is not equal to 0
+## 99 percent confidence interval:
+##   0.3426961 21.3895914
+## sample estimates:
+## mean in group LATIN AMER. &amp; CARIB  mean in group SUB-SAHARAN AFRICA 
+##                         15.972222                          5.106078</code></pre>
+</div>
+<div id="effect-size" class="section level1">
+<h1>7 Effect size</h1>
+<p>Als standardisierte Effektgröße (SMD: Standardized Mean Difference) für zwei Mittelwerte wird üblicherweise Cohens d angefordert. Cohens d wird berechnet, indem man die Mittelwertsdifferenz durch die gepoolte Standardabweichung teilt. Im folgenden Beispiel wird die Effektgröße für den Vergleich von “SUB-SAHARAN AFRICA” und “LATIN AMER. &amp; CARIB” bezüglich ihres Küstenanteils.</p>
+<pre class="r"><code>ci.smd(ncp = t.test(limitation$Coastline.num ~ limitation$Region)$statistic, n.1 = description2$n[1], n.2 = description2$n[2])</code></pre>
+<pre><code>## $Lower.Conf.Limit.smd
+## [1] 0.1466113
+## 
+## $smd
+##         t 
+## 0.5566979 
+## 
+## $Upper.Conf.Limit.smd
+## [1] 0.9639339</code></pre>
+<p>Die <em>ci.smd</em> Funktion enthält folgende Argumente:</p>
+<p><em>ncp =</em> ist der Nonzentralitätsparameter. Dieser Wert kann mit Hilfe des Dollar Zeichens direkt aus der Ausgabe des t-Tests herausgelesen werden.</p>
+<p><em>n.1</em> Die Stichprobengröße der ersten Gruppe. Diese Angabe kann ebenfalls direkt aus der Tabelle mit den deskriptiven Statistiken (4. t-Test with variance inequality/Stichprobengröße) entnommen werden.</p>
+<p><em>n.2</em> Die Stichprobengröße der zweiten Gruppe.</p>
+<p>Wir erhalten ein Cohens d von 0,56 ($smd).</p>
+</div>
+<div id="power" class="section level1">
+<h1>8 Power</h1>
+<p>Im folgenden Beispiel soll die Teststärke für den Welch-Test (4. t-Test with variance inequality/Welch-Test bei Varianzungleichheit) berechnet werden. Folgende Parameter werden daher in den Befehl <em>pwr.t.test</em> eingefügt:</p>
+<ul>
+<li>d = Cohens d</li>
+<li>sig. level = Signifikanzniveau</li>
+<li>n = Gruppengröße (der kleineren Gruppe)</li>
+<li>type = Art des t-Tests</li>
+<li>alternative = Art der Alternativhypothese</li>
+</ul>
+<p>Für das Beispiel mit dem Welch-Test ergibt sich folgende Syntax.</p>
+<pre class="r"><code>pwr.t.test(d=0.5566979, sig.level = 0.0079, n=45, type=&quot;two.sample&quot;, alternative=&quot;two.sided&quot;)</code></pre>
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 45
+##               d = 0.5566979
+##       sig.level = 0.0079
+##           power = 0.4726751
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+<p>Der Welch-Test besitzt eine Teststärke von 0,47. Gewünscht wäre eine Stärke von 0,8. Im Nachgang wird nun berechnet, wie viele Personen man pro Gruppe für den Welch-Test bräuchte, um folgende Werte zu erhalten:</p>
+<ul>
+<li>d = 0,5</li>
+<li>sig.level = 0,05</li>
+<li>power = 0,8</li>
+<li>type = “two.sample”</li>
+<li>alternative =“two.sided”</li>
+</ul>
+<pre class="r"><code>pwr.t.test(d=0.5, sig.level = 0.05, power=0.8, type=&quot;two.sample&quot;, alternative=&quot;two.sided&quot;)</code></pre>
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 63.76561
+##               d = 0.5
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+<p>Um eine Teststärke von 0,8 bei einem Signifikanzlevel von 0,05 und einer Effektgröße von 0,5 zu bekommen (bei einem t-Test für unabhängige Stichproben und ungerichteter Hypothese) bedarf es einer Gruppengröße von mindestens 64 in <strong>beiden</strong> Gruppen.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>9 Conclusion</h1>
+<p>Der Vergleich von Mittelwerten zweier Gruppen kommt in der Statistik sehr häufig vor. In diesem Post wurde gezeigt, wie ein t-Test oder Welch-Test für unabhängige Stichproben durchgeführt wird. Es wurde auf die Voraussetzungen des t-Tests eingegangen sowie die Berechnung der Effekt- und der Teststärke. War die Teststärke nicht ausreichend, wurde im Nachgang die erforderte Gruppengröße berechnet.</p>
+</div>
 
     </div>
   </article>
@@ -88,7 +376,22 @@
     </div>
     
 
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
     
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
 
     
   </body>

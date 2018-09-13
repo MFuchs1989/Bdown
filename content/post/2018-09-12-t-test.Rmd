@@ -9,6 +9,241 @@ tags:
   - R Markdown
 ---
 
-Hie kommt mein t-Test Bericht
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Table of Content
+
++ 1 Introduction
++ 
+
+
+
+
+#1 Introduction
+Ein t-Test kann verwendet werden, um Mittelwertsunterschiede zu überprüfen. 
+
+Wenn man den Stichprobenmittelwert von einer Variablen mit einem bekannten Populationsmittelwert vergleichen möchte, so wird ein **t-Test für eine Stichprobe** verwendet. 
+
+Möchte man bei beispielsweise Längsschnittstudien (bei denen jede Person zweimal untersucht und somit Wertepaare gebildet wurden) zwei Mittelwerte miteinander vergleichen, so verwendet man **t-Tests für abhängige Stichproben**. 
+
+Im Folgenden wird die Verwendung des **t-Tests für unabhängigen Stichproben** behandelt. Dabei vergleicht man zwei Gruppen in Bezug auf den jeweiligen Mittelwert auf der abhängigen Variablen.  
+
+Für diesen Post wurde der Datensatz *countries of the world* von der Statsistik Plattform *Kaggle* <https://www.kaggle.com> verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006> abrufbar.
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(psych)
+library(MBESS)
+library(nortest)
+library(car)
+library(pwr)
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+countries <- read_csv("countries of the world.csv")
+```
+
+#2 Preparation
+
+Für die exemplarische Durchführung der nachfolgenden t-Tests wird der Datensatz *countries of the world* auf die beiden Regionen "LATIN AMER. & CARIB" und "SUB-SAHARAN AFRICA" reduziert. 
+```{r}
+table(countries$Region)
+
+limitation<- countries %>% filter(Region == "LATIN AMER. & CARIB" | Region == "SUB-SAHARAN AFRICA") %>%
+  select(Country, Region, `Coastline (coast/area ratio)`, Population)
+```
+
+Im nachfolgenden soll untersucht werden, ob sich diese beiden Regionen hinsichtlich den Variablen "Population" und "Coastline" signifikant voneinander unterscheiden. Dafür werden sie im Zuge der Vorbereitung in eine nummerische Variable umgewandelt. 
+
+```{r}
+limitation$Population.num <- as.numeric(limitation$Population)
+limitation$Coastline.new <- str_replace(limitation$`Coastline (coast/area ratio)`, ",", ".")
+limitation$Coastline.num <- as.numeric(limitation$Coastline.new)
+
+summary(limitation)
+```
+
+#3 Essential requirements
+
+Bevor man einen t-Test für unabhängige Stichproben durchführen kann, müssen folgende Voraussetzungen überprüft werden:
+
++ Die abhängige Variable ist metrisch skaliert.
++ Normalverteilung der abhängigen Variablen in beiden Populationen wenn N1 < 30 & N2 < 30.
++ Varianzhomogenität der abhängigen Variablen in beiden Populationen.
+
+
+Sowohl "Population" als auch "Coastline" sind metrisch skalierte Variablen. Damit ist die erste Voraussetzung erfüllt.  
+
+##3.1 Normal distribution
+
+Der Lilliefors-Test prüft die Nullhypothese, dass die Verteilung der Variable einer Normalverteilung entspricht. Dies bedeutet, dass wir von einer Normalverteilung ausgehen, wenn das Ergebnis nicht signifikant ist. 
+```{r}
+lillie.test(limitation$Population.num)
+```
+
+Der Test zeigt ein signifikantes Ergebnis. Dies bedeutet, dass die Variable "Population" nicht normalverteilt ist. In Folge dessen, wird die Stichprobengröße untersucht. Falls diese in beiden Gruppen größer 30 ist, greift hier der zentrale Grenzwertsatz, sodass das Ergebnis des t-Tests durch diese Abweichung nicht betroffen ist. 
+
+##3.2 Sampling size
+
+Die Größe der Stichprobe kann mit der *describeBy* Funktion ermittelt werden.
+
+```{r}
+description <- describeBy(limitation$Population.num, limitation$Region, mat = TRUE)
+description
+sum(description$n)
+describeBy(limitation$Population.num, limitation$Region, mat = TRUE)$n
+```
+
+Da N1 & N2 < 30 greift der zentrale Grenzwertsatz.
+
+##3.3 Homogeneity of variance
+
+Der verwendete *leveneTest* hat zwei Argumente. Das erste ist die abhängige Variable das zweite die unabhängige Variable. Die Nullhypothese besagt Varianzhomogenität. 
+
+```{r}
+leveneTest(limitation$Population.num, limitation$Region)
+```
+
+Da p > .05 ist, wird die Nullhypothese beibehalten und wir nehmen Varianzhomogenität an.  
+
+
+#4 t-Test with variance homogeneity
+```{r}
+t.test(limitation$Population.num ~ limitation$Region, var.equal = TRUE)
+```
+
+Die Bestandteile des Tests sind wie folgt:
+
+*two sample t-test*. Der durchgeführte Test, in diesem Fall der t-Test für unabhängige Stichproben.
+*t = -0.38847, df = 94, p-value = 0.6985*. Die empirische Prüfgröße *t*, die Freiheitsgrade *df* und der p-Wert *p-value*.
+*true difference in means is not equal to 0*. Die ausformulierte Alternativhypothese des Tests.
+*95 percent confidence interval*. Das Konfidenzintervall für den Stichprobenmittelwert.
+*sample estimates* Der beobachtete Stichprobenmittelwert für die beiden Ausprägungen der unabhängigen Variablen. 
+
+Der durchgeführte t-Test zeigt ein nicht signifikantes Ergebnis (p > .05). Die Alternativhypothese (Es gibt einen Unterschied zwischen den beiden Regionen "LATIN AMER. & CARIB" und "SUB-SAHARAN AFRICA" hinsichtlich dem Populationswertes) kann somit verworfen werden.
+
+
+#4 t-Test with variance inequality
+
+Es kann natürlich vorkommen, dass die Varianzen der abhängigen Variablen in beiden Populationen nicht gleich ist. 
+Wir wollen eine Mittelwertsvergleich für die beiden Regionen "LATIN AMER. & CARIB" und "SUB-SAHARAN AFRICA" mittels der abhängigen Variablen `Coastline` durchführen. 
+
+**Überprüfung der Normalverteilung**
+
+```{r}
+lillie.test(limitation$Coastline.num)
+```
+Wir sehen, dass die Variable `Coastline` nicht normalverteilt ist. Nun wird erneut die Stichprobengröße der beiden Gruppen betrachtet.
+
+**Stichprobengröße**
+```{r}
+description2 <- describeBy(limitation$Coastline.num, limitation$Region, mat = TRUE)
+description2
+```
+
+Da N1 & N2 < 30 greift erneut der zentrale Grenzwertsatz.
+
+**Überprüfung der Varianzhomogenität**
+```{r}
+leveneTest(limitation$Coastline.num, limitation$Region)
+```
+
+Wir erhalten ein signifikantes Ergebnis. Dies bedeutet, dass Varianzungleichheit vorliegt. Anstelle des t-Tests für unabhängige Stichproben wird daher der Welch Test durchgeführt.  
+
+**Welch-Test bei Varianzungleichheit**
+```{r}
+t.test(limitation$Coastline.num ~ limitation$Region)
+```
+
+Das Ergebnis ist signifikant. Es gibt also einen Unterschied zwischen beiden Regionen hinsichtlich ihres Küstenanteils. 
+
+
+#5 Directed hypothesis
+
+Bei dem durchgeführten t-Test für unabhängige Stichproben sowie dem Welch-Test handelte es sich um ungerichtete Hypothesen:
+$$\begin{equation*} H_0:\mu=\mu_0 \quad \text{gegen} \quad H_1:\mu\neq\mu_0 \end{equation*}$$
+Man behauptet, es gebe einen Mittelwertsunterschied zwischen zwei Gruppen. Die Nullhypothese besagt demnach, dass die Mittelwerte gleich sind. 
+
+Entgegen ungerichteter Hypothesen besteht die Möglichkeit, diese auch gerichtet zu testen:
+$$\begin{equation*} H_0:\mu=\mu_0 \quad \text{gegen} \quad H_1:\mu\geq\mu_0 \end{equation*}$$
+
+Zuvor sollte mittels der *levels* Funktion überprüft werden, welche "Gruppe" innerhalb der unabhängigen Variablen zuerst genannt wird.
+```{r}
+levels(as.factor(limitation$Region))
+```
+
+Für eine gerichtete Hypothese muss die Syntax des t-Tests um das Argument *alternative = "greater" oder "less"* ergänzt werden. Wenn man nun prüfen will, ob "SUB-SAHARAN AFRICA" höhere Werte als "LATIN AMER. & CARIB" hinsichtlich Küstenanteil hat, muss man den t-Test folgendermaßen anfordern.
+```{r}
+t.test(limitation$Coastline.num ~ limitation$Region, alternative = "less")
+```
+
+Mit p = .996 ist das Ergebnis nicht signifikant. "SUB-SAHARAN AFRICA" hat demnach keinen höheren Küstenanteil als "LATIN AMER. & CARIB".
+
+
+#6 Adjust confidence interval
+
+Standardgemäß wird in R immer 95% Konfidenzintervall ausgegeben. Allerdings kann man mit dem Zusatzargument *conf.level =* das Konfidenzintervall anpassen. Im folgenden Beispiel wird der Welch-Test aus Punkt 4 *t-Test with variance inequality* mit einem 99% Konfidenzintervall angefordert. 
+```{r}
+t.test(limitation$Coastline.num ~ limitation$Region, conf.level = 0.99)
+```
+
+
+#7 Effect size
+
+Als standardisierte Effektgröße (SMD: Standardized Mean Difference) für zwei Mittelwerte wird üblicherweise Cohens d angefordert. Cohens d wird berechnet, indem man die Mittelwertsdifferenz durch die gepoolte Standardabweichung teilt. Im folgenden Beispiel wird die Effektgröße für den Vergleich von "SUB-SAHARAN AFRICA" und "LATIN AMER. & CARIB" bezüglich ihres Küstenanteils.
+```{r}
+ci.smd(ncp = t.test(limitation$Coastline.num ~ limitation$Region)$statistic, n.1 = description2$n[1], n.2 = description2$n[2])
+```
+
+Die *ci.smd* Funktion enthält folgende Argumente:
+
+*ncp =* ist der Nonzentralitätsparameter. Dieser Wert kann mit Hilfe des Dollar Zeichens direkt aus der Ausgabe des t-Tests herausgelesen werden.
+
+*n.1* Die Stichprobengröße der ersten Gruppe. Diese Angabe kann ebenfalls direkt aus der Tabelle mit den deskriptiven Statistiken (4. t-Test with variance inequality/Stichprobengröße) entnommen werden. 
+
+*n.2* Die Stichprobengröße der zweiten Gruppe.
+
+Wir erhalten ein Cohens d von 0,56 ($smd).
+
+
+#8 Power
+
+Im folgenden Beispiel soll die Teststärke für den Welch-Test (4. t-Test with variance inequality/Welch-Test bei Varianzungleichheit) berechnet werden. Folgende Parameter werden daher in den Befehl *pwr.t.test* eingefügt:
+
++ d           = Cohens d
++ sig. level  = Signifikanzniveau
++ n           = Gruppengröße (der kleineren Gruppe)
++ type        = Art des t-Tests 
++ alternative = Art der Alternativhypothese 
+
+Für das Beispiel mit dem Welch-Test ergibt sich folgende Syntax.
+```{r}
+pwr.t.test(d=0.5566979, sig.level = 0.0079, n=45, type="two.sample", alternative="two.sided")
+```
+
+Der Welch-Test besitzt eine Teststärke von 0,47. Gewünscht wäre eine Stärke von 0,8. Im Nachgang wird nun berechnet, wie viele Personen man pro Gruppe für den Welch-Test bräuchte, um folgende Werte zu erhalten:
+
++ d           = 0,5
++ sig.level   = 0,05
++ power       = 0,8
++ type        = "two.sample"
++ alternative ="two.sided"
+
+```{r}
+pwr.t.test(d=0.5, sig.level = 0.05, power=0.8, type="two.sample", alternative="two.sided")
+```
+
+Um eine Teststärke von 0,8 bei einem Signifikanzlevel von 0,05 und einer Effektgröße von 0,5 zu bekommen (bei einem t-Test für unabhängige Stichproben und ungerichteter Hypothese) bedarf es einer Gruppengröße von mindestens 64 in **beiden** Gruppen.
+
+
+#9 Conclusion
+
+Der Vergleich von Mittelwerten zweier Gruppen kommt in der Statistik sehr häufig vor. In diesem Post wurde gezeigt, wie ein t-Test oder Welch-Test für unabhängige Stichproben durchgeführt wird. Es wurde auf die Voraussetzungen des t-Tests eingegangen sowie die Berechnung der Effekt- und der Teststärke. War die Teststärke nicht ausreichend, wurde im Nachgang die erforderte Gruppengröße berechnet. 
+
+
+
+
 
 
