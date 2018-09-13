@@ -126,9 +126,13 @@ t.test(limitation$Population.num ~ limitation$Region, var.equal = TRUE)
 Die Bestandteile des Tests sind wie folgt:
 
 *two sample t-test*. Der durchgeführte Test, in diesem Fall der t-Test für unabhängige Stichproben.
+
 *t = -0.38847, df = 94, p-value = 0.6985*. Die empirische Prüfgröße *t*, die Freiheitsgrade *df* und der p-Wert *p-value*.
+
 *true difference in means is not equal to 0*. Die ausformulierte Alternativhypothese des Tests.
+
 *95 percent confidence interval*. Das Konfidenzintervall für den Stichprobenmittelwert.
+
 *sample estimates* Der beobachtete Stichprobenmittelwert für die beiden Ausprägungen der unabhängigen Variablen. 
 
 Der durchgeführte t-Test zeigt ein nicht signifikantes Ergebnis (p > .05). Die Alternativhypothese (Es gibt einen Unterschied zwischen den beiden Regionen "LATIN AMER. & CARIB" und "SUB-SAHARAN AFRICA" hinsichtlich dem Populationswertes) kann somit verworfen werden.
