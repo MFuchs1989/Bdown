@@ -250,6 +250,11 @@ f.1 <- sqrt(as.numeric(f.ANOVA)/(1-as.numeric(f.ANOVA)))
 f.1
 ```
 
+Alternativ bestünde die Möglicheit, die *cohens_f* Funktion zu verwenden. Diese funktioniert allerdings nur wie die *eta_sq* Funktion auf aov-Modelle.
+```{r}
+cohens_f(ANOVA)
+```
+
 Dasselbe wird nun auch für den oneway.test durchgeführt.
 ```{r}
 f.oneway.test <- SS_between/SS_total
