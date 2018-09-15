@@ -110,7 +110,7 @@ Meist haben wir bei statistischen Analysen das Ziel, Effekte (z.B. Unterschiede 
 
 + **Signifikanzniveau** Je größer das Signifikanzniveau alpha ist, desto eher liegt die empirische Prüfgröße jenseits des kritischen Werts.
 
-+**Stichprobengröße** Je größer die Stichprobe ist, desto kleiner fällt der Standardfehler aus. Je kleiner der Standardfehler ist, desto größer ist die empirische Prüfgröße und umso eher wird der Test signifikant. 
++ **Stichprobengröße** Je größer die Stichprobe ist, desto kleiner fällt der Standardfehler aus. Je kleiner der Standardfehler ist, desto größer ist die empirische Prüfgröße und umso eher wird der Test signifikant. 
 
 
 **Power Analysen vor der Testdurchführung**
@@ -126,6 +126,7 @@ Infolge eines Signifikanztests, wird eine Testentscheidung getroffen. Ist der p-
 + Fehler 2 oder beta-Fehler 
 
 Overview | H0 ist falsch | H0 ist richtig
+-------|---------------|----------------
 Test lehnt H0 ab | richtige Entscheidung | Fehler erster Art
 Test lehnt H0 nicht ab | Fehler zweiter Art | richtige Entscheidung
 
