@@ -1,0 +1,86 @@
+---
+title: Effect Size and Power Analysis
+author: Michael Fuchs
+date: '2018-09-15'
+slug: effect-size-and-power-analysis
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Effect Size</li>
+<li>3 Power Analysis</li>
+<li>4 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Nach der Vorstellung der zwei statistischen Testverfahren (<a href="https://michael-fuchs.netlify.com/2018/09/12/t-test/">“t-Test”</a> und <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a>), bei denen jeweils die Effektstärke und die Teststärke berechnet wurde, soll in diesem Post die Bedeutung und Interpretation dieser beiden Maße näher beschrieben werden.</p>
+</div>
+<div id="effect-size" class="section level1">
+<h1>2 Effect Size</h1>
+<p>Als Effektgröße wird in der Statistik ein Maß bezeichnet, welches die relative Größe eines Effektes angibt. Die Effektstärke sollte auch immer zur Verdeutlichung einer gewissen praktischen Relevanz von signifikanten Ergebnissen herangezogen werden, da in der empirischen Forschung nicht nur interessiert, ob ein Effekt vorhanden ist oder nicht, sondern auch wie groß der Effekt ist. Die Effektgröße wird manchmal auch als Korrelation oder Zusammenhang bezeichnet und gehört zur deskriptiven Statistik. Sie gibt also die Größe und die Richtung eines Zusammenhangs an und ist essentiell zur Interpretation der Ergebnisse aus statistischen Analysen.</p>
+<p>Meistens werden standardisierte Effektmaße verwendet, die unabhängig von der Maßeinheit einer Skala interpretiert werden können. Dies hat zwei Vorteile:</p>
+<p>Erstens kann der Effekt auch bei nicht sinnvoll interpretierbaren Einheiten (z.B. Furcht) quantifiziert werden. Beispielsweise ist ein Punktunterschied von 3,6 auf einer Furcht-Skala schwierig zu interpretieren. Für das standardisierte Maß (siehe genaue Vorgehensweise unter Post <a href="https://michael-fuchs.netlify.com/2018/08/25/z-transformation-standardization/">“z-Transformation/Standardizatio”</a>) wird der Unterschied durch die Standardabweichung geteilt und kann somit als Einheit „Standardabweichung“ wie folgt interpretiert werden: „Der Mittelwert der Testgruppe lag 1,3 Standardabweichungen höher als der der Kontrollgruppe“.</p>
+<p>Zweitens sind die Ergebnisse über verschiedene Studien hinweg vergleichbar. Standardisierte Werte liegen innerhalb einer festgelegten Spannweite und können hierdurch als klein, mittelgradig oder groß interpretiert werden.</p>
+<p>Jedes statistische Testverfahren hat ein eigenes Effektmaß:</p>
+<p><strong>Zusammenhang nominal skalierte Variablen</strong></p>
+<p>Odds Ratio (siehe Post <a href="https://michael-fuchs.netlify.com/2018/08/05/survive-on-the-titanic-case-study/">“Survive on the Titanic - Case Study”</a> Abschnitt Effektstärke) oder</p>
+<p>Cramers V Wertebereich: 0 bis +1</p>
+<p>&lt;0,3 kleiner Effekt &gt;0,3 und &lt;0,5 mittelgradiger Effekt &gt;0,5 großer Effekt</p>
+<p><strong>Zusammenhang ordinal und metrisch skalierte Variablen</strong></p>
+<ul>
+<li>Pearson’s r für metrisch skalierte Variablen (siehe Post <a href="https://michael-fuchs.netlify.com/2018/09/04/bivariate-descriptive-statistics/">“Bivariate descriptive statistics”</a> Punkt 3.1))</li>
+<li>Spearman’s Rho (Rangkorrelationskoeffizient) ((siehe Post <a href="https://michael-fuchs.netlify.com/2018/09/04/bivariate-descriptive-statistics/">“Bivariate descriptive statistics”</a> Punkt 4.1)))</li>
+<li>Kendall’s Tau (Rangkorrelationskoeffizient) ((siehe Post <a href="https://michael-fuchs.netlify.com/2018/09/04/bivariate-descriptive-statistics/">“Bivariate descriptive statistics”</a> Punkt 4.2)))</li>
+</ul>
+<p>Wertebereich: -1 bis +1</p>
+<p>&lt;0,3 kleiner Effekt &gt;0,3 und &lt;0,5 mittelgradiger Effekt &gt;0,5 großer Effekt</p>
+<p><strong>Mittelwertsvergleiche durch einen t-Test</strong></p>
+<p>Cohen‘s d (siehe Post <a href="https://michael-fuchs.netlify.com/2018/09/12/t-test/">“t-Test”</a> Punkt 8)) Wertebereich: 0 bis +1</p>
+<p>&lt;0,5 kleiner Effekt &gt;0,5 und &lt;0,8 mittelgradiger Effekt &gt;0,8 großer Effekt</p>
+<p><strong>Mittelwertsvergleiche durch eine ANOVA</strong></p>
+<p>Eta<sup>2</sup> (siehe Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> Punkt 7)) Wertebereich: 0 bis +1</p>
+<p>&lt;0,06 kleiner Effekt &gt;0,06 und &lt;0,14 mittelgradiger Effekt &gt;0,14 großer Effekt</p>
+<p><strong>Mittelwertsvergleiche durch eine MANOVA</strong></p>
+<p>Partielles eta<sup>2</sup><br />
+Wertebereich: 0 bis +1</p>
+<p>&lt;0,06 kleiner Effekt &gt;0,06 und &lt;0,14 mittelgradiger Effekt &gt;0,14 großer Effekt</p>
+<p><strong>Varianzaufklärung bei der Regressionsanalyse</strong></p>
+<p>Determinationskoeffizient R<sup>2</sup> Wertebereich: 0 bis +1</p>
+<p>Mithilfe der unabhängigen Variablen können … Prozent der Varianz der abhängigen Variablen erklärt werden.</p>
+</div>
+<div id="power-analysis" class="section level1">
+<h1>3 Power Analysis</h1>
+<p>Meist haben wir bei statistischen Analysen das Ziel, Effekte (z.B. Unterschiede oder Zusammenhänge) durch ein statistisch signifikantes Ergebnis aufzudecken. Die Wahrscheinlichkeit, einen Populationseffekt mit einem bestimmten Test aufzudecken, wird Teststärke oder Power genannt. Die Teststärke kann von drei Parametern beeinflusst werden:</p>
+<ul>
+<li><p><strong>Größe des Effekts</strong> Je größer der Effekt in der Population ist, desto leichter ist es, ihn zu finden.</p></li>
+<li><p><strong>Signifikanzniveau</strong> Je größer das Signifikanzniveau alpha ist, desto eher liegt die empirische Prüfgröße jenseits des kritischen Werts.</p></li>
+</ul>
+<p>+<strong>Stichprobengröße</strong> Je größer die Stichprobe ist, desto kleiner fällt der Standardfehler aus. Je kleiner der Standardfehler ist, desto größer ist die empirische Prüfgröße und umso eher wird der Test signifikant.</p>
+<p><strong>Power Analysen vor der Testdurchführung</strong></p>
+<p>Da der Populationseffekt in der Regel nicht beeinflusst werden kann und das Signifikanzniveau meist auf 5% festgelegt ist, können wir die Teststärke nur über die Stichprobengröße beeinflussen. Es kann daher sinnvoll sein, vor der Durchführung der Untersuchung eine Stichprobenumfangsplanung durchzuführen. Die verschiedenen Vorgehensweisen sind unter den jeweiligen statistischen Verfahren genau beschrieben (siehe beispielsweise die Stichprobenumfangsplanung für einen t-Test, beschrieben im Post <a href="https://michael-fuchs.netlify.com/2018/09/12/t-test/">“t-Test”</a> unter Punkt 9).</p>
+<p><strong>Power Analysen nach der Testdurchführung</strong></p>
+<p>Infolge eines Signifikanztests, wird eine Testentscheidung getroffen. Ist der p-Wert signifikant, wird die Nullhypothese abgelehnt. Ist der p-Wert nicht signifikant, wird weiterhin an die Nullhypothese geglaubt. Diese Entscheidung kann falsch sein. Das nennt man Fehler beim statistischen Testen. Es gibt zwei Arten von Fehlern beim statistischen Testen:</p>
+<ul>
+<li>Fehler 1 oder alpha-Fehler</li>
+<li>Fehler 2 oder beta-Fehler</li>
+</ul>
+<p>Overview | H0 ist falsch | H0 ist richtig Test lehnt H0 ab | richtige Entscheidung | Fehler erster Art Test lehnt H0 nicht ab | Fehler zweiter Art | richtige Entscheidung</p>
+<p>Der alpha-Fehler (Fehler erster Art) passiert, wenn die Nullhypothese in Wahrheit richtig ist, der Test sie aber ablehnt. Der Test zeigt also einen signifikanten Unterschied / Zusammenhang, obwohl es in Wirklichkeit keinen gibt.</p>
+<p>Der beta-Fehler (Fehler zweiter Art) tritt ein, wenn die Nullhypothese in Wahrheit falsch ist, der Test sie aber nicht ablehnt. Der Test sagt also, es gibt keinen signifikanten Unterschied / Zusammenhang, obwohl es in Wahrheit einen gibt.</p>
+<p>Der alpha-Fehler wird mit dem Signifikanzniveau kontrolliert. Das Signifikanzniveau wird meistens mit 5% festgesetzt. Es wird demnach ein p-Wert kleiner 0,05 als signifikant angesehen. Dies bedeutet, dass man sich bei diesem Test einen alpha-Fehler in maximal 5% der Fälle erlaubt. Der p-Wert wird von R direkt als Testergebnis ausgegeben. Basierend auf ihm wir die Entscheidung für oder gegen die Nullhypothese getroffen.</p>
+<p>Der beta-Fehler wird normalerweise nicht direkt mit dem Testergebnis ausgegeben. Er lässt sich aber nach dem Test berechnen (siehe beispielsweise Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> Punkt 8). Der Wert 1 – beta-Fehler ergibt die Teststärke (Power). Die Teststärke ist ein Maß für die Fähigkeit des Tests, einen Unterschied / Zusammenhang als signifikant nachzuweisen. Ab einer Powerstärke von 80% (0,8) wird meist von einer guten Teststärke gesprochen, da dies bedeutet, dass der beta-Fehler unter 20% (0,2) sinkt (1-0,8 = 0,2).</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>4 Conclusion:</h1>
+<p>Nach der Durchführung eines statistischen Tests sollte immer noch zusätzlich die Effektgröße berechnet werden, um das Ergebnis besser interpretierbar zu machen bzw. mit anderen Studien vergleichen zu können.</p>
+<p>War das Ergebnis eines statistischen Tests nicht signifikant, ist neben der Effektgröße die Berechnung der Teststärke (Power) ratsam. Die Teststärke gibt einerseits Auskunft darüber, ob fälschlicherweise die Nullhypothese beibehalten wurde und zum anderen kann man mittels ihr die optimale Anzahl an Testpersonen berechnen, damit das Ergebnis (unter Einhaltung der angegebenen Parameter) doch noch signifikant wird.</p>
+</div>

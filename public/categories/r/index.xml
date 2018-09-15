@@ -6,10 +6,20 @@
     <description>Recent content in R on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 13 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 15 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Effect Size and Power Analysis</title>
+      <link>/2018/09/15/effect-size-and-power-analysis/</link>
+      <pubDate>Sat, 15 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/09/15/effect-size-and-power-analysis/</guid>
+      <description>Table of Content1 Introduction2 Effect Size3 Power Analysis4 Conclusion1 IntroductionNach der Vorstellung der zwei statistischen Testverfahren (“t-Test” und “ANOVA”), bei denen jeweils die Effektstärke und die Teststärke berechnet wurde, soll in diesem Post die Bedeutung und Interpretation dieser beiden Maße näher beschrieben werden.
+2 Effect SizeAls Effektgröße wird in der Statistik ein Maß bezeichnet, welches die relative Größe eines Effektes angibt.</description>
+    </item>
     
     <item>
       <title>ANOVA</title>
