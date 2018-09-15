@@ -28,7 +28,7 @@ Als Effektgröße wird in der Statistik ein Maß bezeichnet, welches die relativ
 
 Meistens werden standardisierte Effektmaße verwendet, die unabhängig von der Maßeinheit einer Skala interpretiert werden können. Dies hat zwei Vorteile:
 
-Erstens kann der Effekt auch bei nicht sinnvoll interpretierbaren Einheiten (z.B. Furcht) quantifiziert werden. Beispielsweise ist ein Punktunterschied von 3,6 auf einer Furcht-Skala schwierig zu interpretieren. Für das standardisierte Maß (siehe genaue Vorgehensweise unter Post ["z-Transformation/Standardizatio"](https://michael-fuchs.netlify.com/2018/08/25/z-transformation-standardization/)) wird der Unterschied durch die Standardabweichung geteilt und kann somit als Einheit „Standardabweichung“ wie folgt interpretiert werden: „Der Mittelwert der Testgruppe lag 1,3 Standardabweichungen höher als der der Kontrollgruppe“. 
+Erstens kann der Effekt auch bei nicht sinnvoll interpretierbaren Einheiten (z.B. Furcht) quantifiziert werden. Beispielsweise ist ein Punktunterschied von 3,6 auf einer Furcht-Skala schwierig zu interpretieren. Für das standardisierte Maß (siehe genaue Vorgehensweise unter Post ["z-Transformation/Standardization"](https://michael-fuchs.netlify.com/2018/08/25/z-transformation-standardization/)) wird der Unterschied durch die Standardabweichung geteilt und kann somit als Einheit „Standardabweichung“ wie folgt interpretiert werden: „Der Mittelwert der Testgruppe lag 1,3 Standardabweichungen höher als der der Kontrollgruppe“. 
 
 Zweitens sind die Ergebnisse über verschiedene Studien hinweg vergleichbar. Standardisierte Werte liegen innerhalb einer festgelegten Spannweite und können hierdurch als klein, mittelgradig oder groß interpretiert werden.
 
