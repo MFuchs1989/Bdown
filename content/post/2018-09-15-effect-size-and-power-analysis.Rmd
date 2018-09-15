@@ -50,9 +50,9 @@ Wertebereich: 0 bis +1
 **Zusammenhang ordinal und metrisch skalierte Variablen**
 
 
-+ Pearson's r für metrisch skalierte Variablen (siehe Post ["Bivariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/09/04/bivariate-descriptive-statistics/) Punkt 3.1))
-+ Spearman's Rho (Rangkorrelationskoeffizient) ((siehe Post ["Bivariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/09/04/bivariate-descriptive-statistics/) Punkt 4.1)))
-+ Kendall's Tau (Rangkorrelationskoeffizient) ((siehe Post ["Bivariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/09/04/bivariate-descriptive-statistics/) Punkt 4.2)))
++ Pearson's r für metrisch skalierte Variablen (siehe Post ["Bivariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/09/04/bivariate-descriptive-statistics/) Punkt 3.1)
++ Spearman's Rho (Rangkorrelationskoeffizient) (siehe Post ["Bivariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/09/04/bivariate-descriptive-statistics/) Punkt 4.1)
++ Kendall's Tau (Rangkorrelationskoeffizient) (siehe Post ["Bivariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/09/04/bivariate-descriptive-statistics/) Punkt 4.2)
 
 Wertebereich: -1 bis +1
 
@@ -62,7 +62,7 @@ Wertebereich: -1 bis +1
 
 **Mittelwertsvergleiche durch einen t-Test**
 
-Cohen‘s d (siehe Post ["t-Test"](https://michael-fuchs.netlify.com/2018/09/12/t-test/) Punkt 8))
+Cohen‘s d (siehe Post ["t-Test"](https://michael-fuchs.netlify.com/2018/09/12/t-test/) Punkt 8)
 
 Wertebereich: 0 bis +1
 
@@ -73,7 +73,7 @@ Wertebereich: 0 bis +1
 
 **Mittelwertsvergleiche durch eine ANOVA**
 
-Eta^2^  (siehe Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/) Punkt 7))
+Eta^2^  (siehe Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/) Punkt 7)
 
 Wertebereich: 0 bis +1
 

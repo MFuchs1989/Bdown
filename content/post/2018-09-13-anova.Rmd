@@ -198,11 +198,11 @@ Wir sehen, dass es weder bei den Gruppen "AFRICA" und "Asia" noch bei den Gruppe
 
 #7 Effect size
 
-Eine sehr beliebte Effektgröße für die einfaktorielle Varianzanalyse ohne Messwiederholung ist das eta Quadrat.
+Eine sehr beliebte Effektgröße für die einfaktorielle Varianzanalyse ohne Messwiederholung ist das eta^2^.
 
 ##7.1 Effect size for ANOVA with variance homogeneity
 
-Das eta Quadrat wird folgendermaßen berechnet:
+Das eta^2^ wird folgendermaßen berechnet:
 $$\eta^2 = \frac{\mathrm{QS}_\mathrm{Zwischen}}{\mathrm{QS}_\mathrm{Gesamt}}$$
 
 QS steht für Quadratsummen. Diese Werte können wir der Varianzanalysetabelle entnommen werden.
@@ -239,7 +239,7 @@ SS_between/SS_total
 
 ##7.3 Calculation of Cohens f
 
-Aus dem eta Quadrat kann nun die Effektgröße f nach Cohen berechnet werden. Im ersten Schritt weisen wir dazu das eta Quadrat aus der durchgeführten ANOVA dem Objekt "f.ANOVA" zu.
+Aus dem eta^2^ kann nun die Effektgröße f nach Cohen berechnet werden. Im ersten Schritt weisen wir dazu das eta^2^ aus der durchgeführten ANOVA dem Objekt "f.ANOVA" zu.
 ```{r}
 f.ANOVA <- eta_sq(ANOVA)
 ```
@@ -263,7 +263,7 @@ f.2
 ```
 
 Wir erhalten für die ANOVA einen f-Wert von 0,17 und für den oneway.test einen f-Wert von 0,24.
-Warum haben wir zusätzlich ein weiteres Maß der Effektgröße berechnet, nachdem wir bereits eta Quadrat hatten? 
+Warum haben wir zusätzlich ein weiteres Maß der Effektgröße berechnet, nachdem wir bereits eta^2^ hatten? 
 
 
 #8 Power

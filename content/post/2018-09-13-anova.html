@@ -235,10 +235,10 @@ size2$n</code></pre>
 </div>
 <div id="effect-size" class="section level1">
 <h1>7 Effect size</h1>
-<p>Eine sehr beliebte Effektgröße für die einfaktorielle Varianzanalyse ohne Messwiederholung ist das eta Quadrat.</p>
+<p>Eine sehr beliebte Effektgröße für die einfaktorielle Varianzanalyse ohne Messwiederholung ist das eta<sup>2</sup>.</p>
 <div id="effect-size-for-anova-with-variance-homogeneity" class="section level2">
 <h2>7.1 Effect size for ANOVA with variance homogeneity</h2>
-<p>Das eta Quadrat wird folgendermaßen berechnet: <span class="math display">\[\eta^2 = \frac{\mathrm{QS}_\mathrm{Zwischen}}{\mathrm{QS}_\mathrm{Gesamt}}\]</span></p>
+<p>Das eta<sup>2</sup> wird folgendermaßen berechnet: <span class="math display">\[\eta^2 = \frac{\mathrm{QS}_\mathrm{Zwischen}}{\mathrm{QS}_\mathrm{Gesamt}}\]</span></p>
 <p>QS steht für Quadratsummen. Diese Werte können wir der Varianzanalysetabelle entnommen werden.</p>
 <pre class="r"><code>summary(ANOVA)</code></pre>
 <pre><code>##                         Df Sum Sq Mean Sq F value Pr(&gt;F)
@@ -272,7 +272,7 @@ SS_between/SS_total</code></pre>
 </div>
 <div id="calculation-of-cohens-f" class="section level2">
 <h2>7.3 Calculation of Cohens f</h2>
-<p>Aus dem eta Quadrat kann nun die Effektgröße f nach Cohen berechnet werden. Im ersten Schritt weisen wir dazu das eta Quadrat aus der durchgeführten ANOVA dem Objekt “f.ANOVA” zu.</p>
+<p>Aus dem eta<sup>2</sup> kann nun die Effektgröße f nach Cohen berechnet werden. Im ersten Schritt weisen wir dazu das eta<sup>2</sup> aus der durchgeführten ANOVA dem Objekt “f.ANOVA” zu.</p>
 <pre class="r"><code>f.ANOVA &lt;- eta_sq(ANOVA)</code></pre>
 <p>Die Formel für Cohens f sieht in R folgendermaßen aus.</p>
 <pre class="r"><code>f.1 &lt;- sqrt(as.numeric(f.ANOVA)/(1-as.numeric(f.ANOVA)))</code></pre>
@@ -290,7 +290,7 @@ SS_between/SS_total</code></pre>
 f.2 &lt;- sqrt(as.numeric(f.oneway.test)/(1-as.numeric(f.oneway.test)))
 f.2</code></pre>
 <pre><code>## [1] 0.2439762</code></pre>
-<p>Wir erhalten für die ANOVA einen f-Wert von 0,17 und für den oneway.test einen f-Wert von 0,24. Warum haben wir zusätzlich ein weiteres Maß der Effektgröße berechnet, nachdem wir bereits eta Quadrat hatten?</p>
+<p>Wir erhalten für die ANOVA einen f-Wert von 0,17 und für den oneway.test einen f-Wert von 0,24. Warum haben wir zusätzlich ein weiteres Maß der Effektgröße berechnet, nachdem wir bereits eta<sup>2</sup> hatten?</p>
 </div>
 </div>
 <div id="power" class="section level1">
