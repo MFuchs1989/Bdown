@@ -39,11 +39,12 @@ Jedes statistische Testverfahren hat ein eigenes Effektmaß:
 Odds Ratio (siehe Post ["Survive on the Titanic - Case Study"](https://michael-fuchs.netlify.com/2018/08/05/survive-on-the-titanic-case-study/) Abschnitt Effektstärke) oder 
 
 Cramers V
+
 Wertebereich: 0 bis +1
 
-<0,3 kleiner Effekt
->0,3 und <0,5 mittelgradiger Effekt
->0,5 großer Effekt
++ <0,3 kleiner Effekt
++ >0,3 und <0,5 mittelgradiger Effekt
++ >0,5 großer Effekt
 
 
 **Zusammenhang ordinal und metrisch skalierte Variablen**
@@ -55,43 +56,47 @@ Wertebereich: 0 bis +1
 
 Wertebereich: -1 bis +1
 
-<0,3 kleiner Effekt
->0,3 und <0,5 mittelgradiger Effekt
->0,5 großer Effekt
++ <0,3 kleiner Effekt
++ >0,3 und <0,5 mittelgradiger Effekt
++ >0,5 großer Effekt
 
 **Mittelwertsvergleiche durch einen t-Test**
 
 Cohen‘s d (siehe Post ["t-Test"](https://michael-fuchs.netlify.com/2018/09/12/t-test/) Punkt 8))
+
 Wertebereich: 0 bis +1
 
-<0,5 kleiner Effekt
->0,5 und <0,8 mittelgradiger Effekt
->0,8 großer Effekt
++ <0,5 kleiner Effekt
++ >0,5 und <0,8 mittelgradiger Effekt
++ >0,8 großer Effekt
 
 
 **Mittelwertsvergleiche durch eine ANOVA**
 
 Eta^2^  (siehe Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/) Punkt 7))
+
 Wertebereich: 0 bis +1
 
-<0,06 kleiner Effekt
->0,06 und <0,14 mittelgradiger Effekt
->0,14 großer Effekt
++ <0,06 kleiner Effekt
++ >0,06 und <0,14 mittelgradiger Effekt
++ >0,14 großer Effekt
 
 
 **Mittelwertsvergleiche durch eine MANOVA**
 
 Partielles eta^2^  
+
 Wertebereich: 0 bis +1
 
-<0,06 kleiner Effekt
->0,06 und <0,14 mittelgradiger Effekt
->0,14 großer Effekt
++ <0,06 kleiner Effekt
++ >0,06 und <0,14 mittelgradiger Effekt
++ >0,14 großer Effekt
 
 
 **Varianzaufklärung bei der Regressionsanalyse**
 
 Determinationskoeffizient R^2^
+
 Wertebereich: 0 bis +1
 
 Mithilfe der unabhängigen Variablen können … Prozent der Varianz der abhängigen Variablen erklärt werden.
