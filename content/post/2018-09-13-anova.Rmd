@@ -153,7 +153,7 @@ Das Ergebnis ist mit p = .135 nicht signifikant. Es gibt also erstmal keinen Unt
 
 #5 ANOVA with variance inequality
 
-Es kann auch bei einer Varianzanalyse vorkommen, dass die Varianzen der abhängigen Variablen in einer Populatione nicht gleich verteilt ist. 
+Es kann auch bei einer Varianzanalyse vorkommen, dass die Varianzen der abhängigen Variablen in einer Population nicht gleich verteilt ist. 
 Im Nachfolgenden wollen wir überprüfen, ob die Regionen "AFRICA", "Asia" und "LATIN AMER" sich signifikant in ihrem Populationsanteil unterscheiden.
 
 **Überprüfung der Normalverteilung**
@@ -255,7 +255,7 @@ Alternativ bestünde die Möglicheit, die *cohens_f* Funktion zu verwenden. Dies
 cohens_f(ANOVA)
 ```
 
-Dasselbe wird nun auch für den oneway.test durchgeführt.
+Das selbe wird nun auch für den oneway.test durchgeführt.
 ```{r}
 f.oneway.test <- SS_between/SS_total
 f.2 <- sqrt(as.numeric(f.oneway.test)/(1-as.numeric(f.oneway.test)))
@@ -268,7 +268,7 @@ Warum haben wir zusätzlich ein weiteres Maß der Effektgröße berechnet, nachd
 
 #8 Power
 
-Die Frage, warum zusätzlich Cohens f berechnet wurde, klärt sich, wenn die Teststärke berechnet werden soll. Im nachfolgenden soll eine Power Analyse für die ANOVA (4 ANOVA with variance homogeneity) durchgeführt werden. Für die *pwr.anova.test* Funktion werden folgende Parameter benötigt:
+Die Frage, warum zusätzlich Cohens f berechnet wurde, klärt sich, wenn die Teststärke berechnet werden soll. Im Nachfolgenden soll eine Power Analyse für die ANOVA (4 ANOVA with variance homogeneity) durchgeführt werden. Für die *pwr.anova.test* Funktion werden folgende Parameter benötigt:
 
 + k = Anzahl der Gruppen
 + f = Cohens f
@@ -326,7 +326,7 @@ without.outliers<- preparation %>% filter(Coastline.num < 70)
 leveneTest(without.outliers$Coastline.num ~ as.factor(without.outliers$region.new))
 ```
 
-Der leveneTest zeigt nun ein signifikantes Ergebnis. Es liegt Varianzheterogenität vor. Demnach darf die ANOVA nicht verwendet werden. Wir greifen daher auf den oneway.test (Welch) zurück.
+Der levene Test zeigt nun ein signifikantes Ergebnis. Es liegt Varianzheterogenität vor. Demnach darf die ANOVA nicht verwendet werden. Wir greifen daher auf den oneway.test (Welch) zurück.
 
 ```{r}
 oneway.test(without.outliers$Coastline.num ~ without.outliers$region.new)

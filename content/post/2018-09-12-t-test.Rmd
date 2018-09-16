@@ -36,7 +36,7 @@ Ein t-Test kann verwendet werden, um Mittelwertsunterschiede zu überprüfen.
 
 Wenn man den Stichprobenmittelwert von einer Variablen mit einem bekannten Populationsmittelwert vergleichen möchte, so wird ein **t-Test für eine Stichprobe** verwendet. 
 
-Möchte man bei beispielsweise Längsschnittstudien (bei denen jede Person zweimal untersucht und somit Wertepaare gebildet wurden) zwei Mittelwerte miteinander vergleichen, so verwendet man **t-Tests für abhängige Stichproben**. 
+Möchte man bei beispielsweise Längsschnittstudien (bei denen jede Person zweimal untersucht und somit Wertepaare gebildet werden) zwei Mittelwerte miteinander vergleichen, so verwendet man **t-Tests für abhängige Stichproben**. 
 
 Im Folgenden wird die Verwendung des **t-Tests für unabhängigen Stichproben** behandelt. Dabei vergleicht man zwei Gruppen in Bezug auf den jeweiligen Mittelwert auf der abhängigen Variablen.  
 
@@ -64,7 +64,7 @@ limitation<- countries %>% filter(Region == "LATIN AMER. & CARIB" | Region == "S
   select(Country, Region, `Coastline (coast/area ratio)`, Population)
 ```
 
-Im nachfolgenden soll untersucht werden, ob sich diese beiden Regionen hinsichtlich den Variablen "Population" und "Coastline" signifikant voneinander unterscheiden. Dafür werden sie im Zuge der Vorbereitung in eine nummerische Variable umgewandelt. 
+Im Nachfolgenden soll untersucht werden, ob sich diese beiden Regionen hinsichtlich den Variablen "Population" und "Coastline" signifikant voneinander unterscheiden. Dafür werden sie im Zuge der Vorbereitung in eine nummerische Variable umgewandelt. 
 
 ```{r}
 limitation$Population.num <- as.numeric(limitation$Population)
@@ -109,7 +109,7 @@ Da N1 & N2 < 30 greift der zentrale Grenzwertsatz.
 
 ##3.3 Homogeneity of variance
 
-Der verwendete *leveneTest* hat zwei Argumente. Das erste ist die abhängige Variable das zweite die unabhängige Variable. Die Nullhypothese besagt Varianzhomogenität. 
+Der verwendete *leveneTest* hat zwei Argumente. Das Erste ist die abhängige Variable das Zweite die unabhängige Variable. Die Nullhypothese besagt Varianzhomogenität. 
 
 ```{r}
 leveneTest(limitation$Population.num, limitation$Region)
@@ -140,7 +140,7 @@ Der durchgeführte t-Test zeigt ein nicht signifikantes Ergebnis (p > .05). Die 
 
 #5 t-Test with variance inequality
 
-Es kann natürlich vorkommen, dass die Varianzen der abhängigen Variablen in beiden Populationen nicht gleich ist. 
+Es kann natürlich vorkommen, dass die Varianzen der abhängigen Variablen in beiden Populationen nicht gleich sind. 
 Wir wollen eine Mittelwertsvergleich für die beiden Regionen "LATIN AMER. & CARIB" und "SUB-SAHARAN AFRICA" mittels der abhängigen Variablen `Coastline` durchführen. 
 
 **Überprüfung der Normalverteilung**
@@ -205,7 +205,7 @@ t.test(limitation$Coastline.num ~ limitation$Region, conf.level = 0.99)
 
 #8 Effect size
 
-Als standardisierte Effektgröße (SMD: Standardized Mean Difference) für zwei Mittelwerte wird üblicherweise Cohens d angefordert. Cohens d wird berechnet, indem man die Mittelwertsdifferenz durch die gepoolte Standardabweichung teilt. Im folgenden Beispiel wird die Effektgröße für den Vergleich von "SUB-SAHARAN AFRICA" und "LATIN AMER. & CARIB" bezüglich ihres Küstenanteils.
+Als standardisierte Effektgröße (SMD: Standardized Mean Difference) für zwei Mittelwerte wird üblicherweise Cohens d angefordert. Cohens d wird berechnet, indem man die Mittelwertsdifferenz durch die gepoolte Standardabweichung teilt. Im folgenden Beispiel wird die Effektgröße für den Vergleich von "SUB-SAHARAN AFRICA" und "LATIN AMER. & CARIB" bezüglich ihres Küstenanteils ermittelt.
 ```{r}
 ci.smd(ncp = t.test(limitation$Coastline.num ~ limitation$Region)$statistic, n.1 = description2$n[1], n.2 = description2$n[2])
 ```

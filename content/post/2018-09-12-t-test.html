@@ -33,7 +33,7 @@ tags:
 <h1>1 Introduction</h1>
 <p>Ein t-Test kann verwendet werden, um Mittelwertsunterschiede zu überprüfen.</p>
 <p>Wenn man den Stichprobenmittelwert von einer Variablen mit einem bekannten Populationsmittelwert vergleichen möchte, so wird ein <strong>t-Test für eine Stichprobe</strong> verwendet.</p>
-<p>Möchte man bei beispielsweise Längsschnittstudien (bei denen jede Person zweimal untersucht und somit Wertepaare gebildet wurden) zwei Mittelwerte miteinander vergleichen, so verwendet man <strong>t-Tests für abhängige Stichproben</strong>.</p>
+<p>Möchte man bei beispielsweise Längsschnittstudien (bei denen jede Person zweimal untersucht und somit Wertepaare gebildet werden) zwei Mittelwerte miteinander vergleichen, so verwendet man <strong>t-Tests für abhängige Stichproben</strong>.</p>
 <p>Im Folgenden wird die Verwendung des <strong>t-Tests für unabhängigen Stichproben</strong> behandelt. Dabei vergleicht man zwei Gruppen in Bezug auf den jeweiligen Mittelwert auf der abhängigen Variablen.</p>
 <p>Für diesen Post wurde der Datensatz <em>countries of the world</em> von der Statsistik Plattform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006" class="uri">https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006</a> abrufbar.</p>
 <pre class="r"><code>library(tidyverse)
@@ -59,7 +59,7 @@ library(pwr)</code></pre>
 ##                   51                   28</code></pre>
 <pre class="r"><code>limitation&lt;- countries %&gt;% filter(Region == &quot;LATIN AMER. &amp; CARIB&quot; | Region == &quot;SUB-SAHARAN AFRICA&quot;) %&gt;%
   select(Country, Region, `Coastline (coast/area ratio)`, Population)</code></pre>
-<p>Im nachfolgenden soll untersucht werden, ob sich diese beiden Regionen hinsichtlich den Variablen “Population” und “Coastline” signifikant voneinander unterscheiden. Dafür werden sie im Zuge der Vorbereitung in eine nummerische Variable umgewandelt.</p>
+<p>Im Nachfolgenden soll untersucht werden, ob sich diese beiden Regionen hinsichtlich den Variablen “Population” und “Coastline” signifikant voneinander unterscheiden. Dafür werden sie im Zuge der Vorbereitung in eine nummerische Variable umgewandelt.</p>
 <pre class="r"><code>limitation$Population.num &lt;- as.numeric(limitation$Population)
 limitation$Coastline.new &lt;- str_replace(limitation$`Coastline (coast/area ratio)`, &quot;,&quot;, &quot;.&quot;)
 limitation$Coastline.num &lt;- as.numeric(limitation$Coastline.new)
@@ -126,7 +126,7 @@ description</code></pre>
 </div>
 <div id="homogeneity-of-variance" class="section level2">
 <h2>3.3 Homogeneity of variance</h2>
-<p>Der verwendete <em>leveneTest</em> hat zwei Argumente. Das erste ist die abhängige Variable das zweite die unabhängige Variable. Die Nullhypothese besagt Varianzhomogenität.</p>
+<p>Der verwendete <em>leveneTest</em> hat zwei Argumente. Das Erste ist die abhängige Variable das Zweite die unabhängige Variable. Die Nullhypothese besagt Varianzhomogenität.</p>
 <pre class="r"><code>leveneTest(limitation$Population.num, limitation$Region)</code></pre>
 <pre><code>## Warning in leveneTest.default(limitation$Population.num, limitation
 ## $Region): limitation$Region coerced to factor.</code></pre>
@@ -161,7 +161,7 @@ description</code></pre>
 </div>
 <div id="t-test-with-variance-inequality" class="section level1">
 <h1>5 t-Test with variance inequality</h1>
-<p>Es kann natürlich vorkommen, dass die Varianzen der abhängigen Variablen in beiden Populationen nicht gleich ist. Wir wollen eine Mittelwertsvergleich für die beiden Regionen “LATIN AMER. &amp; CARIB” und “SUB-SAHARAN AFRICA” mittels der abhängigen Variablen <code>Coastline</code> durchführen.</p>
+<p>Es kann natürlich vorkommen, dass die Varianzen der abhängigen Variablen in beiden Populationen nicht gleich sind. Wir wollen eine Mittelwertsvergleich für die beiden Regionen “LATIN AMER. &amp; CARIB” und “SUB-SAHARAN AFRICA” mittels der abhängigen Variablen <code>Coastline</code> durchführen.</p>
 <p><strong>Überprüfung der Normalverteilung</strong></p>
 <pre class="r"><code>lillie.test(limitation$Coastline.num)</code></pre>
 <pre><code>## 
@@ -246,7 +246,7 @@ description2</code></pre>
 </div>
 <div id="effect-size" class="section level1">
 <h1>8 Effect size</h1>
-<p>Als standardisierte Effektgröße (SMD: Standardized Mean Difference) für zwei Mittelwerte wird üblicherweise Cohens d angefordert. Cohens d wird berechnet, indem man die Mittelwertsdifferenz durch die gepoolte Standardabweichung teilt. Im folgenden Beispiel wird die Effektgröße für den Vergleich von “SUB-SAHARAN AFRICA” und “LATIN AMER. &amp; CARIB” bezüglich ihres Küstenanteils.</p>
+<p>Als standardisierte Effektgröße (SMD: Standardized Mean Difference) für zwei Mittelwerte wird üblicherweise Cohens d angefordert. Cohens d wird berechnet, indem man die Mittelwertsdifferenz durch die gepoolte Standardabweichung teilt. Im folgenden Beispiel wird die Effektgröße für den Vergleich von “SUB-SAHARAN AFRICA” und “LATIN AMER. &amp; CARIB” bezüglich ihres Küstenanteils ermittelt.</p>
 <pre class="r"><code>ci.smd(ncp = t.test(limitation$Coastline.num ~ limitation$Region)$statistic, n.1 = description2$n[1], n.2 = description2$n[2])</code></pre>
 <pre><code>## $Lower.Conf.Limit.smd
 ## [1] 0.1466113

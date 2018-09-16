@@ -241,7 +241,7 @@ size</code></pre>
 </div>
 <div id="anova-with-variance-inequality" class="section level1">
 <h1>5 ANOVA with variance inequality</h1>
-<p>Es kann auch bei einer Varianzanalyse vorkommen, dass die Varianzen der abhängigen Variablen in einer Populatione nicht gleich verteilt ist. Im Nachfolgenden wollen wir überprüfen, ob die Regionen “AFRICA”, “Asia” und “LATIN AMER” sich signifikant in ihrem Populationsanteil unterscheiden.</p>
+<p>Es kann auch bei einer Varianzanalyse vorkommen, dass die Varianzen der abhängigen Variablen in einer Population nicht gleich verteilt ist. Im Nachfolgenden wollen wir überprüfen, ob die Regionen “AFRICA”, “Asia” und “LATIN AMER” sich signifikant in ihrem Populationsanteil unterscheiden.</p>
 <p><strong>Überprüfung der Normalverteilung</strong></p>
 <pre class="r"><code>lillie.test(preparation$Population.num) </code></pre>
 <pre><code>## 
@@ -343,7 +343,7 @@ SS_between/SS_total</code></pre>
 <pre class="r"><code>cohens_f(ANOVA)</code></pre>
 <pre><code>##                     term  cohens.f
 ## 1 preparation$region.new 0.1722846</code></pre>
-<p>Dasselbe wird nun auch für den oneway.test durchgeführt.</p>
+<p>Das selbe wird nun auch für den oneway.test durchgeführt.</p>
 <pre class="r"><code>f.oneway.test &lt;- SS_between/SS_total
 f.2 &lt;- sqrt(as.numeric(f.oneway.test)/(1-as.numeric(f.oneway.test)))
 f.2</code></pre>
@@ -353,7 +353,7 @@ f.2</code></pre>
 </div>
 <div id="power" class="section level1">
 <h1>8 Power</h1>
-<p>Die Frage, warum zusätzlich Cohens f berechnet wurde, klärt sich, wenn die Teststärke berechnet werden soll. Im nachfolgenden soll eine Power Analyse für die ANOVA (4 ANOVA with variance homogeneity) durchgeführt werden. Für die <em>pwr.anova.test</em> Funktion werden folgende Parameter benötigt:</p>
+<p>Die Frage, warum zusätzlich Cohens f berechnet wurde, klärt sich, wenn die Teststärke berechnet werden soll. Im Nachfolgenden soll eine Power Analyse für die ANOVA (4 ANOVA with variance homogeneity) durchgeführt werden. Für die <em>pwr.anova.test</em> Funktion werden folgende Parameter benötigt:</p>
 <ul>
 <li>k = Anzahl der Gruppen</li>
 <li>f = Cohens f</li>
@@ -418,7 +418,7 @@ f.2</code></pre>
 ##       133                      
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>Der leveneTest zeigt nun ein signifikantes Ergebnis. Es liegt Varianzheterogenität vor. Demnach darf die ANOVA nicht verwendet werden. Wir greifen daher auf den oneway.test (Welch) zurück.</p>
+<p>Der levene Test zeigt nun ein signifikantes Ergebnis. Es liegt Varianzheterogenität vor. Demnach darf die ANOVA nicht verwendet werden. Wir greifen daher auf den oneway.test (Welch) zurück.</p>
 <pre class="r"><code>oneway.test(without.outliers$Coastline.num ~ without.outliers$region.new)</code></pre>
 <pre><code>## 
 ##  One-way analysis of means (not assuming equal variances)
