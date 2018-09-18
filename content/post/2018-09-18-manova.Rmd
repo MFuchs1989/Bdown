@@ -122,7 +122,7 @@ Für die Ausgabe der unterschiedlichen Mittelwerte kann erneut die *model.tables
 model.tables(MANOVA, "means")
 ```
 
-**Grand mean** beschreibt wieder den Gesamtmittelwert. Die Tabelle **Happiness$Family.new** zeigt die Mittelwerte (der Variable `Happiness.Score`) für alle Länder mit vielen Familien und wenigeren, umabhängig davon, ob diese einen hohen oder niedrigen "Freedom"-Grad haben. Die Zeile *rep* nennt uns die Stichprobengröße. In der Tabelle **Happiness$Freedom.new ** erhalten wir die Mittelwerte und Stichprobengrößen für alle Länder (aufgeteilt nach den beiden Kategorien "viel.Freiheit" und "weniger.Freiheit"), unabhängig davon, ob diese einen hohen oder niedrigen "Family"-Grad haben. Schließich werden in der Tabelle **Happiness$Family.new:Happiness$Freedom.new** die Stichprobengrößen und Mittelwerte für jede der einzelnen Kombinationen ausgegeben. 
+**Grand mean** beschreibt wieder den Gesamtmittelwert. Die Tabelle **Happiness.Family.new** zeigt die Mittelwerte (der Variable `Happiness.Score`) für alle Länder mit vielen Familien und wenigeren, umabhängig davon, ob diese einen hohen oder niedrigen "Freedom"-Grad haben. Die Zeile *rep* nennt uns die Stichprobengröße. In der Tabelle **Happiness.Freedom.new ** erhalten wir die Mittelwerte und Stichprobengrößen für alle Länder (aufgeteilt nach den beiden Kategorien "viel.Freiheit" und "weniger.Freiheit"), unabhängig davon, ob diese einen hohen oder niedrigen "Family"-Grad haben. Schließich werden in der Tabelle **Happiness.Family.new:Happiness.Freedom.new** die Stichprobengrößen und Mittelwerte für jede der einzelnen Kombinationen ausgegeben. 
 
 
 **Verschiedene Quadratsummentypen**
