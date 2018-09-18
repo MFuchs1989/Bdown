@@ -18,7 +18,16 @@ knitr::opts_chunk$set(echo = TRUE)
 #Table of Content
 
 + 1 Introduction
-+ 
++ 2 Preparation
++ 3 Essential requirements
++ 3.1 Normal distribution
++ 3.2 Sampling size
++ 3.3 Homogeneity of variance
++ 4 MANOVA
++ 5 Interaction diagram
++ 6 Post-hoc-method
++ 7 Effect size
++ 8 Conclusion
 
 
 
