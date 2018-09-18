@@ -19,6 +19,11 @@
 
 
 
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
 <link rel="stylesheet" href="/css/fonts.css" media="all">
 <link rel="stylesheet" href="/css/main.css" media="all">
 
@@ -54,7 +59,7 @@
 
   <article class="article">
     
-    <span class="article-duration">0 min read</span>
+    <span class="article-duration">2 min read</span>
     
 
     <h1 class="article-title">MANOVA</h1>
@@ -64,7 +69,60 @@
     
 
     <div class="article-content">
-      
+      <div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li></li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Aufbauend auf den Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a>, in dem es um die Funktionsweise der einfaktoriellen Varianzanalyse ging, soll nachfolgend das Prinzip der mehrfaktoriellen Varianzanalyse ohne Messwiederholung, kurz <strong>MANOVA</strong> (multivariate analysis of variance), näher erleutert werden. Im Gegensatz zur einfaktoriellen Varianzanalyse werden bei der MANOVA nicht nur eine, sondern mehrere unabhängige Variablen betrachtet.</p>
+<p>Für diesen Post wurde der Datensatz <em>World Happiness Report</em> von der Statsistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br" class="uri">https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br</a> abrufbar.</p>
+<pre class="r"><code>library(tidyverse)
+library(psych)
+library(sjstats)
+library(nortest)
+library(car)
+library(gplots)
+library(MBESS)</code></pre>
+<pre class="r"><code>Happiness &lt;- read_csv(&quot;World_Happiness_Report.csv&quot;)</code></pre>
+</div>
+<div id="preparation" class="section level1">
+<h1>2 Preparation</h1>
+<p>Anhand des Datensatzes <em>World Happiness Report</em> soll eine zweifaktorielle Varianzanalyse durchgeführt werden. Dafür kreieren wir im ersten Schritt zwei unabhägige kategoriale Variablen (zwei Faktoren).</p>
+<pre class="r"><code>Happiness$Family.new &lt;- ifelse(Happiness$Family &gt;= 1.254, &quot;viele.Familien&quot;, &quot;weniger.Familien&quot;)
+Happiness$Freedom.new &lt;- ifelse(Happiness$Freedom &gt;= 0.4375, &quot;viel.Freiheit&quot;, &quot;weniger.Freiheit&quot;)</code></pre>
+<p>Für das folgende Beispiel wurden die Faktroren <code>Family.new</code>und <code>Freedom.new</code> erstellt. Die Variable <code>Family.new</code> beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen “viele.Familien” und “weniger.Familien” und die Variable <code>Freedom.new</code> mit den beiden Ausprägungen “viel.Freiheit” und “weniger.Freiheit”. Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median.</p>
+<p>Die abhängige Variable für di MANOVa soll der <code>Happiness.Score</code> sein.</p>
+<pre class="r"><code>glimpse(Happiness)</code></pre>
+<pre><code>## Observations: 155
+## Variables: 14
+## $ Country                       &lt;chr&gt; &quot;Norway&quot;, &quot;Denmark&quot;, &quot;Iceland&quot;, ...
+## $ Happiness.Rank                &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1...
+## $ Happiness.Score               &lt;dbl&gt; 7.537, 7.522, 7.504, 7.494, 7.46...
+## $ Whisker.high                  &lt;dbl&gt; 7.594445, 7.581728, 7.622030, 7....
+## $ Whisker.low                   &lt;dbl&gt; 7.479556, 7.462272, 7.385970, 7....
+## $ Economy..GDP.per.Capita.      &lt;dbl&gt; 1.616463, 1.482383, 1.480633, 1....
+## $ Family                        &lt;dbl&gt; 1.533524, 1.551122, 1.610574, 1....
+## $ Health..Life.Expectancy.      &lt;dbl&gt; 0.7966665, 0.7925655, 0.8335521,...
+## $ Freedom                       &lt;dbl&gt; 0.6354226, 0.6260067, 0.6271626,...
+## $ Generosity                    &lt;dbl&gt; 0.36201224, 0.35528049, 0.475540...
+## $ Trust..Government.Corruption. &lt;dbl&gt; 0.31596383, 0.40077007, 0.153526...
+## $ Dystopia.Residual             &lt;dbl&gt; 2.277027, 2.313707, 2.322715, 2....
+## $ Family.new                    &lt;chr&gt; &quot;viele.Familien&quot;, &quot;viele.Familie...
+## $ Freedom.new                   &lt;chr&gt; &quot;viel.Freiheit&quot;, &quot;viel.Freiheit&quot;...</code></pre>
+<pre class="r"><code>table(Happiness$Family.new)</code></pre>
+<pre><code>## 
+##   viele.Familien weniger.Familien 
+##               77               78</code></pre>
+<pre class="r"><code>table(Happiness$Freedom.new)</code></pre>
+<pre><code>## 
+##    viel.Freiheit weniger.Freiheit 
+##               77               78</code></pre>
+</div>
+
     </div>
   </article>
 
@@ -87,7 +145,22 @@
     </div>
     
 
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
     
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
 
     
   </body>

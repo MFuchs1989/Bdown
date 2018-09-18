@@ -8,3 +8,57 @@ categories:
 tags:
   - R Markdown
 ---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Table of Content
+
++ 1 Introduction
++ 
+
+
+
+#1 Introduction
+
+Aufbauend auf den Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/), in dem es um die Funktionsweise der einfaktoriellen Varianzanalyse ging, soll nachfolgend das Prinzip der mehrfaktoriellen Varianzanalyse ohne Messwiederholung, kurz **MANOVA** (multivariate analysis of variance), näher erleutert werden. Im Gegensatz zur einfaktoriellen Varianzanalyse werden bei der MANOVA nicht nur eine, sondern mehrere unabhängige Variablen betrachtet. 
+
+Für diesen Post wurde der Datensatz *World Happiness Report* von der Statsistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br> abrufbar.
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(psych)
+library(sjstats)
+library(nortest)
+library(car)
+library(gplots)
+library(MBESS)
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+Happiness <- read_csv("World_Happiness_Report.csv")
+```
+
+#2 Preparation
+
+Anhand des Datensatzes *World Happiness Report* soll eine zweifaktorielle Varianzanalyse durchgeführt werden. Dafür kreieren wir im ersten Schritt zwei unabhägige kategoriale Variablen (zwei Faktoren). 
+```{r}
+Happiness$Family.new <- ifelse(Happiness$Family >= 1.254, "viele.Familien", "weniger.Familien")
+Happiness$Freedom.new <- ifelse(Happiness$Freedom >= 0.4375, "viel.Freiheit", "weniger.Freiheit")
+```
+
+Für das folgende Beispiel wurden die Faktroren `Family.new`und `Freedom.new` erstellt. Die Variable `Family.new` beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen "viele.Familien" und "weniger.Familien" und die Variable `Freedom.new` mit den beiden Ausprägungen "viel.Freiheit" und "weniger.Freiheit". Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median. 
+
+Die abhängige Variable für di MANOVa soll der `Happiness.Score` sein. 
+```{r}
+glimpse(Happiness)
+table(Happiness$Family.new)
+table(Happiness$Freedom.new)
+```
+
+
+
+
+
