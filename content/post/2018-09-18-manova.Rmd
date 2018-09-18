@@ -141,7 +141,6 @@ Die Spalte "Residuals" beinhaltet die Quadratsummen und Freiheitsgrade für den 
 
 
 ```{r}
-par(mfrow=c(1,2))
 plotmeans(Happiness$Happiness.Score ~ Happiness$Family.new, xlab="Familien",
           ylab="Glücklichkeitsgrad", main="Interaktionsplot Faktor Family")
 plotmeans(Happiness$Happiness.Score ~ Happiness$Freedom.new, xlab="Freiheit",
