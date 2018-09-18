@@ -232,12 +232,14 @@ desc.Hauptfaktor1</code></pre>
 <p>Die Bedeutung der einzelnen Spalten wurde bereits im Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> (unter Punkt 4) genau erklärt. Wir erhalten ein höchst signifikantes Ergebnis für den Haupteffekt des Faktors <code>Family.new</code> (p &lt; .001) und ein hoch signifikants Ergebnis für den Haupteffekt des Faktors <code>Freedom.new</code> (p = .002). Das Ergebnis für den Interaktionseffekt ist mit p = .23 nicht signifikant.</p>
 <p>Die Spalte “Residuals” beinhaltet die Quadratsummen und Freiheitsgrade für den Nenner, beziehungsweise die Unterschiede innerhalb der Gruppen.</p>
 <p><strong>Interaktionsdiagramm</strong></p>
-<pre class="r"><code>plotmeans(Happiness$Happiness.Score ~ Happiness$Family.new, xlab=&quot;Familien&quot;,
-          ylab=&quot;Glücklichkeitsgrad&quot;, main=&quot;Interaktionsplot Faktor Family&quot;)</code></pre>
-<p><img src="/post/2018-09-18-manova_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<pre class="r"><code>plotmeans(Happiness$Happiness.Score ~ Happiness$Freedom.new, xlab=&quot;Freiheit&quot;,
+<pre class="r"><code>Happiness$Family.new.kurz &lt;- ifelse(Happiness$Family.new == &quot;viele.Familien&quot;, &quot;viele&quot;, &quot;weniger&quot;)
+Happiness$Freedom.new.kurz &lt;- ifelse(Happiness$Freedom.new == &quot;viel.Freiheit&quot;, &quot;viel&quot;, &quot;weniger&quot;)
+par(mfrow=c(1,2))
+plotmeans(Happiness$Happiness.Score ~ Happiness$Family.new.kurz, xlab=&quot;Familien&quot;,
+          ylab=&quot;Glücklichkeitsgrad&quot;, main=&quot;Interaktionsplot Faktor Family&quot;)
+plotmeans(Happiness$Happiness.Score ~ Happiness$Freedom.new.kurz, xlab=&quot;Freiheit&quot;,
           ylab=&quot;Glücklichkeitsgrad&quot;, main=&quot;Interaktionsplot Faktor Freedom&quot;)</code></pre>
-<p><img src="/post/2018-09-18-manova_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+<p><img src="/post/2018-09-18-manova_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 
     </div>
