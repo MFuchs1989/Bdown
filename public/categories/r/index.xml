@@ -17,8 +17,8 @@
       <pubDate>Tue, 18 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/09/18/manova/</guid>
-      <description>Table of Content1 Introduction1 IntroductionAufbauend auf den Post “ANOVA”, in dem es um die Funktionsweise der einfaktoriellen Varianzanalyse ging, soll nachfolgend das Prinzip der mehrfaktoriellen Varianzanalyse ohne Messwiederholung, kurz MANOVA (multivariate analysis of variance), näher erleutert werden. Im Gegensatz zur einfaktoriellen Varianzanalyse werden bei der MANOVA nicht nur eine, sondern mehrere unabhängige Variablen betrachtet.
-Für diesen Post wurde der Datensatz World Happiness Report von der Statsistik Plattform “Kaggle” verwendet.</description>
+      <description>Table of Content1 Introduction1 IntroductionAufbauend auf den Post “ANOVA”, in dem es um die Funktionsweise der einfaktoriellen Varianzanalyse ging, soll nachfolgend das Prinzip der mehrfaktoriellen Varianzanalyse ohne Messwiederholung, kurz MANOVA (multivariate analysis of variance), näher erläutert werden. Im Gegensatz zur einfaktoriellen Varianzanalyse werden bei der MANOVA nicht nur eine, sondern mehrere unabhängige Variablen betrachtet.
+Für diesen Post wurde der Datensatz World Happiness Report von der Statistik Plattform “Kaggle” verwendet.</description>
     </item>
     
     <item>

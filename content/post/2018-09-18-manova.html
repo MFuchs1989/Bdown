@@ -20,8 +20,8 @@ tags:
 </div>
 <div id="introduction" class="section level1">
 <h1>1 Introduction</h1>
-<p>Aufbauend auf den Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a>, in dem es um die Funktionsweise der einfaktoriellen Varianzanalyse ging, soll nachfolgend das Prinzip der mehrfaktoriellen Varianzanalyse ohne Messwiederholung, kurz <strong>MANOVA</strong> (multivariate analysis of variance), näher erleutert werden. Im Gegensatz zur einfaktoriellen Varianzanalyse werden bei der MANOVA nicht nur eine, sondern mehrere unabhängige Variablen betrachtet.</p>
-<p>Für diesen Post wurde der Datensatz <em>World Happiness Report</em> von der Statsistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br" class="uri">https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br</a> abrufbar.</p>
+<p>Aufbauend auf den Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a>, in dem es um die Funktionsweise der einfaktoriellen Varianzanalyse ging, soll nachfolgend das Prinzip der mehrfaktoriellen Varianzanalyse ohne Messwiederholung, kurz <strong>MANOVA</strong> (multivariate analysis of variance), näher erläutert werden. Im Gegensatz zur einfaktoriellen Varianzanalyse werden bei der MANOVA nicht nur eine, sondern mehrere unabhängige Variablen betrachtet.</p>
+<p>Für diesen Post wurde der Datensatz <em>World Happiness Report</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br" class="uri">https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br</a> abrufbar.</p>
 <pre class="r"><code>library(tidyverse)
 library(psych)
 library(sjstats)
@@ -33,10 +33,10 @@ library(MBESS)</code></pre>
 </div>
 <div id="preparation" class="section level1">
 <h1>2 Preparation</h1>
-<p>Anhand des Datensatzes <em>World Happiness Report</em> soll eine zweifaktorielle Varianzanalyse durchgeführt werden. Dafür kreieren wir im ersten Schritt zwei unabhägige kategoriale Variablen (zwei Faktoren).</p>
+<p>Anhand des Datensatzes <em>World Happiness Report</em> soll eine zweifaktorielle Varianzanalyse durchgeführt werden. Dafür kreieren wir im ersten Schritt zwei unabhängige kategoriale Variablen (zwei Faktoren).</p>
 <pre class="r"><code>Happiness$Family.new &lt;- ifelse(Happiness$Family &gt;= 1.254, &quot;viele.Familien&quot;, &quot;weniger.Familien&quot;)
 Happiness$Freedom.new &lt;- ifelse(Happiness$Freedom &gt;= 0.4375, &quot;viel.Freiheit&quot;, &quot;weniger.Freiheit&quot;)</code></pre>
-<p>Für das folgende Beispiel wurden die Faktroren <code>Family.new</code>und <code>Freedom.new</code> erstellt. Die Variable <code>Family.new</code> beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen “viele.Familien” und “weniger.Familien” und die Variable <code>Freedom.new</code> mit den beiden Ausprägungen “viel.Freiheit” und “weniger.Freiheit”. Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median.</p>
+<p>Für das folgende Beispiel wurden die Faktoren <code>Family.new</code>und <code>Freedom.new</code> erstellt. Die Variable <code>Family.new</code> beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen “viele.Familien” und “weniger.Familien” und die Variable <code>Freedom.new</code> mit den beiden Ausprägungen “viel.Freiheit” und “weniger.Freiheit”. Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median.</p>
 <pre class="r"><code>median(Happiness$Family)</code></pre>
 <pre><code>## [1] 1.253918</code></pre>
 <pre class="r"><code>median(Happiness$Freedom)</code></pre>
@@ -152,7 +152,7 @@ desc.Hauptfaktor1</code></pre>
 ##     rep              23.00         55.00</code></pre>
 <p><strong>Grand mean</strong> beschreibt wieder den Gesamtmittelwert. Die Tabelle <strong>Happiness.Family.new</strong> zeigt die Mittelwerte (der Variable <code>Happiness.Score</code>) für alle Länder mit vielen Familien und wenigeren, umabhängig davon, ob diese einen hohen oder niedrigen “Freedom”-Grad haben. Die Zeile <em>rep</em> nennt uns die Stichprobengröße. In der Tabelle <strong>Happiness.Freedom.new </strong> erhalten wir die Mittelwerte und Stichprobengrößen für alle Länder (aufgeteilt nach den beiden Kategorien “viel.Freiheit” und “weniger.Freiheit”), unabhängig davon, ob diese einen hohen oder niedrigen “Family”-Grad haben. Schließich werden in der Tabelle <strong>Happiness.Family.new:Happiness.Freedom.new</strong> die Stichprobengrößen und Mittelwerte für jede der einzelnen Kombinationen ausgegeben.</p>
 <p><strong>Verschiedene Quadratsummentypen</strong></p>
-<p>Das Ergebnis der ANOVA wurde mit der <em>summary</em> Funktion angefordert (siehe Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> Punkt 4). Mittels dieser Funktion wird in R automatisch Typ-I-Quadratsummen berechnet. Die Typ-III-Quadratsummen gelten als besser interpretierbar, weshalb sie in diesem Beispiel auch speziell angefordert werden. Dies ist mit der Funktion <em>Anova</em> und dem Zusatzargument <em>typ = 3</em>) möglich. Beim Typ-III-Modell wird der Interaktionseffekt von Anfang an bei der Evaluierung mit berücksichtigt.</p>
+<p>Das Ergebnis der ANOVA wurde mit der <em>summary</em> Funktion angefordert (siehe Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> Punkt 4). Mittels dieser Funktion wird in R automatisch Typ-I-Quadratsummen berechnet. Die Typ-III-Quadratsummen gelten als besser interpretierbar, weshalb sie in diesem Beispiel auch speziell angefordert werden. Dies ist mit der Funktion <em>Anova</em> und dem Zusatzargument <em>typ = 3</em>) möglich. Beim Typ-III-Modell wird der Interaktionseffekt von Anfang an bei der Evaluierung mitberücksichtigt.</p>
 <pre class="r"><code>Anova(MANOVA, type=3)</code></pre>
 <pre><code>## Anova Table (Type III tests)
 ## 
@@ -171,9 +171,13 @@ desc.Hauptfaktor1</code></pre>
 ## Residuals                                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>Die Bedeutung der einzelnen Spalten wurde bereits im Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> (unter Punkt 4) genau erklärt. Wir erhalten ein höchst signifikantes Ergebnis für den Haupteffekt des Faktors <code>Family.new</code> (p &lt; .001) und ein hoch signifikants Ergebnis für den Haupteffekt des Faktors <code>Freedom.new</code> (p = .002). Das Ergebnis für den Interaktionseffekt ist mit p = .23 nicht signifikant.</p>
+<p>Die Bedeutung der einzelnen Spalten wurde bereits im Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> (unter Punkt 4) genau erklärt. Wir erhalten ein höchst signifikantes Ergebnis für den Haupteffekt des Faktors <code>Family.new</code> (p &lt; .001) und ein hoch signifikantes Ergebnis für den Haupteffekt des Faktors <code>Freedom.new</code> (p = .002). Das Ergebnis für den Interaktionseffekt ist mit p = .23 nicht signifikant.</p>
 <p>Die Spalte “Residuals” beinhaltet die Quadratsummen und Freiheitsgrade für den Nenner, beziehungsweise die Unterschiede innerhalb der Gruppen.</p>
-<p><strong>Interaktionsdiagramm</strong></p>
+</div>
+<div id="interaction-diagram" class="section level1">
+<h1>5 Interaction diagram</h1>
+<p>Interaktionseffekte (auch Wechselwirkungseffekte genannt) betrachten die Wirkung eines Faktors (hier <code>Family.new</code>) in Abhängigkeit von einem anderen Faktor (hier <code>Freedom.new</code>). Interaktionseffekte treten dann auf, wenn sich die Wirkung eines Faktors A unterscheidet, je nachdem unter welcher Stufe eines zweiten Faktors B man diesen untersucht. Liegt ein Interaktionseffekt vor bedeutet dies, dass die Wirkung der Faktoren in Kombination über die Summe aus den Einzelwirkungen der Faktoren hinausgeht. Deckt man in einem statistischen Test Wechselwirkungseffekte auf, sollte man diese auch interpretieren. Am einfachsten lassen sich Interaktionen interpretieren, indem man in einem Interaktionsdiagramm die Mittelwerte graphisch darstellt.</p>
+<p><strong>Visualisierung der Haupteffekte</strong></p>
 <pre class="r"><code>Happiness$Family.new.kurz &lt;- ifelse(Happiness$Family.new == &quot;viele.Familien&quot;, &quot;viele&quot;, &quot;weniger&quot;)
 Happiness$Freedom.new.kurz &lt;- ifelse(Happiness$Freedom.new == &quot;viel.Freiheit&quot;, &quot;viel&quot;, &quot;weniger&quot;)
 par(mfrow=c(1,2))
@@ -182,4 +186,179 @@ plotmeans(Happiness$Happiness.Score ~ Happiness$Family.new.kurz, xlab=&quot;Fami
 plotmeans(Happiness$Happiness.Score ~ Happiness$Freedom.new.kurz, xlab=&quot;Freiheit&quot;,
           ylab=&quot;Glücklichkeitsgrad&quot;, main=&quot;Interaktionsplot Faktor Freedom&quot;)</code></pre>
 <p><img src="/post/2018-09-18-manova_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>In diesen beiden Diagrammen, werden die Haupteffekte für die Faktoren <code>Family.new</code>und <code>Freedom.new</code> veranschaulicht. Man sieht, dass sich beide Haupteffekte in ihrem mittleren Glücklichkeitsgrad (innerhalb ihrer beiden Ausprägungen viele/weniger Familien und viel/weniger Freiheit) deutlich unterscheiden.</p>
+<p><strong>Visualisierung des Interaktionseffekts</strong></p>
+<p>Für die graphische Darstellung des Interaktionseffektes wird ein eigener Dataframe, mit den Werten für jede Kombination der Haupteffekte (abzulesen aus der Tabelle <strong>Happiness.Family.new:Happiness.Freedom.new</strong>), erstellt und in zwei Diagrammen graphisch dargestellt.</p>
+<pre class="r"><code>model.tables(MANOVA, &quot;means&quot;)</code></pre>
+<pre><code>## Tables of means
+## Grand mean
+##          
+## 5.354019 
+## 
+##  Happiness$Family.new 
+##     viele.Familien weniger.Familien
+##               6.11            4.607
+## rep          77.00           78.000
+## 
+##  Happiness$Freedom.new 
+##     viel.Freiheit weniger.Freiheit
+##             5.553            5.157
+## rep        77.000           78.000
+## 
+##  Happiness$Family.new:Happiness$Freedom.new 
+##                     Happiness$Freedom.new
+## Happiness$Family.new viel.Freiheit weniger.Freiheit
+##     viele.Familien    6.30          5.66           
+##     rep              54.00         23.00           
+##     weniger.Familien  4.82          4.52           
+##     rep              23.00         55.00</code></pre>
+<pre class="r"><code>par(mfrow=c(1,1))
+Freiheit &lt;- c(&quot;viel.Freiheit&quot;, &quot;weniger.Freiheit&quot;, &quot;viel.Freiheit&quot;, &quot;weniger.Freiheit&quot;)
+Gluecklichkeitsgrad &lt;- c(6.30, 4.52, 4.82, 5.66)
+Familien &lt;- c(&quot;viele.Familien&quot;, &quot;weniger.Familien&quot;, &quot;weniger.Familien&quot;, &quot;viele.Familien&quot;)
+Datensatz1 &lt;- data.frame(Freiheit, Gluecklichkeitsgrad, Familien)
+colnames(Datensatz1) &lt;- c(&quot;Freiheit&quot;, &quot;Glücklichkeitsgrad&quot;, &quot;Familien&quot;)
+Datensatz1</code></pre>
+<pre><code>##           Freiheit Glücklichkeitsgrad         Familien
+## 1    viel.Freiheit               6.30   viele.Familien
+## 2 weniger.Freiheit               4.52 weniger.Familien
+## 3    viel.Freiheit               4.82 weniger.Familien
+## 4 weniger.Freiheit               5.66   viele.Familien</code></pre>
+<pre class="r"><code>Sicht1 &lt;- ggplot(Datensatz1, aes(x = Freiheit, y = Glücklichkeitsgrad, color = Familien)) + 
+  geom_line(aes(group = Familien)) + 
+  geom_point() + 
+  ggtitle(&quot;Interaktionseffekt Sicht 1&quot;)
+
+
+Sicht2 &lt;- ggplot(Datensatz1, aes(x = Familien, y = Glücklichkeitsgrad, color = Freiheit)) + 
+  geom_line(aes(group = Freiheit)) + 
+  geom_point() + 
+  ggtitle(&quot;Interaktionseffekt Sicht 2&quot;)
+
+Sicht1</code></pre>
+<p><img src="/post/2018-09-18-manova_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<pre class="r"><code>Sicht2</code></pre>
+<p><img src="/post/2018-09-18-manova_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
+<p>Bei beiden Diagrammen (Sicht1 und Sicht 2) handelt es sich um dieselben adjustierten Mittelwerte. Der Unterschied zwischen den Diagrammen ist, dass beim ersten Diagramm (“Interaktionseffekt Sicht 1”) der Faktor “Freiheit” auf der x-Achse abgetragen ist und beim zweiten Diagramm (“Interaktionseffekt Sicht 2”) der Faktor “Familien”.</p>
+</div>
+<div id="post-hoc-method" class="section level1">
+<h1>6 Post-hoc-method</h1>
+<p>Bei der einfaktoriellen Varianzanalyse ohne Messwiederholung wurde die <em>pairwise.t.test</em> Funktion angewendet, um multiple Paarvergleiche durchzuführen (Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> Punkt 6). Für eine mehrdimensionale Varianzanalyse funktioniert dieser Befehl nicht mehr. Stattdessen, kann die <em>TukeyHSD</em> Funktion verwendet werden.</p>
+<pre class="r"><code>TukeyHSD(MANOVA)</code></pre>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = Happiness$Happiness.Score ~ Happiness$Family.new * Happiness$Freedom.new)
+## 
+## $`Happiness$Family.new`
+##                                      diff       lwr       upr p adj
+## weniger.Familien-viele.Familien -1.503121 -1.763098 -1.243144     0
+## 
+## $`Happiness$Freedom.new`
+##                                      diff       lwr        upr     p adj
+## weniger.Freiheit-viel.Freiheit -0.3955979 -0.655575 -0.1356208 0.0030961
+## 
+## $`Happiness$Family.new:Happiness$Freedom.new`
+##                                                                         diff
+## weniger.Familien:viel.Freiheit-viele.Familien:viel.Freiheit       -1.4831458
+## viele.Familien:weniger.Freiheit-viele.Familien:viel.Freiheit      -0.6464936
+## weniger.Familien:weniger.Freiheit-viele.Familien:viel.Freiheit    -1.7853370
+## viele.Familien:weniger.Freiheit-weniger.Familien:viel.Freiheit     0.8366522
+## weniger.Familien:weniger.Freiheit-weniger.Familien:viel.Freiheit  -0.3021913
+## weniger.Familien:weniger.Freiheit-viele.Familien:weniger.Freiheit -1.1388434
+##                                                                          lwr
+## weniger.Familien:viel.Freiheit-viele.Familien:viel.Freiheit       -2.0129571
+## viele.Familien:weniger.Freiheit-viele.Familien:viel.Freiheit      -1.1763049
+## weniger.Familien:weniger.Freiheit-viele.Familien:viel.Freiheit    -2.1929722
+## viele.Familien:weniger.Freiheit-weniger.Familien:viel.Freiheit     0.2091898
+## weniger.Familien:weniger.Freiheit-weniger.Familien:viel.Freiheit  -0.8305619
+## weniger.Familien:weniger.Freiheit-viele.Familien:weniger.Freiheit -1.6672141
+##                                                                          upr
+## weniger.Familien:viel.Freiheit-viele.Familien:viel.Freiheit       -0.9533345
+## viele.Familien:weniger.Freiheit-viele.Familien:viel.Freiheit      -0.1166823
+## weniger.Familien:weniger.Freiheit-viele.Familien:viel.Freiheit    -1.3777018
+## viele.Familien:weniger.Freiheit-weniger.Familien:viel.Freiheit     1.4641146
+## weniger.Familien:weniger.Freiheit-weniger.Familien:viel.Freiheit   0.2261794
+## weniger.Familien:weniger.Freiheit-viele.Familien:weniger.Freiheit -0.6104728
+##                                                                       p adj
+## weniger.Familien:viel.Freiheit-viele.Familien:viel.Freiheit       0.0000000
+## viele.Familien:weniger.Freiheit-viele.Familien:viel.Freiheit      0.0098774
+## weniger.Familien:weniger.Freiheit-viele.Familien:viel.Freiheit    0.0000000
+## viele.Familien:weniger.Freiheit-weniger.Familien:viel.Freiheit    0.0038300
+## weniger.Familien:weniger.Freiheit-weniger.Familien:viel.Freiheit  0.4485891
+## weniger.Familien:weniger.Freiheit-viele.Familien:weniger.Freiheit 0.0000006</code></pre>
+<p>Es werden drei Tabellen, mit identischen Spalten ausgegeben.</p>
+<p>Die Spalte <strong>diff</strong> enthält die Mittelwertsdifferenz für den jeweiligen Gruppenvergleich. Die Spalten <strong>lwr</strong> und <strong>upr</strong> enthalten die untere bzw. obere Grenze des Konfidenzintervalls für diese Mittelwertsdifferenz. In der Spalte <strong>p adj</strong> sind die adjustierten p-Werte aufgeführt. Die ersten beiden Tabellen “Happiness.Family.new” und “Happiness.Freedom.new” enthalten die Post-hoc Vergleiche für die beiden Haupteffekte. In der Tabelle “Happiness.Family.new:Happiness.Freedom.new” werden alle vier Einzelgruppen miteinander verglichen (6 paarweise Vergleiche).</p>
+</div>
+<div id="effect-size" class="section level1">
+<h1>7 Effect size</h1>
+<p>Bei der einfaktoriellen Varianzanalyse wurde die Effektgröße eta<sup>2</sup> berechnet. Sie drückt den gesamten Anteil der durch alle Effekte erklärten Varianz an der Gesamtvarianz aus. Da wir bei der MANOVA den Beitrag eines bestimmten Effekts zur Gesamtvarianz berechnen wollen, brauchen wir hierfür das partielle eta<sup>2</sup>.</p>
+<p>Die Formel für das partielle eta<sup>2</sup> lautet: <span class="math display">\[partielles.eta^2 = \frac{\mathrm{QS}_\mathrm{Effekt}}{\mathrm{QS}_\mathrm{Effekt}+\mathrm{QS}_\mathrm{Fehler}}\]</span></p>
+<p>QS-Effekt steht für die Quadratsummen des Effekts und QS-Fehler für die Quadratsummen des Fehlers. Diese beiden Werte können wieder der Varianzanalysetabelle entnommen werden. Als Beispiel soll nachfolgend das partielle eta<sup>2</sup> für den Interaktionseffekt berechnet werden.</p>
+<pre class="r"><code>Anova(MANOVA, type=3)</code></pre>
+<pre><code>## Anova Table (Type III tests)
+## 
+## Response: Happiness$Happiness.Score
+##                                             Sum Sq  Df  F value    Pr(&gt;F)
+## (Intercept)                                2145.67   1 3198.336 &lt; 2.2e-16
+## Happiness$Family.new                         35.48   1   52.888 1.781e-11
+## Happiness$Freedom.new                         6.74   1   10.049  0.001846
+## Happiness$Family.new:Happiness$Freedom.new    0.96   1    1.429  0.233806
+## Residuals                                   101.30 151                   
+##                                               
+## (Intercept)                                ***
+## Happiness$Family.new                       ***
+## Happiness$Freedom.new                      ** 
+## Happiness$Family.new:Happiness$Freedom.new    
+## Residuals                                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><span class="math display">\[partielles.eta^2 = \frac{\mathrm{QS}_\mathrm{Effekt}}{\mathrm{QS}_\mathrm{Effekt}+\mathrm{QS}_\mathrm{Fehler}} = \frac{0{,}96}{0{,}96 + 101{,}30} \approx 0{,}009\]</span></p>
+<p>Alternativ kann auch wieder die <em>eta_sq</em> Funktion mit dem Zusatzargument <em>partial = TRUE</em> verwendet werden.</p>
+<pre class="r"><code>eta_sq(MANOVA, partial = TRUE)</code></pre>
+<pre><code>##                                         term partial.etasq
+## 1                       Happiness$Family.new         0.464
+## 2                      Happiness$Freedom.new         0.067
+## 3 Happiness$Family.new:Happiness$Freedom.new         0.009</code></pre>
+<p>Da die Effektgröße eta<sup>2</sup> dazu neigt, immer etwas zu groß auszufallen, ist es daher sinnvoll, das Konfidenzintervall für den durch den Faktor erklärten Varianzanteil zu berechnen. Für die Funktion <em>ci.pvaf</em> ist dabei der F-Wert, die Zählerfreiheitsgrade, die Nennerfreiheitsgrade sowie die Stichprobengröße notwendig. Diese Werte können erneut der Varianzanalysetabelle und den durchgeführten describeBy-Befehlen entnommen werden. Im Falle des Haupteffekts für <code>Family.new</code> erhält man folgendes Ergebnis.</p>
+<pre class="r"><code>Anova(MANOVA, type=3)</code></pre>
+<pre><code>## Anova Table (Type III tests)
+## 
+## Response: Happiness$Happiness.Score
+##                                             Sum Sq  Df  F value    Pr(&gt;F)
+## (Intercept)                                2145.67   1 3198.336 &lt; 2.2e-16
+## Happiness$Family.new                         35.48   1   52.888 1.781e-11
+## Happiness$Freedom.new                         6.74   1   10.049  0.001846
+## Happiness$Family.new:Happiness$Freedom.new    0.96   1    1.429  0.233806
+## Residuals                                   101.30 151                   
+##                                               
+## (Intercept)                                ***
+## Happiness$Family.new                       ***
+## Happiness$Freedom.new                      ** 
+## Happiness$Family.new:Happiness$Freedom.new    
+## Residuals                                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>sum(desc.Hauptfaktor1$n)</code></pre>
+<pre><code>## [1] 155</code></pre>
+<pre class="r"><code>ci.pvaf(F.value = 52.888, df.1 = 1, df.2 = 151, N=155)</code></pre>
+<pre><code>## $Lower.Limit.Proportion.of.Variance.Accounted.for
+## [1] 0.1455151
+## 
+## $Probability.Less.Lower.Limit
+## [1] 0.025
+## 
+## $Upper.Limit.Proportion.of.Variance.Accounted.for
+## [1] 0.3624183
+## 
+## $Probability.Greater.Upper.Limit
+## [1] 0.025
+## 
+## $Actual.Coverage
+## [1] 0.95</code></pre>
+<p>Das untere Limit liegt bei 14,55% erklärten Varianzanteil und das obere Limit bei 36,24%.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>8 Conclusion</h1>
+<p>In diesem Post wurde die Funktionsweise der zweifaktoriellen Varianzanalyse dargelegt. Es wurden auf die Unterschiede zur ANOVA eingegangen sowie auf die graphische Darstellung von Haupt- und Interaktionseffekte.</p>
 </div>

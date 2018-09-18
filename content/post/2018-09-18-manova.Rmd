@@ -24,9 +24,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #1 Introduction
 
-Aufbauend auf den Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/), in dem es um die Funktionsweise der einfaktoriellen Varianzanalyse ging, soll nachfolgend das Prinzip der mehrfaktoriellen Varianzanalyse ohne Messwiederholung, kurz **MANOVA** (multivariate analysis of variance), näher erleutert werden. Im Gegensatz zur einfaktoriellen Varianzanalyse werden bei der MANOVA nicht nur eine, sondern mehrere unabhängige Variablen betrachtet. 
+Aufbauend auf den Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/), in dem es um die Funktionsweise der einfaktoriellen Varianzanalyse ging, soll nachfolgend das Prinzip der mehrfaktoriellen Varianzanalyse ohne Messwiederholung, kurz **MANOVA** (multivariate analysis of variance), näher erläutert werden. Im Gegensatz zur einfaktoriellen Varianzanalyse werden bei der MANOVA nicht nur eine, sondern mehrere unabhängige Variablen betrachtet. 
 
-Für diesen Post wurde der Datensatz *World Happiness Report* von der Statsistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br> abrufbar.
+Für diesen Post wurde der Datensatz *World Happiness Report* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br> abrufbar.
 
 ```{r results='hide', message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -43,13 +43,13 @@ Happiness <- read_csv("World_Happiness_Report.csv")
 
 #2 Preparation
 
-Anhand des Datensatzes *World Happiness Report* soll eine zweifaktorielle Varianzanalyse durchgeführt werden. Dafür kreieren wir im ersten Schritt zwei unabhägige kategoriale Variablen (zwei Faktoren). 
+Anhand des Datensatzes *World Happiness Report* soll eine zweifaktorielle Varianzanalyse durchgeführt werden. Dafür kreieren wir im ersten Schritt zwei unabhängige kategoriale Variablen (zwei Faktoren). 
 ```{r}
 Happiness$Family.new <- ifelse(Happiness$Family >= 1.254, "viele.Familien", "weniger.Familien")
 Happiness$Freedom.new <- ifelse(Happiness$Freedom >= 0.4375, "viel.Freiheit", "weniger.Freiheit")
 ```
 
-Für das folgende Beispiel wurden die Faktroren `Family.new`und `Freedom.new` erstellt. Die Variable `Family.new` beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen "viele.Familien" und "weniger.Familien" und die Variable `Freedom.new` mit den beiden Ausprägungen "viel.Freiheit" und "weniger.Freiheit". Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median. 
+Für das folgende Beispiel wurden die Faktoren `Family.new`und `Freedom.new` erstellt. Die Variable `Family.new` beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen "viele.Familien" und "weniger.Familien" und die Variable `Freedom.new` mit den beiden Ausprägungen "viel.Freiheit" und "weniger.Freiheit". Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median. 
 ```{r}
 median(Happiness$Family)
 median(Happiness$Freedom)
@@ -127,18 +127,22 @@ model.tables(MANOVA, "means")
 
 **Verschiedene Quadratsummentypen**
 
-Das Ergebnis der ANOVA wurde mit der *summary* Funktion angefordert (siehe Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/) Punkt 4). Mittels dieser Funktion wird in R automatisch Typ-I-Quadratsummen berechnet. Die Typ-III-Quadratsummen gelten als besser interpretierbar, weshalb sie in diesem Beispiel auch speziell angefordert werden. Dies ist mit der Funktion *Anova* und dem Zusatzargument *typ = 3*) möglich. Beim Typ-III-Modell wird der Interaktionseffekt von Anfang an bei der Evaluierung mit berücksichtigt. 
+Das Ergebnis der ANOVA wurde mit der *summary* Funktion angefordert (siehe Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/) Punkt 4). Mittels dieser Funktion wird in R automatisch Typ-I-Quadratsummen berechnet. Die Typ-III-Quadratsummen gelten als besser interpretierbar, weshalb sie in diesem Beispiel auch speziell angefordert werden. Dies ist mit der Funktion *Anova* und dem Zusatzargument *typ = 3*) möglich. Beim Typ-III-Modell wird der Interaktionseffekt von Anfang an bei der Evaluierung mitberücksichtigt.  
 ```{r}
 Anova(MANOVA, type=3)
 ```
 
-Die Bedeutung der einzelnen Spalten wurde bereits im Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/) (unter Punkt 4) genau erklärt. Wir erhalten ein höchst signifikantes Ergebnis für den Haupteffekt des Faktors `Family.new` (p < .001) und ein hoch signifikants Ergebnis für den Haupteffekt des Faktors `Freedom.new` (p = .002). Das Ergebnis für den Interaktionseffekt ist mit p = .23 nicht signifikant. 
+Die Bedeutung der einzelnen Spalten wurde bereits im Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/) (unter Punkt 4) genau erklärt. Wir erhalten ein höchst signifikantes Ergebnis für den Haupteffekt des Faktors `Family.new` (p < .001) und ein hoch signifikantes Ergebnis für den Haupteffekt des Faktors `Freedom.new` (p = .002). Das Ergebnis für den Interaktionseffekt ist mit p = .23 nicht signifikant. 
 
 Die Spalte "Residuals" beinhaltet die Quadratsummen und Freiheitsgrade für den Nenner, beziehungsweise die Unterschiede innerhalb der Gruppen. 
 
 
-**Interaktionsdiagramm**
 
+#5 Interaction diagram
+
+Interaktionseffekte (auch Wechselwirkungseffekte genannt) betrachten die Wirkung eines Faktors (hier `Family.new`) in Abhängigkeit von einem anderen Faktor (hier `Freedom.new`). Interaktionseffekte treten dann auf, wenn sich die Wirkung eines Faktors A unterscheidet, je nachdem unter welcher Stufe eines zweiten Faktors B man diesen untersucht. Liegt ein Interaktionseffekt vor bedeutet dies, dass die Wirkung der Faktoren in Kombination über die Summe aus den Einzelwirkungen der Faktoren hinausgeht. Deckt man in einem statistischen Test Wechselwirkungseffekte auf, sollte man diese auch interpretieren. Am einfachsten lassen sich Interaktionen interpretieren, indem man in einem Interaktionsdiagramm die Mittelwerte graphisch darstellt.
+
+**Visualisierung der Haupteffekte**
 
 ```{r}
 Happiness$Family.new.kurz <- ifelse(Happiness$Family.new == "viele.Familien", "viele", "weniger")
@@ -149,6 +153,97 @@ plotmeans(Happiness$Happiness.Score ~ Happiness$Family.new.kurz, xlab="Familien"
 plotmeans(Happiness$Happiness.Score ~ Happiness$Freedom.new.kurz, xlab="Freiheit",
           ylab="Glücklichkeitsgrad", main="Interaktionsplot Faktor Freedom")
 ```
+
+In diesen beiden Diagrammen, werden die Haupteffekte für die Faktoren `Family.new`und `Freedom.new` veranschaulicht. Man sieht, dass sich beide Haupteffekte in ihrem mittleren Glücklichkeitsgrad (innerhalb ihrer beiden Ausprägungen viele/weniger Familien und viel/weniger Freiheit) deutlich unterscheiden. 
+
+**Visualisierung des Interaktionseffekts**
+
+Für die graphische Darstellung des Interaktionseffektes wird ein eigener Dataframe, mit den Werten für jede Kombination der Haupteffekte (abzulesen aus der Tabelle **Happiness.Family.new:Happiness.Freedom.new**), erstellt und in zwei Diagrammen graphisch dargestellt.
+
+```{r}
+model.tables(MANOVA, "means")
+```
+
+
+```{r}
+par(mfrow=c(1,1))
+Freiheit <- c("viel.Freiheit", "weniger.Freiheit", "viel.Freiheit", "weniger.Freiheit")
+Gluecklichkeitsgrad <- c(6.30, 4.52, 4.82, 5.66)
+Familien <- c("viele.Familien", "weniger.Familien", "weniger.Familien", "viele.Familien")
+Datensatz1 <- data.frame(Freiheit, Gluecklichkeitsgrad, Familien)
+colnames(Datensatz1) <- c("Freiheit", "Glücklichkeitsgrad", "Familien")
+Datensatz1
+```
+
+```{r}
+Sicht1 <- ggplot(Datensatz1, aes(x = Freiheit, y = Glücklichkeitsgrad, color = Familien)) + 
+  geom_line(aes(group = Familien)) + 
+  geom_point() + 
+  ggtitle("Interaktionseffekt Sicht 1")
+
+
+Sicht2 <- ggplot(Datensatz1, aes(x = Familien, y = Glücklichkeitsgrad, color = Freiheit)) + 
+  geom_line(aes(group = Freiheit)) + 
+  geom_point() + 
+  ggtitle("Interaktionseffekt Sicht 2")
+
+Sicht1
+Sicht2
+```
+
+Bei beiden Diagrammen (Sicht1 und Sicht 2) handelt es sich um dieselben adjustierten Mittelwerte. Der Unterschied zwischen den Diagrammen ist, dass beim ersten Diagramm ("Interaktionseffekt Sicht 1") der Faktor "Freiheit" auf der x-Achse abgetragen ist und beim zweiten Diagramm ("Interaktionseffekt Sicht 2") der Faktor "Familien".
+
+
+#6 Post-hoc-method
+
+Bei der einfaktoriellen Varianzanalyse ohne Messwiederholung wurde die *pairwise.t.test* Funktion angewendet, um multiple Paarvergleiche durchzuführen (Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/) Punkt 6). Für eine mehrdimensionale Varianzanalyse funktioniert dieser Befehl nicht mehr. Stattdessen, kann die *TukeyHSD* Funktion verwendet werden. 
+```{r}
+TukeyHSD(MANOVA)
+```
+
+Es werden drei Tabellen, mit identischen Spalten ausgegeben. 
+
+Die Spalte **diff** enthält die Mittelwertsdifferenz für den jeweiligen Gruppenvergleich. Die Spalten **lwr** und **upr** enthalten die untere bzw. obere Grenze des Konfidenzintervalls für diese Mittelwertsdifferenz. In der Spalte **p adj** sind die adjustierten p-Werte aufgeführt. Die ersten beiden Tabellen "Happiness.Family.new" und "Happiness.Freedom.new" enthalten die Post-hoc Vergleiche für die beiden Haupteffekte. In der Tabelle "Happiness.Family.new:Happiness.Freedom.new" werden alle vier Einzelgruppen miteinander verglichen (6 paarweise Vergleiche).
+
+
+#7 Effect size
+
+Bei der einfaktoriellen Varianzanalyse wurde die Effektgröße eta^2^ berechnet. Sie drückt den gesamten Anteil der durch alle Effekte erklärten Varianz an der Gesamtvarianz aus. Da wir bei der MANOVA den Beitrag eines bestimmten Effekts zur Gesamtvarianz berechnen wollen, brauchen wir hierfür das partielle eta^2^. 
+
+Die Formel für das partielle eta^2^ lautet:
+$$partielles.eta^2 = \frac{\mathrm{QS}_\mathrm{Effekt}}{\mathrm{QS}_\mathrm{Effekt}+\mathrm{QS}_\mathrm{Fehler}}$$
+
+QS-Effekt steht für die Quadratsummen des Effekts und QS-Fehler für die Quadratsummen des Fehlers. Diese beiden Werte können wieder der Varianzanalysetabelle entnommen werden. Als Beispiel soll nachfolgend das partielle eta^2^ für den Interaktionseffekt berechnet werden.  
+```{r}
+Anova(MANOVA, type=3)
+```
+
+$$partielles.eta^2 = \frac{\mathrm{QS}_\mathrm{Effekt}}{\mathrm{QS}_\mathrm{Effekt}+\mathrm{QS}_\mathrm{Fehler}} = \frac{0{,}96}{0{,}96 + 101{,}30} \approx 0{,}009$$
+
+Alternativ kann auch wieder die *eta_sq* Funktion mit dem Zusatzargument *partial = TRUE* verwendet werden.
+```{r}
+eta_sq(MANOVA, partial = TRUE)
+```
+
+
+Da die Effektgröße eta^2^ dazu neigt, immer etwas zu groß auszufallen, ist es daher sinnvoll, das Konfidenzintervall für den durch den Faktor erklärten Varianzanteil zu berechnen. Für die Funktion *ci.pvaf* ist dabei der F-Wert, die Zählerfreiheitsgrade, die Nennerfreiheitsgrade sowie die Stichprobengröße notwendig. Diese Werte können erneut der Varianzanalysetabelle und den durchgeführten describeBy-Befehlen entnommen werden. Im Falle des Haupteffekts für `Family.new` erhält man folgendes Ergebnis.
+
+```{r}
+Anova(MANOVA, type=3)
+```
+```{r}
+sum(desc.Hauptfaktor1$n)
+```
+```{r}
+ci.pvaf(F.value = 52.888, df.1 = 1, df.2 = 151, N=155)
+```
+
+Das untere Limit liegt bei 14,55% erklärten Varianzanteil und das obere Limit bei 36,24%.
+
+
+#8 Conclusion
+
+In diesem Post wurde die Funktionsweise der zweifaktoriellen Varianzanalyse dargelegt. Es wurden auf die Unterschiede zur ANOVA eingegangen sowie auf die graphische Darstellung von Haupt- und Interaktionseffekte. 
 
 
 
