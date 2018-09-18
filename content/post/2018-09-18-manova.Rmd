@@ -50,6 +50,10 @@ Happiness$Freedom.new <- ifelse(Happiness$Freedom >= 0.4375, "viel.Freiheit", "w
 ```
 
 Für das folgende Beispiel wurden die Faktroren `Family.new`und `Freedom.new` erstellt. Die Variable `Family.new` beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen "viele.Familien" und "weniger.Familien" und die Variable `Freedom.new` mit den beiden Ausprägungen "viel.Freiheit" und "weniger.Freiheit". Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median. 
+```{r}
+median(Happiness$Family)
+median(Happiness$Freedom)
+```
 
 Die abhängige Variable für die MANOVA soll der `Happiness.Score` sein. 
 ```{r}
@@ -57,6 +61,93 @@ glimpse(Happiness)
 table(Happiness$Family.new)
 table(Happiness$Freedom.new)
 ```
+
+
+#3 Essential requirements
+
+Die Voraussetzungen für die MANOVA sind die gleichen wie die der einfaktoriellen Varianzanalyse. Diese waren:
+
++ Unabhängigkeit der Messungen. Kein Teilnehmer aus einer Gruppe darf auch in einer anderen Gruppe vorkommen.
++ Die abhängige Variable ist metrisch skaliert.
++ Die unabhängige Variable ist unabhängig und nominalskaliert.
++ Normalverteilung der abhängigen Variablen in allen Populationen, wenn gilt N < 30 in jeder Population.
++ Varianzhomogenität der abhängigen Variablen in allen Populationen.
+
+
+##3.1 Normal distribution
+
+Für die Überprüfung der Normalverteilung der abhängigen Variable, wird wie gewohnt der Lilliefors-Test angewendet.
+```{r}
+lillie.test(Happiness$Happiness.Score)
+```
+
+Mit p > .446 ist die Variable `Happiness.Score` normalverteilt.
+
+##3.2 Sampling size
+```{r}
+desc.Hauptfaktor1 <- describeBy(Happiness$Happiness.Score, Happiness$Family.new, mat = TRUE)
+desc.Hauptfaktor2 <- describeBy(Happiness$Happiness.Score, Happiness$Freedom.new, mat = TRUE)
+desc.Hauptfaktor1
+desc.Hauptfaktor2
+```
+
+Da die beiden unabhängigen Variablen `Family.new`und `Freedom.new` jeweils nach ihrem Median aufgeteilt wurden, sind die 4 Gruppen fast gleich groß.
+
+
+##3.3 Homogeneity of variance
+```{r}
+leveneTest(Happiness$Happiness.Score ~ Happiness$Family.new * Happiness$Freedom.new)
+```
+
+Mit p > .834 ist Varianzhomogenität innerhalb der Gruppen gegeben.
+
+
+#4 MANOVA
+
+Auch die mehrfaktorielle Varianzanalyse wird mit dem *aov* Befehl angefordert. Für unser Beispiel sieht die Syntax folgendermaßen aus.
+```{r}
+MANOVA <- aov(Happiness$Happiness.Score ~ Happiness$Family.new * Happiness$Freedom.new)
+```
+
+Wie auch bei der ANOVA wird als erstes Argument die abhängige Variable genannt. Nach der Tilde kommt/kommen die unabhängige/n Variable/n.
+Alternativ könnte man auch folgende (etwas längere) Syntax verwenden:
+```{r}
+alternative.Syntax <- aov(Happiness$Happiness.Score ~ Happiness$Family.new + Happiness$Freedom.new + Happiness$Family.new:Happiness$Freedom.new)
+```
+
+**Beschreibung der unterschiedlichen Mittelwerte**
+
+Für die Ausgabe der unterschiedlichen Mittelwerte kann erneut die *model.tables* Funktion angewendet werden.
+```{r}
+model.tables(MANOVA, "means")
+```
+
+**Grand mean** beschreibt wieder den Gesamtmittelwert. Die Tabelle **Happiness$Family.new** zeigt die Mittelwerte (der Variable `Happiness.Score`) für alle Länder mit vielen Familien und wenigeren, umabhängig davon, ob diese einen hohen oder niedrigen "Freedom"-Grad haben. Die Zeile *rep* nennt uns die Stichprobengröße. In der Tabelle **Happiness$Freedom.new ** erhalten wir die Mittelwerte und Stichprobengrößen für alle Länder (aufgeteilt nach den beiden Kategorien "viel.Freiheit" und "weniger.Freiheit"), unabhängig davon, ob diese einen hohen oder niedrigen "Family"-Grad haben. Schließich werden in der Tabelle **Happiness$Family.new:Happiness$Freedom.new** die Stichprobengrößen und Mittelwerte für jede der einzelnen Kombinationen ausgegeben. 
+
+
+**Verschiedene Quadratsummentypen**
+
+Das Ergebnis der ANOVA wurde mit der *summary* Funktion angefordert (siehe Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/) Punkt 4). Mittels dieser Funktion wird in R automatisch Typ-I-Quadratsummen berechnet. Die Typ-III-Quadratsummen gelten als besser interpretierbar, weshalb sie in diesem Beispiel auch speziell angefordert werden. Dies ist mit der Funktion *Anova* und dem Zusatzargument *typ = 3*) möglich. Beim Typ-III-Modell wird der Interaktionseffekt von Anfang an bei der Evaluierung mit berücksichtigt. 
+```{r}
+Anova(MANOVA, type=3)
+```
+
+Die Bedeutung der einzelnen Spalten wurde bereits im Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/) (unter Punkt 4) genau erklärt. Wir erhalten ein höchst signifikantes Ergebnis für den Haupteffekt des Faktors `Family.new` (p < .001) und ein hoch signifikants Ergebnis für den Haupteffekt des Faktors `Freedom.new` (p = .002). Das Ergebnis für den Interaktionseffekt ist mit p = .23 nicht signifikant. 
+
+Die Spalte "Residuals" beinhaltet die Quadratsummen und Freiheitsgrade für den Nenner, beziehungsweise die Unterschiede innerhalb der Gruppen. 
+
+
+**Interaktionsdiagramm**
+
+
+```{r}
+par(mfrow=c(1,2))
+plotmeans(Happiness$Happiness.Score ~ Happiness$Family.new, xlab="Familien",
+          ylab="Glücklichkeitsgrad", main="Interaktionsplot Faktor Family")
+plotmeans(Happiness$Happiness.Score ~ Happiness$Freedom.new, xlab="Freiheit",
+          ylab="Glücklichkeitsgrad", main="Interaktionsplot Faktor Freedom")
+```
+
 
 
 

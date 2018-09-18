@@ -59,7 +59,7 @@
 
   <article class="article">
     
-    <span class="article-duration">2 min read</span>
+    <span class="article-duration">6 min read</span>
     
 
     <h1 class="article-title">MANOVA</h1>
@@ -95,6 +95,10 @@ library(MBESS)</code></pre>
 <pre class="r"><code>Happiness$Family.new &lt;- ifelse(Happiness$Family &gt;= 1.254, &quot;viele.Familien&quot;, &quot;weniger.Familien&quot;)
 Happiness$Freedom.new &lt;- ifelse(Happiness$Freedom &gt;= 0.4375, &quot;viel.Freiheit&quot;, &quot;weniger.Freiheit&quot;)</code></pre>
 <p>Für das folgende Beispiel wurden die Faktroren <code>Family.new</code>und <code>Freedom.new</code> erstellt. Die Variable <code>Family.new</code> beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen “viele.Familien” und “weniger.Familien” und die Variable <code>Freedom.new</code> mit den beiden Ausprägungen “viel.Freiheit” und “weniger.Freiheit”. Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median.</p>
+<pre class="r"><code>median(Happiness$Family)</code></pre>
+<pre><code>## [1] 1.253918</code></pre>
+<pre class="r"><code>median(Happiness$Freedom)</code></pre>
+<pre><code>## [1] 0.4374543</code></pre>
 <p>Die abhängige Variable für die MANOVA soll der <code>Happiness.Score</code> sein.</p>
 <pre class="r"><code>glimpse(Happiness)</code></pre>
 <pre><code>## Observations: 155
@@ -121,6 +125,119 @@ Happiness$Freedom.new &lt;- ifelse(Happiness$Freedom &gt;= 0.4375, &quot;viel.Fr
 <pre><code>## 
 ##    viel.Freiheit weniger.Freiheit 
 ##               77               78</code></pre>
+</div>
+<div id="essential-requirements" class="section level1">
+<h1>3 Essential requirements</h1>
+<p>Die Voraussetzungen für die MANOVA sind die gleichen wie die der einfaktoriellen Varianzanalyse. Diese waren:</p>
+<ul>
+<li>Unabhängigkeit der Messungen. Kein Teilnehmer aus einer Gruppe darf auch in einer anderen Gruppe vorkommen.</li>
+<li>Die abhängige Variable ist metrisch skaliert.</li>
+<li>Die unabhängige Variable ist unabhängig und nominalskaliert.</li>
+<li>Normalverteilung der abhängigen Variablen in allen Populationen, wenn gilt N &lt; 30 in jeder Population.</li>
+<li>Varianzhomogenität der abhängigen Variablen in allen Populationen.</li>
+</ul>
+<div id="normal-distribution" class="section level2">
+<h2>3.1 Normal distribution</h2>
+<p>Für die Überprüfung der Normalverteilung der abhängigen Variable, wird wie gewohnt der Lilliefors-Test angewendet.</p>
+<pre class="r"><code>lillie.test(Happiness$Happiness.Score)</code></pre>
+<pre><code>## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  Happiness$Happiness.Score
+## D = 0.050105, p-value = 0.4458</code></pre>
+<p>Mit p &gt; .446 ist die Variable <code>Happiness.Score</code> normalverteilt.</p>
+</div>
+<div id="sampling-size" class="section level2">
+<h2>3.2 Sampling size</h2>
+<pre class="r"><code>desc.Hauptfaktor1 &lt;- describeBy(Happiness$Happiness.Score, Happiness$Family.new, mat = TRUE)
+desc.Hauptfaktor2 &lt;- describeBy(Happiness$Happiness.Score, Happiness$Freedom.new, mat = TRUE)
+desc.Hauptfaktor1</code></pre>
+<pre><code>##     item           group1 vars  n     mean        sd median  trimmed
+## X11    1   viele.Familien    1 77 6.110429 0.8677820 6.0980 6.139175
+## X12    2 weniger.Familien    1 78 4.607308 0.8240891 4.5515 4.602781
+##          mad   min   max range        skew   kurtosis         se
+## X11 0.896973 4.096 7.537 3.441 -0.26249300 -0.6588109 0.09889293
+## X12 1.002238 2.693 6.578 3.885  0.03968612 -0.7186485 0.09330972</code></pre>
+<pre class="r"><code>desc.Hauptfaktor2</code></pre>
+<pre><code>##     item           group1 vars  n     mean        sd median  trimmed
+## X11    1    viel.Freiheit    1 77 5.860519 1.0493845  5.956 5.890317
+## X12    2 weniger.Freiheit    1 78 4.854013 0.9811528  4.790 4.838563
+##          mad   min   max range       skew   kurtosis        se
+## X11 1.128258 3.471 7.537 4.066 -0.2165218 -0.9094135 0.1195885
+## X12 1.088228 2.693 7.213 4.520  0.0696700 -0.7288668 0.1110937</code></pre>
+<p>Da die beiden unabhängigen Variablen <code>Family.new</code>und <code>Freedom.new</code> jeweils nach ihrem Median aufgeteilt wurden, sind die 4 Gruppen fast gleich groß.</p>
+</div>
+<div id="homogeneity-of-variance" class="section level2">
+<h2>3.3 Homogeneity of variance</h2>
+<pre class="r"><code>leveneTest(Happiness$Happiness.Score ~ Happiness$Family.new * Happiness$Freedom.new)</code></pre>
+<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
+##        Df F value Pr(&gt;F)
+## group   3  0.2885 0.8337
+##       151</code></pre>
+<p>Mit p &gt; .834 ist Varianzhomogenität innerhalb der Gruppen gegeben.</p>
+</div>
+</div>
+<div id="manova" class="section level1">
+<h1>4 MANOVA</h1>
+<p>Auch die mehrfaktorielle Varianzanalyse wird mit dem <em>aov</em> Befehl angefordert. Für unser Beispiel sieht die Syntax folgendermaßen aus.</p>
+<pre class="r"><code>MANOVA &lt;- aov(Happiness$Happiness.Score ~ Happiness$Family.new * Happiness$Freedom.new)</code></pre>
+<p>Wie auch bei der ANOVA wird als erstes Argument die abhängige Variable genannt. Nach der Tilde kommt/kommen die unabhängige/n Variable/n. Alternativ könnte man auch folgende (etwas längere) Syntax verwenden:</p>
+<pre class="r"><code>alternative.Syntax &lt;- aov(Happiness$Happiness.Score ~ Happiness$Family.new + Happiness$Freedom.new + Happiness$Family.new:Happiness$Freedom.new)</code></pre>
+<p><strong>Beschreibung der unterschiedlichen Mittelwerte</strong></p>
+<p>Für die Ausgabe der unterschiedlichen Mittelwerte kann erneut die <em>model.tables</em> Funktion angewendet werden.</p>
+<pre class="r"><code>model.tables(MANOVA, &quot;means&quot;)</code></pre>
+<pre><code>## Tables of means
+## Grand mean
+##          
+## 5.354019 
+## 
+##  Happiness$Family.new 
+##     viele.Familien weniger.Familien
+##               6.11            4.607
+## rep          77.00           78.000
+## 
+##  Happiness$Freedom.new 
+##     viel.Freiheit weniger.Freiheit
+##             5.553            5.157
+## rep        77.000           78.000
+## 
+##  Happiness$Family.new:Happiness$Freedom.new 
+##                     Happiness$Freedom.new
+## Happiness$Family.new viel.Freiheit weniger.Freiheit
+##     viele.Familien    6.30          5.66           
+##     rep              54.00         23.00           
+##     weniger.Familien  4.82          4.52           
+##     rep              23.00         55.00</code></pre>
+<p><strong>Grand mean</strong> beschreibt wieder den Gesamtmittelwert. Die Tabelle <strong>Happiness<span class="math inline">\(Family.new** zeigt die Mittelwerte (der Variable `Happiness.Score`) für alle Länder mit vielen Familien und wenigeren, umabhängig davon, ob diese einen hohen oder niedrigen &quot;Freedom&quot;-Grad haben. Die Zeile *rep* nennt uns die Stichprobengröße. In der Tabelle **Happiness\)</span>Freedom.new </strong> erhalten wir die Mittelwerte und Stichprobengrößen für alle Länder (aufgeteilt nach den beiden Kategorien “viel.Freiheit” und “weniger.Freiheit”), unabhängig davon, ob diese einen hohen oder niedrigen “Family”-Grad haben. Schließich werden in der Tabelle <strong>Happiness<span class="math inline">\(Family.new:Happiness\)</span>Freedom.new</strong> die Stichprobengrößen und Mittelwerte für jede der einzelnen Kombinationen ausgegeben.</p>
+<p><strong>Verschiedene Quadratsummentypen</strong></p>
+<p>Das Ergebnis der ANOVA wurde mit der <em>summary</em> Funktion angefordert (siehe Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> Punkt 4). Mittels dieser Funktion wird in R automatisch Typ-I-Quadratsummen berechnet. Die Typ-III-Quadratsummen gelten als besser interpretierbar, weshalb sie in diesem Beispiel auch speziell angefordert werden. Dies ist mit der Funktion <em>Anova</em> und dem Zusatzargument <em>typ = 3</em>) möglich. Beim Typ-III-Modell wird der Interaktionseffekt von Anfang an bei der Evaluierung mit berücksichtigt.</p>
+<pre class="r"><code>Anova(MANOVA, type=3)</code></pre>
+<pre><code>## Anova Table (Type III tests)
+## 
+## Response: Happiness$Happiness.Score
+##                                             Sum Sq  Df  F value    Pr(&gt;F)
+## (Intercept)                                2145.67   1 3198.336 &lt; 2.2e-16
+## Happiness$Family.new                         35.48   1   52.888 1.781e-11
+## Happiness$Freedom.new                         6.74   1   10.049  0.001846
+## Happiness$Family.new:Happiness$Freedom.new    0.96   1    1.429  0.233806
+## Residuals                                   101.30 151                   
+##                                               
+## (Intercept)                                ***
+## Happiness$Family.new                       ***
+## Happiness$Freedom.new                      ** 
+## Happiness$Family.new:Happiness$Freedom.new    
+## Residuals                                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Die Bedeutung der einzelnen Spalten wurde bereits im Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> (unter Punkt 4) genau erklärt. Wir erhalten ein höchst signifikantes Ergebnis für den Haupteffekt des Faktors <code>Family.new</code> (p &lt; .001) und ein hoch signifikants Ergebnis für den Haupteffekt des Faktors <code>Freedom.new</code> (p = .002). Das Ergebnis für den Interaktionseffekt ist mit p = .23 nicht signifikant.</p>
+<p>Die Spalte “Residuals” beinhaltet die Quadratsummen und Freiheitsgrade für den Nenner, beziehungsweise die Unterschiede innerhalb der Gruppen.</p>
+<p><strong>Interaktionsdiagramm</strong></p>
+<pre class="r"><code>par(mfrow=c(1,2))
+plotmeans(Happiness$Happiness.Score ~ Happiness$Family.new, xlab=&quot;Familien&quot;,
+          ylab=&quot;Glücklichkeitsgrad&quot;, main=&quot;Interaktionsplot Faktor Family&quot;)
+plotmeans(Happiness$Happiness.Score ~ Happiness$Freedom.new, xlab=&quot;Freiheit&quot;,
+          ylab=&quot;Glücklichkeitsgrad&quot;, main=&quot;Interaktionsplot Faktor Freedom&quot;)</code></pre>
+<p><img src="/post/2018-09-18-manova_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 
     </div>
