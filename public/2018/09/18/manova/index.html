@@ -95,7 +95,7 @@ library(MBESS)</code></pre>
 <pre class="r"><code>Happiness$Family.new &lt;- ifelse(Happiness$Family &gt;= 1.254, &quot;viele.Familien&quot;, &quot;weniger.Familien&quot;)
 Happiness$Freedom.new &lt;- ifelse(Happiness$Freedom &gt;= 0.4375, &quot;viel.Freiheit&quot;, &quot;weniger.Freiheit&quot;)</code></pre>
 <p>Für das folgende Beispiel wurden die Faktroren <code>Family.new</code>und <code>Freedom.new</code> erstellt. Die Variable <code>Family.new</code> beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen “viele.Familien” und “weniger.Familien” und die Variable <code>Freedom.new</code> mit den beiden Ausprägungen “viel.Freiheit” und “weniger.Freiheit”. Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median.</p>
-<p>Die abhängige Variable für di MANOVa soll der <code>Happiness.Score</code> sein.</p>
+<p>Die abhängige Variable für die MANOVA soll der <code>Happiness.Score</code> sein.</p>
 <pre class="r"><code>glimpse(Happiness)</code></pre>
 <pre><code>## Observations: 155
 ## Variables: 14

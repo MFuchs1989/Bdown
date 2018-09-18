@@ -51,7 +51,7 @@ Happiness$Freedom.new <- ifelse(Happiness$Freedom >= 0.4375, "viel.Freiheit", "w
 
 Für das folgende Beispiel wurden die Faktroren `Family.new`und `Freedom.new` erstellt. Die Variable `Family.new` beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen "viele.Familien" und "weniger.Familien" und die Variable `Freedom.new` mit den beiden Ausprägungen "viel.Freiheit" und "weniger.Freiheit". Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median. 
 
-Die abhängige Variable für di MANOVa soll der `Happiness.Score` sein. 
+Die abhängige Variable für die MANOVA soll der `Happiness.Score` sein. 
 ```{r}
 glimpse(Happiness)
 table(Happiness$Family.new)
