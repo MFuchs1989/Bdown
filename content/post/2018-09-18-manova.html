@@ -116,7 +116,7 @@ desc.Hauptfaktor1</code></pre>
 ##          mad   min   max range       skew   kurtosis        se
 ## X11 1.128258 3.471 7.537 4.066 -0.2165218 -0.9094135 0.1195885
 ## X12 1.088228 2.693 7.213 4.520  0.0696700 -0.7288668 0.1110937</code></pre>
-<p>Da die beiden unabhängigen Variablen <code>Family.new</code>und <code>Freedom.new</code> jeweils nach ihrem Median aufgeteilt wurden, sind die 4 Gruppen fast gleich groß.</p>
+<p>Da die beiden unabhängigen Variablen <code>Family.new</code> und <code>Freedom.new</code> jeweils nach ihrem Median aufgeteilt wurden, sind die 4 Gruppen fast gleich groß.</p>
 </div>
 <div id="homogeneity-of-variance" class="section level2">
 <h2>3.3 Homogeneity of variance</h2>
@@ -329,7 +329,7 @@ Sicht1</code></pre>
 ## 1                       Happiness$Family.new         0.464
 ## 2                      Happiness$Freedom.new         0.067
 ## 3 Happiness$Family.new:Happiness$Freedom.new         0.009</code></pre>
-<p>Da die Effektgröße eta<sup>2</sup> dazu neigt, immer etwas zu groß auszufallen, ist es daher sinnvoll, das Konfidenzintervall für den durch den Faktor erklärten Varianzanteil zu berechnen. Für die Funktion <em>ci.pvaf</em> ist dabei der F-Wert, die Zählerfreiheitsgrade, die Nennerfreiheitsgrade sowie die Stichprobengröße notwendig. Diese Werte können erneut der Varianzanalysetabelle und den durchgeführten describeBy-Befehlen entnommen werden. Im Falle des Haupteffekts für <code>Family.new</code> erhält man folgendes Ergebnis.</p>
+<p>Da die Effektgröße eta<sup>2</sup> dazu neigt, immer etwas zu groß auszufallen, ist es daher sinnvoll, das Konfidenzintervall für den durch den Faktor erklärten Varianzanteil zu berechnen. Für die Funktion <em>ci.pvaf</em> ist dabei der <em>F-Wert</em>, die <em>Zählerfreiheitsgrade</em>, die <em>Nennerfreiheitsgrade</em> sowie die <em>Stichprobengröße</em> notwendig. Diese Werte können erneut der Varianzanalysetabelle und den durchgeführten describeBy-Befehlen entnommen werden.</p>
 <pre class="r"><code>Anova(MANOVA, type=3)</code></pre>
 <pre><code>## Anova Table (Type III tests)
 ## 
@@ -350,6 +350,7 @@ Sicht1</code></pre>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code>sum(desc.Hauptfaktor1$n)</code></pre>
 <pre><code>## [1] 155</code></pre>
+<p>Im Falle des Haupteffekts für <code>Family.new</code> erhält man folgendes Ergebnis.</p>
 <pre class="r"><code>ci.pvaf(F.value = 52.888, df.1 = 1, df.2 = 151, N=155)</code></pre>
 <pre><code>## $Lower.Limit.Proportion.of.Variance.Accounted.for
 ## [1] 0.1455151

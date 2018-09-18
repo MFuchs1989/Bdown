@@ -100,7 +100,7 @@ desc.Hauptfaktor1
 desc.Hauptfaktor2
 ```
 
-Da die beiden unabhängigen Variablen `Family.new`und `Freedom.new` jeweils nach ihrem Median aufgeteilt wurden, sind die 4 Gruppen fast gleich groß.
+Da die beiden unabhängigen Variablen `Family.new` und `Freedom.new` jeweils nach ihrem Median aufgeteilt wurden, sind die 4 Gruppen fast gleich groß.
 
 
 ##3.3 Homogeneity of variance
@@ -235,7 +235,7 @@ eta_sq(MANOVA, partial = TRUE)
 ```
 
 
-Da die Effektgröße eta^2^ dazu neigt, immer etwas zu groß auszufallen, ist es daher sinnvoll, das Konfidenzintervall für den durch den Faktor erklärten Varianzanteil zu berechnen. Für die Funktion *ci.pvaf* ist dabei der F-Wert, die Zählerfreiheitsgrade, die Nennerfreiheitsgrade sowie die Stichprobengröße notwendig. Diese Werte können erneut der Varianzanalysetabelle und den durchgeführten describeBy-Befehlen entnommen werden. Im Falle des Haupteffekts für `Family.new` erhält man folgendes Ergebnis.
+Da die Effektgröße eta^2^ dazu neigt, immer etwas zu groß auszufallen, ist es daher sinnvoll, das Konfidenzintervall für den durch den Faktor erklärten Varianzanteil zu berechnen. Für die Funktion *ci.pvaf* ist dabei der *F-Wert*, die *Zählerfreiheitsgrade*, die *Nennerfreiheitsgrade* sowie die *Stichprobengröße* notwendig. Diese Werte können erneut der Varianzanalysetabelle und den durchgeführten describeBy-Befehlen entnommen werden.
 
 ```{r}
 Anova(MANOVA, type=3)
@@ -243,6 +243,9 @@ Anova(MANOVA, type=3)
 ```{r}
 sum(desc.Hauptfaktor1$n)
 ```
+
+Im Falle des Haupteffekts für `Family.new` erhält man folgendes Ergebnis.
+
 ```{r}
 ci.pvaf(F.value = 52.888, df.1 = 1, df.2 = 151, N=155)
 ```
