@@ -245,7 +245,7 @@ f.ANOVA <- eta_sq(ANOVA)
 ```
 
 Die Formel für Cohens f sieht in R folgendermaßen aus.
-```{r}
+```{r, warning=TRUE}
 f.1 <- sqrt(as.numeric(f.ANOVA)/(1-as.numeric(f.ANOVA)))
 f.1
 ```

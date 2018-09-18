@@ -1,0 +1,10 @@
+---
+title: MANOVA
+author: Michael Fuchs
+date: '2018-09-18'
+slug: manova
+categories:
+  - R
+tags:
+  - R Markdown
+---
