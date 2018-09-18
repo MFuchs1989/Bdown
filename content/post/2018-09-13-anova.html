@@ -275,11 +275,8 @@ SS_between/SS_total</code></pre>
 <p>Aus dem eta<sup>2</sup> kann nun die Effektgröße f nach Cohen berechnet werden. Im ersten Schritt weisen wir dazu das eta<sup>2</sup> aus der durchgeführten ANOVA dem Objekt “f.ANOVA” zu.</p>
 <pre class="r"><code>f.ANOVA &lt;- eta_sq(ANOVA)</code></pre>
 <p>Die Formel für Cohens f sieht in R folgendermaßen aus.</p>
-<pre class="r"><code>f.1 &lt;- sqrt(as.numeric(f.ANOVA)/(1-as.numeric(f.ANOVA)))</code></pre>
-<pre><code>## Warning: NAs durch Umwandlung erzeugt
-
-## Warning: NAs durch Umwandlung erzeugt</code></pre>
-<pre class="r"><code>f.1</code></pre>
+<pre class="r"><code>f.1 &lt;- sqrt(as.numeric(f.ANOVA)/(1-as.numeric(f.ANOVA)))
+f.1</code></pre>
 <pre><code>## [1]        NA 0.1722846</code></pre>
 <p>Alternativ bestünde die Möglicheit, die <em>cohens_f</em> Funktion zu verwenden. Diese funktioniert allerdings nur wie die <em>eta_sq</em> Funktion bei aov-Modelle.</p>
 <pre class="r"><code>cohens_f(ANOVA)</code></pre>
