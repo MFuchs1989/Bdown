@@ -1,0 +1,388 @@
+---
+title: Regression Analysis
+author: Michael Fuchs
+date: '2018-09-21'
+slug: regression-analysis
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Table of Content
+
++ 1 Introduction
++ 2 Preparation
+
+
+
+
+#1 Introduction
+
+Mit einer Regressionsanalyse wird der Zusammenhang zwischen einer oder mehrerer unabhängigen Variablen und einer abhängigen Variablen ermittelt. In diesem Beitrag wird nachfolgend sowohl die Verwendung der bivariaten linearen Regression als auch die Verwendung der multiplen linearen Regression thematisiert.
+
+Für diesen Post wurde der Datensatz *World Happiness Report* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br> abrufbar.
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(psych)
+library(car)
+
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+happiness.report <- read_csv("World_Happiness_Report.csv")
+```
+
+#2 Preparation
+
+Für die nachfolgenden Tests sind nicht alle Variablen aus dem Datensatz *World Happiness Report* relevant. Er wird daher auf folgende 5 reduziert. 
+
+Tipp: Mit der *select* Funktion lassen sich Spalten auch gleichzeitig umbenennen. Dies ist in unserem Fall teilweise auch sinnvoll, da die ursprüngliche Spaltenbezeichnung recht lang ausfällt.
+```{r}
+happiness <- happiness.report %>% select(Score = Happiness.Score, Life.exp = Health..Life.Expectancy., Freedom, Generosity, Trust = Trust..Government.Corruption.)
+happiness
+```
+
+**Score** bezeichnet den allgemeinen Glücklichkeitsgrad des jeweiligen Landes.
+
+**Life.exp** beschreibt das Ausmaß, in wie weit die Lebenserwartung zur Berechnung des Zufriedenheitsgrades beigetragen hat.
+
+**Freedom** beschreibt das Ausmaß, in wie weit Freiheit zur Berechnung des Zufriedenheitsgrades beigetragen hat.
+
+**Generosity** beschreibt das Ausmaß, in wie weit Großzügigkeit zur Berechnung des Zufriedenheitsgrades beigetragen hat.
+
+**Trust** beschreibt das Ausmaß, in wie weit Vertrauen zur Berechnung des Zufriedenheitsgrades beigetragen hat.
+
+
+Es wird noch überprüft, ob fehlende Werte in der neuen Auswahl existieren.
+```{r}
+any(is.na(happiness))
+sum(any(is.na(happiness)))
+```
+
+Das Objekt "happiness" enthält somit keine fehlenden Werte.
+
+
+#3 Bivariate linear regression
+
+Bei der bivariaten linearen Regression wird der lineare Zusammenhang zwischen einer unabhängigen Variablen und einer abhängigen Variablen modelliert. Beide Variablen müssen dafür metrisch skaliert sein. 
+
+Die Formel für die bivariate lineare Regression lautet:
+$$ Y = b_0 + b_1 \cdot X + E $$
+
+TEST !!!! b~2~
+
+
+Das Regressionsgewicht b_1 sagt aus, welche Veränderung man in Y erwartet, wenn X um eine Einheit erhöht wird. Es ist daher ein Zusammenhangsmaß zwischen X und Y. Der Achsenabschnitt b_0 ist der vorhergesagte Wert für Y, wenn X den Wert Null annimmt. 
+
+Zusammenhänge lassen sich auch prima mit Streudiagrammen graphisch darstellen.
+
+```{r}
+plot(happiness$Life.exp, happiness$Score)
+```
+
+In die *plot* Funktion kann auch direkt ein statistisches Modell eingeben werden. Allerdings ändert sich hierbei die Reihenfolge des Befehls. 
+```{r}
+plot(happiness$Score ~ happiness$Life.exp)
+```
+
+Des Weiteren hat man die Möglichkeit, eine Lowess-Kurve sowie eine Regressionsgerade in der Grafik zu ergänzen.
+
+```{r}
+plot(happiness$Score ~ happiness$Life.exp) + 
+  lines(lowess(happiness$Score ~ happiness$Life.exp)) +
+  abline(lm(happiness$Score ~ happiness$Life.exp))
+```
+
+##3.1 Unstandardized regression coefficients
+
+Im Folgenden soll der Zusammenhang zwischen dem Glücklichkeitsgrad (abhängige Variable) und der Lebenserwartung (unabhängige Variable) untersucht werden. 
+
+```{r}
+lm(happiness$Score ~ happiness$Life.exp)
+```
+
+*Intercept* bedeutet Achsenabschnitt, d.h. b_0 beträgt hier 3,297. Der Wert unter *happiness$Life.exp* ist das Regressionsgewicht für diese Variable, d.h. b_1 beträgt hier 3,731.  
+
+
+##3.2 Standardized regression coefficients
+
+Manchmal ist es sinnvoll, die standardisierten Regressionskoeffizienten anzufordern und zu interpretieren. Dazu werden die verwendeten Variablen z-standardisiert (siehe hierzu Post ["z-Transformation / Standardization"](https://michael-fuchs.netlify.com/2018/08/25/z-transformation-standardization/)). Das Regressionsgewicht b_0 ist dann die Anzahl der Standardabweichungen, um die sich Y verändert, wenn man X um eine Standardabweichung erhöht. Die Standardisierung kann mit der *scale* Funktion durchgeführt werden. 
+
+```{r}
+lm(scale(happiness$Score) ~ scale(happiness$Life.exp))
+```
+
+Intercept zeigt einen Wert nahe Null. Dies ist immer so, da die standardisierte Regressionsanalyse durch den Ursprung geht. Das standardisierte Regressionsgewicht beträgt 7.820e-01. Dies ist in R eine andere Schreibweise für 0,782 (Rechenweg s.u.) 
+
+$$ 7.820e-01 = 7.820 \cdot 10^{-1} = 7.820 \cdot 0,1 = 0.782 $$
+
+Bei der bivariaten linearen Regressionsanalyse entspricht das standardisierte Regressionsgewicht genau der Korrelation zwischen den beiden Variablen. 
+```{r}
+cor(happiness$Life.exp, happiness$Score)
+```
+
+##3.3 Significance tests
+
+Beim Signifikanztest für die Regressionskoeffizienten wird die Nullhypothese (der Regressionskoeffizient ist Null) mit einem t-Test überprüft. Ein signifikantes Ergebnis würde bedeuten, dass sich der Regressionskoeffizient signifikant von Null unterscheidet und somit einen Einfluss auf die abhängige Variable hat. 
+
+Wir weisen der zuvor durchgeführten Regression einem Objekt zu und fordern das Ergebnis des Signifikanztests mit der *summary* Funktion an.
+
+```{r}
+simple.reg <- lm(happiness$Score ~ happiness$Life.exp)
+summary(simple.reg) 
+```
+
+**Call** zeigt nochmal die Modellgleichung auf.
+
+**Residuals** beinhaltet 5 statistische Kennwerte für die Residuen. 
+
+**Coefficients**. In diesem Abschnitt wird für jeden Regressionskoeffizienten (*Estimate*) der Standardfehler (*Std. Error*), die empirische Prüfgröße (*t value*) und der p-Wert (*Pr(>|t|)*) angegeben.
+
+**Residual standard error** ist der Standardschätzfehler. Dieser sagt uns, um wie viele Einheiten der abhängigen Variablen wir uns mit der Regression im Durchschnitt verschätzen. 
+
+**Degrees of freedom** sind die Freiheitsgrade. Sie sind definiert mit *df=N-k-1*, wobei N die Stichprobengröße und k die Anzahl der Prädiktoren ist. 
+
+**Multiple R-squared**. Der Determinationskoeffizient R^2^ mit dem adjustierten R^2^ sowie dem dazugehörigen F-Test. 
+
+
+Wir erhalten ein höchst signifikantes Ergebnis von p < .001 was bedeutet, dass die Lebenserwartung einen Einfluss auf den Glücklichkeitsgrad hat. 
+
+
+##3.4 Confidence interval
+
+Konfidenzintervalle für die Regressionsanalyse müssen mit der *confint* Funktion expliziet angefordert werden. 
+```{r}
+confint(simple.reg)
+```
+
+Standardgemäße wird ein Konfidenzintervall von 95% ausgegeben. Dies kann mit dem Zusatzargument *levels=* verändert werden.
+```{r}
+confint(simple.reg, level = 0.99)
+```
+
+##3.5 Predicted values
+
+Die durch die Regression vorhergesagten Werte können via der *fitted* Funktion angefordert werden. Die Residuen fordert man über den *resid* Befehl an. Die Ausführung der beiden Funktionen würde eine vollständige Liste aller vorhergesagten Werte bzw. Residuen ausgeben. Aus diesem Grund werden die Befehle hier nur in Kombination mit der *head* Funktion angefordert.  
+```{r}
+head(fitted(simple.reg))
+head(resid(simple.reg))
+```
+
+Man hat hier die Möglichkeit, sich den vorhergesagten Wert für einen bestimmten Wert auf der Prädiktorvariablen ausgeben zu lassen. Im nachfolgenden soll der vorhergesagt Wert für einen Lebenserwartungswert von 0,8 angefordert werden.
+
+Tipp: Für eine einfache Handhabung sollten die verwendeten Variablen immer Objekten zugeordnet werden. Die Ausführung der *predict* Funktion funktioniert hierbei zuverlässiger.
+```{r}
+Score<-happiness$Score
+Life.exp<-happiness$Life.exp
+
+simple.reg2 <- lm(Score ~ Life.exp)
+
+predict(simple.reg2,data.frame(Life.exp=0.8))
+```
+
+Einen Lebenserwartungswert von 0,8 führt zu einem vorhergesagten Glücklichkeitsgrad von 6,28.
+Nun interessiert uns noch, wie hoch der vorhergesagte Wert für den Mittelwert der Variablen `Life.exp` ausfällt.
+```{r}
+predict(simple.reg2,data.frame(Life.exp=mean(Life.exp)), interval="confidence")
+```
+
+Der durchschnittliche Lebenserwartungswert in unserem Datensatz führt zu einem Glücklichkeitsgrad von 5,35.
+
+
+
+
+#4 Multiple linear regression
+
+Bei der multiplen linearen Regression wird der lineare Zusammenhang zwischen mehreren unabhängigen Variablen und einer abhängigen Variablen modelliert.
+
+Die Formel für die multiple lineare Regression lautet:
+
+$$ Y = b_0 + b_1 \cdot X_1 + b_2 \cdot X_2 + E $$
+
+Der Achsenabschnitt b_0 ist der vorhergesagt Wert für Y, wenn sowohl X_1 als auch X_2 den Wert Null annehmen. Das Regressionsgewicht b_1 ist der Wert, um den sich Y erhöht, wenn man X_1 um eine Einheit erhöht und gleichzeitig X_2 konstant hält. Gleichermaßen dazu ist b_2 der Wert, um den sich Y erhöht, wenn man X_2 um eine Einheit erhöht und gleichzeitig X_2 konstant hält. Die unabhängigen Variablen in dem Modell kontrollieren sich also gegenseitig. 
+
+Die multiple lineare Regression wird in R ebenfalls mit der *lm* Funktion durchgeführt. Im nachfolgenden soll der Glücklichkeitsgrad durch die Variable ´Life.exp´ und ´Trust´ vorhergesagt werden. 
+```{r}
+mult.reg <- lm(Score ~ Life.exp + Trust, data = happiness)
+summary(mult.reg)
+```
+
+Da diese Ausgabe bereits unter Punkt 3.3 ausführlich besprochen wurde, wird im Nachfolgenden nur auf zwei Punkte eingegangen:
+
+**Multiple R-squared**. Dies ist der Determinationskoeffizient R^2^. Er ist ein Maß für die Modellgüte. In dem vorliegenden Beispiel ist R^2^=.659, was bedeutet, dass die beiden Prädiktoren zusammen 65,9% der beobachteten Varianz in dem Glücklichkeitsgrad erklären. 
+
+**F-statistic**. Der Determinationskoeffizient R^2^ kann inferenzstatistisch geprüft werden. Dies geschieht über den F-Test. In unserem Beispiel zeigt der F-Test ein höchst signifikantes Ergebnis von p<.001, d.h. der Determinationskoeffizient unterscheidet sich signifikant von Null. 
+
+
+##4.1 Multiple correlation
+
+Im Post ["Bivariate descriptive statistics"](https://michael-fuchs.netlify.com/2018/09/04/bivariate-descriptive-statistics/) (Punkt 3) wurde die Berechnung des Zusammenhangs r zwischen zwei metrischen Variablen gezeigt. Die Höhe des Zusammenhangs r zwischen einer abhängigen Variablen und mehreren unabhängigen Variablen wurde bis jetzt noch nicht thematisiert. Die Berechnung ist allerdings mit der *Multiple R-squared* Angabe aus dem Ergebnis der Regressionsanalyse möglich. Dazu wird der R^2^ Wert aus der *summary*-Ausgabe entnommen und anschließend in den *sqrt*-Befehl eingesetzt.
+
+```{r}
+summary(mult.reg)$r.squared
+sqrt(summary(mult.reg)$r.squared)
+```
+
+Wir können folgende beiden Werte für die **Effektgröße** der durchgeführten multiplen Regressionsanalyse festhalten:
+
++ R^2^ = .659
++ r = .81
+
+
+##4.2 Hierarchical regression
+
+
+Anstatt alle Prädiktoren (unabhängige Variablen) auf einmal in das Regressionsmodell aufzunehmen, kann man auch schrittweise vorgehen. Bei der hierarchischen Regression werden die Prädiktoren in zwei oder mehrere Blöcke aufgeteilt und nacheinander in das Modell mit aufgenommen. 
+
+Das zentrale statistische Maß bei der hierarchischen Regression ist der Determinationskoeffizient R^2^. Vergleicht man den Determinationskoeffizienten aus dem ersten Modell mit dem Determinationskoeffizienten aus dem zweiten Modell, so kann bestimmt werden, wie viel Varianz die im zweiten Modell hinzugekommenen Prädiktoren über die im ersten Modell aufgenommenen Prädiktoren hinaus erklären. Dieser Zuwachs des Determinationskoeffizienten kann über einen F-Test statistisch überprüft werden. Ein signifikantes Ergebnis würde bedeuten, dass das zweite Modell signifikant mehr Varianz aufklärt als das erste Modell. Ein nicht signifikantes Ergebnis würde demnach bedeuten, dass das zweite Modell nicht signifikant mehr Varianz aufklärt als das erste Modell, obwohl es mehr Prädiktoren enthält. In diesem Fall sollte man das erste Modell bevorzugen.  
+
+Für das nachfolgende Beispiel werden zwei Regressionsanalysen erstellt. Das erste Modell enthält zwei Prädiktoren, das zweite enthält drei Prädiktoren. 
+```{r}
+kleines.modell <- lm(Score ~ Generosity + Freedom, data = happiness)
+volles.modell <- lm(Score ~ Generosity + Freedom + Life.exp, data = happiness)
+```
+
+Anschließend werden die jeweiligen Determinationskoeffizienten angefordert.
+```{r}
+summary(kleines.modell)$r.squared
+summary(volles.modell)$r.squared
+```
+
+Wir sehen, dass das erste Modell 32,6% der Varianz erklärt und das zweite 71,2%.
+Es kann nun ausgerechnet werden, dass der Zuwachs in R^2^ gegenüber dem ersten Modell ca. 38,6% beträgt.
+```{r}
+klein<-summary(kleines.modell)$r.squared
+voll<-summary(volles.modell)$r.squared
+voll-klein
+```
+
+
+Nun wird noch überprüft, ob dieser Zuwachs statistisch bedeutsam ist. Der Zuwachs in R^2^ wird mit dem F-Test (*anova*-Funktion) auf Signifikanz geprüft. 
+```{r}
+anova(kleines.modell, volles.modell)
+```
+
+Der Zuwachs in R^2^ ist mit p<.001 signifikant. Das bedeutet, dass das zweite Modell mit den drei Prädiktoren signifikant mehr Varianz aufklärt als das erste Modell. Der Prädiktor *Lebenserwartung* hat einen signifikanten Effekt auf die Kriteriumsvariable. 
+
+
+#5 Model assumption
+
+Es sollten eine Reihe von Annahmen erfüllt sein, damit die lineare Regressionsanalyse korrekte Ergebnisse liefert. Die wichtigsten sind:
+
++ Korrekte Spezifikation des Modells 
++ Normalverteilung der Residuen
++ Homoskedastizität 
++ Ausreißer und einflussreiche Werte
++ Multikollinearität
++ Unabhängigkeit der Residuen
+
+
+Die ersten vier Annahmen können in R mit verschiedenen Diagrammen graphisch geprüft werden. Dies soll exemplarisch mit der multiplen Regression (Punkt 4) durchgeführt werden.
+```{r}
+par(mfrow= c(2,2))
+plot(mult.reg)
+```
+
+**Korrekte Spezifikation des Modells**
+
+Hier wird der Frage nachgegangen, ob das Modell alle relevanten und keine überflüssigen Prädiktoren enthält. Das Diagramm "Residuals vs Fitted" (links oben) zeigt die vorhergesagten Werte (*fitted values*) auf der x-Achse und die unstandardisierten Residuen (*residuals*) auf der y-Achse. Die rote Linie ist die Lowess-Linie. Dieser Grafik kann entnommen werden, ob das Modell korrekt spezifiziert wurde. Dies ist der Fall, wenn die Werte möglichst unsystematisch verteilt sind und die rote Lowess-Linie möglichst parallel zur x-Achse verläuft. Das Diagramm gibt allerdings keine Aussage darüber, ob wichtige Kontrollvariablen im Modell fehlen. 
+
+**Normalverteilung der Residuen** 
+
+Hier wird der Frage nachgegangen, ob die Residuen normalverteilt sind. Dies kann im "Normal Q-Q" Plot (rechts oben) überprüft werden. Auf der x-Achse sind die Quantile abgetragen, die man erwarten würde, wenn Normalverteilung gegeben ist. Auf der y-Achse werden die tatsächlich beobachteten Quantile aufgeführt. Wenn die Residuen normalverteilt sind, liegen sie genau auf der Diagonalen.
+
+**Homoskedastizität**
+
+Die Homoskedastizität beschreibt, ob die Varianz der Residuen über alle Ausprägungen der Prädiktoren hinweg gleich ist. Die "Scale-Location" Grafik (links unten) dient zur Überprüfung der Homoskedastizität. In diesem Diagramm werden die vorhergesagten Werte (*fitted values*) auf der x-Achse und die standardisierten Residuen (*standardized residuals*) auf der y-Achse abgetragen. Homoskedastizität ist dann gegeben, wenn die Residuen weitestgehend unsystematisch im Diagramm verteilt sind. 
+
+**Ausreißer und einflussreiche Werte**
+
+Hier wird überprüft, ob es Ausreißer oder andere Datenpunkte gibt, die einen starken Einfluss auf die Schätzung haben und diese daher verzerren können. Besonders geeignet zur Identifikation von Ausreißern und einflussreichen Werten ist das "Residuals vs Leverage" Diagramm (rechts unten). Auf der x-Achse dieser Grafik werden die Hebelwerte (*Leverage*) abgetragen. Hebelwerte sind ein Maß für die Abweichungen einzelner Werte auf den unabhängigen Variablen. An großen Hebelwerten kann man somit Ausreißer erkennen. Ausreißer oder einflussreiche Werte sind aber an sich noch nicht schlimm, solange sie sich einigermaßen konform verhalten. Das heißt, solange sie sich nicht zu sehr von den durch die Regression vorhergesagten Werten abweichen. Die Abweichung ist auf der y-Achse in Form der standardisierten Residuen (*standardized residuals*) abgetragen. In dem "Residuals vs Leverage" Diagramm kann man also ebenfalls erkennen, ob die Ausreißer auffällige Residuen haben. Die rot gestrichelten Linien im Diagramm markieren bestimmte Werte für Cook's Distance. Liegen einzelne Werte jenseits dieser gestrichelten Linien, so handelt es sich dabei um Werte, die die Regressionsanalyse in einem hohen Maß beeinflussen.  
+
+
+**Multikollinearität**
+
+Unter Multikollinearität versteht man die multiple Korrelation eines Prädiktors mit allen anderen Prädiktoren im Modell. Dies geschieht unabhängig davon, wie stark die Prädiktoren jeweils mit der Kriteriumsvariable korrelieren. Das Ausmaß der Multikollinearität wird über die Toleranz und den VIF (Variance Inflation Factor) bestimmt. Die Toleranz besitzt einen Wertebereich von 0 bis 1 und sollte möglichst nahe 1 liegen und nicht kleiner als 0,10 werden. Der Variance Inflation Factor ist der Kehrwert der Toleranz. Auch dieser sollte nahe 1 liegen und nicht größer als 10 werden.
+
+Der VIF wird mit der *vif* Funktion berechnet.
+```{r}
+vif(mult.reg)
+```
+
+Die Berechnung der Toleranz basiert auf dem VIF und erfolgt mit folgendem modifiziertem Befehl.
+```{r}
+1/vif(mult.reg)
+```
+
+Multikollinearität ist also für beide Prädiktoren gegeben. 
+
+
+**Unabhängigkeit der Residuen**
+
+Man sollte darauf achten, dass die Unabhängigkeit der Residuen in folgenden beiden Fällen häufig verletzt ist:
+
++ wenn die Stichprobe aus mehreren Gruppen bestehen
++ bei Längsschnittdaten/-studien
+
+Besteht die Gesamtstichprobe aus mehreren Gruppen z.B. bei Schulklassen, ist die Unabhängigkeit der Residuen meist verletzt, da es sich um ein geschachteltes Design handelt. Einzelne Personen lassen sich hierbei eindeutig bestimmten Gruppen zuordnen. Die einzelnen Personen sind ihren Gruppenmitgliedern meist ähnlicher als Personen aus anderen Gruppen. Statistisch erfasst wird diese Ähnlichkeit mit einer Intraklassenkorrelation. Ist diese größer Null , muss man die Gruppenzugehörigkeit in dem Regressionsmodell berücksichtigen. Dies geschieht, wenn man beispielsweise ein Mehrebenenanalyse durchführt. 
+
+Bei Längsschnittstudien kann es vorkommen, dass die Ausprägung eines Residuums zu einem bestimmten Messzeitpunkt von den zeitlich früheren Residuen beeinflusst wird. Dies wird auch Autokorrelation der Residuen genannt. Wenn eine solche seriale Abhängigkeit vorliegt, sollten geeignete längsschnittliche Verfahren eingesetzt werden. 
+
+
+#6 Partial correlation and semi partial correlation
+
+Die Partialkorrelation und die Semipartialkorrelation sind Koeffizienten zur Beschreibung des Zusammenhangs zwischen zwei Variablen unter Kontrolle einer oder mehrerer Drittvariablen. 
+
+
+#6.1 Partial correlation
+
+Die Partialkorrelation quantifiziert den Zusammenhang zwischen zwei Variablen X und Y, wenn der Einfluss einer Drittvariablen Z kontrolliert wird. Die Korrelation wird also um den Effekt einer anderen Variablen bereinigt. Dies hat den Zweck, dass wir Kausalvermutungen überprüfen können. 
+
+In R wird die Partialkorrelation über die *partial.r* Funktion angefordert. Im folgenden Beispiel soll der Zusammenhang zwischen dem Lebenserwartungsgrad (`Life.exp`) und dem Vertrauensgrad (`Trust`) berechnet werden, wenn der Glücklichkeitsgrad (`Score`) auspartialisiert ist. Dazu werden im ersten Schritt die drei Variablen dem Objekt "auswahl" zugeordnet.  
+```{r}
+auswahl <- data.frame(happiness$Score, happiness$Life.exp, happiness$Trust)
+```
+
+Im zweiten Schritt werden die gerundeten bivariaten Korrelationen nullter Ordnung mit der *cor* Funktion angefordert. 
+```{r}
+round(cor(auswahl), 2)
+```
+
+Für den Zusammenhang der Variablen `Life.exp` und `Trust` erhalten wir einen Wert von r=.28, was einen eher geringeren Zusammenhang darstellt. Nun wird die Partialkorrelation durchgeführt. 
+```{r}
+partial.r(auswahl, c(2,3), 1)
+```
+
+Das erste Argument der *partial.r* Funktion ist der Name des Data Frames, in dem die drei Variablen enthalten sind. Anschließend werden mit c(2, 3) die Spaltennummern der Variablen genannt, deren Korrelation uns interessiert. Die Variablen `Life.exp` und `Trust` wurden hier in den Spalten 2 und 3 gespeichert. Das letzte Argument ("1") ist die Spaltennummer der Variablen, die auspartialisiert werden soll. Würde man an dieser Stelle mehrere Variablen angeben, würden Partialkorrelationen höherer Ordnung berechnet werden. 
+
+Die R-Ausgabe enthält eine Korrelationsmatrix mit der Partialkorrelation. Die Partialkorrelation zwischen den beiden Variablen `Life.exp` und `Trust` ist also r=-.1. Im Vergleich zur bivariaten Korrelation hat sich der Zusammenhang durch die Auspartialisierung des Glücklichkeitsgrades von einer geringen positiven Korrelation in eine leicht negative Korrelation verändert.  
+
+
+#6.2 Semi partial correlation
+
+Die Semipartialkorrelation quantifiziert den Zusammenhang zwischen zwei Variablen X und Y, wenn der Einfluss einer Drittvariablen Z aus nur einer der beiden Variablen auspartialisiert wird. Dabei kann überprüft werden, ob ein Prädiktor zusätzliche Informationen bei der Erklärung des Kriteriums besitzt.
+
+Die Partialkorrelation entspricht formal der Korrelation der Regressionsresiduen, die man erhält, wenn man die interessierende Variablen X und Y jeweils aus Z vorhersagt. Bei der Semipartialkorrelation wird die Regressionsanalyse für nur eine der beiden Variablen durchgeführt. Anschließend werden diese Regressionsresiduen mit den beobachteten Werten der anderen Variablen korreliert. 
+
+Im folgenden Beispiel soll die Semipartialkorrelation zwischen dem Glücklichkeitsgrad (`Score`) und dem Lebenserwartungsgrad (`Life.exp`) berechnet werden, wobei der Vertrauensgrad (`Trust`) aus dem Lebenserwartungsgrad (`Life.exp`) auspartialisiert werden soll. Dafür wird eine Regression mit dem Lebenserwartungsgrad als abhängige Variable und dem Vertrauensgrad als unabhängige Variable durchgeführt. Mit der *resid* Funktion werden die Residuen für dieses Modell angefordert, welche wir unter dem Objekt "auswahl2" abspeichern. 
+```{r}
+auswahl2<- resid(lm(happiness.Life.exp ~ happiness.Trust, data = auswahl))
+```
+
+Anschließend wird die Korrelation zwischen dem Glücklichkeitsgrad (`Score`) und der neuen Variablen "auswahl2" berechnet. Dies stellt dann die gewünschte Semipartialkorrelation da.
+```{r}
+cor(auswahl$happiness.Score, auswahl2)
+```
+
+
+#7 Conclusion
+
+In diesem Post wurde die Anwendung der bivariaten linearen Regression und die Anwendung für die multiple lineare Regression behandelt. Es wurden Effektgrößen für die Regressionsanalyse berechnet und die Prüfung einiger Modellannahmen gezeigt. Abschließend wurde auf die Funktionsweise der Partial- und Semipartialkorrelation eingegangen.  
+
+

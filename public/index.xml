@@ -6,10 +6,20 @@
     <description>Recent content on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 18 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 21 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Regression Analysis</title>
+      <link>/2018/09/21/regression-analysis/</link>
+      <pubDate>Fri, 21 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/09/21/regression-analysis/</guid>
+      <description>Table of Content1 Introduction2 Preparation1 IntroductionMit einer Regressionsanalyse wird der Zusammenhang zwischen einer oder mehrerer unabhängigen Variablen und einer abhängigen Variablen ermittelt. In diesem Beitrag wird nachfolgend sowohl die Verwendung der bivariaten linearen Regression als auch die Verwendung der multiplen linearen Regression thematisiert.
+Für diesen Post wurde der Datensatz World Happiness Report von der Statistik Plattform “Kaggle” verwendet. Eine Kopie des Datensatzes ist unter https://drive.</description>
+    </item>
     
     <item>
       <title>MANOVA</title>

@@ -58,7 +58,7 @@ Happiness$Family.new <- ifelse(Happiness$Family >= 1.254, "viele.Familien", "wen
 Happiness$Freedom.new <- ifelse(Happiness$Freedom >= 0.4375, "viel.Freiheit", "weniger.Freiheit")
 ```
 
-Für das folgende Beispiel wurden die Faktoren `Family.new`und `Freedom.new` erstellt. Die Variable `Family.new` beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen "viele.Familien" und "weniger.Familien" und die Variable `Freedom.new` mit den beiden Ausprägungen "viel.Freiheit" und "weniger.Freiheit". Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median. 
+Für das folgende Beispiel wurden die Faktoren `Family.new` und `Freedom.new` erstellt. Die Variable `Family.new` beschreibt nun die Länder im Datensatz mit den beiden Ausprägungen "viele.Familien" und "weniger.Familien" und die Variable `Freedom.new` mit den beiden Ausprägungen "viel.Freiheit" und "weniger.Freiheit". Aufgeteilt wurden die beiden Variablen jeweils nach ihrem Median. 
 ```{r}
 median(Happiness$Family)
 median(Happiness$Freedom)
