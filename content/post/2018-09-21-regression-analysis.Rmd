@@ -18,8 +18,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 + 1 Introduction
 + 2 Preparation
-
-
++ 3 Bivariate linear regression
++ 3.1 Unstandardized regression coefficients
++ 3.2 Standardized regression coefficients
++ 3.3 Significance tests
++ 3.4 Confidence interval
++ 3.5 Predicted values
++ 4 Multiple linear regression
++ 4.1 Multiple correlation
++ 4.2 Hierarchical regression
++ 5 Model assumption
++ 6 Partial correlation and semi partial correlation
++ 6.1 Partial correlation
++ 6.2 Semi partial correlation
++ 7 Conclusion
 
 
 #1 Introduction
@@ -75,10 +87,7 @@ Bei der bivariaten linearen Regression wird der lineare Zusammenhang zwischen ei
 Die Formel für die bivariate lineare Regression lautet:
 $$ Y = b_0 + b_1 \cdot X + E $$
 
-TEST !!!! b~2~
-
-
-Das Regressionsgewicht b_1 sagt aus, welche Veränderung man in Y erwartet, wenn X um eine Einheit erhöht wird. Es ist daher ein Zusammenhangsmaß zwischen X und Y. Der Achsenabschnitt b_0 ist der vorhergesagte Wert für Y, wenn X den Wert Null annimmt. 
+Das Regressionsgewicht b~1~ sagt aus, welche Veränderung man in Y erwartet, wenn X um eine Einheit erhöht wird. Es ist daher ein Zusammenhangsmaß zwischen X und Y. Der Achsenabschnitt b~0~ ist der vorhergesagte Wert für Y, wenn X den Wert Null annimmt. 
 
 Zusammenhänge lassen sich auch prima mit Streudiagrammen graphisch darstellen.
 
@@ -107,12 +116,12 @@ Im Folgenden soll der Zusammenhang zwischen dem Glücklichkeitsgrad (abhängige 
 lm(happiness$Score ~ happiness$Life.exp)
 ```
 
-*Intercept* bedeutet Achsenabschnitt, d.h. b_0 beträgt hier 3,297. Der Wert unter *happiness$Life.exp* ist das Regressionsgewicht für diese Variable, d.h. b_1 beträgt hier 3,731.  
+*Intercept* bedeutet Achsenabschnitt, d.h. b~0~ beträgt hier 3,297. Der Wert unter *happiness$Life.exp* ist das Regressionsgewicht für diese Variable, d.h. b~1~ beträgt hier 3,731.  
 
 
 ##3.2 Standardized regression coefficients
 
-Manchmal ist es sinnvoll, die standardisierten Regressionskoeffizienten anzufordern und zu interpretieren. Dazu werden die verwendeten Variablen z-standardisiert (siehe hierzu Post ["z-Transformation / Standardization"](https://michael-fuchs.netlify.com/2018/08/25/z-transformation-standardization/)). Das Regressionsgewicht b_0 ist dann die Anzahl der Standardabweichungen, um die sich Y verändert, wenn man X um eine Standardabweichung erhöht. Die Standardisierung kann mit der *scale* Funktion durchgeführt werden. 
+Manchmal ist es sinnvoll, die standardisierten Regressionskoeffizienten anzufordern und zu interpretieren. Dazu werden die verwendeten Variablen z-standardisiert (siehe hierzu Post ["z-Transformation / Standardization"](https://michael-fuchs.netlify.com/2018/08/25/z-transformation-standardization/)). Das Regressionsgewicht b~0~ ist dann die Anzahl der Standardabweichungen, um die sich Y verändert, wenn man X um eine Standardabweichung erhöht. Die Standardisierung kann mit der *scale* Funktion durchgeführt werden. 
 
 ```{r}
 lm(scale(happiness$Score) ~ scale(happiness$Life.exp))
@@ -205,7 +214,7 @@ Die Formel für die multiple lineare Regression lautet:
 
 $$ Y = b_0 + b_1 \cdot X_1 + b_2 \cdot X_2 + E $$
 
-Der Achsenabschnitt b_0 ist der vorhergesagt Wert für Y, wenn sowohl X_1 als auch X_2 den Wert Null annehmen. Das Regressionsgewicht b_1 ist der Wert, um den sich Y erhöht, wenn man X_1 um eine Einheit erhöht und gleichzeitig X_2 konstant hält. Gleichermaßen dazu ist b_2 der Wert, um den sich Y erhöht, wenn man X_2 um eine Einheit erhöht und gleichzeitig X_2 konstant hält. Die unabhängigen Variablen in dem Modell kontrollieren sich also gegenseitig. 
+Der Achsenabschnitt b~0~ ist der vorhergesagt Wert für Y, wenn sowohl X~1~ als auch X~2~ den Wert Null annehmen. Das Regressionsgewicht b~1~ ist der Wert, um den sich Y erhöht, wenn man X~1~ um eine Einheit erhöht und gleichzeitig X~2~ konstant hält. Gleichermaßen dazu ist b~2~ der Wert, um den sich Y erhöht, wenn man X~2~ um eine Einheit erhöht und gleichzeitig X~1~ konstant hält. Die unabhängigen Variablen in dem Modell kontrollieren sich also gegenseitig. 
 
 Die multiple lineare Regression wird in R ebenfalls mit der *lm* Funktion durchgeführt. Im nachfolgenden soll der Glücklichkeitsgrad durch die Variable ´Life.exp´ und ´Trust´ vorhergesagt werden. 
 ```{r}

@@ -16,6 +16,20 @@ tags:
 <ul>
 <li>1 Introduction</li>
 <li>2 Preparation</li>
+<li>3 Bivariate linear regression</li>
+<li>3.1 Unstandardized regression coefficients</li>
+<li>3.2 Standardized regression coefficients</li>
+<li>3.3 Significance tests</li>
+<li>3.4 Confidence interval</li>
+<li>3.5 Predicted values</li>
+<li>4 Multiple linear regression</li>
+<li>4.1 Multiple correlation</li>
+<li>4.2 Hierarchical regression</li>
+<li>5 Model assumption</li>
+<li>6 Partial correlation and semi partial correlation</li>
+<li>6.1 Partial correlation</li>
+<li>6.2 Semi partial correlation</li>
+<li>7 Conclusion</li>
 </ul>
 </div>
 <div id="introduction" class="section level1">
@@ -63,8 +77,7 @@ happiness</code></pre>
 <h1>3 Bivariate linear regression</h1>
 <p>Bei der bivariaten linearen Regression wird der lineare Zusammenhang zwischen einer unabhängigen Variablen und einer abhängigen Variablen modelliert. Beide Variablen müssen dafür metrisch skaliert sein.</p>
 <p>Die Formel für die bivariate lineare Regression lautet: <span class="math display">\[ Y = b_0 + b_1 \cdot X + E \]</span></p>
-<p>TEST !!!! b<sub>2</sub></p>
-<p>Das Regressionsgewicht b_1 sagt aus, welche Veränderung man in Y erwartet, wenn X um eine Einheit erhöht wird. Es ist daher ein Zusammenhangsmaß zwischen X und Y. Der Achsenabschnitt b_0 ist der vorhergesagte Wert für Y, wenn X den Wert Null annimmt.</p>
+<p>Das Regressionsgewicht b<sub>1</sub> sagt aus, welche Veränderung man in Y erwartet, wenn X um eine Einheit erhöht wird. Es ist daher ein Zusammenhangsmaß zwischen X und Y. Der Achsenabschnitt b<sub>0</sub> ist der vorhergesagte Wert für Y, wenn X den Wert Null annimmt.</p>
 <p>Zusammenhänge lassen sich auch prima mit Streudiagrammen graphisch darstellen.</p>
 <pre class="r"><code>plot(happiness$Life.exp, happiness$Score)</code></pre>
 <p><img src="/post/2018-09-21-regression-analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
@@ -88,11 +101,11 @@ happiness</code></pre>
 ## Coefficients:
 ##        (Intercept)  happiness$Life.exp  
 ##              3.297               3.731</code></pre>
-<p><em>Intercept</em> bedeutet Achsenabschnitt, d.h. b_0 beträgt hier 3,297. Der Wert unter <em>happiness$Life.exp</em> ist das Regressionsgewicht für diese Variable, d.h. b_1 beträgt hier 3,731.</p>
+<p><em>Intercept</em> bedeutet Achsenabschnitt, d.h. b<sub>0</sub> beträgt hier 3,297. Der Wert unter <em>happiness$Life.exp</em> ist das Regressionsgewicht für diese Variable, d.h. b<sub>1</sub> beträgt hier 3,731.</p>
 </div>
 <div id="standardized-regression-coefficients" class="section level2">
 <h2>3.2 Standardized regression coefficients</h2>
-<p>Manchmal ist es sinnvoll, die standardisierten Regressionskoeffizienten anzufordern und zu interpretieren. Dazu werden die verwendeten Variablen z-standardisiert (siehe hierzu Post <a href="https://michael-fuchs.netlify.com/2018/08/25/z-transformation-standardization/">“z-Transformation / Standardization”</a>). Das Regressionsgewicht b_0 ist dann die Anzahl der Standardabweichungen, um die sich Y verändert, wenn man X um eine Standardabweichung erhöht. Die Standardisierung kann mit der <em>scale</em> Funktion durchgeführt werden.</p>
+<p>Manchmal ist es sinnvoll, die standardisierten Regressionskoeffizienten anzufordern und zu interpretieren. Dazu werden die verwendeten Variablen z-standardisiert (siehe hierzu Post <a href="https://michael-fuchs.netlify.com/2018/08/25/z-transformation-standardization/">“z-Transformation / Standardization”</a>). Das Regressionsgewicht b<sub>0</sub> ist dann die Anzahl der Standardabweichungen, um die sich Y verändert, wenn man X um eine Standardabweichung erhöht. Die Standardisierung kann mit der <em>scale</em> Funktion durchgeführt werden.</p>
 <pre class="r"><code>lm(scale(happiness$Score) ~ scale(happiness$Life.exp))</code></pre>
 <pre><code>## 
 ## Call:
@@ -183,7 +196,7 @@ predict(simple.reg2,data.frame(Life.exp=0.8))</code></pre>
 <p>Bei der multiplen linearen Regression wird der lineare Zusammenhang zwischen mehreren unabhängigen Variablen und einer abhängigen Variablen modelliert.</p>
 <p>Die Formel für die multiple lineare Regression lautet:</p>
 <p><span class="math display">\[ Y = b_0 + b_1 \cdot X_1 + b_2 \cdot X_2 + E \]</span></p>
-<p>Der Achsenabschnitt b_0 ist der vorhergesagt Wert für Y, wenn sowohl X_1 als auch X_2 den Wert Null annehmen. Das Regressionsgewicht b_1 ist der Wert, um den sich Y erhöht, wenn man X_1 um eine Einheit erhöht und gleichzeitig X_2 konstant hält. Gleichermaßen dazu ist b_2 der Wert, um den sich Y erhöht, wenn man X_2 um eine Einheit erhöht und gleichzeitig X_2 konstant hält. Die unabhängigen Variablen in dem Modell kontrollieren sich also gegenseitig.</p>
+<p>Der Achsenabschnitt b<sub>0</sub> ist der vorhergesagt Wert für Y, wenn sowohl X<sub>1</sub> als auch X<sub>2</sub> den Wert Null annehmen. Das Regressionsgewicht b<sub>1</sub> ist der Wert, um den sich Y erhöht, wenn man X<sub>1</sub> um eine Einheit erhöht und gleichzeitig X<sub>2</sub> konstant hält. Gleichermaßen dazu ist b<sub>2</sub> der Wert, um den sich Y erhöht, wenn man X<sub>2</sub> um eine Einheit erhöht und gleichzeitig X<sub>1</sub> konstant hält. Die unabhängigen Variablen in dem Modell kontrollieren sich also gegenseitig.</p>
 <p>Die multiple lineare Regression wird in R ebenfalls mit der <em>lm</em> Funktion durchgeführt. Im nachfolgenden soll der Glücklichkeitsgrad durch die Variable ´Life.exp´ und ´Trust´ vorhergesagt werden.</p>
 <pre class="r"><code>mult.reg &lt;- lm(Score ~ Life.exp + Trust, data = happiness)
 summary(mult.reg)</code></pre>
