@@ -127,7 +127,7 @@ Manchmal ist es sinnvoll, die standardisierten Regressionskoeffizienten anzuford
 lm(scale(happiness$Score) ~ scale(happiness$Life.exp))
 ```
 
-Intercept zeigt einen Wert nahe Null. Dies ist immer so, da die standardisierte Regressionsanalyse durch den Ursprung geht. Das standardisierte Regressionsgewicht beträgt 7.820e-01. Dies ist in R eine andere Schreibweise für 0,782 (Rechenweg s.u.) 
+Intercept zeigt einen Wert nahe Null. Dies ist immer so, da die standardisierte Regressionsanalyse durch den Ursprung geht. Das standardisierte Regressionsgewicht beträgt 7.820e-01. Dies ist in R eine andere Schreibweise für 0,782 (Rechenweg s.u.).
 
 $$ 7.820e-01 = 7.820 \cdot 10^{-1} = 7.820 \cdot 0,1 = 0.782 $$
 

@@ -84,7 +84,7 @@ Wertebereich: 0 bis +1
 
 **Mittelwertsvergleiche durch eine MANOVA**
 
-Partielles eta^2^  
+Partielles eta^2^ (siehe Post ["MANOVA"](https://michael-fuchs.netlify.com/2018/09/18/manova/) Punkt 7) 
 
 Wertebereich: 0 bis +1
 
@@ -95,7 +95,7 @@ Wertebereich: 0 bis +1
 
 **Varianzaufklärung bei der Regressionsanalyse**
 
-Determinationskoeffizient R^2^
+Determinationskoeffizient R^2^ (siehe Post ["Regression Analysis"](https://michael-fuchs.netlify.com/2018/09/21/regression-analysis/) Punkt 4.1)
 
 Wertebereich: 0 bis +1
 

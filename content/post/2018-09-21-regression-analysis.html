@@ -114,7 +114,7 @@ happiness</code></pre>
 ## Coefficients:
 ##               (Intercept)  scale(happiness$Life.exp)  
 ##                -5.574e-16                  7.820e-01</code></pre>
-<p>Intercept zeigt einen Wert nahe Null. Dies ist immer so, da die standardisierte Regressionsanalyse durch den Ursprung geht. Das standardisierte Regressionsgewicht beträgt 7.820e-01. Dies ist in R eine andere Schreibweise für 0,782 (Rechenweg s.u.)</p>
+<p>Intercept zeigt einen Wert nahe Null. Dies ist immer so, da die standardisierte Regressionsanalyse durch den Ursprung geht. Das standardisierte Regressionsgewicht beträgt 7.820e-01. Dies ist in R eine andere Schreibweise für 0,782 (Rechenweg s.u.).</p>
 <p><span class="math display">\[ 7.820e-01 = 7.820 \cdot 10^{-1} = 7.820 \cdot 0,1 = 0.782 \]</span></p>
 <p>Bei der bivariaten linearen Regressionsanalyse entspricht das standardisierte Regressionsgewicht genau der Korrelation zwischen den beiden Variablen.</p>
 <pre class="r"><code>cor(happiness$Life.exp, happiness$Score)</code></pre>
