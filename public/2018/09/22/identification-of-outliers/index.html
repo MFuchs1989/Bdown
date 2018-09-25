@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Identification of Outliers - Michael Fuchs</title>
+<meta property="og:title" content="Identification of Outliers - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">Identification of Outliers</h1>
+
+    
+    <span class="article-date">2018/09/22</span>
+    
+
+    <div class="article-content">
+      <pre class="r"><code>library(tidyverse)
+library(outliers)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Identification of outliers</li>
+<li>3 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>In der Statistik spricht man von Outlieren oder Ausreißern, wenn Messwerte nicht in eine erwartete Messreihe passen, da sie auffällig höher oder niedriger ausfallen. In diesem Post wird der Frage nachgegangen, wie Outlier identifiziert werden können.</p>
+</div>
+<div id="identification-of-outliers" class="section level1">
+<h1>2 Identification of outliers</h1>
+<p>Neben der Möglichkeit, Ausreißer per Grafik zu identifizieren, kann in R auch der <em>Grubbs</em>-Test angewendet werden. Für das nachfolgende Beispiel wird das Objekt “x” erstellt, welches einen Ausreißer beinhaltet.</p>
+<pre class="r"><code>x&lt;- c(3, 4, 5, 5, 6, 7, 7, 8, 9, 10, 10, 11, 12, 13, 14, 14, 16, 18, 19, 19, 20, 60)</code></pre>
+<p>Die manuelle Berechnung des <em>Grubbs</em>-Tests erfolgt folgender maßen:</p>
+<pre class="r"><code>n&lt;- length(x)
+mean &lt;- mean(x)
+sd &lt;- sd(x)
+alpha &lt;- 0.05
+t &lt;- qt(alpha/(2*n), n-2)
+G &lt;- max(abs(x-mean))/sd
+G.crit &lt;- ((n-1)/sqrt(n))*sqrt(t^2/(n-2+t^2))</code></pre>
+<pre class="r"><code>G</code></pre>
+<pre><code>## [1] 4.012328</code></pre>
+<pre class="r"><code>G.crit</code></pre>
+<pre><code>## [1] 2.757735</code></pre>
+<p>Da G(4,01) &gt; G.crit (2,76) kann die Nullhypothese (es gibt keine Outlier) verworfen werden. Das Objekt “x” enthält demnach mindestens einen Ausreißer.</p>
+<p>Alternativ hat man in R auch die Möglichkeit, die <em>grubbs.test</em>-Funktion anzuwenden.</p>
+<pre class="r"><code>grubbs.test(x)</code></pre>
+<pre><code>## 
+##  Grubbs test for one outlier
+## 
+## data:  x
+## G = 4.01230, U = 0.19689, p-value = 1.873e-07
+## alternative hypothesis: highest value 60 is an outlier</code></pre>
+<p>Das Ergebnis ist mit p &lt; .001 signifikant. Es gibt demnach Outlier. Hierbei wird auch der höchste Wert (<em>alternative hypothesis: highest value 60 is an outlier</em>), welcher als Ausreißer identifiziert wurde, ausgegeben.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>3 Conclusion</h1>
+<p>In R gibt es viele verschiedene Möglichkeiten, um Outlier zu erkennen. In diesem Beitrag wurde lediglich nur eine Variante zur Identifizierung vorgestellt. Wie man anhand des Beispiels im Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> (Punkt 9) sehen kann, können Ausreißer einen erheblichen Einfluss auf statistische Auswertung und deren Ergebnis haben. Für eine möglichst präzise Auswertung empfiehlt es sich daher, achtsam im Umgang mit extremen Werten zu sein.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+

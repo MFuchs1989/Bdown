@@ -1,0 +1,76 @@
+---
+title: Identification of Outliers
+author: Michael Fuchs
+date: '2018-09-22'
+slug: identification-of-outliers
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(outliers)
+```
+
+#Table of Content
+
++ 1 Introduction
++ 2 Identification of outliers
++ 3 Conclusion
+
+#1 Introduction
+
+In der Statistik spricht man von Outlieren oder Ausreißern, wenn Messwerte nicht in eine erwartete Messreihe passen, da sie auffällig höher oder niedriger ausfallen. In diesem Post wird der Frage nachgegangen, wie Outlier identifiziert werden können. 
+
+
+#2 Identification of outliers
+
+Neben der Möglichkeit, Ausreißer per Grafik zu identifizieren, kann in R auch der *Grubbs*-Test angewendet werden. Für das nachfolgende Beispiel wird das Objekt "x" erstellt, welches einen Ausreißer beinhaltet. 
+```{r}
+x<- c(3, 4, 5, 5, 6, 7, 7, 8, 9, 10, 10, 11, 12, 13, 14, 14, 16, 18, 19, 19, 20, 60)
+```
+
+Die manuelle Berechnung des *Grubbs*-Tests erfolgt folgender maßen:
+```{r}
+n<- length(x)
+mean <- mean(x)
+sd <- sd(x)
+alpha <- 0.05
+t <- qt(alpha/(2*n), n-2)
+G <- max(abs(x-mean))/sd
+G.crit <- ((n-1)/sqrt(n))*sqrt(t^2/(n-2+t^2))
+```
+
+```{r}
+G
+```
+```{r}
+G.crit
+```
+
+Da G(4,01) > G.crit (2,76) kann die Nullhypothese (es gibt keine Outlier) verworfen werden. 
+Das Objekt "x" enthält demnach mindestens einen Ausreißer.  
+
+
+Alternativ hat man in R auch die Möglichkeit, die *grubbs.test*-Funktion anzuwenden. 
+```{r}
+grubbs.test(x)
+```
+
+Das Ergebnis ist mit p < .001 signifikant. Es gibt demnach Outlier. Hierbei wird auch der höchste Wert (*alternative hypothesis: highest value 60 is an outlier*), welcher als Ausreißer identifiziert wurde, ausgegeben.  
+
+
+#3 Conclusion
+
+In R gibt es viele verschiedene Möglichkeiten, um Outlier zu erkennen. In diesem Beitrag wurde lediglich nur eine Variante zur Identifizierung vorgestellt. Wie man anhand des Beispiels im Post ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/) (Punkt 9) sehen kann, können Ausreißer einen erheblichen Einfluss auf statistische Auswertung und deren Ergebnis haben. Für eine möglichst präzise Auswertung empfiehlt es sich daher, achtsam im Umgang mit extremen Werten zu sein. 
+
+
+
+
+

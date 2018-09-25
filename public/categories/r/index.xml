@@ -6,10 +6,20 @@
     <description>Recent content in R on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 21 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 22 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Identification of Outliers</title>
+      <link>/2018/09/22/identification-of-outliers/</link>
+      <pubDate>Sat, 22 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/09/22/identification-of-outliers/</guid>
+      <description>library(tidyverse)library(outliers)Table of Content1 Introduction2 Identification of outliers3 Conclusion1 IntroductionIn der Statistik spricht man von Outlieren oder Ausreißern, wenn Messwerte nicht in eine erwartete Messreihe passen, da sie auffällig höher oder niedriger ausfallen. In diesem Post wird der Frage nachgegangen, wie Outlier identifiziert werden können.
+2 Identification of outliersNeben der Möglichkeit, Ausreißer per Grafik zu identifizieren, kann in R auch der Grubbs-Test angewendet werden.</description>
+    </item>
     
     <item>
       <title>Regression Analysis</title>
