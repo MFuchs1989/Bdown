@@ -27,6 +27,7 @@ knitr::opts_chunk$set(echo = TRUE)
 + 4 Multiple linear regression
 + 4.1 Multiple correlation
 + 4.2 Hierarchical regression
++ 4.3 Gradual regression
 + 5 Model assumption
 + 6 Partial correlation and semi partial correlation
 + 6.1 Partial correlation
@@ -279,6 +280,29 @@ anova(kleines.modell, volles.modell)
 
 Der Zuwachs in R^2^ ist mit p<.001 signifikant. Das bedeutet, dass das zweite Modell mit den drei Prädiktoren signifikant mehr Varianz aufklärt als das erste Modell. Der Prädiktor *Lebenserwartung* hat einen signifikanten Effekt auf die Kriteriumsvariable. 
 
+
+#4.3 Gradual regression
+
+Bei der hierarchischen Regression wurde selber entschieden, welche Prädiktoren in das Modell aufgenommen werden. Bei der schrittweisen Regression wird diese Entscheidung dem Computer überlassen. Es wird hierbei von einer datengeleiteten Auswahl von Prädiktoren gesprochen, bei der in einem schrittweisen Verfahren nach und nach die Prädiktoren in das Modell aufgenommen werden, die das Modell am signifikantesten verbessern. Das daraus resultierende Modell enthält demnach nur Prädiktoren, welche einen signifikanten Effekt auf die Kriteriumsvariable haben. 
+
+Es handelt sich hierbei um ein sehr exploratives Vorgehen. Daher sollte stark darauf geachtet werden, welche Prädiktoren bei der schrittweisen Regression zur Auswahl gestellt werden. Würde man alle Variablen der Stichprobe zur Verfügung stellen, so könnten relevante Prädiktoren weggelassen oder irrelevante Prädiktoren aufgenommen werden. 
+
+Im ersten Schritt wird das Startmodell definiert. Dieses Modell enthält nur einen Achsenabschnitt. 
+```{r}
+grad.reg<- lm(Score ~ 1, data = happiness)
+```
+
+Anschließend wird der *step*-Befehl auf das Startmodell angewendet. Unter dem Argument *scope* werden alle Prädiktoren aufgelistet, welche berücksichtigt werden sollen. 
+```{r}
+grad.reg.output <- step(grad.reg, scope = ~ happiness$Life.exp + happiness$Freedom + happiness$Generosity + happiness$Trust)
+```
+
+Das Informationskriterium AIC wird von R zum Vergleich der verschiedenen Modelle verwendet. Je kleiner der AIC Wert ist, desto besser ist das Modell. Der Tabelle kann entnommen werden, wie die Variablen sich hinsichtlich ihrer Zähler-Quadratsummen (*Sum of Sq*), Nenner-Quadratsummen (*RSS*) sowie ihres AIC-Wertes (*AIC*) verändern würden, wenn diese Variable in das Modell aufgenommen würde. 
+
+Das finale Modell wird mit der *summary* Funktion angefordert.
+```{r}
+summary(grad.reg.output)
+```
 
 #5 Model assumption
 

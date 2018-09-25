@@ -25,6 +25,7 @@ tags:
 <li>4 Multiple linear regression</li>
 <li>4.1 Multiple correlation</li>
 <li>4.2 Hierarchical regression</li>
+<li>4.3 Gradual regression</li>
 <li>5 Model assumption</li>
 <li>6 Partial correlation and semi partial correlation</li>
 <li>6.1 Partial correlation</li>
@@ -266,6 +267,78 @@ voll-klein</code></pre>
 <p>Der Zuwachs in R<sup>2</sup> ist mit p&lt;.001 signifikant. Das bedeutet, dass das zweite Modell mit den drei Prädiktoren signifikant mehr Varianz aufklärt als das erste Modell. Der Prädiktor <em>Lebenserwartung</em> hat einen signifikanten Effekt auf die Kriteriumsvariable.</p>
 </div>
 </div>
+<div id="gradual-regression" class="section level1">
+<h1>4.3 Gradual regression</h1>
+<p>Bei der hierarchischen Regression wurde selber entschieden, welche Prädiktoren in das Modell aufgenommen werden. Bei der schrittweisen Regression wird diese Entscheidung dem Computer überlassen. Es wird hierbei von einer datengeleiteten Auswahl von Prädiktoren gesprochen, bei der in einem schrittweisen Verfahren nach und nach die Prädiktoren in das Modell aufgenommen werden, die das Modell am signifikantesten verbessern. Das daraus resultierende Modell enthält demnach nur Prädiktoren, welche einen signifikanten Effekt auf die Kriteriumsvariable haben.</p>
+<p>Es handelt sich hierbei um ein sehr exploratives Vorgehen. Daher sollte stark darauf geachtet werden, welche Prädiktoren bei der schrittweisen Regression zur Auswahl gestellt werden. Würde man alle Variablen der Stichprobe zur Verfügung stellen, so könnten relevante Prädiktoren weggelassen oder irrelevante Prädiktoren aufgenommen werden.</p>
+<p>Im ersten Schritt wird das Startmodell definiert. Dieses Modell enthält nur einen Achsenabschnitt.</p>
+<pre class="r"><code>grad.reg&lt;- lm(Score ~ 1, data = happiness)</code></pre>
+<p>Anschließend wird der <em>step</em>-Befehl auf das Startmodell angewendet. Unter dem Argument <em>scope</em> werden alle Prädiktoren aufgelistet, welche berücksichtigt werden sollen.</p>
+<pre class="r"><code>grad.reg.output &lt;- step(grad.reg, scope = ~ happiness$Life.exp + happiness$Freedom + happiness$Generosity + happiness$Trust)</code></pre>
+<pre><code>## Start:  AIC=39.22
+## Score ~ 1
+## 
+##                        Df Sum of Sq     RSS      AIC
+## + happiness$Life.exp    1   120.498  76.573 -105.304
+## + happiness$Freedom     1    64.059 133.012  -19.713
+## + happiness$Trust       1    36.283 160.788    9.683
+## + happiness$Generosity  1     4.750 192.321   37.440
+## &lt;none&gt;                              197.071   39.222
+## 
+## Step:  AIC=-105.3
+## Score ~ happiness$Life.exp
+## 
+##                        Df Sum of Sq     RSS      AIC
+## + happiness$Freedom     1    19.753  56.820 -149.549
+## + happiness$Trust       1     9.458  67.114 -123.739
+## + happiness$Generosity  1     2.217  74.356 -107.857
+## &lt;none&gt;                               76.573 -105.304
+## - happiness$Life.exp    1   120.498 197.071   39.222
+## 
+## Step:  AIC=-149.55
+## Score ~ happiness$Life.exp + happiness$Freedom
+## 
+##                        Df Sum of Sq     RSS      AIC
+## + happiness$Trust       1     1.490  55.330 -151.667
+## &lt;none&gt;                               56.820 -149.549
+## + happiness$Generosity  1     0.009  56.811 -147.574
+## - happiness$Freedom     1    19.753  76.573 -105.304
+## - happiness$Life.exp    1    76.192 133.012  -19.713
+## 
+## Step:  AIC=-151.67
+## Score ~ happiness$Life.exp + happiness$Freedom + happiness$Trust
+## 
+##                        Df Sum of Sq     RSS      AIC
+## &lt;none&gt;                               55.330 -151.667
+## + happiness$Generosity  1     0.014  55.316 -149.706
+## - happiness$Trust       1     1.490  56.820 -149.549
+## - happiness$Freedom     1    11.784  67.114 -123.739
+## - happiness$Life.exp    1    72.203 127.533  -24.233</code></pre>
+<p>Das Informationskriterium AIC wird von R zum Vergleich der verschiedenen Modelle verwendet. Je kleiner der AIC Wert ist, desto besser ist das Modell. Der Tabelle kann entnommen werden, wie die Variablen sich hinsichtlich ihrer Zähler-Quadratsummen (<em>Sum of Sq</em>), Nenner-Quadratsummen (<em>RSS</em>) sowie ihres AIC-Wertes (<em>AIC</em>) verändern würden, wenn diese Variable in das Modell aufgenommen würde.</p>
+<p>Das finale Modell wird mit der <em>summary</em> Funktion angefordert.</p>
+<pre class="r"><code>summary(grad.reg.output)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Score ~ happiness$Life.exp + happiness$Freedom + 
+##     happiness$Trust, data = happiness)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.93833 -0.39221  0.02576  0.45721  1.39692 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          2.6019     0.1596  16.307  &lt; 2e-16 ***
+## happiness$Life.exp   3.1092     0.2215  14.037  &lt; 2e-16 ***
+## happiness$Freedom    2.1997     0.3879   5.671 7.01e-08 ***
+## happiness$Trust      1.1260     0.5585   2.016   0.0455 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.6053 on 151 degrees of freedom
+## Multiple R-squared:  0.7192, Adjusted R-squared:  0.7137 
+## F-statistic: 128.9 on 3 and 151 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
 <div id="model-assumption" class="section level1">
 <h1>5 Model assumption</h1>
 <p>Es sollten eine Reihe von Annahmen erfüllt sein, damit die lineare Regressionsanalyse korrekte Ergebnisse liefert. Die wichtigsten sind:</p>
@@ -280,7 +353,7 @@ voll-klein</code></pre>
 <p>Die ersten vier Annahmen können in R mit verschiedenen Diagrammen graphisch geprüft werden. Dies soll exemplarisch mit der multiplen Regression (Punkt 4) durchgeführt werden.</p>
 <pre class="r"><code>par(mfrow= c(2,2))
 plot(mult.reg)</code></pre>
-<p><img src="/post/2018-09-21-regression-analysis_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="/post/2018-09-21-regression-analysis_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 <p><strong>Korrekte Spezifikation des Modells</strong></p>
 <p>Hier wird der Frage nachgegangen, ob das Modell alle relevanten und keine überflüssigen Prädiktoren enthält. Das Diagramm “Residuals vs Fitted” (links oben) zeigt die vorhergesagten Werte (<em>fitted values</em>) auf der x-Achse und die unstandardisierten Residuen (<em>residuals</em>) auf der y-Achse. Die rote Linie ist die Lowess-Linie. Dieser Grafik kann entnommen werden, ob das Modell korrekt spezifiziert wurde. Dies ist der Fall, wenn die Werte möglichst unsystematisch verteilt sind und die rote Lowess-Linie möglichst parallel zur x-Achse verläuft. Das Diagramm gibt allerdings keine Aussage darüber, ob wichtige Kontrollvariablen im Modell fehlen.</p>
 <p><strong>Normalverteilung der Residuen</strong></p>
