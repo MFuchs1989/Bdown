@@ -30,7 +30,7 @@ library(psych)</code></pre>
 </div>
 <div id="introduction" class="section level1">
 <h1>1 Introduction</h1>
-<p>Sehr häufig werden R-Befehle per Copy &amp; Paste vervielfacht und anschließend für unterschiedliche Zwecke leicht abgewandelt. Dies ist nicht nur umständlich, sondern auch leicht fehleranfällig. Vor diesem Hintergrund werden im Nachfolgenden Möglichkeiten aufgezeigt, wie man effektive Codes in R schreiben kann ohne einen Befehl doppelt zu verwenden.</p>
+<p>Sehr häufig werden R-Befehle per Copy &amp; Paste vervielfacht und anschließend für unterschiedliche Zwecke leicht abgewandelt. Dies ist nicht nur umständlich, sondern auch leicht fehleranfällig. Vor diesem Hintergrund werden im Nachfolgenden Möglichkeiten aufgezeigt, wie man effektive Codes in R schreiben kann, ohne einen Befehl doppelt zu verwenden.</p>
 <p>Für diesen Post wurde der Datensatz <em>Affairs</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1N4osROEo724c7OZA2ARiwEthcZDwLxtf" class="uri">https://drive.google.com/open?id=1N4osROEo724c7OZA2ARiwEthcZDwLxtf</a> abrufbar.</p>
 </div>
 <div id="purrrmap-function" class="section level1">
@@ -46,7 +46,7 @@ map(v, ~ .* 10)</code></pre>
 ## 
 ## [[3]]
 ## [1] 30</code></pre>
-<p>Die <em>map</em> Funktion transformiert einen Input durch die Anwendung einer Funktion auf jedes Element des Inputs und gibt anschließend einen Vektor aus, der dieselbe Länge besitzt wie die des Inputs. In unserem Beispiel wurde R den Befehl gegeben, jedes Element aus v (zuvor erstelltes Objekt) mit 10 zu multiplizieren.</p>
+<p>Die <em>map</em> Funktion transformiert einen Input durch die Anwendung einer Funktion auf jedes Element des Inputs und gibt anschließend einen Vektor aus, der dieselbe Länge besitzt wie die des Inputs. In unserem Beispiel wurde R der Befehl gegeben, jedes Element aus v (zuvor erstelltes Objekt) mit 10 zu multiplizieren.</p>
 </div>
 <div id="how-to-request-with-map-some-statistical-values" class="section level1">
 <h1>3 How to request with map() some statistical values</h1>
@@ -163,7 +163,7 @@ cbind(Mittelwert,Median ,standardabweichung)</code></pre>
 <pre class="r"><code>fun1 &lt;- function(x) abs(x - mean(x))^1
 fun2 &lt;- function(x) abs(x - mean(x))^2
 fun3 &lt;- function(x) abs(x - mean(x))^3</code></pre>
-<p>Diese in einer Syntax zu schreiben könnte folgendermaßen aussehen.</p>
+<p>Diese in einer Syntax zu schreiben könnte folgendermaßen aussehen:</p>
 <pre class="r"><code>fun.ges &lt;- function(x, i) abs(x - mean(x))^i</code></pre>
 <p>Genau dieses Prinzip lässt sich auch auf die Funktionen der statistischen Kennwerte anwenden.</p>
 <pre class="r"><code>col_summary &lt;- function(df, fun) {
@@ -262,7 +262,7 @@ fun3 &lt;- function(x) abs(x - mean(x))^3</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Der <em>map</em> Befehl sieht hier anders aus als der verwendete beim t-Test. Ist aber nur eine andere Schreibweise. Hier die beiden Varianten gegenüber gesellt:</p>
+<p>Der <em>map</em> Befehl sieht hier anders aus, als der beim t-Test verwendete, ist aber nur eine andere Schreibweise. Hier die beiden Varianten gegenüber gesellt:</p>
 <ul>
 <li>map(~lm(affairs ~ .x, data = affairs))</li>
 <li>map(function(x) lm(affairs$affairs ~ .x))</li>
@@ -339,7 +339,7 @@ summary(lm1)$r.squared</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Eine Gegenüberstellung der Ergebnisse kann folgendermaßen aussehen.</p>
+<p>Eine Gegenüberstellung der Ergebnisse kann folgendermaßen aussehen:</p>
 <pre class="r"><code>cbind(modell, modell.pvalue)</code></pre>
 <pre><code>##           names    r.squared         names      p.value
 ## 1        rating 7.812718e-02     education 9.524501e-01

@@ -184,7 +184,7 @@ head(fitted(simple.reg))
 head(resid(simple.reg))
 ```
 
-Man hat hier die Möglichkeit, sich den vorhergesagten Wert für einen bestimmten Wert auf der Prädiktorvariablen ausgeben zu lassen. Im nachfolgenden soll der vorhergesagt Wert für einen Lebenserwartungswert von 0,8 angefordert werden.
+Man hat hier die Möglichkeit, sich den vorhergesagten Wert für einen bestimmten Wert auf der Prädiktorvariablen ausgeben zu lassen. Im Nachfolgenden soll der vorhergesagte Wert für einen Lebenserwartungswert von 0,8 angefordert werden.
 
 Tipp: Für eine einfache Handhabung sollten die verwendeten Variablen immer Objekten zugeordnet werden. Die Ausführung der *predict* Funktion funktioniert hierbei zuverlässiger.
 ```{r}
@@ -215,15 +215,15 @@ Die Formel für die multiple lineare Regression lautet:
 
 $$ Y = b_0 + b_1 \cdot X_1 + b_2 \cdot X_2 + E $$
 
-Der Achsenabschnitt b~0~ ist der vorhergesagt Wert für Y, wenn sowohl X~1~ als auch X~2~ den Wert Null annehmen. Das Regressionsgewicht b~1~ ist der Wert, um den sich Y erhöht, wenn man X~1~ um eine Einheit erhöht und gleichzeitig X~2~ konstant hält. Gleichermaßen dazu ist b~2~ der Wert, um den sich Y erhöht, wenn man X~2~ um eine Einheit erhöht und gleichzeitig X~1~ konstant hält. Die unabhängigen Variablen in dem Modell kontrollieren sich also gegenseitig. 
+Der Achsenabschnitt b~0~ ist der vorhergesagte Wert für Y, wenn sowohl X~1~ als auch X~2~ den Wert Null annehmen. Das Regressionsgewicht b~1~ ist der Wert, um den sich Y erhöht, wenn man X~1~ um eine Einheit erhöht und gleichzeitig X~2~ konstant hält. Gleichermaßen dazu ist b~2~ der Wert, um den sich Y erhöht, wenn man X~2~ um eine Einheit erhöht und gleichzeitig X~1~ konstant hält. Die unabhängigen Variablen in dem Modell kontrollieren sich also gegenseitig. 
 
-Die multiple lineare Regression wird in R ebenfalls mit der *lm* Funktion durchgeführt. Im nachfolgenden soll der Glücklichkeitsgrad durch die Variable ´Life.exp´ und ´Trust´ vorhergesagt werden. 
+Die multiple lineare Regression wird in R ebenfalls mit der *lm* Funktion durchgeführt. Im Nachfolgenden soll der Glücklichkeitsgrad durch die Variable ´Life.exp´ und ´Trust´ vorhergesagt werden. 
 ```{r}
 mult.reg <- lm(Score ~ Life.exp + Trust, data = happiness)
 summary(mult.reg)
 ```
 
-Da diese Ausgabe bereits unter Punkt 3.3 ausführlich besprochen wurde, wird im Nachfolgenden nur auf zwei Punkte eingegangen:
+Da diese Ausgabe bereits unter Punkt 3.3 ausführlich besprochen wurde, wird nun nur auf zwei Punkte eingegangen:
 
 **Multiple R-squared**. Dies ist der Determinationskoeffizient R^2^. Er ist ein Maß für die Modellgüte. In dem vorliegenden Beispiel ist R^2^=.659, was bedeutet, dass die beiden Prädiktoren zusammen 65,9% der beobachteten Varianz in dem Glücklichkeitsgrad erklären. 
 
@@ -239,7 +239,7 @@ summary(mult.reg)$r.squared
 sqrt(summary(mult.reg)$r.squared)
 ```
 
-Wir können folgende beiden Werte für die **Effektgröße** der durchgeführten multiplen Regressionsanalyse festhalten:
+Wir können folgende zwei Werte für die **Effektgröße** der durchgeführten multiplen Regressionsanalyse festhalten:
 
 + R^2^ = .659
 + r = .81

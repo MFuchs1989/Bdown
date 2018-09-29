@@ -79,7 +79,7 @@ Happiness$Freedom.new &lt;- ifelse(Happiness$Freedom &gt;= 0.4375, &quot;viel.Fr
 </div>
 <div id="essential-requirements" class="section level1">
 <h1>3 Essential requirements</h1>
-<p>Die Voraussetzungen für die MANOVA sind die gleichen wie die der einfaktoriellen Varianzanalyse. Diese waren:</p>
+<p>Die Voraussetzungen für die MANOVA sind die gleichen wie bei der einfaktoriellen Varianzanalyse. Diese waren:</p>
 <ul>
 <li>Unabhängigkeit der Messungen. Kein Teilnehmer aus einer Gruppe darf auch in einer anderen Gruppe vorkommen.</li>
 <li>Die abhängige Variable ist metrisch skaliert.</li>
@@ -130,7 +130,7 @@ desc.Hauptfaktor1</code></pre>
 </div>
 <div id="manova" class="section level1">
 <h1>4 MANOVA</h1>
-<p>Auch die mehrfaktorielle Varianzanalyse wird mit dem <em>aov</em> Befehl angefordert. Für unser Beispiel sieht die Syntax folgendermaßen aus.</p>
+<p>Auch die mehrfaktorielle Varianzanalyse wird mit dem <em>aov</em> Befehl angefordert. Für unser Beispiel sieht die Syntax folgendermaßen aus:</p>
 <pre class="r"><code>MANOVA &lt;- aov(Happiness$Happiness.Score ~ Happiness$Family.new * Happiness$Freedom.new)</code></pre>
 <p>Wie auch bei der ANOVA wird als erstes Argument die abhängige Variable genannt. Nach der Tilde kommt/kommen die unabhängige/n Variable/n. Alternativ könnte man auch folgende (etwas längere) Syntax verwenden:</p>
 <pre class="r"><code>alternative.Syntax &lt;- aov(Happiness$Happiness.Score ~ Happiness$Family.new + Happiness$Freedom.new + Happiness$Family.new:Happiness$Freedom.new)</code></pre>
@@ -159,7 +159,7 @@ desc.Hauptfaktor1</code></pre>
 ##     rep              54.00         23.00           
 ##     weniger.Familien  4.82          4.52           
 ##     rep              23.00         55.00</code></pre>
-<p><strong>Grand mean</strong> beschreibt wieder den Gesamtmittelwert. Die Tabelle <strong>Happiness.Family.new</strong> zeigt die Mittelwerte (der Variable <code>Happiness.Score</code>) für alle Länder mit vielen Familien und wenigeren, umabhängig davon, ob diese einen hohen oder niedrigen “Freedom”-Grad haben. Die Zeile <em>rep</em> nennt uns die Stichprobengröße. In der Tabelle <strong>Happiness.Freedom.new </strong> erhalten wir die Mittelwerte und Stichprobengrößen für alle Länder (aufgeteilt nach den beiden Kategorien “viel.Freiheit” und “weniger.Freiheit”), unabhängig davon, ob diese einen hohen oder niedrigen “Family”-Grad haben. Schließich werden in der Tabelle <strong>Happiness.Family.new:Happiness.Freedom.new</strong> die Stichprobengrößen und Mittelwerte für jede der einzelnen Kombinationen ausgegeben.</p>
+<p><strong>Grand mean</strong> beschreibt wieder den Gesamtmittelwert. Die Tabelle <strong>Happiness.Family.new</strong> zeigt die Mittelwerte (der Variable <code>Happiness.Score</code>) für alle Länder mit vielen und wenigen Familien, umabhängig davon, ob diese einen hohen oder niedrigen “Freedom”-Grad haben. Die Zeile <em>rep</em> nennt uns die Stichprobengröße. In der Tabelle <strong>Happiness.Freedom.new </strong> erhalten wir die Mittelwerte und Stichprobengrößen für alle Länder (aufgeteilt nach den beiden Kategorien “viel.Freiheit” und “weniger.Freiheit”), unabhängig davon, ob diese einen hohen oder niedrigen “Family”-Grad haben. Schließlich werden in der Tabelle <strong>Happiness.Family.new:Happiness.Freedom.new</strong> die Stichprobengrößen und Mittelwerte für jede der einzelnen Kombinationen ausgegeben.</p>
 <p><strong>Verschiedene Quadratsummentypen</strong></p>
 <p>Das Ergebnis der ANOVA wurde mit der <em>summary</em> Funktion angefordert (siehe Post <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a> Punkt 4). Mittels dieser Funktion wird in R automatisch Typ-I-Quadratsummen berechnet. Die Typ-III-Quadratsummen gelten als besser interpretierbar, weshalb sie in diesem Beispiel auch speziell angefordert werden. Dies ist mit der Funktion <em>Anova</em> und dem Zusatzargument <em>typ = 3</em>) möglich. Beim Typ-III-Modell wird der Interaktionseffekt von Anfang an bei der Evaluierung mitberücksichtigt.</p>
 <pre class="r"><code>Anova(MANOVA, type=3)</code></pre>
@@ -248,7 +248,7 @@ Sicht1</code></pre>
 <p><img src="/post/2018-09-18-manova_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <pre class="r"><code>Sicht2</code></pre>
 <p><img src="/post/2018-09-18-manova_files/figure-html/unnamed-chunk-16-2.png" width="672" /></p>
-<p>Bei beiden Diagrammen (Sicht1 und Sicht 2) handelt es sich um dieselben adjustierten Mittelwerte. Der Unterschied zwischen den Diagrammen ist, dass beim ersten Diagramm (“Interaktionseffekt Sicht 1”) der Faktor “Freiheit” auf der x-Achse abgetragen ist und beim zweiten Diagramm (“Interaktionseffekt Sicht 2”) der Faktor “Familien”.</p>
+<p>Bei beiden Diagrammen (Sicht1 und Sicht 2) handelt es sich um die selben adjustierten Mittelwerte. Der Unterschied zwischen den Diagrammen ist, dass beim ersten Diagramm (“Interaktionseffekt Sicht 1”) der Faktor “Freiheit” auf der x-Achse abgetragen ist und beim zweiten Diagramm (“Interaktionseffekt Sicht 2”) der Faktor “Familien”.</p>
 </div>
 <div id="post-hoc-method" class="section level1">
 <h1>6 Post-hoc-method</h1>

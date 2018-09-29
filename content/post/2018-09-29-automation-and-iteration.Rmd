@@ -37,7 +37,7 @@ affairs <- read_csv("Affairs.csv")
 
 #1 Introduction
 
-Sehr häufig werden R-Befehle per Copy & Paste vervielfacht und anschließend für unterschiedliche Zwecke leicht abgewandelt. Dies ist nicht nur umständlich, sondern auch leicht fehleranfällig. Vor diesem Hintergrund werden im Nachfolgenden Möglichkeiten aufgezeigt, wie man effektive Codes in R schreiben kann ohne einen Befehl doppelt zu verwenden.
+Sehr häufig werden R-Befehle per Copy & Paste vervielfacht und anschließend für unterschiedliche Zwecke leicht abgewandelt. Dies ist nicht nur umständlich, sondern auch leicht fehleranfällig. Vor diesem Hintergrund werden im Nachfolgenden Möglichkeiten aufgezeigt, wie man effektive Codes in R schreiben kann, ohne einen Befehl doppelt zu verwenden.
 
 Für diesen Post wurde der Datensatz *Affairs* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1N4osROEo724c7OZA2ARiwEthcZDwLxtf> abrufbar.
 
@@ -50,7 +50,7 @@ v <- list(1, 2, 3)
 map(v, ~ .* 10)
 ```
 
-Die *map* Funktion transformiert einen Input durch die Anwendung einer Funktion auf jedes Element des Inputs und gibt anschließend einen Vektor aus, der dieselbe Länge besitzt wie die des Inputs. In unserem Beispiel wurde R den Befehl gegeben, jedes Element aus v (zuvor erstelltes Objekt) mit 10 zu multiplizieren. 
+Die *map* Funktion transformiert einen Input durch die Anwendung einer Funktion auf jedes Element des Inputs und gibt anschließend einen Vektor aus, der dieselbe Länge besitzt wie die des Inputs. In unserem Beispiel wurde R der Befehl gegeben, jedes Element aus v (zuvor erstelltes Objekt) mit 10 zu multiplizieren. 
 
 
 #3 How to request with map() some statistical values
@@ -147,7 +147,7 @@ fun2 <- function(x) abs(x - mean(x))^2
 fun3 <- function(x) abs(x - mean(x))^3
 ```
 
-Diese in einer Syntax zu schreiben könnte folgendermaßen aussehen.
+Diese in einer Syntax zu schreiben könnte folgendermaßen aussehen:
 ```{r}
 fun.ges <- function(x, i) abs(x - mean(x))^i
 ```
@@ -213,7 +213,7 @@ kable(modell)
 ```
 
 
-Der *map* Befehl sieht hier anders aus als der verwendete beim t-Test. Ist aber nur eine andere Schreibweise. Hier die beiden Varianten gegenüber gesellt: 
+Der *map* Befehl sieht hier anders aus, als der beim t-Test verwendete, ist aber nur eine andere Schreibweise. Hier die beiden Varianten gegenüber gesellt: 
 
 + map(~lm(affairs ~ .x, data = affairs))
 + map(function(x) lm(affairs$affairs ~ .x))
@@ -261,7 +261,7 @@ kable(modell.pvalue)
 ```
 
 
-Eine Gegenüberstellung der Ergebnisse kann folgendermaßen aussehen.
+Eine Gegenüberstellung der Ergebnisse kann folgendermaßen aussehen:
 ```{r}
 cbind(modell, modell.pvalue)
 ```

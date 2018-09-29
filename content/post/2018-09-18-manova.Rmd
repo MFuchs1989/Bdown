@@ -74,7 +74,7 @@ table(Happiness$Freedom.new)
 
 #3 Essential requirements
 
-Die Voraussetzungen für die MANOVA sind die gleichen wie die der einfaktoriellen Varianzanalyse. Diese waren:
+Die Voraussetzungen für die MANOVA sind die gleichen wie bei der einfaktoriellen Varianzanalyse. Diese waren:
 
 + Unabhängigkeit der Messungen. Kein Teilnehmer aus einer Gruppe darf auch in einer anderen Gruppe vorkommen.
 + Die abhängige Variable ist metrisch skaliert.
@@ -113,7 +113,7 @@ Mit p > .834 ist Varianzhomogenität innerhalb der Gruppen gegeben.
 
 #4 MANOVA
 
-Auch die mehrfaktorielle Varianzanalyse wird mit dem *aov* Befehl angefordert. Für unser Beispiel sieht die Syntax folgendermaßen aus.
+Auch die mehrfaktorielle Varianzanalyse wird mit dem *aov* Befehl angefordert. Für unser Beispiel sieht die Syntax folgendermaßen aus:
 ```{r}
 MANOVA <- aov(Happiness$Happiness.Score ~ Happiness$Family.new * Happiness$Freedom.new)
 ```
@@ -131,7 +131,7 @@ Für die Ausgabe der unterschiedlichen Mittelwerte kann erneut die *model.tables
 model.tables(MANOVA, "means")
 ```
 
-**Grand mean** beschreibt wieder den Gesamtmittelwert. Die Tabelle **Happiness.Family.new** zeigt die Mittelwerte (der Variable `Happiness.Score`) für alle Länder mit vielen Familien und wenigeren, umabhängig davon, ob diese einen hohen oder niedrigen "Freedom"-Grad haben. Die Zeile *rep* nennt uns die Stichprobengröße. In der Tabelle **Happiness.Freedom.new ** erhalten wir die Mittelwerte und Stichprobengrößen für alle Länder (aufgeteilt nach den beiden Kategorien "viel.Freiheit" und "weniger.Freiheit"), unabhängig davon, ob diese einen hohen oder niedrigen "Family"-Grad haben. Schließich werden in der Tabelle **Happiness.Family.new:Happiness.Freedom.new** die Stichprobengrößen und Mittelwerte für jede der einzelnen Kombinationen ausgegeben. 
+**Grand mean** beschreibt wieder den Gesamtmittelwert. Die Tabelle **Happiness.Family.new** zeigt die Mittelwerte (der Variable `Happiness.Score`) für alle Länder mit vielen und wenigen Familien, umabhängig davon, ob diese einen hohen oder niedrigen "Freedom"-Grad haben. Die Zeile *rep* nennt uns die Stichprobengröße. In der Tabelle **Happiness.Freedom.new ** erhalten wir die Mittelwerte und Stichprobengrößen für alle Länder (aufgeteilt nach den beiden Kategorien "viel.Freiheit" und "weniger.Freiheit"), unabhängig davon, ob diese einen hohen oder niedrigen "Family"-Grad haben. Schließlich werden in der Tabelle **Happiness.Family.new:Happiness.Freedom.new** die Stichprobengrößen und Mittelwerte für jede der einzelnen Kombinationen ausgegeben. 
 
 
 **Verschiedene Quadratsummentypen**
@@ -200,7 +200,7 @@ Sicht1
 Sicht2
 ```
 
-Bei beiden Diagrammen (Sicht1 und Sicht 2) handelt es sich um dieselben adjustierten Mittelwerte. Der Unterschied zwischen den Diagrammen ist, dass beim ersten Diagramm ("Interaktionseffekt Sicht 1") der Faktor "Freiheit" auf der x-Achse abgetragen ist und beim zweiten Diagramm ("Interaktionseffekt Sicht 2") der Faktor "Familien".
+Bei beiden Diagrammen (Sicht1 und Sicht 2) handelt es sich um die selben adjustierten Mittelwerte. Der Unterschied zwischen den Diagrammen ist, dass beim ersten Diagramm ("Interaktionseffekt Sicht 1") der Faktor "Freiheit" auf der x-Achse abgetragen ist und beim zweiten Diagramm ("Interaktionseffekt Sicht 2") der Faktor "Familien".
 
 
 #6 Post-hoc-method

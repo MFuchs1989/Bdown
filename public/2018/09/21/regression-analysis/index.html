@@ -233,7 +233,7 @@ summary(simple.reg) </code></pre>
 <pre class="r"><code>head(resid(simple.reg))</code></pre>
 <pre><code>##         1         2         3         4         5         6 
 ## 1.2676211 1.2679223 1.0969934 0.9952833 1.1530137 1.0552734</code></pre>
-<p>Man hat hier die Möglichkeit, sich den vorhergesagten Wert für einen bestimmten Wert auf der Prädiktorvariablen ausgeben zu lassen. Im nachfolgenden soll der vorhergesagt Wert für einen Lebenserwartungswert von 0,8 angefordert werden.</p>
+<p>Man hat hier die Möglichkeit, sich den vorhergesagten Wert für einen bestimmten Wert auf der Prädiktorvariablen ausgeben zu lassen. Im Nachfolgenden soll der vorhergesagte Wert für einen Lebenserwartungswert von 0,8 angefordert werden.</p>
 <p>Tipp: Für eine einfache Handhabung sollten die verwendeten Variablen immer Objekten zugeordnet werden. Die Ausführung der <em>predict</em> Funktion funktioniert hierbei zuverlässiger.</p>
 <pre class="r"><code>Score&lt;-happiness$Score
 Life.exp&lt;-happiness$Life.exp
@@ -255,8 +255,8 @@ predict(simple.reg2,data.frame(Life.exp=0.8))</code></pre>
 <p>Bei der multiplen linearen Regression wird der lineare Zusammenhang zwischen mehreren unabhängigen Variablen und einer abhängigen Variablen modelliert.</p>
 <p>Die Formel für die multiple lineare Regression lautet:</p>
 <p><span class="math display">\[ Y = b_0 + b_1 \cdot X_1 + b_2 \cdot X_2 + E \]</span></p>
-<p>Der Achsenabschnitt b<sub>0</sub> ist der vorhergesagt Wert für Y, wenn sowohl X<sub>1</sub> als auch X<sub>2</sub> den Wert Null annehmen. Das Regressionsgewicht b<sub>1</sub> ist der Wert, um den sich Y erhöht, wenn man X<sub>1</sub> um eine Einheit erhöht und gleichzeitig X<sub>2</sub> konstant hält. Gleichermaßen dazu ist b<sub>2</sub> der Wert, um den sich Y erhöht, wenn man X<sub>2</sub> um eine Einheit erhöht und gleichzeitig X<sub>1</sub> konstant hält. Die unabhängigen Variablen in dem Modell kontrollieren sich also gegenseitig.</p>
-<p>Die multiple lineare Regression wird in R ebenfalls mit der <em>lm</em> Funktion durchgeführt. Im nachfolgenden soll der Glücklichkeitsgrad durch die Variable ´Life.exp´ und ´Trust´ vorhergesagt werden.</p>
+<p>Der Achsenabschnitt b<sub>0</sub> ist der vorhergesagte Wert für Y, wenn sowohl X<sub>1</sub> als auch X<sub>2</sub> den Wert Null annehmen. Das Regressionsgewicht b<sub>1</sub> ist der Wert, um den sich Y erhöht, wenn man X<sub>1</sub> um eine Einheit erhöht und gleichzeitig X<sub>2</sub> konstant hält. Gleichermaßen dazu ist b<sub>2</sub> der Wert, um den sich Y erhöht, wenn man X<sub>2</sub> um eine Einheit erhöht und gleichzeitig X<sub>1</sub> konstant hält. Die unabhängigen Variablen in dem Modell kontrollieren sich also gegenseitig.</p>
+<p>Die multiple lineare Regression wird in R ebenfalls mit der <em>lm</em> Funktion durchgeführt. Im Nachfolgenden soll der Glücklichkeitsgrad durch die Variable ´Life.exp´ und ´Trust´ vorhergesagt werden.</p>
 <pre class="r"><code>mult.reg &lt;- lm(Score ~ Life.exp + Trust, data = happiness)
 summary(mult.reg)</code></pre>
 <pre><code>## 
@@ -278,7 +278,7 @@ summary(mult.reg)</code></pre>
 ## Residual standard error: 0.6645 on 152 degrees of freedom
 ## Multiple R-squared:  0.6594, Adjusted R-squared:  0.655 
 ## F-statistic: 147.2 on 2 and 152 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>Da diese Ausgabe bereits unter Punkt 3.3 ausführlich besprochen wurde, wird im Nachfolgenden nur auf zwei Punkte eingegangen:</p>
+<p>Da diese Ausgabe bereits unter Punkt 3.3 ausführlich besprochen wurde, wird nun nur auf zwei Punkte eingegangen:</p>
 <p><strong>Multiple R-squared</strong>. Dies ist der Determinationskoeffizient R<sup>2</sup>. Er ist ein Maß für die Modellgüte. In dem vorliegenden Beispiel ist R<sup>2</sup>=.659, was bedeutet, dass die beiden Prädiktoren zusammen 65,9% der beobachteten Varianz in dem Glücklichkeitsgrad erklären.</p>
 <p><strong>F-statistic</strong>. Der Determinationskoeffizient R<sup>2</sup> kann inferenzstatistisch geprüft werden. Dies geschieht über den F-Test. In unserem Beispiel zeigt der F-Test ein höchst signifikantes Ergebnis von p&lt;.001, d.h. der Determinationskoeffizient unterscheidet sich signifikant von Null.</p>
 <div id="multiple-correlation" class="section level2">
@@ -288,7 +288,7 @@ summary(mult.reg)</code></pre>
 <pre><code>## [1] 0.6594405</code></pre>
 <pre class="r"><code>sqrt(summary(mult.reg)$r.squared)</code></pre>
 <pre><code>## [1] 0.8120594</code></pre>
-<p>Wir können folgende beiden Werte für die <strong>Effektgröße</strong> der durchgeführten multiplen Regressionsanalyse festhalten:</p>
+<p>Wir können folgende zwei Werte für die <strong>Effektgröße</strong> der durchgeführten multiplen Regressionsanalyse festhalten:</p>
 <ul>
 <li>R<sup>2</sup> = .659</li>
 <li>r = .81</li>
