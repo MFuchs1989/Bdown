@@ -1,0 +1,286 @@
+---
+title: Automation and Iteration
+author: Michael Fuchs
+date: '2018-09-29'
+slug: automation-and-iteration
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Table of Content
+
++ 1 Introduction
++ 2 purrr::map() function
++ 3 How to request with map() some statistical values
++ 4 How to use map() for multiple t-tests
++ 5 How to use map() for multiple linear regressions
++ 6 Conclusion
+
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(purrr)
+library(broom)
+library(knitr)
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+affairs <- read_csv("Affairs.csv")
+```
+
+
+#1 Introduction
+
+Sehr häufig werden R-Befehle per Copy & Paste vervielfacht und anschließend für unterschiedliche Zwecke leicht abgewandelt. Dies ist nicht nur umständlich, sondern auch leicht fehleranfällig. Vor diesem Hintergrund werden im Nachfolgenden Möglichkeiten aufgezeigt, wie man effektive Codes in R schreiben kann ohne einen Befehl doppelt zu verwenden.
+
+Für diesen Post wurde der Datensatz *Affairs* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1N4osROEo724c7OZA2ARiwEthcZDwLxtf> abrufbar.
+
+
+#2 purrr::map() function
+
+Als kurze Einführung wird die Frage beantwortet, was die *map* Funktion aus dem *purrr* Package macht.
+```{r}
+v <- list(1, 2, 3)
+map(v, ~ .* 10)
+```
+
+Die *map* Funktion transformiert einen Input durch die Anwendung einer Funktion auf jedes Element des Inputs und gibt anschließend einen Vektor aus, der dieselbe Länge besitzt wie die des Inputs. In unserem Beispiel wurde R den Befehl gegeben, jedes Element aus v (zuvor erstelltes Objekt) mit 10 zu multiplizieren. 
+
+
+#3 How to request with map() some statistical values
+
+```{r}
+glimpse(affairs)
+```
+
+Für die Beschreibung eines Datensatzes werden häufig sehr viele statistische Kennzahlen (Median, Mittelwert, Standardabweichung, ...) angefordert. Dies jeweils mit einem eigenen Befehl zu tun ist besonders bei großen Datensätzen mit vielen Variablen sehr zeitintensiv und auch völlig überflüssig, denn hierfür kann prima auch die *map* Funktion verwendet werden. 
+
+Mit *select* können gezielt Spalten ausgewählt werden, für die anschließend mit *map* die Kennzahlen angefordert werden sollen. 
+
+```{r, warning=FALSE}
+affairs %>% select(7:10) %>% map(describeBy)
+```
+
+Meistens sind jedoch nur gezielte Kennzahlen von bestimmten Variablen von Interesse. Der Datensatz *Affairs* wird deshalb auf folgende 5 Variablen beschränkt.
+
+```{r}
+affairs.short <- affairs %>% select(age, 7:10)
+affairs.short
+```
+
+
+Es soll nun der Mittelwert für alle 5 Variablen angefordert werden. Dafür würde sich die *for loop* Funktion anbieten.
+```{r}
+output <- vector("double", length(affairs.short))
+            for (i in seq_along(affairs.short)) {
+              output[[i]] <- mean(affairs.short[[i]])
+            }
+output
+```
+
+Man könnte dies auch gleich als *Funktion* schreiben.
+```{r}
+col_mean <- function(df) {
+  output <- vector("double", length(df))
+  for (i in seq_along(df)) {
+    output[i] <- mean(df[[i]])
+  }
+  output
+}
+
+
+col_mean(affairs.short)  
+```
+
+Man sieht, dass die Funktion klappt. Leicht abgewandelt, kann diese auch andere statistische Kennwerte berechnen. Im Nachfolgenden werden die Befehle auf die gleiche Art und Weise für die Standardabweichung und den Median erstellt. 
+```{r}
+col_sd <- function(df) {
+  output <- vector("double", length(df))
+  for (i in seq_along(df)) {
+    output[i] <- sd(df[[i]])
+  }
+  output
+}
+
+
+
+col_median <- function(df) {
+  output <- vector("double", length(df))
+  for (i in seq_along(df)) {
+    output[i] <- median(df[[i]])
+  }
+  output
+}
+```
+
+Anschließend erfolgt eine gemeinsame Ausgabe der statistischen Werte.
+
+```{r}
+col_mean(affairs.short)  
+col_sd(affairs.short) 
+col_median(affairs.short)
+```
+
+Auch dies funktioniert wie erwartet. Für eine bessere Übersicht, können die Zeilen miteinander verbunden werden. 
+
+```{r}
+Mittelwert<-col_mean(affairs.short)
+Median<-col_median(affairs.short)
+standardabweichung<-col_sd(affairs.short)
+cbind(Mittelwert,Median ,standardabweichung)
+```
+
+An und für sich ein zufriedenstellendes Ergebnis. Jedoch wurde wieder ein Fehler gemacht, der in diesem Post eigentlich vermieden werden sollte. Es wurde erneut copy & paste angewendet. 
+
+Die zentrale Frage ist: wie können die drei Funktionen in einer Syntax miteinander verbunden werden?
+
+Zur Beantwortug dieser Frage werden beispielhaft folgende drei Funktionen erstellt.
+```{r}
+fun1 <- function(x) abs(x - mean(x))^1
+fun2 <- function(x) abs(x - mean(x))^2
+fun3 <- function(x) abs(x - mean(x))^3
+```
+
+Diese in einer Syntax zu schreiben könnte folgendermaßen aussehen.
+```{r}
+fun.ges <- function(x, i) abs(x - mean(x))^i
+```
+
+Genau dieses Prinzip lässt sich auch auf die Funktionen der statistischen Kennwerte anwenden. 
+```{r}
+col_summary <- function(df, fun) {
+  out <- vector("double", length(df))
+  for (i in seq_along(df)) {
+    out[[i]] <- fun(df[[i]])
+  }
+  out
+} 
+```
+
+Die erstellte *col_summary* Funktion lässt sich nun beliebig auf jeden Datensatz (Argument 1) und R-Befehl (Argument 2) anwenden. 
+Hier die Anforderung des Medians für die Variablen im Datensatz "affairs.short"
+
+```{r}
+col_summary(affairs.short, median)
+```
+
+Man sieht das gleiche Ergebnis wie bei der zuvor erstellten "Einzelfunkton" für den Median (col_median(affairs.short)).
+
+
+
+#4 How to use map() for multiple t-tests
+
+Mit *map* lässt sich ein kompletter Datensatz auch sehr schnell und effizient auf beispielsweise Geschlechterunterschiede mittels t-tests untersuchen.
+
+```{r}
+affairs %>% select(age, affairs, yearsmarried, education, religiousness) %>% 
+  map(function(x) t.test(x ~ affairs$gender)$p.value)
+```
+
+Männer und Frauen unterscheiden sich also signifikant in dieser Stichprobe nur in ihrem Alter und der Ausbildung.  
+
+```{r}
+affairs %>% select(age, affairs, yearsmarried, education, religiousness) %>% map(function(x) t.test(x ~ affairs$gender)$p.value) %>%
+  as.data.frame %>% gather %>% mutate(signif = ifelse(value < .05, "significant", "n.significant")) %>%
+  ggplot(aes(x = reorder(key, value), y = value)) + 
+  geom_point(aes(color=signif)) + 
+  coord_flip() +
+  ylab("p-value")
+```
+
+
+#5 How to use map() for multiple linear regressions
+
+Was mit dem t-Test ging, geht auch für die einfache lineare Regression. Hierbei wird aber nicht der p-Wert angefordert, sondern R^2^.
+
+```{r}
+affairs %>% 
+  select(age, yearsmarried, education, religiousness, rating, children, gender, occupation) %>%  
+  map(~lm(affairs ~ .x, data = affairs)) %>% 
+  map(summary) %>% 
+  map_dbl("r.squared") %>% 
+  tidy %>% 
+  arrange(desc(x)) %>% 
+  rename(r.squared = x) -> modell
+
+kable(modell)
+```
+
+
+Der *map* Befehl sieht hier anders aus als der verwendete beim t-Test. Ist aber nur eine andere Schreibweise. Hier die beiden Varianten gegenüber gesellt: 
+
++ map(~lm(affairs ~ .x, data = affairs))
++ map(function(x) lm(affairs$affairs ~ .x))
+
+Zur Überprüfung wird eine Regression manuell durchgeführt.
+```{r}
+lm1 <- lm(affairs ~ rating, data = affairs)
+summary(lm1)$r.squared
+```
+
+Wir sehen das gleiche R^2^ wie bei der Ausgabe kable(modell).
+
+Wie viele Regressionen wurden eigentlich durchgeführt?
+```{r}
+ncol(affairs %>% 
+       select(age, yearsmarried, education, religiousness, rating, children, gender, occupation))
+```
+
+Insgesamt 8 Stück. Es hat sich also bereits gelohnt die *map* Funktion anzuwenden. 
+Die Ergebnisse sollen nun noch schön graphisch dargestellt werden.
+```{r}
+ggplot(modell, aes(x = reorder(names, r.squared), y = r.squared)) + 
+  geom_point(size = 5, color = "green") +
+  ylab(expression(R^{2})) +
+  xlab("Prädiktoren") +
+  ggtitle("Erklärte Varianz pro Prädiktor")
+```
+
+Der Prädiktor `rating` erklärt also mit knapp 8% am meisten Varianz.
+
+Im zweiten Schritt soll noch überprüft werden, ob die Ergebnisse signifikant sind.
+
+```{r}
+affairs %>% 
+  select(age, yearsmarried, education, religiousness, rating, children, gender, occupation) %>%  
+  map(~lm(affairs ~ .x, data = affairs)) %>% 
+  map(summary) %>%
+  map(c("coefficients")) %>% 
+  map_dbl(8)  %>%
+  tidy %>% 
+  arrange(desc(x)) %>% 
+  rename(p.value = x) -> modell.pvalue
+
+kable(modell.pvalue)
+```
+
+
+Eine Gegenüberstellung der Ergebnisse kann folgendermaßen aussehen.
+```{r}
+cbind(modell, modell.pvalue)
+```
+
+Dies ist allerdings sehr unschön, da die Reihenfolge der beiden Listen mit absteigenden R^2^ bzw p-Wert angefordert wurden und daher unterschiedlich angeordnet sind. 
+Abhilfe leistet hier der *left_join* Befehl.
+
+```{r}
+Gute_Ansicht <- modell %>% left_join(modell.pvalue, by = "names") %>%
+         mutate(P_Wert = round(p.value, digits = 2)) %>%
+          select(-p.value)
+Gute_Ansicht
+```
+
+ 
+#6 Conclusion
+ 
+Die Verwendung der *map* Funktion ist mit ein wenig Übung leicht anzuwenden und unglaublich effektiv, wenn es um automatisierte Datenanalyse geht.  
+ 
+ 
+ 
+ 
+
