@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Automation and Iteration - Michael Fuchs</title>
+<meta property="og:title" content="Automation and Iteration - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">9 min read</span>
+    
+
+    <h1 class="article-title">Automation and Iteration</h1>
+
+    
+    <span class="article-date">2018/09/29</span>
+    
+
+    <div class="article-content">
+      <div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 purrr::map() function</li>
+<li>3 How to request with map() some statistical values</li>
+<li>4 How to use map() for multiple t-tests</li>
+<li>5 How to use map() for multiple linear regressions</li>
+<li>6 Conclusion</li>
+</ul>
+<pre class="r"><code>library(tidyverse)
+library(purrr)
+library(broom)
+library(knitr)
+library(psych)</code></pre>
+<pre class="r"><code>affairs &lt;- read_csv(&quot;Affairs.csv&quot;)</code></pre>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Sehr häufig werden R-Befehle per Copy &amp; Paste vervielfacht und anschließend für unterschiedliche Zwecke leicht abgewandelt. Dies ist nicht nur umständlich, sondern auch leicht fehleranfällig. Vor diesem Hintergrund werden im Nachfolgenden Möglichkeiten aufgezeigt, wie man effektive Codes in R schreiben kann ohne einen Befehl doppelt zu verwenden.</p>
+<p>Für diesen Post wurde der Datensatz <em>Affairs</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1N4osROEo724c7OZA2ARiwEthcZDwLxtf" class="uri">https://drive.google.com/open?id=1N4osROEo724c7OZA2ARiwEthcZDwLxtf</a> abrufbar.</p>
+</div>
+<div id="purrrmap-function" class="section level1">
+<h1>2 purrr::map() function</h1>
+<p>Als kurze Einführung wird die Frage beantwortet, was die <em>map</em> Funktion aus dem <em>purrr</em> Package macht.</p>
+<pre class="r"><code>v &lt;- list(1, 2, 3)
+map(v, ~ .* 10)</code></pre>
+<pre><code>## [[1]]
+## [1] 10
+## 
+## [[2]]
+## [1] 20
+## 
+## [[3]]
+## [1] 30</code></pre>
+<p>Die <em>map</em> Funktion transformiert einen Input durch die Anwendung einer Funktion auf jedes Element des Inputs und gibt anschließend einen Vektor aus, der dieselbe Länge besitzt wie die des Inputs. In unserem Beispiel wurde R den Befehl gegeben, jedes Element aus v (zuvor erstelltes Objekt) mit 10 zu multiplizieren.</p>
+</div>
+<div id="how-to-request-with-map-some-statistical-values" class="section level1">
+<h1>3 How to request with map() some statistical values</h1>
+<pre class="r"><code>glimpse(affairs)</code></pre>
+<pre><code>## Observations: 601
+## Variables: 10
+## $ X1            &lt;int&gt; 4, 5, 11, 16, 23, 29, 44, 45, 47, 49, 50, 55, 64...
+## $ affairs       &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...
+## $ gender        &lt;chr&gt; &quot;male&quot;, &quot;female&quot;, &quot;female&quot;, &quot;male&quot;, &quot;male&quot;, &quot;fem...
+## $ age           &lt;dbl&gt; 37, 27, 32, 57, 22, 32, 22, 57, 32, 22, 37, 27, ...
+## $ yearsmarried  &lt;dbl&gt; 10.00, 4.00, 15.00, 15.00, 0.75, 1.50, 0.75, 15....
+## $ children      &lt;chr&gt; &quot;no&quot;, &quot;no&quot;, &quot;yes&quot;, &quot;yes&quot;, &quot;no&quot;, &quot;no&quot;, &quot;no&quot;, &quot;yes...
+## $ religiousness &lt;int&gt; 3, 4, 1, 5, 2, 2, 2, 2, 4, 4, 2, 4, 5, 2, 4, 1, ...
+## $ education     &lt;int&gt; 18, 14, 12, 18, 17, 17, 12, 14, 16, 14, 20, 18, ...
+## $ occupation    &lt;int&gt; 7, 6, 1, 6, 6, 5, 1, 4, 1, 4, 7, 6, 6, 5, 5, 5, ...
+## $ rating        &lt;int&gt; 4, 4, 4, 5, 3, 5, 3, 4, 2, 5, 2, 4, 4, 4, 4, 5, ...</code></pre>
+<p>Für die Beschreibung eines Datensatzes werden häufig sehr viele statistische Kennzahlen (Median, Mittelwert, Standardabweichung, …) angefordert. Dies jeweils mit einem eigenen Befehl zu tun ist besonders bei großen Datensätzen mit vielen Variablen sehr zeitintensiv und auch völlig überflüssig, denn hierfür kann prima auch die <em>map</em> Funktion verwendet werden.</p>
+<p>Mit <em>select</em> können gezielt Spalten ausgewählt werden, für die anschließend mit <em>map</em> die Kennzahlen angefordert werden sollen.</p>
+<pre class="r"><code>affairs %&gt;% select(7:10) %&gt;% map(describeBy)</code></pre>
+<pre><code>## $religiousness
+##    vars   n mean   sd median trimmed  mad min max range  skew kurtosis
+## X1    1 601 3.12 1.17      3    3.12 1.48   1   5     4 -0.09    -1.02
+##      se
+## X1 0.05
+## 
+## $education
+##    vars   n  mean  sd median trimmed  mad min max range  skew kurtosis  se
+## X1    1 601 16.17 2.4     16   16.21 2.97   9  20    11 -0.25    -0.32 0.1
+## 
+## $occupation
+##    vars   n mean   sd median trimmed  mad min max range  skew kurtosis
+## X1    1 601 4.19 1.82      5    4.34 1.48   1   7     6 -0.74    -0.79
+##      se
+## X1 0.07
+## 
+## $rating
+##    vars   n mean  sd median trimmed  mad min max range  skew kurtosis   se
+## X1    1 601 3.93 1.1      4    4.07 1.48   1   5     4 -0.83    -0.22 0.04</code></pre>
+<p>Meistens sind jedoch nur gezielte Kennzahlen von bestimmten Variablen von Interesse. Der Datensatz <em>Affairs</em> wird deshalb auf folgende 5 Variablen beschränkt.</p>
+<pre class="r"><code>affairs.short &lt;- affairs %&gt;% select(age, 7:10)
+affairs.short</code></pre>
+<pre><code>## # A tibble: 601 x 5
+##      age religiousness education occupation rating
+##    &lt;dbl&gt;         &lt;int&gt;     &lt;int&gt;      &lt;int&gt;  &lt;int&gt;
+##  1    37             3        18          7      4
+##  2    27             4        14          6      4
+##  3    32             1        12          1      4
+##  4    57             5        18          6      5
+##  5    22             2        17          6      3
+##  6    32             2        17          5      5
+##  7    22             2        12          1      3
+##  8    57             2        14          4      4
+##  9    32             4        16          1      2
+## 10    22             4        14          4      5
+## # ... with 591 more rows</code></pre>
+<p>Es soll nun der Mittelwert für alle 5 Variablen angefordert werden. Dafür würde sich die <em>for loop</em> Funktion anbieten.</p>
+<pre class="r"><code>output &lt;- vector(&quot;double&quot;, length(affairs.short))
+            for (i in seq_along(affairs.short)) {
+              output[[i]] &lt;- mean(affairs.short[[i]])
+            }
+output</code></pre>
+<pre><code>## [1] 32.487521  3.116473 16.166389  4.194676  3.931780</code></pre>
+<p>Man könnte dies auch gleich als <em>Funktion</em> schreiben.</p>
+<pre class="r"><code>col_mean &lt;- function(df) {
+  output &lt;- vector(&quot;double&quot;, length(df))
+  for (i in seq_along(df)) {
+    output[i] &lt;- mean(df[[i]])
+  }
+  output
+}
+
+
+col_mean(affairs.short)  </code></pre>
+<pre><code>## [1] 32.487521  3.116473 16.166389  4.194676  3.931780</code></pre>
+<p>Man sieht, dass die Funktion klappt. Leicht abgewandelt, kann diese auch andere statistische Kennwerte berechnen. Im Nachfolgenden werden die Befehle auf die gleiche Art und Weise für die Standardabweichung und den Median erstellt.</p>
+<pre class="r"><code>col_sd &lt;- function(df) {
+  output &lt;- vector(&quot;double&quot;, length(df))
+  for (i in seq_along(df)) {
+    output[i] &lt;- sd(df[[i]])
+  }
+  output
+}
+
+
+
+col_median &lt;- function(df) {
+  output &lt;- vector(&quot;double&quot;, length(df))
+  for (i in seq_along(df)) {
+    output[i] &lt;- median(df[[i]])
+  }
+  output
+}</code></pre>
+<p>Anschließend erfolgt eine gemeinsame Ausgabe der statistischen Werte.</p>
+<pre class="r"><code>col_mean(affairs.short)  </code></pre>
+<pre><code>## [1] 32.487521  3.116473 16.166389  4.194676  3.931780</code></pre>
+<pre class="r"><code>col_sd(affairs.short) </code></pre>
+<pre><code>## [1] 9.288762 1.167509 2.402555 1.819443 1.103179</code></pre>
+<pre class="r"><code>col_median(affairs.short)</code></pre>
+<pre><code>## [1] 32  3 16  5  4</code></pre>
+<p>Auch dies funktioniert wie erwartet. Für eine bessere Übersicht, können die Zeilen miteinander verbunden werden.</p>
+<pre class="r"><code>Mittelwert&lt;-col_mean(affairs.short)
+Median&lt;-col_median(affairs.short)
+standardabweichung&lt;-col_sd(affairs.short)
+cbind(Mittelwert,Median ,standardabweichung)</code></pre>
+<pre><code>##      Mittelwert Median standardabweichung
+## [1,]  32.487521     32           9.288762
+## [2,]   3.116473      3           1.167509
+## [3,]  16.166389     16           2.402555
+## [4,]   4.194676      5           1.819443
+## [5,]   3.931780      4           1.103179</code></pre>
+<p>An und für sich ein zufriedenstellendes Ergebnis. Jedoch wurde wieder ein Fehler gemacht, der in diesem Post eigentlich vermieden werden sollte. Es wurde erneut copy &amp; paste angewendet.</p>
+<p>Die zentrale Frage ist: wie können die drei Funktionen in einer Syntax miteinander verbunden werden?</p>
+<p>Zur Beantwortug dieser Frage werden beispielhaft folgende drei Funktionen erstellt.</p>
+<pre class="r"><code>fun1 &lt;- function(x) abs(x - mean(x))^1
+fun2 &lt;- function(x) abs(x - mean(x))^2
+fun3 &lt;- function(x) abs(x - mean(x))^3</code></pre>
+<p>Diese in einer Syntax zu schreiben könnte folgendermaßen aussehen.</p>
+<pre class="r"><code>fun.ges &lt;- function(x, i) abs(x - mean(x))^i</code></pre>
+<p>Genau dieses Prinzip lässt sich auch auf die Funktionen der statistischen Kennwerte anwenden.</p>
+<pre class="r"><code>col_summary &lt;- function(df, fun) {
+  out &lt;- vector(&quot;double&quot;, length(df))
+  for (i in seq_along(df)) {
+    out[[i]] &lt;- fun(df[[i]])
+  }
+  out
+} </code></pre>
+<p>Die erstellte <em>col_summary</em> Funktion lässt sich nun beliebig auf jeden Datensatz (Argument 1) und R-Befehl (Argument 2) anwenden. Hier die Anforderung des Medians für die Variablen im Datensatz “affairs.short”</p>
+<pre class="r"><code>col_summary(affairs.short, median)</code></pre>
+<pre><code>## [1] 32  3 16  5  4</code></pre>
+<p>Man sieht das gleiche Ergebnis wie bei der zuvor erstellten “Einzelfunkton” für den Median (col_median(affairs.short)).</p>
+</div>
+<div id="how-to-use-map-for-multiple-t-tests" class="section level1">
+<h1>4 How to use map() for multiple t-tests</h1>
+<p>Mit <em>map</em> lässt sich ein kompletter Datensatz auch sehr schnell und effizient auf beispielsweise Geschlechterunterschiede mittels t-tests untersuchen.</p>
+<pre class="r"><code>affairs %&gt;% select(age, affairs, yearsmarried, education, religiousness) %&gt;% 
+  map(function(x) t.test(x ~ affairs$gender)$p.value)</code></pre>
+<pre><code>## $age
+## [1] 2.848452e-06
+## 
+## $affairs
+## [1] 0.7739606
+## 
+## $yearsmarried
+## [1] 0.458246
+## 
+## $education
+## [1] 9.772643e-24
+## 
+## $religiousness
+## [1] 0.8513998</code></pre>
+<p>Männer und Frauen unterscheiden sich also signifikant in dieser Stichprobe nur in ihrem Alter und der Ausbildung.</p>
+<pre class="r"><code>affairs %&gt;% select(age, affairs, yearsmarried, education, religiousness) %&gt;% map(function(x) t.test(x ~ affairs$gender)$p.value) %&gt;%
+  as.data.frame %&gt;% gather %&gt;% mutate(signif = ifelse(value &lt; .05, &quot;significant&quot;, &quot;n.significant&quot;)) %&gt;%
+  ggplot(aes(x = reorder(key, value), y = value)) + 
+  geom_point(aes(color=signif)) + 
+  coord_flip() +
+  ylab(&quot;p-value&quot;)</code></pre>
+<p><img src="/post/2018-09-29-automation-and-iteration_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+<div id="how-to-use-map-for-multiple-linear-regressions" class="section level1">
+<h1>5 How to use map() for multiple linear regressions</h1>
+<p>Was mit dem t-Test ging, geht auch für die einfache lineare Regression. Hierbei wird aber nicht der p-Wert angefordert, sondern R<sup>2</sup>.</p>
+<pre class="r"><code>affairs %&gt;% 
+  select(age, yearsmarried, education, religiousness, rating, children, gender, occupation) %&gt;%  
+  map(~lm(affairs ~ .x, data = affairs)) %&gt;% 
+  map(summary) %&gt;% 
+  map_dbl(&quot;r.squared&quot;) %&gt;% 
+  tidy %&gt;% 
+  arrange(desc(x)) %&gt;% 
+  rename(r.squared = x) -&gt; modell</code></pre>
+<pre><code>## Warning: &#39;tidy.numeric&#39; ist veraltet.
+## Siehe help(&quot;Deprecated&quot;)</code></pre>
+<pre class="r"><code>kable(modell)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">names</th>
+<th align="right">r.squared</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">rating</td>
+<td align="right">0.0781272</td>
+</tr>
+<tr class="even">
+<td align="left">yearsmarried</td>
+<td align="right">0.0349098</td>
+</tr>
+<tr class="odd">
+<td align="left">religiousness</td>
+<td align="right">0.0208806</td>
+</tr>
+<tr class="even">
+<td align="left">children</td>
+<td align="right">0.0108181</td>
+</tr>
+<tr class="odd">
+<td align="left">age</td>
+<td align="right">0.0090701</td>
+</tr>
+<tr class="even">
+<td align="left">occupation</td>
+<td align="right">0.0024613</td>
+</tr>
+<tr class="odd">
+<td align="left">gender</td>
+<td align="right">0.0001377</td>
+</tr>
+<tr class="even">
+<td align="left">education</td>
+<td align="right">0.0000059</td>
+</tr>
+</tbody>
+</table>
+<p>Der <em>map</em> Befehl sieht hier anders aus als der verwendete beim t-Test. Ist aber nur eine andere Schreibweise. Hier die beiden Varianten gegenüber gesellt:</p>
+<ul>
+<li>map(~lm(affairs ~ .x, data = affairs))</li>
+<li>map(function(x) lm(affairs$affairs ~ .x))</li>
+</ul>
+<p>Zur Überprüfung wird eine Regression manuell durchgeführt.</p>
+<pre class="r"><code>lm1 &lt;- lm(affairs ~ rating, data = affairs)
+summary(lm1)$r.squared</code></pre>
+<pre><code>## [1] 0.07812718</code></pre>
+<p>Wir sehen das gleiche R<sup>2</sup> wie bei der Ausgabe kable(modell).</p>
+<p>Wie viele Regressionen wurden eigentlich durchgeführt?</p>
+<pre class="r"><code>ncol(affairs %&gt;% 
+       select(age, yearsmarried, education, religiousness, rating, children, gender, occupation))</code></pre>
+<pre><code>## [1] 8</code></pre>
+<p>Insgesamt 8 Stück. Es hat sich also bereits gelohnt die <em>map</em> Funktion anzuwenden. Die Ergebnisse sollen nun noch schön graphisch dargestellt werden.</p>
+<pre class="r"><code>ggplot(modell, aes(x = reorder(names, r.squared), y = r.squared)) + 
+  geom_point(size = 5, color = &quot;green&quot;) +
+  ylab(expression(R^{2})) +
+  xlab(&quot;Prädiktoren&quot;) +
+  ggtitle(&quot;Erklärte Varianz pro Prädiktor&quot;)</code></pre>
+<p><img src="/post/2018-09-29-automation-and-iteration_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>Der Prädiktor <code>rating</code> erklärt also mit knapp 8% am meisten Varianz.</p>
+<p>Im zweiten Schritt soll noch überprüft werden, ob die Ergebnisse signifikant sind.</p>
+<pre class="r"><code>affairs %&gt;% 
+  select(age, yearsmarried, education, religiousness, rating, children, gender, occupation) %&gt;%  
+  map(~lm(affairs ~ .x, data = affairs)) %&gt;% 
+  map(summary) %&gt;%
+  map(c(&quot;coefficients&quot;)) %&gt;% 
+  map_dbl(8)  %&gt;%
+  tidy %&gt;% 
+  arrange(desc(x)) %&gt;% 
+  rename(p.value = x) -&gt; modell.pvalue</code></pre>
+<pre><code>## Warning: &#39;tidy.numeric&#39; ist veraltet.
+## Siehe help(&quot;Deprecated&quot;)</code></pre>
+<pre class="r"><code>kable(modell.pvalue)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">names</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">education</td>
+<td align="right">0.9524501</td>
+</tr>
+<tr class="even">
+<td align="left">gender</td>
+<td align="right">0.7740138</td>
+</tr>
+<tr class="odd">
+<td align="left">occupation</td>
+<td align="right">0.2245709</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="right">0.0195320</td>
+</tr>
+<tr class="odd">
+<td align="left">children</td>
+<td align="right">0.0107275</td>
+</tr>
+<tr class="even">
+<td align="left">religiousness</td>
+<td align="right">0.0003797</td>
+</tr>
+<tr class="odd">
+<td align="left">yearsmarried</td>
+<td align="right">0.0000040</td>
+</tr>
+<tr class="even">
+<td align="left">rating</td>
+<td align="right">0.0000000</td>
+</tr>
+</tbody>
+</table>
+<p>Eine Gegenüberstellung der Ergebnisse kann folgendermaßen aussehen.</p>
+<pre class="r"><code>cbind(modell, modell.pvalue)</code></pre>
+<pre><code>##           names    r.squared         names      p.value
+## 1        rating 7.812718e-02     education 9.524501e-01
+## 2  yearsmarried 3.490982e-02        gender 7.740138e-01
+## 3 religiousness 2.088064e-02    occupation 2.245709e-01
+## 4      children 1.081809e-02           age 1.953203e-02
+## 5           age 9.070125e-03      children 1.072749e-02
+## 6    occupation 2.461327e-03 religiousness 3.797263e-04
+## 7        gender 1.377396e-04  yearsmarried 3.995520e-06
+## 8     education 5.941117e-06        rating 3.002385e-12</code></pre>
+<p>Dies ist allerdings sehr unschön, da die Reihenfolge der beiden Listen mit absteigenden R<sup>2</sup> bzw p-Wert angefordert wurden und daher unterschiedlich angeordnet sind. Abhilfe leistet hier der <em>left_join</em> Befehl.</p>
+<pre class="r"><code>Gute_Ansicht &lt;- modell %&gt;% left_join(modell.pvalue, by = &quot;names&quot;) %&gt;%
+         mutate(P_Wert = round(p.value, digits = 2)) %&gt;%
+          select(-p.value)
+Gute_Ansicht</code></pre>
+<pre><code>## # A tibble: 8 x 3
+##   names          r.squared P_Wert
+##   &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt;
+## 1 rating        0.0781       0   
+## 2 yearsmarried  0.0349       0   
+## 3 religiousness 0.0209       0   
+## 4 children      0.0108       0.01
+## 5 age           0.00907      0.02
+## 6 occupation    0.00246      0.22
+## 7 gender        0.000138     0.77
+## 8 education     0.00000594   0.95</code></pre>
+</div>
+<div id="conclusion" class="section level1">
+<h1>6 Conclusion</h1>
+<p>Die Verwendung der <em>map</em> Funktion ist mit ein wenig Übung leicht anzuwenden und unglaublich effektiv, wenn es um automatisierte Datenanalyse geht.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

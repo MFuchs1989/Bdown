@@ -28,6 +28,7 @@ library(tidyverse)
 library(purrr)
 library(broom)
 library(knitr)
+library(psych)
 ```
 ```{r results='hide', message=FALSE, warning=FALSE}
 affairs <- read_csv("Affairs.csv")
