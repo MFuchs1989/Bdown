@@ -42,10 +42,10 @@ Mit einer Regressionsanalyse wird der Zusammenhang zwischen einer oder mehrerer 
 Für diesen Post wurde der Datensatz *World Happiness Report* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br> abrufbar.
 
 ```{r results='hide', message=FALSE, warning=FALSE}
+library(ppcor)
 library(tidyverse)
 library(psych)
 library(car)
-
 ```
 ```{r results='hide', message=FALSE, warning=FALSE}
 happiness.report <- read_csv("World_Happiness_Report.csv")
@@ -396,6 +396,12 @@ Das erste Argument der *partial.r* Funktion ist der Name des Data Frames, in dem
 
 Die R-Ausgabe enthält eine Korrelationsmatrix mit der Partialkorrelation. Die Partialkorrelation zwischen den beiden Variablen `Life.exp` und `Trust` ist also r=-.1. Im Vergleich zur bivariaten Korrelation hat sich der Zusammenhang durch die Auspartialisierung des Glücklichkeitsgrades von einer geringen positiven Korrelation in eine leicht negative Korrelation verändert.  
 
+Leider wird mit der *partial.r* Funktion kein p-Wert mit ausgegeben. Aus diesem Grund wird eine weitere Möglichkeit zur Berechnung der Partialkorrelation mit dem *ppcor* Package vorgestellt.
+```{r}
+pcor.test(auswahl$happiness.Life.exp, auswahl$happiness.Trust, auswahl$happiness.Score, method = c("pearson"))
+```
+
+Nun wird zusätzlich zu dem Zusammenhang (r=-.1) der Variablen `Life.exp` und `Trust` noch der p-Wert von .222 berechnet. 
 
 #6.2 Semi partial correlation
 

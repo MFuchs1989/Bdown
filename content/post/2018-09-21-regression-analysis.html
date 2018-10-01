@@ -37,7 +37,8 @@ tags:
 <h1>1 Introduction</h1>
 <p>Mit einer Regressionsanalyse wird der Zusammenhang zwischen einer oder mehrerer unabhängigen Variablen und einer abhängigen Variablen ermittelt. In diesem Beitrag wird nachfolgend sowohl die Verwendung der bivariaten linearen Regression als auch die Verwendung der multiplen linearen Regression thematisiert.</p>
 <p>Für diesen Post wurde der Datensatz <em>World Happiness Report</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br" class="uri">https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br</a> abrufbar.</p>
-<pre class="r"><code>library(tidyverse)
+<pre class="r"><code>library(ppcor)
+library(tidyverse)
 library(psych)
 library(car)</code></pre>
 <pre class="r"><code>happiness.report &lt;- read_csv(&quot;World_Happiness_Report.csv&quot;)</code></pre>
@@ -405,6 +406,11 @@ plot(mult.reg)</code></pre>
 ## happiness.Trust                  -0.1             1.0</code></pre>
 <p>Das erste Argument der <em>partial.r</em> Funktion ist der Name des Data Frames, in dem die drei Variablen enthalten sind. Anschließend werden mit c(2, 3) die Spaltennummern der Variablen genannt, deren Korrelation uns interessiert. Die Variablen <code>Life.exp</code> und <code>Trust</code> wurden hier in den Spalten 2 und 3 gespeichert. Das letzte Argument (“1”) ist die Spaltennummer der Variablen, die auspartialisiert werden soll. Würde man an dieser Stelle mehrere Variablen angeben, würden Partialkorrelationen höherer Ordnung berechnet werden.</p>
 <p>Die R-Ausgabe enthält eine Korrelationsmatrix mit der Partialkorrelation. Die Partialkorrelation zwischen den beiden Variablen <code>Life.exp</code> und <code>Trust</code> ist also r=-.1. Im Vergleich zur bivariaten Korrelation hat sich der Zusammenhang durch die Auspartialisierung des Glücklichkeitsgrades von einer geringen positiven Korrelation in eine leicht negative Korrelation verändert.</p>
+<p>Leider wird mit der <em>partial.r</em> Funktion kein p-Wert mit ausgegeben. Aus diesem Grund wird eine weitere Möglichkeit zur Berechnung der Partialkorrelation mit dem <em>ppcor</em> Package vorgestellt.</p>
+<pre class="r"><code>pcor.test(auswahl$happiness.Life.exp, auswahl$happiness.Trust, auswahl$happiness.Score, method = c(&quot;pearson&quot;))</code></pre>
+<pre><code>##      estimate   p.value statistic   n gp  Method
+## 1 -0.09904614 0.2216609 -1.227157 155  1 pearson</code></pre>
+<p>Nun wird zusätzlich zu dem Zusammenhang (r=-.1) der Variablen <code>Life.exp</code> und <code>Trust</code> noch der p-Wert von .222 berechnet.</p>
 </div>
 <div id="semi-partial-correlation" class="section level1">
 <h1>6.2 Semi partial correlation</h1>
