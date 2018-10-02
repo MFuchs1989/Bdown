@@ -96,7 +96,7 @@ map(v, ~ .* 10)</code></pre>
 ## 
 ## $rating
 ## [1] 0</code></pre>
-<p>Man sieht, dass bei keiner Variablen des Datensatzes “affairs” ein fehlender Wert (NA) existierst. Dieselbe Überprüfung kann auch pro Spalte erfolgen. Aus Übersichtsgründen wurde die Ausgabe des Befehls hier unterdrückt.</p>
+<p>Man sieht, dass bei keiner Variablen des Datensatzes “affairs” ein fehlender Wert (NA) existiert. Dieselbe Überprüfung kann auch pro Zeile erfolgen. Aus Übersichtsgründen wurde die Ausgabe des Befehls hier unterdrückt.</p>
 <pre class="r"><code>apply(affairs,MARGIN = 1, FUN = function(x) sum(is.na(x)))</code></pre>
 <p>Mit dem <em>select</em> Befehl können auch gezielt Spalten ausgewählt werden, für die anschließend mit der <em>map</em> Funktion die Kennzahlen angefordert werden sollen.</p>
 <pre class="r"><code>affairs %&gt;% select(7:10) %&gt;% map(describeBy)</code></pre>

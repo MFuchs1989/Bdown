@@ -67,7 +67,7 @@ affairs %>%
   map(~sum(is.na(.)))
 ```
 
-Man sieht, dass bei keiner Variablen des Datensatzes "affairs" ein fehlender Wert (NA) existierst. Dieselbe Überprüfung kann auch pro Spalte erfolgen. Aus Übersichtsgründen wurde die Ausgabe des Befehls hier unterdrückt.
+Man sieht, dass bei keiner Variablen des Datensatzes "affairs" ein fehlender Wert (NA) existiert. Dieselbe Überprüfung kann auch pro Zeile erfolgen. Aus Übersichtsgründen wurde die Ausgabe des Befehls hier unterdrückt.
 ```{r, results='hide'}
 apply(affairs,MARGIN = 1, FUN = function(x) sum(is.na(x)))
 ```
