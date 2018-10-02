@@ -125,10 +125,12 @@ Infolge eines Signifikanztests, wird eine Testentscheidung getroffen. Ist der p-
 + Fehler 1 oder alpha-Fehler
 + Fehler 2 oder beta-Fehler 
 
+
 | Overview        | **H~0~ ist falsch** | **H~0~ ist richtig** |
 | ------------- |:-------------:| -----:|
 | **Test lehnt H~0~ ab**      | richtige Entscheidung | alpha-Fehler |
 | **Test lehnt H~0~ nicht ab**  | beta-Fehler      |   richtige Entscheidung |
+
 
 
 
