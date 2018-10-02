@@ -1,0 +1,132 @@
+---
+title: Special Regression Analysis
+author: Michael Fuchs
+date: '2018-10-02'
+slug: special-regression-analysis
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(psych)
+library(rockchalk)
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+affairs <- read_csv("Affairs.csv")
+```
+
+
+#Table of Content
+
++ 1 Introduction
++ 2 Categorical predictors
+
+
+#1 Introduction
+
+Aufbauend auf den Post ["Regression Analysis"](https://michael-fuchs.netlify.com/2018/09/21/regression-analysis/) soll im Nachfolgenden spezielle Regressionsmodelle vorgestellt werden.
+
+Für diesen Beitrag wurde der Datensatz *Affairs* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1N4osROEo724c7OZA2ARiwEthcZDwLxtf> abrufbar.
+
+
+#2 Categorical predictors
+
+Mit dem allgemeinen linearen Modell lassens sich sowohl kontinuierliche Prädiktoren (wie bei der einfachen Regressionsanalyse) als auch kategoriale Prädiktoren (wie bei der Varianzanalyse) analysieren. Der *lm* Befehl ändert sich dadurch nicht. R erkennt automatisch, dass es sich im nachfolgenden Fall bei der Prädiktorvariable um einen Faktor handelt. Für dieses Beispiel wird die Variable `religiousness` entsprechend umkodiert. 
+```{r}
+affairs$religiousness.r <- recode(affairs$religiousness, `1`="Gruppe 1", `2`="Gruppe 2", `3`="Gruppe 3", `4`="Gruppe 4", `5`="Gruppe 5")
+```
+
+Nun erfolgt die *lm* Syntax wie gewohnt. Es soll untersucht werden, ob es Altersunterschiede zwischen den verschiedenen Gurppen gibt.
+```{r}
+lm.kat <- lm(affairs$age ~ affairs$religiousness.r)
+summary(lm.kat)
+```
+
+Das durchschnittliche Alter in der Referenzgruppe "Gruppe1" beträgt 30,44 Jahre. Dieser Wert zeit mit p < .001, dass dieser Koeffizient signifikant von Null verschieden ist. Die weiteren Koeffizienten drücken die Unterschiede zwischen den jeweiligen Gruppen und der Referenzgruppe aus. Gruppe 2 und 3 sind nicht signifikant, d.h. es gibt keine Gruppenunterschiede in den Mittelwerten. Dahingegen ist Gruppe 4 leicht und Gruppe 5 stark signifikant. 
+
+
+#3 Moderated regression
+
+Bei der moderierten Regression wird überprüft, ob der Einfluss eines Prädiktors auf das Kriterium von der Ausprägung einer dritten Moderatorvariable abhängt. Für die nachfolgende Untersuchung ist es ratsam, die verwendeten Variablen zu zentrieren (siehe hierzu auch Post ["Change Variables in R"](https://michael-fuchs.netlify.com/2018/08/24/edit-variables-in-r/) Punkt 4.4). Es soll untersucht werden, ob die Anzahl der Affären (`affairs`) vom Alter (`age`) und vom Bildungsstand (`education`) abhängig sind. Das Alter soll hierbei der Prädiktor (X) sein, die Anzahl der Affären das Kriterium (Y) und der Bildungsstand (Z) soll als Moderatorvariable dienen. 
+
+
+```{r}
+age.cen <- as.numeric(scale(affairs$age, scale = FALSE))
+education.cen <- as.numeric(scale(affairs$education, scale = FALSE))
+affairs.normal <- as.numeric(affairs$affairs)
+
+lm.mod <- lm(affairs.normal ~ age.cen * education.cen)
+
+summary(lm.mod)
+```
+
+Der Haupteffekt Alter ist signifikant, d.h. die Anzahl an Affären steigt mit dem Alter, bei einem durchschnittlichen Bildungsgrad, an. Der Haupteffekt Bildungsgrad ist mit p = .505 nicht signifikant, d.h. es gibt keinen Zusammenhang zwischen Bildungsgrad und der Anzahl an Affären, wenn das Alter einen durchschnittlichen Wert aufweist. Der Interaktionseffekt ist zwar ebenfalls nicht signifikant, er wird aber für dieses Beispiel dennoch weiter untersucht. Für die Interpretation des Interaktionseffektes bieten sich bedingte Regressionsgleichungen zur Veranschaulichung an. Dabei wird die Auswirkung des Prädiktors (x) auf das Kriterium (Y) für verschiedene Ausprägungen der Moderatorvariable (Z) berechnet. 
+```{r}
+Steigung <- plotSlopes(lm.mod, plotx = "age.cen", modx = "education.cen")
+```
+
+Zu Beginn der *plotSlopes* Funktion wird der Name des Regressionsmodells genannt. *plotx = ""* beinhaltet den Namen der Variable X und *modx =""* den Namen der Variablen Z (für die die bedingte Regressionsgleichung erstellt werden sollen).
+
+Es werden drei bedingte Regressionsgleichung, für die Quartile der Moderatorvariablen, in der Abbildung dargestellt. 
+
+Das Objekt "Steigung" enthält folgende Werte.
+```{r}
+Steigung
+```
+
+Die *$modxVals* Angabe enthält die Werte der Moderatorvariablen, die für die Berechnung der bedingten Regressionsgleichungen eingesetzt wurden. 
+
+Nun soll untersucht werden, unter welchen Umständen sich die bedingten Regressionsgewichte signifikant von Null unterscheiden. Dies kann mittels der *testSlopes* Funktion berechnet werden.
+```{r}
+testSlopes(Steigung)
+```
+
+Das Regressionsgewicht ist signifikant von Null verschieden, wenn der Wert der Moderatorvariablen kleiner als -0,99 oder größer als 6,98 ist. 
+
+
+#4 Non-linear regression
+
+Bei nicht linearen Regressionen soll untersucht werden, ob die Auswirkung einer Variablen X auf das Kriterium Y ab einen gewissen Grad stärker zunimmt, abnimmt oder sich sogar in die entgegengesetzten Richtung umschwenkt. Beispielhaft kann man hier Untersuchungen zum Kaffeekonsum erwähnen. Kaffee (beziehungsweise das Koffein) bewirkt zum Anfang eine positive Auswirkung auf die Konzentration. Ab einer bestimmten Menge an Kaffee flacht die Auswirkungen auf die Konzentrationsfähigkeit ab und bewirkt bei weiterer Zuführung von Koffein sogar eine Beinträchtigung der Konzentration.
+
+Nicht lineare Zusammenhänge können in der Regressionsanalyse modelliert werden, wenn Polynome höherer Ordnung in die Gleichung aufgenommen werden. 
+
+Es soll untersucht werden, ob die Anzahl an verheirateten Jahren, einen nicht linearen Zusammenhang zu der Anzahl an Affären aufweisen. Dafür ist es wieder notwendig, die zu untersuchenden Variablen zu zentrieren (die Variable `affairs` wurde bereits zentriert und unter dem Objekt "affairs.normal" abgespeichert).
+```{r}
+years.married.cen <- as.numeric(scale(affairs$yearsmarried, scale = FALSE))
+```
+
+Anschließend wird das nicht lineare Modell spezifiziert, indem die `years.married` Variable zweimal aufgnommen wird. 
+```{r}
+lm.nlm <- lm(affairs.normal ~ years.married.cen + I(years.married.cen^2))
+summary(lm.nlm)
+```
+
+Nur ein Regressionsgewicht der Prädiktoren ist signifikant von Null verschieden, d.h. es liegt **kein kurvilinearer Zusammenhang** vor. Dafür müssten beide Regressionsgewichtet sich signifikant von Null unterscheiden. Wäre dies der Fall, so könnte man für eine vereinfachte Interpretation folgende Grafik (Streudiagramm) erstellen.
+```{r}
+plot(years.married.cen, affairs.normal, xlab = "Anzahl verheirateter Jahre zentriert", ylab = "Affären vs. Treue")
+curve(1.720059 + 0.114330*x - 0.008524*(x^2), add=TRUE)
+abline(lm(affairs.normal ~ years.married.cen))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+
+```

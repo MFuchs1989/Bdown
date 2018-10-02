@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Special Regression Analysis - Michael Fuchs</title>
+<meta property="og:title" content="Special Regression Analysis - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">6 min read</span>
+    
+
+    <h1 class="article-title">Special Regression Analysis</h1>
+
+    
+    <span class="article-date">2018/10/02</span>
+    
+
+    <div class="article-content">
+      <pre class="r"><code>library(tidyverse)
+library(psych)
+library(rockchalk)</code></pre>
+<pre class="r"><code>affairs &lt;- read_csv(&quot;Affairs.csv&quot;)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Categorical predictors</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Aufbauend auf den Post <a href="https://michael-fuchs.netlify.com/2018/09/21/regression-analysis/">“Regression Analysis”</a> soll im Nachfolgenden spezielle Regressionsmodelle vorgestellt werden.</p>
+<p>Für diesen Beitrag wurde der Datensatz <em>Affairs</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1N4osROEo724c7OZA2ARiwEthcZDwLxtf" class="uri">https://drive.google.com/open?id=1N4osROEo724c7OZA2ARiwEthcZDwLxtf</a> abrufbar.</p>
+</div>
+<div id="categorical-predictors" class="section level1">
+<h1>2 Categorical predictors</h1>
+<p>Mit dem allgemeinen linearen Modell lassens sich sowohl kontinuierliche Prädiktoren (wie bei der einfachen Regressionsanalyse) als auch kategoriale Prädiktoren (wie bei der Varianzanalyse) analysieren. Der <em>lm</em> Befehl ändert sich dadurch nicht. R erkennt automatisch, dass es sich im nachfolgenden Fall bei der Prädiktorvariable um einen Faktor handelt. Für dieses Beispiel wird die Variable <code>religiousness</code> entsprechend umkodiert.</p>
+<pre class="r"><code>affairs$religiousness.r &lt;- recode(affairs$religiousness, `1`=&quot;Gruppe 1&quot;, `2`=&quot;Gruppe 2&quot;, `3`=&quot;Gruppe 3&quot;, `4`=&quot;Gruppe 4&quot;, `5`=&quot;Gruppe 5&quot;)</code></pre>
+<p>Nun erfolgt die <em>lm</em> Syntax wie gewohnt. Es soll untersucht werden, ob es Altersunterschiede zwischen den verschiedenen Gurppen gibt.</p>
+<pre class="r"><code>lm.kat &lt;- lm(affairs$age ~ affairs$religiousness.r)
+summary(lm.kat)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = affairs$age ~ affairs$religiousness.r)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -19.221  -6.687  -1.687   5.926  26.562 
+## 
+## Coefficients:
+##                                 Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                      30.4375     1.3143  23.158  &lt; 2e-16 ***
+## affairs$religiousness.rGruppe 2   0.5655     1.4943   0.378 0.705225    
+## affairs$religiousness.rGruppe 3   0.6361     1.5396   0.413 0.679611    
+## affairs$religiousness.rGruppe 4   3.2493     1.4710   2.209 0.027561 *  
+## affairs$religiousness.rGruppe 5   6.2839     1.7065   3.682 0.000252 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 9.106 on 596 degrees of freedom
+## Multiple R-squared:  0.04538,    Adjusted R-squared:  0.03897 
+## F-statistic: 7.083 on 4 and 596 DF,  p-value: 1.419e-05</code></pre>
+<p>Das durchschnittliche Alter in der Referenzgruppe “Gruppe1” beträgt 30,44 Jahre. Dieser Wert zeit mit p &lt; .001, dass dieser Koeffizient signifikant von Null verschieden ist. Die weiteren Koeffizienten drücken die Unterschiede zwischen den jeweiligen Gruppen und der Referenzgruppe aus. Gruppe 2 und 3 sind nicht signifikant, d.h. es gibt keine Gruppenunterschiede in den Mittelwerten. Dahingegen ist Gruppe 4 leicht und Gruppe 5 stark signifikant.</p>
+</div>
+<div id="moderated-regression" class="section level1">
+<h1>3 Moderated regression</h1>
+<p>Bei der moderierten Regression wird überprüft, ob der Einfluss eines Prädiktors auf das Kriterium von der Ausprägung einer dritten Moderatorvariable abhängt. Für die nachfolgende Untersuchung ist es ratsam, die verwendeten Variablen zu zentrieren (siehe hierzu auch Post <a href="https://michael-fuchs.netlify.com/2018/08/24/edit-variables-in-r/">“Change Variables in R”</a> Punkt 4.4). Es soll untersucht werden, ob die Anzahl der Affären (<code>affairs</code>) vom Alter (<code>age</code>) und vom Bildungsstand (<code>education</code>) abhängig sind. Das Alter soll hierbei der Prädiktor (X) sein, die Anzahl der Affären das Kriterium (Y) und der Bildungsstand (Z) soll als Moderatorvariable dienen.</p>
+<pre class="r"><code>age.cen &lt;- as.numeric(scale(affairs$age, scale = FALSE))
+education.cen &lt;- as.numeric(scale(affairs$education, scale = FALSE))
+affairs.normal &lt;- as.numeric(affairs$affairs)
+
+lm.mod &lt;- lm(affairs.normal ~ age.cen * education.cen)
+
+summary(lm.mod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = affairs.normal ~ age.cen * education.cen)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -2.789 -1.564 -1.258 -0.860 10.899 
+## 
+## Coefficients:
+##                        Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)            1.436301   0.135077  10.633   &lt;2e-16 ***
+## age.cen                0.036177   0.014643   2.471   0.0138 *  
+## education.cen         -0.038808   0.058195  -0.667   0.5051    
+## age.cen:education.cen  0.006538   0.005400   1.211   0.2265    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.288 on 597 degrees of freedom
+## Multiple R-squared:  0.01173,    Adjusted R-squared:  0.006768 
+## F-statistic: 2.363 on 3 and 597 DF,  p-value: 0.07025</code></pre>
+<p>Der Haupteffekt Alter ist signifikant, d.h. die Anzahl an Affären steigt mit dem Alter, bei einem durchschnittlichen Bildungsgrad, an. Der Haupteffekt Bildungsgrad ist mit p = .505 nicht signifikant, d.h. es gibt keinen Zusammenhang zwischen Bildungsgrad und der Anzahl an Affären, wenn das Alter einen durchschnittlichen Wert aufweist. Der Interaktionseffekt ist zwar ebenfalls nicht signifikant, er wird aber für dieses Beispiel dennoch weiter untersucht. Für die Interpretation des Interaktionseffektes bieten sich bedingte Regressionsgleichungen zur Veranschaulichung an. Dabei wird die Auswirkung des Prädiktors (x) auf das Kriterium (Y) für verschiedene Ausprägungen der Moderatorvariable (Z) berechnet.</p>
+<pre class="r"><code>Steigung &lt;- plotSlopes(lm.mod, plotx = &quot;age.cen&quot;, modx = &quot;education.cen&quot;)</code></pre>
+<p><img src="/post/2018-10-02-special-regression-analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Zu Beginn der <em>plotSlopes</em> Funktion wird der Name des Regressionsmodells genannt. <em>plotx = “”</em> beinhaltet den Namen der Variable X und <em>modx =“”</em> den Namen der Variablen Z (für die die bedingte Regressionsgleichung erstellt werden sollen).</p>
+<p>Es werden drei bedingte Regressionsgleichung, für die Quartile der Moderatorvariablen, in der Abbildung dargestellt.</p>
+<p>Das Objekt “Steigung” enthält folgende Werte.</p>
+<pre class="r"><code>Steigung</code></pre>
+<pre><code>## $call
+## plotSlopes.lm(model = lm.mod, plotx = &quot;age.cen&quot;, modx = &quot;education.cen&quot;)
+## 
+## $newdata
+##     age.cen education.cen       fit
+## 1 -14.98752    -2.1663894 1.1904443
+## 2 -14.98752    -0.1663894 0.9168548
+## 3 -14.98752     1.8336106 0.6432654
+## 4  24.51248    -2.1663894 2.0599861
+## 5  24.51248    -0.1663894 2.3028881
+## 6  24.51248     1.8336106 2.5457901
+## 
+## $modxVals
+##        25%        50%        75% 
+## -2.1663894 -0.1663894  1.8336106 
+## 
+## $col
+## 25% 50% 75% 
+##   1   2   3 
+## 
+## $lty
+## 25% 50% 75% 
+##   1   2   3 
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;plotSlopes&quot; &quot;rockchalk&quot;</code></pre>
+<p>Die <em>$modxVals</em> Angabe enthält die Werte der Moderatorvariablen, die für die Berechnung der bedingten Regressionsgleichungen eingesetzt wurden.</p>
+<p>Nun soll untersucht werden, unter welchen Umständen sich die bedingten Regressionsgewichte signifikant von Null unterscheiden. Dies kann mittels der <em>testSlopes</em> Funktion berechnet werden.</p>
+<pre class="r"><code>testSlopes(Steigung)</code></pre>
+<pre><code>## Values of education.cen INSIDE this interval:
+##         lo         hi 
+## -0.9901723  6.9786332 
+## cause the slope of (b1 + b2*education.cen)age.cen to be statistically significant</code></pre>
+<p>Das Regressionsgewicht ist signifikant von Null verschieden, wenn der Wert der Moderatorvariablen kleiner als -0,99 oder größer als 6,98 ist.</p>
+</div>
+<div id="non-linear-regression" class="section level1">
+<h1>4 Non-linear regression</h1>
+<p>Bei nicht linearen Regressionen soll untersucht werden, ob die Auswirkung einer Variablen X auf das Kriterium Y ab einen gewissen Grad stärker zunimmt, abnimmt oder sich sogar in die entgegengesetzten Richtung umschwenkt. Beispielhaft kann man hier Untersuchungen zum Kaffeekonsum erwähnen. Kaffee (beziehungsweise das Koffein) bewirkt zum Anfang eine positive Auswirkung auf die Konzentration. Ab einer bestimmten Menge an Kaffee flacht die Auswirkungen auf die Konzentrationsfähigkeit ab und bewirkt bei weiterer Zuführung von Koffein sogar eine Beinträchtigung der Konzentration.</p>
+<p>Nicht lineare Zusammenhänge können in der Regressionsanalyse modelliert werden, wenn Polynome höherer Ordnung in die Gleichung aufgenommen werden.</p>
+<p>Es soll untersucht werden, ob die Anzahl an verheirateten Jahren, einen nicht linearen Zusammenhang zu der Anzahl an Affären aufweisen. Dafür ist es wieder notwendig, die zu untersuchenden Variablen zu zentrieren (die Variable <code>affairs</code> wurde bereits zentriert und unter dem Objekt “affairs.normal” abgespeichert).</p>
+<pre class="r"><code>years.married.cen &lt;- as.numeric(scale(affairs$yearsmarried, scale = FALSE))</code></pre>
+<p>Anschließend wird das nicht lineare Modell spezifiziert, indem die <code>years.married</code> Variable zweimal aufgnommen wird.</p>
+<pre class="r"><code>lm.nlm &lt;- lm(affairs.normal ~ years.married.cen + I(years.married.cen^2))
+summary(lm.nlm)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = affairs.normal ~ years.married.cen + I(years.married.cen^2))
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.1033 -1.9001 -1.0936 -0.3194 11.5994 
+## 
+## Coefficients:
+##                         Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)             1.720059   0.241827   7.113 3.26e-12 ***
+## years.married.cen       0.114330   0.023921   4.779 2.22e-06 ***
+## I(years.married.cen^2) -0.008524   0.006534  -1.305    0.193    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 3.241 on 598 degrees of freedom
+## Multiple R-squared:  0.03765,    Adjusted R-squared:  0.03443 
+## F-statistic:  11.7 on 2 and 598 DF,  p-value: 1.039e-05</code></pre>
+<p>Nur ein Regressionsgewicht der Prädiktoren ist signifikant von Null verschieden, d.h. es liegt <strong>kein kurvilinearer Zusammenhang</strong> vor. Dafür müssten beide Regressionsgewichtet sich signifikant von Null unterscheiden. Wäre dies der Fall, so könnte man für eine vereinfachte Interpretation folgende Grafik (Streudiagramm) erstellen.</p>
+<pre class="r"><code>plot(years.married.cen, affairs.normal, xlab = &quot;Anzahl verheirateter Jahre zentriert&quot;, ylab = &quot;Affären vs. Treue&quot;)
+curve(1.720059 + 0.114330*x - 0.008524*(x^2), add=TRUE)
+abline(lm(affairs.normal ~ years.married.cen))</code></pre>
+<p><img src="/post/2018-10-02-special-regression-analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

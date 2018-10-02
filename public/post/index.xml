@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 29 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 02 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Special Regression Analysis</title>
+      <link>/2018/10/02/special-regression-analysis/</link>
+      <pubDate>Tue, 02 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/10/02/special-regression-analysis/</guid>
+      <description>library(tidyverse)library(psych)library(rockchalk)affairs &amp;lt;- read_csv(&amp;quot;Affairs.csv&amp;quot;)Table of Content1 Introduction2 Categorical predictors1 IntroductionAufbauend auf den Post “Regression Analysis” soll im Nachfolgenden spezielle Regressionsmodelle vorgestellt werden.
+Für diesen Beitrag wurde der Datensatz Affairs von der Statistik Plattform “Kaggle” verwendet. Eine Kopie des Datensatzes ist unter https://drive.google.com/open?id=1N4osROEo724c7OZA2ARiwEthcZDwLxtf abrufbar.
+2 Categorical predictorsMit dem allgemeinen linearen Modell lassens sich sowohl kontinuierliche Prädiktoren (wie bei der einfachen Regressionsanalyse) als auch kategoriale Prädiktoren (wie bei der Varianzanalyse) analysieren.</description>
+    </item>
     
     <item>
       <title>Automation and Iteration</title>
