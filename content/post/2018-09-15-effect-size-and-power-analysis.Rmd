@@ -131,6 +131,7 @@ Infolge eines Signifikanztests, wird eine Testentscheidung getroffen. Ist der p-
 | **Test lehnt H~0~ nicht ab**  | beta-Fehler      |   richtige Entscheidung |
 
 
+
 Der alpha-Fehler (Fehler erster Art) passiert, wenn die Nullhypothese in Wahrheit richtig ist, der Test sie aber ablehnt. Der Test zeigt also einen signifikanten Unterschied / Zusammenhang, obwohl es in Wirklichkeit keinen gibt.
 
 Der beta-Fehler (Fehler zweiter Art) tritt ein, wenn die Nullhypothese in Wahrheit falsch ist, der Test sie aber nicht ablehnt. Der Test sagt also, es gibt keinen signifikanten Unterschied / Zusammenhang, obwohl es in Wahrheit einen gibt. 
