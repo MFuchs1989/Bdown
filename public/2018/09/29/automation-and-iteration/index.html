@@ -122,7 +122,41 @@ map(v, ~ .* 10)</code></pre>
 ## $ occupation    &lt;int&gt; 7, 6, 1, 6, 6, 5, 1, 4, 1, 4, 7, 6, 6, 5, 5, 5, ...
 ## $ rating        &lt;int&gt; 4, 4, 4, 5, 3, 5, 3, 4, 2, 5, 2, 4, 4, 4, 4, 5, ...</code></pre>
 <p>Für die Beschreibung eines Datensatzes werden häufig sehr viele statistische Kennzahlen (Median, Mittelwert, Standardabweichung, …) angefordert. Dies jeweils mit einem eigenen Befehl zu tun ist besonders bei großen Datensätzen mit vielen Variablen sehr zeitintensiv und auch völlig überflüssig, denn hierfür kann prima auch die <em>map</em> Funktion verwendet werden.</p>
-<p>Mit <em>select</em> können gezielt Spalten ausgewählt werden, für die anschließend mit <em>map</em> die Kennzahlen angefordert werden sollen.</p>
+<p>Zu Beginn einer Analyse ist meist von Interesse, ob und wenn ja wie viele fehlende Werte im Datensatz vorhanden sind. Dies kann folgendermaßen überprüft werden.</p>
+<pre class="r"><code>affairs %&gt;% 
+  map(~sum(is.na(.)))</code></pre>
+<pre><code>## $X1
+## [1] 0
+## 
+## $affairs
+## [1] 0
+## 
+## $gender
+## [1] 0
+## 
+## $age
+## [1] 0
+## 
+## $yearsmarried
+## [1] 0
+## 
+## $children
+## [1] 0
+## 
+## $religiousness
+## [1] 0
+## 
+## $education
+## [1] 0
+## 
+## $occupation
+## [1] 0
+## 
+## $rating
+## [1] 0</code></pre>
+<p>Man sieht, dass bei keiner Variablen des Datensatzes “affairs” ein fehlender Wert (NA) existierst. Dieselbe Überprüfung kann auch pro Spalte erfolgen. Aus Übersichtsgründen wurde die Ausgabe des Befehls hier unterdrückt.</p>
+<pre class="r"><code>apply(affairs,MARGIN = 1, FUN = function(x) sum(is.na(x)))</code></pre>
+<p>Mit dem <em>select</em> Befehl können auch gezielt Spalten ausgewählt werden, für die anschließend mit der <em>map</em> Funktion die Kennzahlen angefordert werden sollen.</p>
 <pre class="r"><code>affairs %&gt;% select(7:10) %&gt;% map(describeBy)</code></pre>
 <pre><code>## $religiousness
 ##    vars   n mean   sd median trimmed  mad min max range  skew kurtosis
@@ -262,7 +296,7 @@ fun3 &lt;- function(x) abs(x - mean(x))^3</code></pre>
   geom_point(aes(color=signif)) + 
   coord_flip() +
   ylab(&quot;p-value&quot;)</code></pre>
-<p><img src="/post/2018-09-29-automation-and-iteration_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="/post/2018-09-29-automation-and-iteration_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 </div>
 <div id="how-to-use-map-for-multiple-linear-regressions" class="section level1">
 <h1>5 How to use map() for multiple linear regressions</h1>
@@ -340,7 +374,7 @@ summary(lm1)$r.squared</code></pre>
   ylab(expression(R^{2})) +
   xlab(&quot;Prädiktoren&quot;) +
   ggtitle(&quot;Erklärte Varianz pro Prädiktor&quot;)</code></pre>
-<p><img src="/post/2018-09-29-automation-and-iteration_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p><img src="/post/2018-09-29-automation-and-iteration_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <p>Der Prädiktor <code>rating</code> erklärt also mit knapp 8% am meisten Varianz.</p>
 <p>Im zweiten Schritt soll noch überprüft werden, ob die Ergebnisse signifikant sind.</p>
 <pre class="r"><code>affairs %&gt;% 

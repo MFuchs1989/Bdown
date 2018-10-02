@@ -59,9 +59,21 @@ Die *map* Funktion transformiert einen Input durch die Anwendung einer Funktion 
 glimpse(affairs)
 ```
 
-Für die Beschreibung eines Datensatzes werden häufig sehr viele statistische Kennzahlen (Median, Mittelwert, Standardabweichung, ...) angefordert. Dies jeweils mit einem eigenen Befehl zu tun ist besonders bei großen Datensätzen mit vielen Variablen sehr zeitintensiv und auch völlig überflüssig, denn hierfür kann prima auch die *map* Funktion verwendet werden. 
+Für die Beschreibung eines Datensatzes werden häufig sehr viele statistische Kennzahlen (Median, Mittelwert, Standardabweichung, ...) angefordert. Dies jeweils mit einem eigenen Befehl zu tun ist besonders bei großen Datensätzen mit vielen Variablen sehr zeitintensiv und auch völlig überflüssig, denn hierfür kann prima auch die *map* Funktion verwendet werden.
 
-Mit *select* können gezielt Spalten ausgewählt werden, für die anschließend mit *map* die Kennzahlen angefordert werden sollen. 
+Zu Beginn einer Analyse ist meist von Interesse, ob und wenn ja wie viele fehlende Werte im Datensatz vorhanden sind. Dies kann folgendermaßen überprüft werden.
+```{r}
+affairs %>% 
+  map(~sum(is.na(.)))
+```
+
+Man sieht, dass bei keiner Variablen des Datensatzes "affairs" ein fehlender Wert (NA) existierst. Dieselbe Überprüfung kann auch pro Spalte erfolgen. Aus Übersichtsgründen wurde die Ausgabe des Befehls hier unterdrückt.
+```{r, results='hide'}
+apply(affairs,MARGIN = 1, FUN = function(x) sum(is.na(x)))
+```
+
+
+Mit dem *select* Befehl können auch gezielt Spalten ausgewählt werden, für die anschließend mit der *map* Funktion die Kennzahlen angefordert werden sollen. 
 
 ```{r, warning=FALSE}
 affairs %>% select(7:10) %>% map(describeBy)
