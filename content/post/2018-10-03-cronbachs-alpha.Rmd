@@ -1,0 +1,94 @@
+---
+title: Cronbachs Alpha
+author: Michael Fuchs
+date: '2018-10-03'
+slug: cronbachs-alpha
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(psych)
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+World_Happiness_Report <- read_csv("World_Happiness_Report.csv")
+```
+
+
+#Table of Content
+
++ 1 Introduction
++ 2 Internal consistency
+
+#1 Introduction
+
+Das Ziel eines psychologischen Tests ist immer, Unterschiede zwischen Individuen hinsichtlich bestimmter Konstrukte aufzudecken. Um dies bestmöglich zu gewährleisten, muss man bei der Auswahl an Items ansetzen. Folgende Punkte sind für die Güte eines Items ausschlaggebend:
+
++ **Beitrag zur Reliabilität**. Das Item sollte die Reliabilität einer Skala verbessern.
++ **Schwierigkeit**. Das Item sollte weder zu schwer noch zu leicht sein. Eine mittlere Schwierigkeit ist erstrebenswert.
++ **Trennschärfe**. Das Item sollte eine gute Repräsentation der Skala darstellen.
++ **Verteilungsform**. Die Häufigkeitsverteilung der Antworten sollte möglichst symmetrisch sein. 
+
+Für diesen Post wurde der Datensatz *World Happiness Report* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br> abrufbar.
+
+
+#2 Internal consistency
+
+Cronbachs Alpha ist ein Koeffizient, welcher zur Bestimmung der internen Konsistenz einer Skala, eines Tests oder Subtests berechnet wird. Er gibt an, wie genau die Items eines Tests/einer Skala ein Konstrukt messen. Dabei ist Cronbachs Alpha der für die Berechnung der internen Konsistenz gebräuchlichste Koeffizient. Je mehr Items in einem Test enthalten sind, desto größer wird Alpha. Cronbachs Alpha gibt also in Abhängigkeit von der Item Anzahl die Höhe der mittleren Item Zusammenhänge an. 
+
+Berechnet wird Cronbachs Alpha in R mit der *alpha* Funktion. Der Übersicht halber werden nur 4 Items ausgewählt, die u.a. das Konstrukt "Happiness" (`Happiness.Score`) messen sollen.
+```{r}
+World_Happiness_Report %>% 
+  select(economy = Economy..GDP.per.Capita., Family, health = Health..Life.Expectancy., Freedom) -> cronbach
+
+alpha(cronbach)
+```
+
+Wir erhalten folgende drei Tabellen:
+
++ Reliability analysis 
++ Reliability if an item is dropped
++ Item statistics
+
+**Reliability analysis **
+
+Die erste Spalte bei dieser Tabelle (*raw_alpha*) enthält das klassische Cronbachs Alpha. *G6(smc)* gibt Guttman's Lambda wieder, was ein alternatives Maß für die Reliabilität einer Skala darstellt. Ein weiteres alternatives Maß für die Reliabilität ist die Signal-Noise-Ratio (*S/N*). Unter *aes* ist der Standardfehler für Cronbachs Alpha aufgeführt. In den letzten drei Spalten wird der Skalenmittelwert (*mean*), die Standardabweichung (*sd*) und der Median (*median_r*) aufgeführt. 
+
+**Reliability if an item is dropped **
+
+Der Beitrag zur Reliabilität kann dieser Tabelle entnommen werden. In der ersten Spalte (*raw_alpha*) ist die interne Konsistenz der Skala aufgeführt, wenn diese das betreffende Item nicht enthält. Je kleiner dieser Wert im Vergleich zur internen Konsistenz für die Gesamtskala ist, desto besser ist der Beitrag dieses Items zur Reliabilität. Die weiteren Spalten dieser Tabelle zeigen die entsprechenden Veränderungen in den anderen oben genannten Reliabilitäts-Maßen. 
+
+**Item statistics **
+
+Unter *n* ist die Anzahl an gültigen Werten für jedes Item angegeben. Die 4 weiteren Spalten enthalten Angaben zu diversen Korrelationen. Die Spalten *mean* (Mittelwert) und *sd* (Standardabweichung) können als Indikator für die Schwierigkeit der Items herangezogen werden. Je höher der Mittelwert eines Items ist, desto leichter ist es, diesem Item zuzustimmen. Items mit sehr hohen oder sehr niedrigen Mittelwerten sollten in der Skala nicht berücksichtigt werden, da sie zu leicht bzw. zu schwer sind.  
+
+#3 Interpretation
+
+| **Cronbach's Alpha**         | **Interne Konsistenz**| 
+| ------------- |:-------------:| 
+| Alpha ≥ 0,9      | Exzellent | 
+|  0,9 > Alpha ≥ 0,8   | Gut     |   
+|  0,8 > Alpha ≥ 0,7   | Akzeptabel     |   
+|   0,7 > Alpha ≥ 0,6   | Fragwürdig     |   
+|  0,6 > Alpha ≥ 0,5   | Schlecht     |   
+|  0,5 > Alpha | Unakzeptabel     |   
+
+#4 Conclusion
+
+Fällt das Kronabachs Alpha bei der Itemanalyse nicht gut aus (Werte unter 0,7), sollte eine Faktoranalyse durchgeführt werden um herauszufinden, ob nicht doch mehr als ein Konstrukt mit den Items gemessen wird.
+
+
+
+
+
+
+

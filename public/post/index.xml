@@ -6,10 +6,20 @@
     <description>Recent content in Posts on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 02 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 03 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Cronbachs Alpha</title>
+      <link>/2018/10/03/cronbachs-alpha/</link>
+      <pubDate>Wed, 03 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/10/03/cronbachs-alpha/</guid>
+      <description>library(tidyverse)library(psych)World_Happiness_Report &amp;lt;- read_csv(&amp;quot;World_Happiness_Report.csv&amp;quot;)Table of Content1 Introduction2 Internal consistency1 IntroductionDas Ziel eines psychologischen Tests ist immer, Unterschiede zwischen Individuen hinsichtlich bestimmter Konstrukte aufzudecken. Um dies bestmöglich zu gewährleisten, muss man bei der Auswahl an Items ansetzen. Folgende Punkte sind für die Güte eines Items ausschlaggebend:
+Beitrag zur Reliabilität. Das Item sollte die Reliabilität einer Skala verbessern.Schwierigkeit. Das Item sollte weder zu schwer noch zu leicht sein.</description>
+    </item>
     
     <item>
       <title>Special Regression Analysis</title>

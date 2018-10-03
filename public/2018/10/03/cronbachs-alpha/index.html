@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Cronbachs Alpha - Michael Fuchs</title>
+<meta property="og:title" content="Cronbachs Alpha - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">4 min read</span>
+    
+
+    <h1 class="article-title">Cronbachs Alpha</h1>
+
+    
+    <span class="article-date">2018/10/03</span>
+    
+
+    <div class="article-content">
+      <pre class="r"><code>library(tidyverse)
+library(psych)</code></pre>
+<pre class="r"><code>World_Happiness_Report &lt;- read_csv(&quot;World_Happiness_Report.csv&quot;)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Internal consistency</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Das Ziel eines psychologischen Tests ist immer, Unterschiede zwischen Individuen hinsichtlich bestimmter Konstrukte aufzudecken. Um dies bestmöglich zu gewährleisten, muss man bei der Auswahl an Items ansetzen. Folgende Punkte sind für die Güte eines Items ausschlaggebend:</p>
+<ul>
+<li><strong>Beitrag zur Reliabilität</strong>. Das Item sollte die Reliabilität einer Skala verbessern.</li>
+<li><strong>Schwierigkeit</strong>. Das Item sollte weder zu schwer noch zu leicht sein. Eine mittlere Schwierigkeit ist erstrebenswert.</li>
+<li><strong>Trennschärfe</strong>. Das Item sollte eine gute Repräsentation der Skala darstellen.</li>
+<li><strong>Verteilungsform</strong>. Die Häufigkeitsverteilung der Antworten sollte möglichst symmetrisch sein.</li>
+</ul>
+<p>Für diesen Post wurde der Datensatz <em>World Happiness Report</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br" class="uri">https://drive.google.com/open?id=1DLZ_gVFhsT0dBROLE79h2Y5_6NXRF2Br</a> abrufbar.</p>
+</div>
+<div id="internal-consistency" class="section level1">
+<h1>2 Internal consistency</h1>
+<p>Cronbachs Alpha ist ein Koeffizient, welcher zur Bestimmung der internen Konsistenz einer Skala, eines Tests oder Subtests berechnet wird. Er gibt an, wie genau die Items eines Tests/einer Skala ein Konstrukt messen. Dabei ist Cronbachs Alpha der für die Berechnung der internen Konsistenz gebräuchlichste Koeffizient. Je mehr Items in einem Test enthalten sind, desto größer wird Alpha. Cronbachs Alpha gibt also in Abhängigkeit von der Item Anzahl die Höhe der mittleren Item Zusammenhänge an.</p>
+<p>Berechnet wird Cronbachs Alpha in R mit der <em>alpha</em> Funktion. Der Übersicht halber werden nur 4 Items ausgewählt, die u.a. das Konstrukt “Happiness” (<code>Happiness.Score</code>) messen sollen.</p>
+<pre class="r"><code>World_Happiness_Report %&gt;% 
+  select(economy = Economy..GDP.per.Capita., Family, health = Health..Life.Expectancy., Freedom) -&gt; cronbach
+
+alpha(cronbach)</code></pre>
+<pre><code>## 
+## Reliability analysis   
+## Call: alpha(x = cronbach)
+## 
+##   raw_alpha std.alpha G6(smc) average_r S/N   ase mean   sd median_r
+##       0.81      0.83    0.83      0.55 4.8 0.017 0.78 0.23     0.52
+## 
+##  lower alpha upper     95% confidence boundaries
+## 0.78 0.81 0.85 
+## 
+##  Reliability if an item is dropped:
+##         raw_alpha std.alpha G6(smc) average_r S/N alpha se var.r med.r
+## economy      0.71      0.72    0.65      0.46 2.6    0.034 0.018  0.42
+## Family       0.73      0.77    0.77      0.52 3.3    0.024 0.078  0.37
+## health       0.70      0.75    0.70      0.49 2.9    0.029 0.029  0.42
+## Freedom      0.85      0.88    0.86      0.71 7.5    0.016 0.014  0.69
+## 
+##  Item statistics 
+##           n raw.r std.r r.cor r.drop mean   sd
+## economy 155  0.94  0.89  0.90   0.82 0.98 0.42
+## Family  155  0.85  0.84  0.76   0.71 1.19 0.29
+## health  155  0.88  0.86  0.85   0.80 0.55 0.24
+## Freedom 155  0.55  0.66  0.45   0.42 0.41 0.15</code></pre>
+<p>Wir erhalten folgende drei Tabellen:</p>
+<ul>
+<li>Reliability analysis</li>
+<li>Reliability if an item is dropped</li>
+<li>Item statistics</li>
+</ul>
+<p><strong>Reliability analysis </strong></p>
+<p>Die erste Spalte bei dieser Tabelle (<em>raw_alpha</em>) enthält das klassische Cronbachs Alpha. <em>G6(smc)</em> gibt Guttman’s Lambda wieder, was ein alternatives Maß für die Reliabilität einer Skala darstellt. Ein weiteres alternatives Maß für die Reliabilität ist die Signal-Noise-Ratio (<em>S/N</em>). Unter <em>aes</em> ist der Standardfehler für Cronbachs Alpha aufgeführt. In den letzten drei Spalten wird der Skalenmittelwert (<em>mean</em>), die Standardabweichung (<em>sd</em>) und der Median (<em>median_r</em>) aufgeführt.</p>
+<p><strong>Reliability if an item is dropped </strong></p>
+<p>Der Beitrag zur Reliabilität kann dieser Tabelle entnommen werden. In der ersten Spalte (<em>raw_alpha</em>) ist die interne Konsistenz der Skala aufgeführt, wenn diese das betreffende Item nicht enthält. Je kleiner dieser Wert im Vergleich zur internen Konsistenz für die Gesamtskala ist, desto besser ist der Beitrag dieses Items zur Reliabilität. Die weiteren Spalten dieser Tabelle zeigen die entsprechenden Veränderungen in den anderen oben genannten Reliabilitäts-Maßen.</p>
+<p><strong>Item statistics </strong></p>
+<p>Unter <em>n</em> ist die Anzahl an gültigen Werten für jedes Item angegeben. Die 4 weiteren Spalten enthalten Angaben zu diversen Korrelationen. Die Spalten <em>mean</em> (Mittelwert) und <em>sd</em> (Standardabweichung) können als Indikator für die Schwierigkeit der Items herangezogen werden. Je höher der Mittelwert eines Items ist, desto leichter ist es, diesem Item zuzustimmen. Items mit sehr hohen oder sehr niedrigen Mittelwerten sollten in der Skala nicht berücksichtigt werden, da sie zu leicht bzw. zu schwer sind.</p>
+</div>
+<div id="interpretation" class="section level1">
+<h1>3 Interpretation</h1>
+<table>
+<thead>
+<tr class="header">
+<th><strong>Cronbach’s Alpha</strong></th>
+<th align="center"><strong>Interne Konsistenz</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Alpha ≥ 0,9</td>
+<td align="center">Exzellent</td>
+</tr>
+<tr class="even">
+<td>0,9 &gt; Alpha ≥ 0,8</td>
+<td align="center">Gut</td>
+</tr>
+<tr class="odd">
+<td>0,8 &gt; Alpha ≥ 0,7</td>
+<td align="center">Akzeptabel</td>
+</tr>
+<tr class="even">
+<td>0,7 &gt; Alpha ≥ 0,6</td>
+<td align="center">Fragwürdig</td>
+</tr>
+<tr class="odd">
+<td>0,6 &gt; Alpha ≥ 0,5</td>
+<td align="center">Schlecht</td>
+</tr>
+<tr class="even">
+<td>0,5 &gt; Alpha</td>
+<td align="center">Unakzeptabel</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="conclusion" class="section level1">
+<h1>4 Conclusion</h1>
+<p>Fällt das Kronabachs Alpha bei der Itemanalyse nicht gut aus (Werte unter 0,7), sollte eine Faktoranalyse durchgeführt werden um herauszufinden, ob nicht doch mehr als ein Konstrukt mit den Items gemessen wird.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+
