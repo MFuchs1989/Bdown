@@ -17,9 +17,9 @@
       <pubDate>Tue, 02 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/10/02/special-regression-analysis/</guid>
-      <description>library(tidyverse)library(psych)library(rockchalk)affairs &amp;lt;- read_csv(&amp;quot;Affairs.csv&amp;quot;)Table of Content1 Introduction2 Categorical predictors1 IntroductionAufbauend auf den Post “Regression Analysis” soll im Nachfolgenden spezielle Regressionsmodelle vorgestellt werden.
+      <description>library(tidyverse)library(psych)library(rockchalk)affairs &amp;lt;- read_csv(&amp;quot;Affairs.csv&amp;quot;)Table of Content1 Introduction2 Categorical predictors3 Moderated regression4 Non-linear regression5 Analysis of covariance (ANCOVA)6 Logistic regression7 Conclusion1 IntroductionAufbauend auf den Post “Regression Analysis” soll im Nachfolgenden spezielle Regressionsmodelle vorgestellt werden.
 Für diesen Beitrag wurde der Datensatz Affairs von der Statistik Plattform “Kaggle” verwendet. Eine Kopie des Datensatzes ist unter https://drive.google.com/open?id=1N4osROEo724c7OZA2ARiwEthcZDwLxtf abrufbar.
-2 Categorical predictorsMit dem allgemeinen linearen Modell lassens sich sowohl kontinuierliche Prädiktoren (wie bei der einfachen Regressionsanalyse) als auch kategoriale Prädiktoren (wie bei der Varianzanalyse) analysieren.</description>
+2 Categorical predictorsMit dem allgemeinen linearen Modell lassen sich sowohl kontinuierliche Prädiktoren (wie bei der einfachen Regressionsanalyse) als auch kategoriale Prädiktoren (wie bei der Varianzanalyse) analysieren.</description>
     </item>
     
     <item>

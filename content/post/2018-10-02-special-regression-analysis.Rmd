@@ -28,7 +28,11 @@ affairs <- read_csv("Affairs.csv")
 
 + 1 Introduction
 + 2 Categorical predictors
-
++ 3 Moderated regression
++ 4 Non-linear regression
++ 5 Analysis of covariance (ANCOVA)
++ 6 Logistic regression
++ 7 Conclusion
 
 #1 Introduction
 
@@ -39,18 +43,18 @@ Für diesen Beitrag wurde der Datensatz *Affairs* von der Statistik Plattform ["
 
 #2 Categorical predictors
 
-Mit dem allgemeinen linearen Modell lassens sich sowohl kontinuierliche Prädiktoren (wie bei der einfachen Regressionsanalyse) als auch kategoriale Prädiktoren (wie bei der Varianzanalyse) analysieren. Der *lm* Befehl ändert sich dadurch nicht. R erkennt automatisch, dass es sich im nachfolgenden Fall bei der Prädiktorvariable um einen Faktor handelt. Für dieses Beispiel wird die Variable `religiousness` entsprechend umkodiert. 
+Mit dem allgemeinen linearen Modell lassen sich sowohl kontinuierliche Prädiktoren (wie bei der einfachen Regressionsanalyse) als auch kategoriale Prädiktoren (wie bei der Varianzanalyse) analysieren. Der *lm* Befehl ändert sich dadurch nicht. R erkennt automatisch, dass es sich im nachfolgenden Fall bei der Prädiktorvariable um einen Faktor handelt. Für dieses Beispiel wird die Variable `religiousness` entsprechend umkodiert. 
 ```{r}
 affairs$religiousness.r <- recode(affairs$religiousness, `1`="Gruppe 1", `2`="Gruppe 2", `3`="Gruppe 3", `4`="Gruppe 4", `5`="Gruppe 5")
 ```
 
-Nun erfolgt die *lm* Syntax wie gewohnt. Es soll untersucht werden, ob es Altersunterschiede zwischen den verschiedenen Gurppen gibt.
+Nun erfolgt die *lm* Syntax wie gewohnt. Es soll untersucht werden, ob es Altersunterschiede zwischen den verschiedenen Gruppen gibt.
 ```{r}
 lm.kat <- lm(affairs$age ~ affairs$religiousness.r)
 summary(lm.kat)
 ```
 
-Das durchschnittliche Alter in der Referenzgruppe "Gruppe1" beträgt 30,44 Jahre. Dieser Wert zeit mit p < .001, dass dieser Koeffizient signifikant von Null verschieden ist. Die weiteren Koeffizienten drücken die Unterschiede zwischen den jeweiligen Gruppen und der Referenzgruppe aus. Gruppe 2 und 3 sind nicht signifikant, d.h. es gibt keine Gruppenunterschiede in den Mittelwerten. Dahingegen ist Gruppe 4 leicht und Gruppe 5 stark signifikant. 
+Das durchschnittliche Alter in der Referenzgruppe "Gruppe1" beträgt 30,44 Jahre. Dieser Wert zeigt mit p < .001, dass dieser Koeffizient signifikant von Null verschieden ist. Die weiteren Koeffizienten drücken die Unterschiede zwischen den jeweiligen Gruppen und der Referenzgruppe aus. Gruppe 2 und 3 sind nicht signifikant, d.h. es gibt keine Gruppenunterschiede in den Mittelwerten. Dahingegen ist Gruppe 4 leicht und Gruppe 5 stark signifikant. 
 
 
 #3 Moderated regression
@@ -94,7 +98,7 @@ Das Regressionsgewicht ist signifikant von Null verschieden, wenn der Wert der M
 
 #4 Non-linear regression
 
-Bei nicht linearen Regressionen soll untersucht werden, ob die Auswirkung einer Variablen X auf das Kriterium Y ab einen gewissen Grad stärker zunimmt, abnimmt oder sich sogar in die entgegengesetzten Richtung umschwenkt. Beispielhaft kann man hier Untersuchungen zum Kaffeekonsum erwähnen. Kaffee (beziehungsweise das Koffein) bewirkt zum Anfang eine positive Auswirkung auf die Konzentration. Ab einer bestimmten Menge an Kaffee flacht die Auswirkungen auf die Konzentrationsfähigkeit ab und bewirkt bei weiterer Zuführung von Koffein sogar eine Beinträchtigung der Konzentration.
+Bei nicht linearen Regressionen soll untersucht werden, ob die Auswirkung einer Variablen X auf das Kriterium Y ab einen gewissen Grad stärker zunimmt, abnimmt oder sich sogar in die entgegengesetzte Richtung umschwenkt. Beispielhaft kann man hier Untersuchungen zum Kaffeekonsum erwähnen. Kaffee (beziehungsweise das Koffein) bewirkt zum Anfang eine positive Auswirkung auf die Konzentration. Ab einer bestimmten Menge an Kaffee flacht die Auswirkungen auf die Konzentrationsfähigkeit ab und bewirkt bei weiterer Zuführung von Koffein sogar eine Beeinträchtigung der Konzentration.
 
 Nicht lineare Zusammenhänge können in der Regressionsanalyse modelliert werden, wenn Polynome höherer Ordnung in die Gleichung aufgenommen werden. 
 
@@ -117,16 +121,111 @@ abline(lm(affairs.normal ~ years.married.cen))
 ```
 
 
+#5 Analysis of covariance (ANCOVA)
 
-
-
-
-
-
-
-
-
-
+Die Kovarianzanalyse erlaubt die Kombination von kategorialen und metrischen Prädiktoren in einem einzigen linearen Modell. Im Nachfolgenden soll der Einfluss des Alters (zentriert) und des Geschlechts auf die Anzahl an Affären untersucht werden.
 ```{r}
-
+sex <- affairs$gender
+table(sex)
 ```
+
+Merke: "female" wird an erster Stelle genannt.
+```{r}
+cov <- lm(affairs.normal ~ age.cen * sex)
+summary(cov)
+```
+
+Der vorhergesagt Wert (Intercept) für Frauen (wg erster Stelle der *table(sex)* Funktion) beträgt 1,49 bei durchschnittlichem Alter. Der Koeffizient *age.cen* beschreibt den Zusammenhang zwischen Alter und der Anzahl an Affären für Frauen. Der Koeffizient *sexmale* drückt hier den Unterschied zwischen Männer und Frauen hinsichtlich der Anzahl an Affären bei durchschnittlichem Lebensalter aus. Der Interaktionseffekt (*age.cen:sexmale*) beschreibt das Ausmaß, in dem sich die Stärke des Zusammenhangs zwischen Alter und Anzahl an Affären für Männer von den Frauen unterscheidet. In dem vorangegangenen Beispiel sind weder die Haupteffekte noch der Interaktionseffekt statistisch signifikant. Wäre der Interaktionseffekt signifikant gewesen, so würde sich zur besseren Interpretation (wie bei der moderierten Regression) die Berechnung und die graphische Darstellung der bedingten Regressionsgleichungen anbieten.
+```{r}
+Steigung2 <- plotSlopes(cov, plotx = "age.cen", modx = "sex")
+```
+
+Anschließend wird noch ein Signifikanztest für die beiden Regressionsgewichte durchgeführt.
+```{r}
+testSlopes(Steigung2)
+```
+
+Dieser Ausgabe kann entnommen werden, dass weder das Lebensalter bei Frauen (p = .053) noch das bei Männern (p= .172) signifikant mit der Anzahl an Affären zusammenhängt. 
+
+#6 Logistic regression
+
+Die bisherig vorgestellten speziellen Regressionsmodelle hatten die Gemeinsamkeit, dass das untersuchte Kriterium metrisch war. Mit der logistischen Regression ist es möglich, eine kategoriale abhängige Variable zu analysieren. Diese muss auch nicht zwingend dichotom sein, sondern kann auch mehr als zwei Ausprägungen besitzen. 
+
+Im folgenden Beispiel soll der Unterschied zwischen Männer und Frauen Frauen hinsichtlich des Bildungsgrades untersucht werden. Das Geschlecht ist hierbei das Kriterium. Für die logistische Regression ist es wichtig, dass die erste Kategorie mit 0 und die zweite Kategorie mit 1 kodiert ist.
+```{r}
+affairs$gender.r <- recode(affairs$gender, `male`="0", `female`="1")
+sex.r <- as.numeric(affairs$gender.r)
+```
+
+Im zweiten Schritt wird die unabhängige Variable einem Objekt zugeordnet.
+```{r}
+education.normal <- as.numeric(affairs$education)
+```
+
+Modelle mit nicht-metrischen abhängigen Variablen werden als Generalized Linear Models (Generalisierte Lineare Modelle) bezeichnet und können in R mit der *glm* Funktion berechnet werden. Im nachfolgenden Beispiel wird eine lineare Regression mit der abhängigen Variable `sex.r` und der unabhängigen Variable `education.normal` angefordert.  
+```{r}
+log.lm <- glm(sex.r ~ education.normal, family = binomial)
+```
+
+Auch bei dem *glm* Befehl funktioniert die *summary* Funktion.
+```{r}
+summary(log.lm)
+```
+
+Für den Prädiktor `education.normal` erhalten wir den Regressionskoeffizienten b~1~=-0,39, z=-9,1, p<.001. Der Bildungsgrad ist also ein signifikanter Prädiktor für die Variable `sex.r`. Zur genaueren Interpretation dieses Koeffizienten wird daran erinnert, dass die zweite Kategorie (female) mit 1 kodiert worden ist. Der Regressionskoeffizient wird daher wie folgt interpretiert: Wenn man den Bildungsgrad um eine Einheit erhöht, reduziert sich der Logit um -0,39. Der Logit ist der natürliche Logarithmus des Wettquotienten. Der Achsenabschnitt (Intercept, hier 6,40) drückt die Höhe des Logits für einen Bildungsgrad von Null aus. Des Weiteren erhalten wir mit der *summary* Funktion bei *glm* Modellen Angaben zu den Devianzen. Diese sind ein Maß für die Modellgüte. Je kleiner die Devianz ist, desto besser passt das Modell auf die Daten. Die Zeile *Null deviance* enthält die Devianz des Nullmodells (ein Modell, das keien Prädiktoren enthält). Die Zeile *Residual deviance* ist die Devianz für das von uns durchgeführte Modell. Diese Devianz sollte deutlich kleiner sein als die von dem Nullmodell. Die Angabe *AIC* steht für Akaikes Information Criterion und ist ebenfalls ein Indikator für die Modellgüte. Je kleiner der AIC ausfällt, desto besser ist das Modell. Die Ausgabe *Number of Fisher Scoring iterations: 4* zeigt an, wie viele Iterationen benötigt wurden, um die Modellparameter zu schätzen. Eine hohe Anzahl (> 25) würde darauf hindeute, dass das Modell nicht gut auf die Daten passt. 
+
+Zusätzlich zu den Regressionskoeffizienten wird das Odds Ratio berechnet. Dies dient auch als Effektgröße für die einzelnen Koeffizienten. Als erstes werden nochmals die Regressionskoeffizienten des "log.lm" Objektes angefordert. 
+```{r}
+coef(log.lm)
+```
+
+Das Odds Ratio lässt sich aus den Koeffizienten berechnen, indem man diese exponiert. 
+```{r}
+exp(coef(log.lm))
+```
+
+Zusätzlich können Konfidenzintervalle für das Odds Ratio angefordert werden. 
+```{r}
+exp(confint(log.lm))
+```
+
+
+Ähnlich wie bei der multiplen linearen Regression kann auch bei der logistischen Regression verschiedene Modelle miteinander verglichen werden (hierarchisches Vorgehen). Im ersten Modell wurde der Unterschied zwischen Männer und Frauen hinsichtlich des Bildungsgrades untersucht (hier nochmal neu abgespeichert unter dem Objekt "log.lm1").
+```{r}
+log.lm1 <- glm(sex.r ~ education.normal, family = binomial)
+```
+
+In einem weiteren Modell soll der Unterschied zwischen Männer und Frauen hinsichtlich des Bildungsgrades **und** der Religiosität untersucht werden. 
+```{r}
+reli <- as.numeric(affairs$religiousness)
+log.lm2 <- glm(sex.r ~ education.normal + reli, family = binomial)
+summary(log.lm2)
+```
+
+Der zusätzliche Prädiktor `reli` ist nicht signifikant (b~2~=-0,05, z=-,62, p=.534).
+
+Nun werden die beiden Modelle auf Signifikanz getestet.
+```{r}
+anova(log.lm1, log.lm2, test = "Chi")
+```
+
+Die *Resid. Df* Spalte enthält die Freiheitsgrade und die *Resid. Dev* Spalte die Residualdevianzen der beiden Modellgleichungen. Die Residualdevianz des zweiten Modells (D~2~ = 728,66) fällt etwas kleiner aus als die Residualdevianz des ersten Modells (D~1~ = 729,05). Das zweite Modell passt demnach etwas besser auf die Daten. Diese Verbesserung muss aber noch auf Signifikanz überprüft werden.
+Die Spalte *Deviance* enthält den Chi^2-Wert (die Differenz der beiden Devianzen) und die dazugehörigen Freiheitsgrade für den Test sind unter der Spalte *Df* aufgeführt. Diese entsprechen der Differenz der Freiheitsgrade der beiden Modelle, hier also 599-598 = 1 Freiheitsgrad. Der durchgeführte Chi^2-Test ist mit chi^2=0,39, df=1, p=.534 nicht signifikant. Dies bedeutet, dass das zweite Modell nicht signifikant besser auf die Daten passt als das sparsamere Modell. Es wird daher das Modell 1 (log.lm1) bevorzugt. 
+
+
+
+#7 Conclusion
+
+Ergänzend zu dem Post ["Regression Analysis"](https://michael-fuchs.netlify.com/2018/09/21/regression-analysis/) wurde in diesem Beitrag die Aufnahme von kategorialen Prädiktoren (Punkt 2) in lineare Regressionsmodelle behandelt. Des Weiteren wurde gezeigt, wie eine moderierte Regression (Punkt 3) durchgeführt und interpretiert werden kann. Die Modellierung nicht-linearer Zusammenhänge wurde unter Punkt 4 thematisiert. Zum Schluss war die logistische Regression (Punkt 5), bei der eine dichotome abhängige Variable vorlag, zentral. 
+
+
+
+
+
+
+
+
+
+
+
+
