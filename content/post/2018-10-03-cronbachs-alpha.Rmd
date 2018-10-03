@@ -73,7 +73,7 @@ Unter *n* ist die Anzahl an gültigen Werten für jedes Item angegeben. Die 4 we
 
 #3 Interpretation
 
-| **Cronbach's Alpha**         | **Interne Konsistenz**| 
+| **Cronbach's Alpha**  -       | **Interne Konsistenz**| 
 | ------------- |:-------------:| 
 | Alpha ≥ 0,9      | Exzellent | 
 |  0,9 > Alpha ≥ 0,8   | Gut     |   
