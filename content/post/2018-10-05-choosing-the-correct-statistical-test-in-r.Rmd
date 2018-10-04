@@ -19,7 +19,7 @@ In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (st
 |  Vergleich von zwei Gruppen  aus einer Stichprobe | ja   | ja |  ["T-Test"](https://michael-fuchs.netlify.com/2018/09/12/t-test/) für unabhängige Stichproben |
 | s.o.   |  ja | nein    |  Welch Test |
 | s.o.   | nein | nein    |  Wilcoxon Test  |
-| Vergleich von mehr als zwei Gruppen aus einer Stichprobe | ja | ja    |  einfaktorelle Varianzanalyse (ANOVA) ohne Messwiederholung  |
+| Vergleich von mehr als zwei Gruppen aus einer Stichprobe | ja | ja    |  einfaktorelle Varianzanalyse (["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/)) ohne Messwiederholung  |
 | s.o.   | ja | nein    |  One-way-Test (Welch)  |
 | s.o.   | nein | nein    |  Kruskal Wallis Test  |
 
