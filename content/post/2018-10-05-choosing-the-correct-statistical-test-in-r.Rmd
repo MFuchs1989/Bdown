@@ -11,20 +11,20 @@ tags:
 
 In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (statistische) Test anzuwenden ist. 
 
-***Mittelwertsvergleiche**
++ **Mittelwertsvergleiche**
 
 
 | **Fragestellung**       | **Normalverteilung**     | **Varianzhomogenität** | **Test**  |
 | :------------- | :----------: | :----------: |----------: |
 |  Vergleich von zwei Gruppen  aus einer Stichprobe | ja   | ja |  T-Test für unabhängige Stichproben |
-| '    '   |  ja | nein    |  Welch Test |
-| '    '  | nein | nein    |  Wilcoxon Test  |
+| s.o.   |  ja | nein    |  Welch Test |
+| s.o.   | nein | nein    |  Wilcoxon Test  |
 | Vergleich von mehr als zwei Gruppen aus einer Stichprobe | ja | ja    |  einfaktorelle Varianzanalyse (ANOVA) ohne Messwiederholung  |
-| '    '  | ja | nein    |  One-way-Test (Welch)  |
-| '    '  | nein | nein    |  Kruskal Wallis Test  |
+| s.o.   | ja | nein    |  One-way-Test (Welch)  |
+| s.o.   | nein | nein    |  Kruskal Wallis Test  |
 
 
-**Zusammenhangsmaße** 
++ **Zusammenhangsmaße** 
 
 | **Skalierung** | **Test**  |
 | :------------- | ----------: |
@@ -36,7 +36,7 @@ In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (st
 Anmerkung: ist eine metrisch skalierte Variable nicht normalverteilt, so muss  das Zusammenhangsmaß mit niedrigerer Güte berechnet werden. 
 
 
-**Beziehungen zwischen unterschiedlichen Variablen**
++ **Beziehungen zwischen unterschiedlichen Variablen**
 
 | **Prädiktor**       | **Kriterium**     | **Test** |
 | :------------- | :----------: | ----------: |
@@ -47,7 +47,7 @@ Anmerkung: ist eine metrisch skalierte Variable nicht normalverteilt, so muss  d
 | ein metrischer   |  ein kategoriales | Logistische Regression    | 
 
 
-**Sonstige**
++ **Sonstige**
 
 | **Test auf:**       | **Test**     |
 | :------------- | ----------: |
