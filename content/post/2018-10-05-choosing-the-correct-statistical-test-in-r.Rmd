@@ -1,7 +1,7 @@
 ---
 title: Choosing the correct statistical test in R
 author: Michael Fuchs
-date: '2018-10-04'
+date: '2018-10-05'
 slug: choosing-the-correct-statistical-test-in-r
 categories:
   - R

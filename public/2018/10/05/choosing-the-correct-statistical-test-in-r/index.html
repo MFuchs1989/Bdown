@@ -65,7 +65,9 @@
 
     <div class="article-content">
       <p>In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (statistische) Test anzuwenden ist.</p>
-<p>*<strong>Mittelwertsvergleiche</strong></p>
+<ul>
+<li><strong>Mittelwertsvergleiche</strong></li>
+</ul>
 <table style="width:74%;">
 <colgroup>
 <col width="20%" />
@@ -75,8 +77,8 @@
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left"><strong>Fragestellung</strong></th>
-<th align="center"><strong>Normalverteilung</strong></th>
+<th align="left"><strong>Fragestellung</strong>-</th>
+<th align="center"><strong>Normalverteilung</strong>-</th>
 <th align="center"><strong>Varianzhomogenität</strong></th>
 <th align="right"><strong>Test</strong></th>
 </tr>
@@ -89,13 +91,13 @@
 <td align="right">T-Test für unabhängige Stichproben</td>
 </tr>
 <tr class="even">
-<td align="left">‘’</td>
+<td align="left">s.o.</td>
 <td align="center">ja</td>
 <td align="center">nein</td>
 <td align="right">Welch Test</td>
 </tr>
 <tr class="odd">
-<td align="left">‘’</td>
+<td align="left">s.o.</td>
 <td align="center">nein</td>
 <td align="center">nein</td>
 <td align="right">Wilcoxon Test</td>
@@ -107,20 +109,22 @@
 <td align="right">einfaktorelle Varianzanalyse (ANOVA) ohne Messwiederholung</td>
 </tr>
 <tr class="odd">
-<td align="left">‘’</td>
+<td align="left">s.o.</td>
 <td align="center">ja</td>
 <td align="center">nein</td>
 <td align="right">One-way-Test (Welch)</td>
 </tr>
 <tr class="even">
-<td align="left">‘’</td>
+<td align="left">s.o.</td>
 <td align="center">nein</td>
 <td align="center">nein</td>
 <td align="right">Kruskal Wallis Test</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Zusammenhangsmaße</strong></p>
+<ul>
+<li><strong>Zusammenhangsmaße</strong></li>
+</ul>
 <table>
 <thead>
 <tr class="header">
@@ -130,16 +134,90 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Fragestellung / beabsichtigte Prüfung</td>
-<td align="right">Normalverteilung</td>
+<td align="left">zwei metrische Variablen:</td>
+<td align="right">Person’s r</td>
 </tr>
 <tr class="even">
-<td align="left">Fragestellung / beabsichtigte Prüfung</td>
-<td align="right">Normalverteilung</td>
+<td align="left">eine metrisch &amp; eine ordinalskalierte Variable:</td>
+<td align="right">Spearman’s roh</td>
 </tr>
 <tr class="odd">
-<td align="left">Fragestellung / beabsichtigte Prüfung</td>
-<td align="right">Normalverteilung</td>
+<td align="left">zwei ordinalskalierte Variablen:</td>
+<td align="right">Kendall’s tau</td>
+</tr>
+<tr class="even">
+<td align="left">zwei nominalskalierten Vaiablen:</td>
+<td align="right">Chi<sup>2</sup> Test</td>
+</tr>
+</tbody>
+</table>
+<p>Anmerkung: ist eine metrisch skalierte Variable nicht normalverteilt, so muss das Zusammenhangsmaß mit niedrigerer Güte berechnet werden.</p>
+<ul>
+<li><strong>Beziehungen zwischen unterschiedlichen Variablen</strong></li>
+</ul>
+<table style="width:56%;">
+<colgroup>
+<col width="20%" />
+<col width="18%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"><strong>Prädiktor</strong></th>
+<th align="center"><strong>Kriterium</strong></th>
+<th align="right"><strong>Test</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ein metrischer</td>
+<td align="center">ein metrisches</td>
+<td align="right">Bivariate lineare Regression</td>
+</tr>
+<tr class="even">
+<td align="left">zwei metrische</td>
+<td align="center">ein metrisches</td>
+<td align="right">Multiple lineare Regression</td>
+</tr>
+<tr class="odd">
+<td align="left">ein metrischer + eine Moderatorvariable (metrisch)</td>
+<td align="center">ein metrisches</td>
+<td align="right">Moderierte Regression</td>
+</tr>
+<tr class="even">
+<td align="left">kategorial + metrisch</td>
+<td align="center">ein metrisches</td>
+<td align="right">Kovarianzanalyse</td>
+</tr>
+<tr class="odd">
+<td align="left">ein metrischer</td>
+<td align="center">ein kategoriales</td>
+<td align="right">Logistische Regression</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Sonstige</strong></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th align="left"><strong>Test auf</strong></th>
+<th align="right"><strong>Test</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Normalverteilung</td>
+<td align="right">Lilliefors-Test</td>
+</tr>
+<tr class="even">
+<td align="left">Varianzhomogenität</td>
+<td align="right">Levene Test</td>
+</tr>
+<tr class="odd">
+<td align="left">Identifikation von Outliern</td>
+<td align="right">Grubbs Test</td>
 </tr>
 </tbody>
 </table>
