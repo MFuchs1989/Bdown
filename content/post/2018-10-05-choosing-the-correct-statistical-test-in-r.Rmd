@@ -1,7 +1,7 @@
 ---
 title: Choosing the correct statistical test in R
 author: Michael Fuchs
-date: '2018-10-05'
+date: '2018-10-04'
 slug: choosing-the-correct-statistical-test-in-r
 categories:
   - R
@@ -14,7 +14,7 @@ In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (st
 ***Mittelwertsvergleiche**
 
 
-| Fragestellung / beabsichtigte Prüfung       | Normalverteilung     | Varianzhomogenität | Test  |
+| **Fragestellung**       | **Normalverteilung**     | **Varianzhomogenität** | **Test**  |
 | :------------- | :----------: | :----------: |----------: |
 |  Vergleich von zwei Gruppen  aus einer Stichprobe | ja   | ja |  T-Test für unabhängige Stichproben |
 | '    '   |  ja | nein    |  Welch Test |
@@ -24,12 +24,13 @@ In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (st
 | '    '  | nein | nein    |  Kruskal Wallis Test  |
 
 
+**Zusammenhangsmaße** 
 
-
-
-
-
-
+| **Skalierung** | **Test**  |
+| :------------- | ----------: |
+| Fragestellung / beabsichtigte Prüfung       | Normalverteilung     |
+| Fragestellung / beabsichtigte Prüfung       | Normalverteilung     |
+| Fragestellung / beabsichtigte Prüfung       | Normalverteilung     |
 
 
 
