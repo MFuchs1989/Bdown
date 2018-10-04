@@ -1,0 +1,51 @@
+---
+title: Choosing the correct statistical test in R
+author: Michael Fuchs
+date: '2018-10-05'
+slug: choosing-the-correct-statistical-test-in-r
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<p>In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (statistische) Test anzuwenden ist.</p>
+<p>*<strong>Mittelwertsvergleiche</strong></p>
+<table style="width:74%;">
+<colgroup>
+<col width="20%" />
+<col width="18%" />
+<col width="18%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Fragestellung / beabsichtigte Prüfung</th>
+<th align="center">Normalverteilung</th>
+<th align="center">Varianzhomogenität</th>
+<th align="right">Test</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Vergleich von zwei Gruppen aus einer Stichprobe</td>
+<td align="center">ja</td>
+<td align="center">ja</td>
+<td align="right">T-Test für unabhängige Stichproben</td>
+</tr>
+<tr class="even">
+<td align="left">‘’</td>
+<td align="center">ja</td>
+<td align="center">nein</td>
+<td align="right">Welch Test</td>
+</tr>
+<tr class="odd">
+<td align="left">‘’</td>
+<td align="center">nein</td>
+<td align="center">nein</td>
+<td align="right">Wilcoxon Test</td>
+</tr>
+</tbody>
+</table>

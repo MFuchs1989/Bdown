@@ -1,0 +1,35 @@
+---
+title: Choosing the correct statistical test in R
+author: Michael Fuchs
+date: '2018-10-05'
+slug: choosing-the-correct-statistical-test-in-r
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (statistische) Test anzuwenden ist. 
+
+***Mittelwertsvergleiche**
+
+
+| Fragestellung / beabsichtigte Prüfung       | Normalverteilung     | Varianzhomogenität | Test  |
+| :------------- | :----------: | :----------: |----------: |
+|  Vergleich von zwei Gruppen  aus einer Stichprobe | ja   | ja |  T-Test für unabhängige Stichproben |
+| '    '   |  ja | nein    |  Welch Test |
+| '    '  | nein | nein    |  Wilcoxon Test  |
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,10 +6,21 @@
     <description>Recent content in R on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 05 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Choosing the correct statistical test in R</title>
+      <link>/2018/10/05/choosing-the-correct-statistical-test-in-r/</link>
+      <pubDate>Fri, 05 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/10/05/choosing-the-correct-statistical-test-in-r/</guid>
+      <description>In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (statistische) Test anzuwenden ist.
+*Mittelwertsvergleiche
+Fragestellung / beabsichtigte PrüfungNormalverteilungVarianzhomogenitätTestVergleich von zwei Gruppen aus einer StichprobejajaT-Test für unabhängige Stichproben‘’janeinWelch Test‘’neinneinWilcoxon Test</description>
+    </item>
     
     <item>
       <title> Nonparametric Methods</title>
