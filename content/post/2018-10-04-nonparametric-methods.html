@@ -29,7 +29,7 @@ countries &lt;- read_csv(&quot;countries of the world.csv&quot;)</code></pre>
 <div id="introduction" class="section level1">
 <h1>1 Introduction</h1>
 <p>Bei den zwei vorgestellten inferenzstatistischen Tests (<a href="https://michael-fuchs.netlify.com/2018/09/12/t-test/">“T-Test”</a> und <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a>) handelte es sich um so genannte parametrische Verfahren. Als Voraussetzung für parametrische Verfahren gilt, dass die unabhängige Variable mindestens intervallskaliert oder normalverteilt ist. Ist eine der beiden Voraussetzung nicht erfüllt, muss auf ein nonparametrisches Verfahren zurückgegriffen werden.</p>
-<p>Für diesen Post wurde die Datensätze <em>insurance</em> und <em>countries_of_the_world</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie der Datensätze ist unter <a href="https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e" class="uri">https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e</a> (insurance) und <a href="https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006" class="uri">https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006</a> (countries_of_the_world) abrufbar.</p>
+<p>Für diesen Post wurden die Datensätze <em>insurance</em> und <em>countries_of_the_world</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie der Datensätze ist unter <a href="https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e" class="uri">https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e</a> (insurance) und <a href="https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006" class="uri">https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006</a> (countries_of_the_world) abrufbar.</p>
 </div>
 <div id="chi2-test" class="section level1">
 <h1>2 Chi<sup>2</sup>-test</h1>
@@ -89,7 +89,7 @@ addmargins(tab2)</code></pre>
 ## 
 ## data:  tab2
 ## X-squared = 7.3929, df = 1, p-value = 0.006548</code></pre>
-<p>Das Ergebnis ist signifikant (chi<sup>2</sup>=7,39, df=1, p&lt;.001). Männer sind demnach häufiger Raucher mehr als Frauen.</p>
+<p>Das Ergebnis ist signifikant (chi<sup>2</sup>=7,39, df=1, p&lt;.001). Männer sind demnach häufiger Raucher als es Frauen sind.</p>
 </div>
 <div id="wilcoxon-test" class="section level1">
 <h1>3 Wilcoxon-test</h1>

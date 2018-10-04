@@ -39,7 +39,7 @@ countries <- read_csv("countries of the world.csv")
 
 Bei den zwei vorgestellten inferenzstatistischen Tests (["T-Test"](https://michael-fuchs.netlify.com/2018/09/12/t-test/) und ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/)) handelte es sich um so genannte parametrische Verfahren. Als Voraussetzung für parametrische Verfahren gilt, dass die unabhängige Variable mindestens intervallskaliert oder normalverteilt ist. Ist eine der beiden Voraussetzung nicht erfüllt, muss auf ein nonparametrisches Verfahren zurückgegriffen werden. 
 
-Für diesen Post wurde die Datensätze *insurance* und *countries_of_the_world* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie der Datensätze ist unter <https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e> (insurance) und <https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006> (countries_of_the_world) abrufbar.
+Für diesen Post wurden die Datensätze *insurance* und *countries_of_the_world* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie der Datensätze ist unter <https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e> (insurance) und <https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006> (countries_of_the_world) abrufbar.
 
 
 #2 Chi^2^-test
@@ -82,7 +82,7 @@ addmargins(tab2)
 chisq.test(tab2)
 ```
 
-Das Ergebnis ist signifikant (chi^2^=7,39, df=1, p<.001). Männer sind demnach häufiger Raucher mehr als Frauen. 
+Das Ergebnis ist signifikant (chi^2^=7,39, df=1, p<.001). Männer sind demnach häufiger Raucher als es Frauen sind. 
 
 
 #3 Wilcoxon-test
