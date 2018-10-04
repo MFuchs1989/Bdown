@@ -113,7 +113,7 @@ Da nun auch Varianzhomogenität (p > .05) nachgewiesen wurde, wird im nachfolgen
 
 #4 ANOVA with variance homogeneity
 
-Nun wird überprüft ob die Regionen "AFRICA", "Asia" und "LATIN AMER" sich signifikant in ihrem Küstenanteil unterscheiden. Wir speichern die *aov* Funktion unter dem Objekt "ANOva" ab.
+Nun wird überprüft ob die Regionen "AFRICA", "Asia" und "LATIN AMER" sich signifikant in ihrem Küstenanteil unterscheiden. Wir speichern die *aov* Funktion unter dem Objekt "ANOVA" ab.
 
 ```{r}
 ANOVA <- aov(preparation$Coastline.num ~ preparation$region.new)

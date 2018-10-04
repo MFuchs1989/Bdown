@@ -202,7 +202,7 @@ size</code></pre>
 </div>
 <div id="anova-with-variance-homogeneity" class="section level1">
 <h1>4 ANOVA with variance homogeneity</h1>
-<p>Nun wird überprüft ob die Regionen “AFRICA”, “Asia” und “LATIN AMER” sich signifikant in ihrem Küstenanteil unterscheiden. Wir speichern die <em>aov</em> Funktion unter dem Objekt “ANOva” ab.</p>
+<p>Nun wird überprüft ob die Regionen “AFRICA”, “Asia” und “LATIN AMER” sich signifikant in ihrem Küstenanteil unterscheiden. Wir speichern die <em>aov</em> Funktion unter dem Objekt “ANOVA” ab.</p>
 <pre class="r"><code>ANOVA &lt;- aov(preparation$Coastline.num ~ preparation$region.new)</code></pre>
 <p>Mit der <em>model.tables</em> Funktion und dem Zusatzargument <em>“means”</em> lassen sich die Mittelwerte pro Gruppe ausgeben.</p>
 <pre class="r"><code>model.tables(ANOVA, &quot;means&quot;)</code></pre>
