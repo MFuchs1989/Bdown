@@ -17,7 +17,7 @@
       <pubDate>Thu, 04 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/10/04/nonparametric-methods/</guid>
-      <description>library(nortest)library(tidyverse)library(psych)insurance &amp;lt;- read_csv(&amp;quot;insurance.csv&amp;quot;)countries &amp;lt;- read_csv(&amp;quot;countries of the world.csv&amp;quot;)Table of Content1 Introduction2 Chi^2-test3 Wilcoxon-test4 Kruskal-Wallis-test5 Conclusion1 IntroductionBei den zwei vorgestellten inferenzstatistischen Tests (“T-Test” und “ANOVA”) handelte es sich um so genannte parametrische Verfahren. Als Voraussetzung für parametrische Verfahren gilt, dass die unabhängige Variable mindestens intervallskaliert oder normalverteilt ist. Ist eine der beiden Voraussetzung nicht erfüllt, muss auf ein nonparametrisches Verfahren zurückgegriffen werden.</description>
+      <description>library(nortest)library(tidyverse)library(psych)insurance &amp;lt;- read_csv(&amp;quot;insurance.csv&amp;quot;)countries &amp;lt;- read_csv(&amp;quot;countries of the world.csv&amp;quot;)Table of Content1 Introduction2 Chi2-test3 Wilcoxon-test4 Kruskal-Wallis-test5 Conclusion1 IntroductionBei den zwei vorgestellten inferenzstatistischen Tests (“T-Test” und “ANOVA”) handelte es sich um so genannte parametrische Verfahren. Als Voraussetzung für parametrische Verfahren gilt, dass die unabhängige Variable mindestens intervallskaliert oder normalverteilt ist. Ist eine der beiden Voraussetzung nicht erfüllt, muss auf ein nonparametrisches Verfahren zurückgegriffen werden.</description>
     </item>
     
     <item>

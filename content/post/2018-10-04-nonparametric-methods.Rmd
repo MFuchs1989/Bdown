@@ -29,7 +29,7 @@ countries <- read_csv("countries of the world.csv")
 #Table of Content
 
 + 1 Introduction
-+ 2 Chi^2-test
++ 2 Chi^2^-test
 + 3 Wilcoxon-test
 + 4 Kruskal-Wallis-test
 + 5 Conclusion
@@ -42,14 +42,14 @@ Bei den zwei vorgestellten inferenzstatistischen Tests (["T-Test"](https://micha
 Für diesen Post wurde die Datensätze *insurance* und *countries_of_the_world* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie der Datensätze ist unter <https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e> (insurance) und <https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006> (countries_of_the_world) abrufbar.
 
 
-#2 Chi^2-test
+#2 Chi^2^-test
 
-Der Chi^2-Test dient dazu, beobachtete Werte mit erwarteten Werten zu vergleichen. Dieser Test wurde bereits schon einmal in dem Post ["Survive on the Titanic - Case Study"](https://michael-fuchs.netlify.com/2018/08/05/survive-on-the-titanic-case-study/) thematisiert. Aufbauend darauf, soll in diesem Abschnitt der Chi^2-Anpassungstest sowie der Chi^2-Test für zwei Variablen vorgestellt werden. Für diese Untersuchung wird der Datensatz *insurance* verwendet.
+Der Chi^2^-Test dient dazu, beobachtete Werte mit erwarteten Werten zu vergleichen. Dieser Test wurde bereits schon einmal in dem Post ["Survive on the Titanic - Case Study"](https://michael-fuchs.netlify.com/2018/08/05/survive-on-the-titanic-case-study/) thematisiert. Aufbauend darauf, soll in diesem Abschnitt der Chi^2^-Anpassungstest sowie der Chi^2^-Test für zwei Variablen vorgestellt werden. Für diese Untersuchung wird der Datensatz *insurance* verwendet.
 ```{r}
 head(insurance)
 ```
 
-**Chi^2-Anpassungstest**
+**Chi^2^-Anpassungstest**
 
 Im nachfolgenden wird untersucht, ob die Geschlechterverteilung in der vorliegenden Stichprobe von der Häufigkeitsverteilung in der Population abweicht. 
 ```{r}
@@ -62,27 +62,27 @@ Man sieht, dass die Verteilung gleich ausfällt.
 chisq.test(geschl.tabelle)
 ```
 
-Der Chi^2 Test zeigt ein nicht signifikantes Ergebnis (chi^2=0,15, df=1,p=.702). Dies bedeutet, dass die Häufigkeitsverteilung in unserer Stichprobe nicht bedeutsam von er Häufigkeitsverteilung in der Population abweicht. 
+Der Chi^2^ Test zeigt ein nicht signifikantes Ergebnis (chi^2^=0,15, df=1,p=.702). Dies bedeutet, dass die Häufigkeitsverteilung in unserer Stichprobe nicht bedeutsam von der Häufigkeitsverteilung in der Population abweicht. 
 
-**Chi^2-Test für zwei Variablen**
+**Chi^2^-Test für zwei Variablen**
 
-Der Chi^2 Test kann ebenfalls dazu verwendet werden, um die Höhe des Zusammenhangs zwischen zwei nominalskalierten Variablen zu beschreiben. Es soll untersucht werden, ob in den verschiedenen Regionen unterschiedlich viele Männer oder Frauen leben.
+Der Chi^2^ Test kann ebenfalls dazu verwendet werden, um die Höhe des Zusammenhangs zwischen zwei nominalskalierten Variablen zu beschreiben. Es soll untersucht werden, ob in den verschiedenen Regionen unterschiedlich viele Männer oder Frauen leben.
 ```{r}
 tab1 <- table(insurance$sex, insurance$region)
 addmargins(tab1)
 chisq.test(tab1)
 ```
 
-Mit der *addmargins* Funktion wird eine Kontingenztabelle mit den absoluten Häufigkeiten erstellt. Der durchgeführte Test zeigt mit chi2=0,44, df=3, p=.933 ein nicht signifikantes Ergebnis. Frauen und Männer sind demnach in den unterschiedlichen Regionen gleich stark verteilt. 
+Mit der *addmargins* Funktion wird eine Kontingenztabelle mit den absoluten Häufigkeiten erstellt. Der durchgeführte Test zeigt mit chi^2^=0,44, df=3, p=.933 ein nicht signifikantes Ergebnis. Frauen und Männer sind demnach in den unterschiedlichen Regionen gleich stark verteilt. 
 
-Wird der Chi^2 Test auf eine 2x2 Tabelle angewendet, führt R automatisch die Korrektur von Yates durch. Für eine beispielhafte Darstellung wird nachfolgend untersucht, ob sich Männer und Frauen hinsichtlich ihres Raucherstatus (Raucher vs. Nichtraucher) unterscheiden.
+Wird der Chi^2^ Test auf eine 2x2 Tabelle angewendet, führt R automatisch die Korrektur von Yates durch. Für eine beispielhafte Darstellung wird nachfolgend untersucht, ob sich Männer und Frauen hinsichtlich ihres Raucherstatus (Raucher vs. Nichtraucher) unterscheiden.
 ```{r}
 tab2 <- table(insurance$sex, insurance$smoker)
 addmargins(tab2)
 chisq.test(tab2)
 ```
 
-Das Ergebnis ist signifikant (chi^2=7,39, df=1, p<.001). Männer sind demnach häufiger Raucher mehr als Frauen. 
+Das Ergebnis ist signifikant (chi^2^=7,39, df=1, p<.001). Männer sind demnach häufiger Raucher mehr als Frauen. 
 
 
 #3 Wilcoxon-test
@@ -142,7 +142,7 @@ Erneut greift der zentrale Grenzwertsatz nicht, daher wird anstelle der einfakto
 kruskal.test(kruskal$Population.num ~ factor(kruskal$Region))
 ```
 
-Die Prüfgröße des Kruskal-Wallis-Test ist chi^2 verteilt. Wir erhalten ein signifikantes Ergebnis mit chi^2=15,13, df=2 und p<.001. Die Länder der drei Regionen unterschieden sich demnach in ihren Populationswerten. 
+Die Prüfgröße des Kruskal-Wallis-Test ist chi^2^ verteilt. Wir erhalten ein signifikantes Ergebnis mit chi^2^=15,13, df=2 und p<.001. Die Länder der drei Regionen unterschieden sich demnach in ihren Populationswerten. 
 
 
 #5 Conclusion

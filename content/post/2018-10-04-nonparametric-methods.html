@@ -20,7 +20,7 @@ countries &lt;- read_csv(&quot;countries of the world.csv&quot;)</code></pre>
 <h1>Table of Content</h1>
 <ul>
 <li>1 Introduction</li>
-<li>2 Chi^2-test</li>
+<li>2 Chi<sup>2</sup>-test</li>
 <li>3 Wilcoxon-test</li>
 <li>4 Kruskal-Wallis-test</li>
 <li>5 Conclusion</li>
@@ -32,8 +32,8 @@ countries &lt;- read_csv(&quot;countries of the world.csv&quot;)</code></pre>
 <p>Für diesen Post wurde die Datensätze <em>insurance</em> und <em>countries_of_the_world</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie der Datensätze ist unter <a href="https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e" class="uri">https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e</a> (insurance) und <a href="https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006" class="uri">https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006</a> (countries_of_the_world) abrufbar.</p>
 </div>
 <div id="chi2-test" class="section level1">
-<h1>2 Chi^2-test</h1>
-<p>Der Chi^2-Test dient dazu, beobachtete Werte mit erwarteten Werten zu vergleichen. Dieser Test wurde bereits schon einmal in dem Post <a href="https://michael-fuchs.netlify.com/2018/08/05/survive-on-the-titanic-case-study/">“Survive on the Titanic - Case Study”</a> thematisiert. Aufbauend darauf, soll in diesem Abschnitt der Chi^2-Anpassungstest sowie der Chi^2-Test für zwei Variablen vorgestellt werden. Für diese Untersuchung wird der Datensatz <em>insurance</em> verwendet.</p>
+<h1>2 Chi<sup>2</sup>-test</h1>
+<p>Der Chi<sup>2</sup>-Test dient dazu, beobachtete Werte mit erwarteten Werten zu vergleichen. Dieser Test wurde bereits schon einmal in dem Post <a href="https://michael-fuchs.netlify.com/2018/08/05/survive-on-the-titanic-case-study/">“Survive on the Titanic - Case Study”</a> thematisiert. Aufbauend darauf, soll in diesem Abschnitt der Chi<sup>2</sup>-Anpassungstest sowie der Chi<sup>2</sup>-Test für zwei Variablen vorgestellt werden. Für diese Untersuchung wird der Datensatz <em>insurance</em> verwendet.</p>
 <pre class="r"><code>head(insurance)</code></pre>
 <pre><code>## # A tibble: 6 x 7
 ##     age sex      bmi children smoker region    charges
@@ -44,7 +44,7 @@ countries &lt;- read_csv(&quot;countries of the world.csv&quot;)</code></pre>
 ## 4    33 male    22.7        0 no     northwest  21984.
 ## 5    32 male    28.9        0 no     northwest   3867.
 ## 6    31 female  25.7        0 no     southeast   3757.</code></pre>
-<p><strong>Chi^2-Anpassungstest</strong></p>
+<p><strong>Chi<sup>2</sup>-Anpassungstest</strong></p>
 <p>Im nachfolgenden wird untersucht, ob die Geschlechterverteilung in der vorliegenden Stichprobe von der Häufigkeitsverteilung in der Population abweicht.</p>
 <pre class="r"><code>geschl.tabelle &lt;- table(insurance$sex)
 geschl.tabelle</code></pre>
@@ -58,9 +58,9 @@ geschl.tabelle</code></pre>
 ## 
 ## data:  geschl.tabelle
 ## X-squared = 0.14649, df = 1, p-value = 0.7019</code></pre>
-<p>Der Chi^2 Test zeigt ein nicht signifikantes Ergebnis (chi^2=0,15, df=1,p=.702). Dies bedeutet, dass die Häufigkeitsverteilung in unserer Stichprobe nicht bedeutsam von er Häufigkeitsverteilung in der Population abweicht.</p>
-<p><strong>Chi^2-Test für zwei Variablen</strong></p>
-<p>Der Chi^2 Test kann ebenfalls dazu verwendet werden, um die Höhe des Zusammenhangs zwischen zwei nominalskalierten Variablen zu beschreiben. Es soll untersucht werden, ob in den verschiedenen Regionen unterschiedlich viele Männer oder Frauen leben.</p>
+<p>Der Chi<sup>2</sup> Test zeigt ein nicht signifikantes Ergebnis (chi<sup>2</sup>=0,15, df=1,p=.702). Dies bedeutet, dass die Häufigkeitsverteilung in unserer Stichprobe nicht bedeutsam von der Häufigkeitsverteilung in der Population abweicht.</p>
+<p><strong>Chi<sup>2</sup>-Test für zwei Variablen</strong></p>
+<p>Der Chi<sup>2</sup> Test kann ebenfalls dazu verwendet werden, um die Höhe des Zusammenhangs zwischen zwei nominalskalierten Variablen zu beschreiben. Es soll untersucht werden, ob in den verschiedenen Regionen unterschiedlich viele Männer oder Frauen leben.</p>
 <pre class="r"><code>tab1 &lt;- table(insurance$sex, insurance$region)
 addmargins(tab1)</code></pre>
 <pre><code>##         
@@ -74,8 +74,8 @@ addmargins(tab1)</code></pre>
 ## 
 ## data:  tab1
 ## X-squared = 0.43514, df = 3, p-value = 0.9329</code></pre>
-<p>Mit der <em>addmargins</em> Funktion wird eine Kontingenztabelle mit den absoluten Häufigkeiten erstellt. Der durchgeführte Test zeigt mit chi2=0,44, df=3, p=.933 ein nicht signifikantes Ergebnis. Frauen und Männer sind demnach in den unterschiedlichen Regionen gleich stark verteilt.</p>
-<p>Wird der Chi^2 Test auf eine 2x2 Tabelle angewendet, führt R automatisch die Korrektur von Yates durch. Für eine beispielhafte Darstellung wird nachfolgend untersucht, ob sich Männer und Frauen hinsichtlich ihres Raucherstatus (Raucher vs. Nichtraucher) unterscheiden.</p>
+<p>Mit der <em>addmargins</em> Funktion wird eine Kontingenztabelle mit den absoluten Häufigkeiten erstellt. Der durchgeführte Test zeigt mit chi<sup>2</sup>=0,44, df=3, p=.933 ein nicht signifikantes Ergebnis. Frauen und Männer sind demnach in den unterschiedlichen Regionen gleich stark verteilt.</p>
+<p>Wird der Chi<sup>2</sup> Test auf eine 2x2 Tabelle angewendet, führt R automatisch die Korrektur von Yates durch. Für eine beispielhafte Darstellung wird nachfolgend untersucht, ob sich Männer und Frauen hinsichtlich ihres Raucherstatus (Raucher vs. Nichtraucher) unterscheiden.</p>
 <pre class="r"><code>tab2 &lt;- table(insurance$sex, insurance$smoker)
 addmargins(tab2)</code></pre>
 <pre><code>##         
@@ -89,7 +89,7 @@ addmargins(tab2)</code></pre>
 ## 
 ## data:  tab2
 ## X-squared = 7.3929, df = 1, p-value = 0.006548</code></pre>
-<p>Das Ergebnis ist signifikant (chi^2=7,39, df=1, p&lt;.001). Männer sind demnach häufiger Raucher mehr als Frauen.</p>
+<p>Das Ergebnis ist signifikant (chi<sup>2</sup>=7,39, df=1, p&lt;.001). Männer sind demnach häufiger Raucher mehr als Frauen.</p>
 </div>
 <div id="wilcoxon-test" class="section level1">
 <h1>3 Wilcoxon-test</h1>
@@ -174,7 +174,7 @@ sampling.size$n</code></pre>
 ## 
 ## data:  kruskal$Population.num by factor(kruskal$Region)
 ## Kruskal-Wallis chi-squared = 15.13, df = 2, p-value = 0.0005183</code></pre>
-<p>Die Prüfgröße des Kruskal-Wallis-Test ist chi^2 verteilt. Wir erhalten ein signifikantes Ergebnis mit chi^2=15,13, df=2 und p&lt;.001. Die Länder der drei Regionen unterschieden sich demnach in ihren Populationswerten.</p>
+<p>Die Prüfgröße des Kruskal-Wallis-Test ist chi<sup>2</sup> verteilt. Wir erhalten ein signifikantes Ergebnis mit chi<sup>2</sup>=15,13, df=2 und p&lt;.001. Die Länder der drei Regionen unterschieden sich demnach in ihren Populationswerten.</p>
 </div>
 <div id="conclusion" class="section level1">
 <h1>5 Conclusion</h1>
