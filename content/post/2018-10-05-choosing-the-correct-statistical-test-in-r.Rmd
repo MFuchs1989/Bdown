@@ -19,9 +19,9 @@ In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (st
 |  Vergleich von zwei Gruppen  aus einer Stichprobe | ja   | ja |  T-Test für unabhängige Stichproben |
 | '    '   |  ja | nein    |  Welch Test |
 | '    '  | nein | nein    |  Wilcoxon Test  |
-
-
-
+| Vergleich von mehr als zwei Gruppen aus einer Stichprobe | ja | ja    |  einfaktorelle Varianzanalyse (ANOVA) ohne Messwiederholung  |
+| '    '  | ja | nein    |  One-way-Test (Welch)  |
+| '    '  | nein | nein    |  Kruskal Wallis Test  |
 
 
 

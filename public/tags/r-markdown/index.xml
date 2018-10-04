@@ -19,7 +19,7 @@
       <guid>/2018/10/05/choosing-the-correct-statistical-test-in-r/</guid>
       <description>In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (statistische) Test anzuwenden ist.
 *Mittelwertsvergleiche
-Fragestellung / beabsichtigte PrüfungNormalverteilungVarianzhomogenitätTestVergleich von zwei Gruppen aus einer StichprobejajaT-Test für unabhängige Stichproben‘’janeinWelch Test‘’neinneinWilcoxon Test</description>
+Fragestellung / beabsichtigte PrüfungNormalverteilungVarianzhomogenitätTestVergleich von zwei Gruppen aus einer StichprobejajaT-Test für unabhängige Stichproben‘’janeinWelch Test‘’neinneinWilcoxon TestVergleich von mehr als zwei Gruppen aus einer Stichprobejajaeinfaktorelle Varianzanalyse (ANOVA) ohne Messwiederholung‘’janeinOne-way-Test (Welch)‘’neinneinKruskal Wallis Test</description>
     </item>
     
     <item>
