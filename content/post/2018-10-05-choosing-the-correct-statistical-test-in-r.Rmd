@@ -14,7 +14,7 @@ In diesem Post soll zusammengefasst werden, unter welchen Umständen welcher (st
 + **Mittelwertsvergleiche**
 
 
-| **Fragestellung** -      | **Normalverteilung**  -   | **Varianzhomogenität** | **Test**  |
+| **Fragestellung**-      | **Normalverteilung**-   | **Varianzhomogenität** | **Test**  |
 | :------------- | :----------: | :----------: |----------: |
 |  Vergleich von zwei Gruppen  aus einer Stichprobe | ja   | ja |  T-Test für unabhängige Stichproben |
 | s.o.   |  ja | nein    |  Welch Test |
