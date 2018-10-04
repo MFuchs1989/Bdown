@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title> Nonparametric Methods - Michael Fuchs</title>
+<meta property="og:title" content=" Nonparametric Methods - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">6 min read</span>
+    
+
+    <h1 class="article-title"> Nonparametric Methods</h1>
+
+    
+    <span class="article-date">2018/10/04</span>
+    
+
+    <div class="article-content">
+      <pre class="r"><code>library(nortest)
+library(tidyverse)
+library(psych)</code></pre>
+<pre class="r"><code>insurance &lt;- read_csv(&quot;insurance.csv&quot;)
+countries &lt;- read_csv(&quot;countries of the world.csv&quot;)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Chi^2-test</li>
+<li>3 Wilcoxon-test</li>
+<li>4 Kruskal-Wallis-test</li>
+<li>5 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Bei den zwei vorgestellten inferenzstatistischen Tests (<a href="https://michael-fuchs.netlify.com/2018/09/12/t-test/">“T-Test”</a> und <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“ANOVA”</a>) handelte es sich um so genannte parametrische Verfahren. Als Voraussetzung für parametrische Verfahren gilt, dass die unabhängige Variable mindestens intervallskaliert oder normalverteilt ist. Ist eine der beiden Voraussetzung nicht erfüllt, muss auf ein nonparametrisches Verfahren zurückgegriffen werden.</p>
+<p>Für diesen Post wurde die Datensätze <em>insurance</em> und <em>countries_of_the_world</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie der Datensätze ist unter <a href="https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e" class="uri">https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e</a> (insurance) und <a href="https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006" class="uri">https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006</a> (countries_of_the_world) abrufbar.</p>
+</div>
+<div id="chi2-test" class="section level1">
+<h1>2 Chi^2-test</h1>
+<p>Der Chi^2-Test dient dazu, beobachtete Werte mit erwarteten Werten zu vergleichen. Dieser Test wurde bereits schon einmal in dem Post <a href="https://michael-fuchs.netlify.com/2018/08/05/survive-on-the-titanic-case-study/">“Survive on the Titanic - Case Study”</a> thematisiert. Aufbauend darauf, soll in diesem Abschnitt der Chi^2-Anpassungstest sowie der Chi^2-Test für zwei Variablen vorgestellt werden. Für diese Untersuchung wird der Datensatz <em>insurance</em> verwendet.</p>
+<pre class="r"><code>head(insurance)</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##     age sex      bmi children smoker region    charges
+##   &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;    &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt;
+## 1    19 female  27.9        0 yes    southwest  16885.
+## 2    18 male    33.8        1 no     southeast   1726.
+## 3    28 male    33          3 no     southeast   4449.
+## 4    33 male    22.7        0 no     northwest  21984.
+## 5    32 male    28.9        0 no     northwest   3867.
+## 6    31 female  25.7        0 no     southeast   3757.</code></pre>
+<p><strong>Chi^2-Anpassungstest</strong></p>
+<p>Im nachfolgenden wird untersucht, ob die Geschlechterverteilung in der vorliegenden Stichprobe von der Häufigkeitsverteilung in der Population abweicht.</p>
+<pre class="r"><code>geschl.tabelle &lt;- table(insurance$sex)
+geschl.tabelle</code></pre>
+<pre><code>## 
+## female   male 
+##    662    676</code></pre>
+<p>Man sieht, dass die Verteilung gleich ausfällt.</p>
+<pre class="r"><code>chisq.test(geschl.tabelle)</code></pre>
+<pre><code>## 
+##  Chi-squared test for given probabilities
+## 
+## data:  geschl.tabelle
+## X-squared = 0.14649, df = 1, p-value = 0.7019</code></pre>
+<p>Der Chi^2 Test zeigt ein nicht signifikantes Ergebnis (chi^2=0,15, df=1,p=.702). Dies bedeutet, dass die Häufigkeitsverteilung in unserer Stichprobe nicht bedeutsam von er Häufigkeitsverteilung in der Population abweicht.</p>
+<p><strong>Chi^2-Test für zwei Variablen</strong></p>
+<p>Der Chi^2 Test kann ebenfalls dazu verwendet werden, um die Höhe des Zusammenhangs zwischen zwei nominalskalierten Variablen zu beschreiben. Es soll untersucht werden, ob in den verschiedenen Regionen unterschiedlich viele Männer oder Frauen leben.</p>
+<pre class="r"><code>tab1 &lt;- table(insurance$sex, insurance$region)
+addmargins(tab1)</code></pre>
+<pre><code>##         
+##          northeast northwest southeast southwest  Sum
+##   female       161       164       175       162  662
+##   male         163       161       189       163  676
+##   Sum          324       325       364       325 1338</code></pre>
+<pre class="r"><code>chisq.test(tab1)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  tab1
+## X-squared = 0.43514, df = 3, p-value = 0.9329</code></pre>
+<p>Mit der <em>addmargins</em> Funktion wird eine Kontingenztabelle mit den absoluten Häufigkeiten erstellt. Der durchgeführte Test zeigt mit chi2=0,44, df=3, p=.933 ein nicht signifikantes Ergebnis. Frauen und Männer sind demnach in den unterschiedlichen Regionen gleich stark verteilt.</p>
+<p>Wird der Chi^2 Test auf eine 2x2 Tabelle angewendet, führt R automatisch die Korrektur von Yates durch. Für eine beispielhafte Darstellung wird nachfolgend untersucht, ob sich Männer und Frauen hinsichtlich ihres Raucherstatus (Raucher vs. Nichtraucher) unterscheiden.</p>
+<pre class="r"><code>tab2 &lt;- table(insurance$sex, insurance$smoker)
+addmargins(tab2)</code></pre>
+<pre><code>##         
+##            no  yes  Sum
+##   female  547  115  662
+##   male    517  159  676
+##   Sum    1064  274 1338</code></pre>
+<pre class="r"><code>chisq.test(tab2)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+## 
+## data:  tab2
+## X-squared = 7.3929, df = 1, p-value = 0.006548</code></pre>
+<p>Das Ergebnis ist signifikant (chi^2=7,39, df=1, p&lt;.001). Männer sind demnach häufiger Raucher mehr als Frauen.</p>
+</div>
+<div id="wilcoxon-test" class="section level1">
+<h1>3 Wilcoxon-test</h1>
+<p>Der Wilcoxon-Test stellt eine nonparametrische Alternative zum <a href="https://michael-fuchs.netlify.com/2018/09/12/t-test/">“T-Test”</a> dar. In diesem Abschnitt wird lediglich die Verwendung des Wilcoxon-Tests für zwei unabhängige Stichproben behandelt. Dafür wird der Datensatz <em>countries_of_the_world</em> verwendet.</p>
+<pre class="r"><code>glimpse(countries)</code></pre>
+<pre><code>## Observations: 227
+## Variables: 20
+## $ Country                              &lt;chr&gt; &quot;Afghanistan&quot;, &quot;Albania&quot;,...
+## $ Region                               &lt;chr&gt; &quot;ASIA (EX. NEAR EAST)&quot;, &quot;...
+## $ Population                           &lt;int&gt; 31056997, 3581655, 329300...
+## $ `Area (sq. mi.)`                     &lt;int&gt; 647500, 28748, 2381740, 1...
+## $ `Pop. Density (per sq. mi.)`         &lt;chr&gt; &quot;48,0&quot;, &quot;124,6&quot;, &quot;13,8&quot;, ...
+## $ `Coastline (coast/area ratio)`       &lt;chr&gt; &quot;0,00&quot;, &quot;1,26&quot;, &quot;0,04&quot;, &quot;...
+## $ `Net migration`                      &lt;chr&gt; &quot;23,06&quot;, &quot;-4,93&quot;, &quot;-0,39&quot;...
+## $ `Infant mortality (per 1000 births)` &lt;dbl&gt; 16307, 2152, 31, 927, 405...
+## $ `GDP ($ per capita)`                 &lt;int&gt; 700, 4500, 6000, 8000, 19...
+## $ `Literacy (%)`                       &lt;dbl&gt; 360, 865, 700, 970, 1000,...
+## $ `Phones (per 1000)`                  &lt;chr&gt; &quot;3,2&quot;, &quot;71,2&quot;, &quot;78,1&quot;, &quot;2...
+## $ `Arable (%)`                         &lt;chr&gt; &quot;12,13&quot;, &quot;21,09&quot;, &quot;3,22&quot;,...
+## $ `Crops (%)`                          &lt;chr&gt; &quot;0,22&quot;, &quot;4,42&quot;, &quot;0,25&quot;, &quot;...
+## $ `Other (%)`                          &lt;dbl&gt; 8765, 7449, 9653, 75, 977...
+## $ Climate                              &lt;dbl&gt; 1, 3, 1, 2, 3, NA, 2, 2, ...
+## $ Birthrate                            &lt;dbl&gt; 466, 1511, 1714, 2246, 87...
+## $ Deathrate                            &lt;dbl&gt; 2034, 522, 461, 327, 625,...
+## $ Agriculture                          &lt;chr&gt; &quot;0,38&quot;, &quot;0,232&quot;, &quot;0,101&quot;,...
+## $ Industry                             &lt;chr&gt; &quot;0,24&quot;, &quot;0,188&quot;, &quot;0,6&quot;, N...
+## $ Service                              &lt;chr&gt; &quot;0,38&quot;, &quot;0,579&quot;, &quot;0,298&quot;,...</code></pre>
+<p>Es soll untersucht werden, ob die Länder der Regionen “WESTERN EUROPE” und “OCEANIA” sich in ihrem Populationswert unterscheiden.</p>
+<pre class="r"><code>wilcox &lt;- countries %&gt;% filter(Region == &quot;WESTERN EUROPE&quot; | Region == &quot;OCEANIA&quot;) %&gt;%
+  select(Region, Population)
+wilcox$Population.num &lt;- as.numeric(wilcox$Population)</code></pre>
+<p>Wie auch beim <a href="https://michael-fuchs.netlify.com/2018/09/12/t-test/">“T-Test”</a> wird untersucht, ob Normalverteilung der unabhängigen Variable (hier Population) vorliegt.</p>
+<pre class="r"><code>lillie.test(wilcox$Population.num)</code></pre>
+<pre><code>## 
+##  Lilliefors (Kolmogorov-Smirnov) normality test
+## 
+## data:  wilcox$Population.num
+## D = 0.31988, p-value = 7.605e-14</code></pre>
+<p>Das signifikante Ergebnis zeigt uns, dass die Variable <code>Population.num</code> nicht normalverteilt ist.</p>
+<pre class="r"><code>sampling.size &lt;- describeBy(wilcox$Population.num, wilcox$Region, mat = TRUE)
+sampling.size$n</code></pre>
+<pre><code>## [1] 21 28</code></pre>
+<p>Auch der zentrale Grenzwertsatz greift hier nicht, da N<sub>1</sub> und N<sub>2</sub> jeweils &lt; 30 liegen. Es muss daher anstelle des klassischen T-Tests der Wilcoxon-Test durchgeführt werden.</p>
+<pre class="r"><code>wilcox.test(wilcox$Population.num ~ wilcox$Region)</code></pre>
+<pre><code>## 
+##  Wilcoxon rank sum test
+## 
+## data:  wilcox$Population.num by wilcox$Region
+## W = 166, p-value = 0.009101
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<p>Mit W=166 und p&lt;.001 ist der Test signifikant. Die Länder der Regionen “WESTERN EUROPE” und “OCEANIA” unterscheiden sich in ihrem Populationswert.</p>
+</div>
+<div id="kruskal-wallis-test" class="section level1">
+<h1>4 Kruskal-Wallis-test</h1>
+<p>Der Kruskal-Wallis-Test stellt eine nonparametrische Alternative zur <a href="https://michael-fuchs.netlify.com/2018/09/13/anova/">“einfaktoriellen Varianzanalyse”</a> ohne Messwiederholung dar. Es soll hierbei untersucht werden, ob die Länder der Regionen “WESTERN EUROPE”, “OCEANIA” und “NEAR EAST” sich hinsichtlich ihrem Populationswert signifikant voneinander unterscheiden. Es wird erneut der Datensatz <em>countries_of_the_world</em> verwendet.</p>
+<pre class="r"><code>kruskal &lt;- countries %&gt;% filter(Region == &quot;WESTERN EUROPE&quot; | Region == &quot;OCEANIA&quot; | Region == &quot;NEAR EAST&quot;) %&gt;%
+  select(Region, Population)
+kruskal$Population.num &lt;- as.numeric(kruskal$Population)
+kruskal</code></pre>
+<pre><code>## # A tibble: 65 x 3
+##    Region         Population Population.num
+##    &lt;chr&gt;               &lt;int&gt;          &lt;dbl&gt;
+##  1 OCEANIA             57794          57794
+##  2 WESTERN EUROPE      71201          71201
+##  3 OCEANIA          20264082       20264082
+##  4 WESTERN EUROPE    8192880        8192880
+##  5 NEAR EAST          698585         698585
+##  6 WESTERN EUROPE   10379067       10379067
+##  7 OCEANIA             21388          21388
+##  8 NEAR EAST          784301         784301
+##  9 WESTERN EUROPE    5450661        5450661
+## 10 WESTERN EUROPE      47246          47246
+## # ... with 55 more rows</code></pre>
+<p>Die Variable <code>Population.num</code> wurde unter Punkt 3 bereits auf Normalverteilung überprüft (das Ergebnis war signifikant, d.h. es liegt keine Normalverteilung vor). Diesen Schritt sparen wir uns daher an dieser Stelle. Es wird lediglich erneut die Stichprobengröße untersucht.</p>
+<pre class="r"><code>sampling.size &lt;- describeBy(kruskal$Population.num, kruskal$Region, mat = TRUE)
+sampling.size$n</code></pre>
+<pre><code>## [1] 16 21 28</code></pre>
+<p>Erneut greift der zentrale Grenzwertsatz nicht, daher wird anstelle der einfaktoriellen Varinzanalyse der Kruskal-Wallis-Test angewendet.</p>
+<pre class="r"><code>kruskal.test(kruskal$Population.num ~ factor(kruskal$Region))</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  kruskal$Population.num by factor(kruskal$Region)
+## Kruskal-Wallis chi-squared = 15.13, df = 2, p-value = 0.0005183</code></pre>
+<p>Die Prüfgröße des Kruskal-Wallis-Test ist chi^2 verteilt. Wir erhalten ein signifikantes Ergebnis mit chi^2=15,13, df=2 und p&lt;.001. Die Länder der drei Regionen unterschieden sich demnach in ihren Populationswerten.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>5 Conclusion</h1>
+<p>Zwar kommt es bei einer repräsentativen Studie eher selten dazu, dass die unabhängige Variable nicht normalverteilt ist bzw. die Stichprobengröße (pro Gruppe!) unter 30 fällt aber streng genommen ist eine Variable, die durch die Verwendung einer Likert-Skala erhoben wurde, nicht intervallskaliert. Demnach müssten, bei Verwendung solcher Variablen, nonparametrische Verfahren eingesetzt werden.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

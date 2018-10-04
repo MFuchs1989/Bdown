@@ -6,10 +6,19 @@
     <description>Recent content in R Markdown on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 03 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title> Nonparametric Methods</title>
+      <link>/2018/10/04/nonparametric-methods/</link>
+      <pubDate>Thu, 04 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/10/04/nonparametric-methods/</guid>
+      <description>library(nortest)library(tidyverse)library(psych)insurance &amp;lt;- read_csv(&amp;quot;insurance.csv&amp;quot;)countries &amp;lt;- read_csv(&amp;quot;countries of the world.csv&amp;quot;)Table of Content1 Introduction2 Chi^2-test3 Wilcoxon-test4 Kruskal-Wallis-test5 Conclusion1 IntroductionBei den zwei vorgestellten inferenzstatistischen Tests (“T-Test” und “ANOVA”) handelte es sich um so genannte parametrische Verfahren. Als Voraussetzung für parametrische Verfahren gilt, dass die unabhängige Variable mindestens intervallskaliert oder normalverteilt ist. Ist eine der beiden Voraussetzung nicht erfüllt, muss auf ein nonparametrisches Verfahren zurückgegriffen werden.</description>
+    </item>
     
     <item>
       <title>Cronbachs Alpha</title>
@@ -17,8 +26,8 @@
       <pubDate>Wed, 03 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/10/03/cronbachs-alpha/</guid>
-      <description>library(tidyverse)library(psych)World_Happiness_Report &amp;lt;- read_csv(&amp;quot;World_Happiness_Report.csv&amp;quot;)Table of Content1 Introduction2 Internal consistency1 IntroductionDas Ziel eines psychologischen Tests ist immer, Unterschiede zwischen Individuen hinsichtlich bestimmter Konstrukte aufzudecken. Um dies bestmöglich zu gewährleisten, muss man bei der Auswahl an Items ansetzen. Folgende Punkte sind für die Güte eines Items ausschlaggebend:
-Beitrag zur Reliabilität. Das Item sollte die Reliabilität einer Skala verbessern.Schwierigkeit. Das Item sollte weder zu schwer noch zu leicht sein.</description>
+      <description>library(tidyverse)library(psych)World_Happiness_Report &amp;lt;- read_csv(&amp;quot;World_Happiness_Report.csv&amp;quot;)Table of Content1 Introduction2 Internal consistency3 Interpretation4 Conclusion1 IntroductionDas Ziel eines psychologischen Tests ist immer, Unterschiede zwischen Individuen hinsichtlich bestimmter Konstrukte aufzudecken. Um dies bestmöglich zu gewährleisten, muss man bei der Auswahl an Items ansetzen. Folgende Punkte sind für die Güte eines Items ausschlaggebend:
+Beitrag zur Reliabilität. Das Item sollte die Reliabilität einer Skala verbessern.Schwierigkeit.</description>
     </item>
     
     <item>

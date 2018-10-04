@@ -28,6 +28,8 @@ World_Happiness_Report <- read_csv("World_Happiness_Report.csv")
 
 + 1 Introduction
 + 2 Internal consistency
++ 3 Interpretation
++ 4 Conclusion
 
 #1 Introduction
 

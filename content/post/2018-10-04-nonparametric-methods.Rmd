@@ -1,0 +1,156 @@
+---
+title: ' Nonparametric Methods'
+author: Michael Fuchs
+date: '2018-10-04'
+slug: nonparametric-methods
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(nortest)
+library(tidyverse)
+library(psych)
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+insurance <- read_csv("insurance.csv")
+countries <- read_csv("countries of the world.csv")
+```
+
+
+#Table of Content
+
++ 1 Introduction
++ 2 Chi^2-test
++ 3 Wilcoxon-test
++ 4 Kruskal-Wallis-test
++ 5 Conclusion
+
+
+#1 Introduction
+
+Bei den zwei vorgestellten inferenzstatistischen Tests (["T-Test"](https://michael-fuchs.netlify.com/2018/09/12/t-test/) und ["ANOVA"](https://michael-fuchs.netlify.com/2018/09/13/anova/)) handelte es sich um so genannte parametrische Verfahren. Als Voraussetzung für parametrische Verfahren gilt, dass die unabhängige Variable mindestens intervallskaliert oder normalverteilt ist. Ist eine der beiden Voraussetzung nicht erfüllt, muss auf ein nonparametrisches Verfahren zurückgegriffen werden. 
+
+Für diesen Post wurde die Datensätze *insurance* und *countries_of_the_world* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie der Datensätze ist unter <https://drive.google.com/open?id=1_fK9j74lRidUOsC_tlCAYbaJLuWzgR-e> (insurance) und <https://drive.google.com/open?id=1QO_t4hySiqVsSDsVOsKZEOHOkLlWO006> (countries_of_the_world) abrufbar.
+
+
+#2 Chi^2-test
+
+Der Chi^2-Test dient dazu, beobachtete Werte mit erwarteten Werten zu vergleichen. Dieser Test wurde bereits schon einmal in dem Post ["Survive on the Titanic - Case Study"](https://michael-fuchs.netlify.com/2018/08/05/survive-on-the-titanic-case-study/) thematisiert. Aufbauend darauf, soll in diesem Abschnitt der Chi^2-Anpassungstest sowie der Chi^2-Test für zwei Variablen vorgestellt werden. Für diese Untersuchung wird der Datensatz *insurance* verwendet.
+```{r}
+head(insurance)
+```
+
+**Chi^2-Anpassungstest**
+
+Im nachfolgenden wird untersucht, ob die Geschlechterverteilung in der vorliegenden Stichprobe von der Häufigkeitsverteilung in der Population abweicht. 
+```{r}
+geschl.tabelle <- table(insurance$sex)
+geschl.tabelle
+```
+
+Man sieht, dass die Verteilung gleich ausfällt.
+```{r}
+chisq.test(geschl.tabelle)
+```
+
+Der Chi^2 Test zeigt ein nicht signifikantes Ergebnis (chi^2=0,15, df=1,p=.702). Dies bedeutet, dass die Häufigkeitsverteilung in unserer Stichprobe nicht bedeutsam von er Häufigkeitsverteilung in der Population abweicht. 
+
+**Chi^2-Test für zwei Variablen**
+
+Der Chi^2 Test kann ebenfalls dazu verwendet werden, um die Höhe des Zusammenhangs zwischen zwei nominalskalierten Variablen zu beschreiben. Es soll untersucht werden, ob in den verschiedenen Regionen unterschiedlich viele Männer oder Frauen leben.
+```{r}
+tab1 <- table(insurance$sex, insurance$region)
+addmargins(tab1)
+chisq.test(tab1)
+```
+
+Mit der *addmargins* Funktion wird eine Kontingenztabelle mit den absoluten Häufigkeiten erstellt. Der durchgeführte Test zeigt mit chi2=0,44, df=3, p=.933 ein nicht signifikantes Ergebnis. Frauen und Männer sind demnach in den unterschiedlichen Regionen gleich stark verteilt. 
+
+Wird der Chi^2 Test auf eine 2x2 Tabelle angewendet, führt R automatisch die Korrektur von Yates durch. Für eine beispielhafte Darstellung wird nachfolgend untersucht, ob sich Männer und Frauen hinsichtlich ihres Raucherstatus (Raucher vs. Nichtraucher) unterscheiden.
+```{r}
+tab2 <- table(insurance$sex, insurance$smoker)
+addmargins(tab2)
+chisq.test(tab2)
+```
+
+Das Ergebnis ist signifikant (chi^2=7,39, df=1, p<.001). Männer sind demnach häufiger Raucher mehr als Frauen. 
+
+
+#3 Wilcoxon-test
+
+Der Wilcoxon-Test stellt eine nonparametrische Alternative zum ["T-Test"](https://michael-fuchs.netlify.com/2018/09/12/t-test/) dar. In diesem Abschnitt wird lediglich die Verwendung des Wilcoxon-Tests für zwei unabhängige Stichproben behandelt. Dafür wird der Datensatz *countries_of_the_world* verwendet. 
+```{r}
+glimpse(countries)
+```
+
+Es soll untersucht werden, ob die Länder der Regionen "WESTERN EUROPE" und "OCEANIA" sich in ihrem Populationswert unterscheiden. 
+
+```{r}
+wilcox <- countries %>% filter(Region == "WESTERN EUROPE" | Region == "OCEANIA") %>%
+  select(Region, Population)
+wilcox$Population.num <- as.numeric(wilcox$Population)
+```
+
+Wie auch beim ["T-Test"](https://michael-fuchs.netlify.com/2018/09/12/t-test/) wird untersucht, ob Normalverteilung der unabhängigen Variable (hier Population) vorliegt. 
+
+
+```{r}
+lillie.test(wilcox$Population.num)
+```
+
+Das signifikante Ergebnis zeigt uns, dass die Variable `Population.num` nicht normalverteilt ist.  
+```{r}
+sampling.size <- describeBy(wilcox$Population.num, wilcox$Region, mat = TRUE)
+sampling.size$n
+```
+
+Auch der zentrale Grenzwertsatz greift hier nicht, da N~1~ und N~2~ jeweils < 30 liegen. Es muss daher anstelle des klassischen T-Tests der Wilcoxon-Test durchgeführt werden. 
+```{r}
+wilcox.test(wilcox$Population.num ~ wilcox$Region)
+```
+
+Mit W=166 und p<.001 ist der Test signifikant. Die Länder der Regionen "WESTERN EUROPE" und "OCEANIA" unterscheiden sich in ihrem Populationswert. 
+
+
+#4 Kruskal-Wallis-test
+
+Der Kruskal-Wallis-Test stellt eine nonparametrische Alternative zur ["einfaktoriellen Varianzanalyse"](https://michael-fuchs.netlify.com/2018/09/13/anova/) ohne Messwiederholung dar. Es soll hierbei untersucht werden, ob die Länder der Regionen "WESTERN EUROPE", "OCEANIA" und "NEAR EAST" sich hinsichtlich ihrem Populationswert signifikant voneinander unterscheiden. Es wird erneut der Datensatz *countries_of_the_world* verwendet. 
+```{r}
+kruskal <- countries %>% filter(Region == "WESTERN EUROPE" | Region == "OCEANIA" | Region == "NEAR EAST") %>%
+  select(Region, Population)
+kruskal$Population.num <- as.numeric(kruskal$Population)
+kruskal
+```
+
+Die Variable `Population.num` wurde unter Punkt 3 bereits auf Normalverteilung überprüft (das Ergebnis war signifikant, d.h. es liegt keine Normalverteilung vor). Diesen Schritt sparen wir uns daher an dieser Stelle. Es wird lediglich erneut die Stichprobengröße untersucht.
+```{r}
+sampling.size <- describeBy(kruskal$Population.num, kruskal$Region, mat = TRUE)
+sampling.size$n
+```
+
+Erneut greift der zentrale Grenzwertsatz nicht, daher wird anstelle der einfaktoriellen Varinzanalyse der Kruskal-Wallis-Test angewendet. 
+```{r}
+kruskal.test(kruskal$Population.num ~ factor(kruskal$Region))
+```
+
+Die Prüfgröße des Kruskal-Wallis-Test ist chi^2 verteilt. Wir erhalten ein signifikantes Ergebnis mit chi^2=15,13, df=2 und p<.001. Die Länder der drei Regionen unterschieden sich demnach in ihren Populationswerten. 
+
+
+#5 Conclusion
+
+Zwar kommt es bei einer repräsentativen Studie eher selten dazu, dass die unabhängige Variable nicht normalverteilt ist bzw. die Stichprobengröße (pro Gruppe!) unter 30 fällt aber streng genommen ist eine Variable, die durch die Verwendung einer Likert-Skala erhoben wurde, nicht intervallskaliert. Demnach müssten, bei Verwendung solcher Variablen, nonparametrische Verfahren eingesetzt werden.   
+
+
+
+
+
+
