@@ -1,0 +1,44 @@
+---
+title: Exploratory Factor Analysis
+author: Michael Fuchs
+date: '2018-10-07'
+slug: exploratory-factor-analysis
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<pre class="r"><code>library(tidyverse)
+library(psych)
+library(readxl)</code></pre>
+<pre class="r"><code>BigFive &lt;- read_excel(&quot;BigFive.xlsx&quot;)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Determination of the number of factors</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Mithilfe der exploratorischen Faktorenanalyse kann aus den Beobachtungen vieler manifester Variablen (beispielsweise Items eines Fragebogens) auf wenige zugrunde liegende latente Variablen geschlossen werden. Diese latente Variablen werden Faktoren genannt. Eine Faktorenanalyse führt demnach zu einer Reduktion der Variablen auf wenige, den manifesten Variablen zugrunde liegende, Faktoren.</p>
+<p>Für die exemplarische Durchführung einer Faktorenanalyse wurde der Datensatz <em>BigFive</em> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1bD6qeHLfkPBQTosJZFug0PthTRFjbNf0" class="uri">https://drive.google.com/open?id=1bD6qeHLfkPBQTosJZFug0PthTRFjbNf0</a> abrufbar.</p>
+</div>
+<div id="determination-of-the-number-of-factors" class="section level1">
+<h1>2 Determination of the number of factors</h1>
+<p>Die exploratorische Faktorenanalyse ist ein Verfahren das angewendet wird, wenn in einem Datensatz nach einer noch unbekannten korrelativen Struktur gesucht werden soll. Sie gehört somit in die Gruppe der strukturentdeckenden Verfahren. Nachfolgend soll die Anzahl an Faktoren für den Datensatz <em>BigFive</em> bestimmt werden.</p>
+<pre class="r"><code>fa.parallel(BigFive, fa=&quot;fa&quot;)</code></pre>
+<p><img src="/post/2018-10-07-exploratory-factor-analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre><code>## Parallel analysis suggests that the number of factors =  5  and the number of components =  NA</code></pre>
+<p>Die <em>fa.parallel</em> Funktion enthält zwei Argumente. Das erste Argument ist der zu untersuchende Datensatz und das zweite Argument legt die Extraktionsmethode fest. Die Bezeichnung <em>fa=“fa”</em> steht dabei für “Hauptachsenanalyse”. Des Weiteren wäre die Auswahl der “Hauptkomponentenanalyse” (fa=“pc”) möglich gewesen. Diese zählt allerdings im strengen Sinne nicht zur Faktorenanalyse.</p>
+<p><strong>Eigenwert-Kriterium</strong></p>
+<p>In dem von uns erstellten Diagramm ist der Eigenwertverlauf abgebildet. Dabei stellt jedes Kreuz den Eigenwert eines gefundenen Faktors dar. Der größte gefundene Wert wird auf der x-Achse als erstes (ganz links) abgebildet. Geht man demnach auf der x-Achse weiter nach rechts, werden die Eigenwerte immer kleiner. Der Eigenwert eines jeden Faktors sagt aus, wie viel Varianz dieser Faktor an der Gesamtvarianz aller Items aufklärt. Es sollten nur Faktoren extrahiert werden, deren Eigenwert größer 1 liegt. In der Abbildung ist erkennbar, dass 4 Faktoren oberhalb der Geraden (Eigenwert von 1) liegen. Dem Eigenwert-Kriterium nach, besteht der Datensatz <em>BigFive</em> aus 4 Faktoren. Aus der Literatur ist allerdings bekannt, dass das Fünf-Faktoren-Modell (FFM) aus 5 Hauptdimensionen der Persönlichkeit besteht. Das dise nicht alle nach dem Eigenwert-Kriterium identifiziert werden liegt daran, dass diese Methode recht willkürlich ist und sowohl zur Über- als auch Unterfaktorisierung führen kann. Aus diesem Grund wird meistens der Scree-Test zusätzlich hinzugezogen.</p>
+<p><strong>Scree-Test</strong></p>
+<p>Der Scree-Test ist kein herkömmlicher statistischer Test wie der T-Test oder ähnliches. Er ist mehr eine graphische Überprüfung des Screeplots (das erstellte Diagramm). Dabei wird nach einer Stelle nahe dem Wert 1 im Eigenwertverlauf gesucht, an der die Kurve plötzlich nach unten wegknickt. Diese Stelle wird meistens auch “Ellbogen” genannt und ist nach dem 5ten Faktor zu finden. Berücksichtigt man zusätzlich zum Eigenwert-Kriterium den Scree-Test, so lassen sich 5 Faktoren für den Datensatz <em>BigFive</em> bestimmen.</p>
+</div>
+<div id="execution-of-the-factor-analysis" class="section level1">
+<h1>3 Execution of the factor analysis</h1>
+</div>

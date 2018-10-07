@@ -6,10 +6,20 @@
     <description>Recent content in R on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 07 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Exploratory Factor Analysis</title>
+      <link>/2018/10/07/exploratory-factor-analysis/</link>
+      <pubDate>Sun, 07 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/10/07/exploratory-factor-analysis/</guid>
+      <description>library(tidyverse)library(psych)library(readxl)BigFive &amp;lt;- read_excel(&amp;quot;BigFive.xlsx&amp;quot;)Table of Content1 Introduction2 Determination of the number of factors1 IntroductionMithilfe der exploratorischen Faktorenanalyse kann aus den Beobachtungen vieler manifester Variablen (beispielsweise Items eines Fragebogens) auf wenige zugrunde liegende latente Variablen geschlossen werden. Diese latente Variablen werden Faktoren genannt. Eine Faktorenanalyse führt demnach zu einer Reduktion der Variablen auf wenige, den manifesten Variablen zugrunde liegende, Faktoren.
+Für die exemplarische Durchführung einer Faktorenanalyse wurde der Datensatz BigFive verwendet.</description>
+    </item>
     
     <item>
       <title> Nonparametric Methods</title>
