@@ -17,8 +17,7 @@
       <pubDate>Sun, 07 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/10/07/exploratory-factor-analysis/</guid>
-      <description>library(tidyverse)library(psych)library(readxl)BigFive &amp;lt;- read_excel(&amp;quot;BigFive.xlsx&amp;quot;)Table of Content1 Introduction2 Determination of the number of factors1 IntroductionMithilfe der exploratorischen Faktorenanalyse kann aus den Beobachtungen vieler manifester Variablen (beispielsweise Items eines Fragebogens) auf wenige zugrunde liegende latente Variablen geschlossen werden. Diese latente Variablen werden Faktoren genannt. Eine Faktorenanalyse führt demnach zu einer Reduktion der Variablen auf wenige, den manifesten Variablen zugrunde liegende, Faktoren.
-Für die exemplarische Durchführung einer Faktorenanalyse wurde der Datensatz BigFive verwendet.</description>
+      <description>library(tidyverse)library(psych)library(readxl)library(GPArotation)BigFive &amp;lt;- read_excel(&amp;quot;BigFive.xlsx&amp;quot;)Table of Content1 Introduction2 Determination of the number of factors3 Execution of the factor analysis4 Conclusion1 IntroductionMithilfe der exploratorischen Faktorenanalyse kann aus den Beobachtungen vieler manifester Variablen (beispielsweise Items eines Fragebogens) auf wenige zugrunde liegende latente Variablen geschlossen werden. Diese latenten Variablen werden Faktoren genannt. Eine Faktorenanalyse führt demnach zu einer Reduktion der Variablen auf wenige, den manifesten Variablen zugrunde liegende, Faktoren.</description>
     </item>
     
     <item>

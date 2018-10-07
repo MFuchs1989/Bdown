@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(psych)
 library(readxl)
+library(GPArotation)
 ```
 ```{r results='hide', message=FALSE, warning=FALSE}
 BigFive <- read_excel("BigFive.xlsx")
@@ -28,11 +29,12 @@ BigFive <- read_excel("BigFive.xlsx")
 
 + 1 Introduction
 + 2 Determination of the number of factors
-
++ 3 Execution of the factor analysis
++ 4 Conclusion
 
 #1 Introduction
 
-Mithilfe der exploratorischen Faktorenanalyse kann aus den Beobachtungen vieler manifester Variablen (beispielsweise Items eines Fragebogens) auf wenige zugrunde liegende latente Variablen geschlossen werden. Diese latente Variablen werden Faktoren genannt. Eine Faktorenanalyse führt demnach zu einer Reduktion der Variablen auf wenige, den manifesten Variablen zugrunde liegende, Faktoren.
+Mithilfe der exploratorischen Faktorenanalyse kann aus den Beobachtungen vieler manifester Variablen (beispielsweise Items eines Fragebogens) auf wenige zugrunde liegende latente Variablen geschlossen werden. Diese latenten Variablen werden Faktoren genannt. Eine Faktorenanalyse führt demnach zu einer Reduktion der Variablen auf wenige, den manifesten Variablen zugrunde liegende, Faktoren.
 
 Für die exemplarische Durchführung einer Faktorenanalyse wurde der Datensatz *BigFive* verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1bD6qeHLfkPBQTosJZFug0PthTRFjbNf0> abrufbar.
 
@@ -49,7 +51,7 @@ Die *fa.parallel* Funktion enthält zwei Argumente. Das erste Argument ist der z
 
 **Eigenwert-Kriterium**
 
-In dem von uns erstellten Diagramm ist der Eigenwertverlauf abgebildet. Dabei stellt jedes Kreuz den Eigenwert eines gefundenen Faktors dar. Der größte gefundene Wert wird auf der x-Achse als erstes (ganz links) abgebildet. Geht man demnach auf der x-Achse weiter nach rechts, werden die Eigenwerte immer kleiner. Der Eigenwert eines jeden Faktors sagt aus, wie viel Varianz dieser Faktor an der Gesamtvarianz aller Items aufklärt. Es sollten nur Faktoren extrahiert werden, deren Eigenwert größer 1 liegt. In der Abbildung ist erkennbar, dass 4 Faktoren oberhalb der Geraden (Eigenwert von 1) liegen. Dem Eigenwert-Kriterium nach, besteht der Datensatz *BigFive* aus 4 Faktoren. Aus der Literatur ist allerdings bekannt, dass das Fünf-Faktoren-Modell (FFM) aus 5 Hauptdimensionen der Persönlichkeit besteht. Das dise nicht alle nach dem Eigenwert-Kriterium identifiziert werden liegt daran, dass diese Methode recht willkürlich ist und sowohl zur Über- als auch Unterfaktorisierung führen kann. Aus diesem Grund wird meistens der Scree-Test zusätzlich hinzugezogen. 
+In dem von uns erstellten Diagramm ist der Eigenwertverlauf abgebildet. Dabei stellt jedes Kreuz den Eigenwert eines gefundenen Faktors dar. Der größte gefundene Wert wird auf der x-Achse als erstes (ganz links) abgebildet. Geht man demnach auf der x-Achse weiter nach rechts, werden die Eigenwerte immer kleiner. Der Eigenwert eines jeden Faktors sagt aus, wie viel Varianz dieser Faktor an der Gesamtvarianz aller Items aufklärt. Es sollten nur Faktoren extrahiert werden, deren Eigenwert größer 1 liegt. In der Abbildung ist erkennbar, dass 4 Faktoren oberhalb der Geraden (Eigenwert von 1) liegen. Dem Eigenwert-Kriterium nach, besteht der Datensatz *BigFive* aus 4 Faktoren. Aus der Literatur ist allerdings bekannt, dass das Fünf-Faktoren-Modell (FFM) aus 5 Hauptdimensionen der Persönlichkeit besteht. Dass diese nicht alle nach dem Eigenwert-Kriterium identifiziert werden liegt daran, dass diese Methode recht willkürlich ist und sowohl zur Über- als auch Unterfaktorisierung führen kann. Aus diesem Grund wird meistens der Scree-Test zusätzlich hinzugezogen. 
 
 **Scree-Test**
 
@@ -58,10 +60,41 @@ Der Scree-Test ist kein herkömmlicher statistischer Test wie der T-Test oder ä
 
 #3 Execution of the factor analysis
 
+Da nun die Anzahl der zu extrahierenden Faktoren festgelegt ist, kann die eigentliche Faktorenanalyse durchgeführt werden. Dabei sind erneut zwei Entscheidungen zu treffen:
+
++ Wahl der Extraktionsmethode: diese kann mithilfe der Maximum-Likelihood-Faktorenanalyse oder der Hauptachsenanalyse durchgeführt werden.
++ Wahl der Rotationsmethode: hierbei steht die orthogonale Rotation (die Faktoren dürfen nicht korrelieren) oder die oblique Rotation (die Faktoren dürfen korrelieren) zur Verfügung.
+
+Im folgenden Beispiel soll eine Maximum-Likelihood-Faktorenanalyse mit Promax-Rotation durchgeführt werden. 
+```{r}
+fa.ml <- fa(BigFive, 5, fm="ml", rotate = "promax")
+```
+
+Die Funktion beinhaltet 4 Argumente. *BigFive* ist der Name des Datensatzes, in dem die zu analysierenden Variablen enthalten sind. *5* ist die Anzahl der zu extrahierenden Faktoren, welche im vorherigen Kapitel bestimmt worden sind. *fm* ist die gewünschte Extraktionsmethode. Dabei steht *ml* für Maximum Likelihood. *rotate* ist die gewünschte Rotationsmethode, wobei *promax* eine oblique Methode der Rotation ist. 
+
+Eine schöne Übersicht der Ergebnisse, lässt sich mit der *print* Funktion darstellen. Mit dem Zusatzargument *digits=2* werden alle Zahlen auf zwei Nachkommastellen gerundet und mit *cut=.3* werden nur Faktorladungen größer 0,30 angezeigt. Mit *sort=TRUE* werden alle Items, die auf den selben Faktor laden, in der Tabelle direkt untereinander gestellt. 
+```{r}
+print(fa.ml, digits = 2, cut = .3, sort = TRUE)
+```
+
+**Standardized loadings (pattern matrix) based upon correlation matrix**
+
+Die erste Tabelle enthält die Faktorladungen der einzelnen Variablen auf den Faktoren ML1 bis ML5. Sehr erstrebenswert ist es, wenn die Variablen möglichst hoch auf einem und möglichst gering auf allen anderen Faktoren laden. Die Kommunalität (*h2*) sagt aus, wie viel Prozent der Varianz dieses Items durch alle fünf Faktoren erklärt wird. Dahingegen drückt der Uniqueness-Wert (*u2*) den Anteil der Varianz aus, der nicht durch die Faktoren erklärt wird. Je höher u2 ist, desto weniger hat das Item mit den anderen Items gemeinsam. Der Komplexitätswert (*com*) erklärt, wie viele latente Faktoren notwendig sind, um die Varianz dieses Items zu erklären. Erstrebenswert ist hierbei, dass alle Items einen com-Wert nahe 1 besitzen, denn dies entspricht einer Einfachstruktur. Dies bedeutet, dass die Items eine hohe Ladung auf genau einem einzigen Faktor haben und niedrige Ladungen auf allen anderen Faktoren besitzen. 
+
+**SS loadings**
+
+Die nächste Tabelle zeigt die quadrierten und aufsummierten Ladungen der einzelnen Faktoren. Die Zeile *Proportion Var* enthält den Anteil der Varianz dieses Faktors an der Gesamtvarianz. In der darunterliegenden Zeile *Cumulative Var* werden diese Werte addiert. Hier erkennt man, dass die fünf Faktoren zusammen 52% der Gesamtvarianz aufklären. In der Zeile *Proportion Explained* steht, wie viel jeder Faktor zur erklärten Varianz (die 52%) beiträgt. 
 
 
+**With factor correlations of**
+
+Diese Tabelle enthält die Interfaktor-Korrelationen. Man sieht, dass fast alle Korrelationen klein bis mittelstark ausfallen. 
+
+Anschließend werden noch eine Reihe von Fit-Statistiken ausgegeben, auf die in diesem Post nicht weiter eingegangen wird. 
 
 
+#4 Conclusion
 
+Die hier vorgestellte Faktorenanalyse sollte eingesetzt werden, wenn noch unklar, ist wie viele Faktoren in dem zu analysierenden Datensatz enthalten sind. Hat man bereits eine genaue Vorstellung von der Faktorstruktur eines Datensatzes, so sollte man statt der exploratorischen eine konfirmatorische Faktorenanalyse durchführen. 
 
 
