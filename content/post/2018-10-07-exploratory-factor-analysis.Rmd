@@ -95,6 +95,6 @@ Anschließend werden noch eine Reihe von Fit-Statistiken ausgegeben, auf die in 
 
 #4 Conclusion
 
-Die hier vorgestellte Faktorenanalyse sollte eingesetzt werden, wenn noch unklar, ist wie viele Faktoren in dem zu analysierenden Datensatz enthalten sind. Hat man bereits eine genaue Vorstellung von der Faktorstruktur eines Datensatzes, so sollte man statt der exploratorischen eine konfirmatorische Faktorenanalyse durchführen. 
+Die hier vorgestellte Faktorenanalyse sollte eingesetzt werden, wenn noch unklar ist, wie viele Faktoren in dem zu analysierenden Datensatz enthalten sind. Hat man bereits eine genaue Vorstellung von der Faktorstruktur eines Datensatzes, so sollte man statt der exploratorischen eine konfirmatorische Faktorenanalyse durchführen. 
 
 
