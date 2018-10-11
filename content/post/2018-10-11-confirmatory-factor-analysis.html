@@ -1,0 +1,135 @@
+---
+title: Confirmatory Factor Analysis
+author: Michael Fuchs
+date: '2018-10-11'
+slug: confirmatory-factor-analysis
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<pre class="r"><code>library(psych)
+library(lavaan)
+library(readxl)</code></pre>
+<pre class="r"><code>Arbeitszufriedenheit &lt;- read_excel(&quot;Arbeitszufriedenheit.xlsx&quot;)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 One-factorial model</li>
+<li>3 Comparative observation</li>
+<li>4 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>In dem Beitrag zur <a href="https://michael-fuchs.netlify.com/2018/10/07/exploratory-factor-analysis/">“exploratorischen Faktorenanalyse”</a> wurde bereits erwähnt, dass die konfirmatorische Faktorenanalyse als Strukturgleichungsmodell angewendet werden sollte, wenn die Faktorstruktur eines Datensatzes bereits bekannt ist. Nachfolgend soll dieses Verfahren vorgestellt werden.</p>
+<p>Für die exemplarische Durchführung der konfirmatorischen Faktorenanalyse wurde der Datensatz <em>Arbeitszufriedenheit</em> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=1z2unBqG7CJMJRguwYD3uJGXHO6LLT_qP" class="uri">https://drive.google.com/open?id=1z2unBqG7CJMJRguwYD3uJGXHO6LLT_qP</a> abrufbar.</p>
+</div>
+<div id="one-factorial-model" class="section level1">
+<h1>2 One-factorial model</h1>
+<p>In der konfirmatorischen Faktorenanalyse werden die Beziehungen zwischen den manifesten Variablen und den latenten Variablen untersucht. In diesem Messmodell wird beschrieben, wie die latenten Variablen gemessen werden sollen. Der Unterschied zur exploratorischen Faktorenanalyse besteht darin, dass in der konfirmatorischen Faktorenanalyse sowohl die Anzahl der latenten Variablen als auch die Verbindung der Items zu diesen latenten Variablen festgelegt wird. Dies bedeutet, dass vom Benutzer selber bestimmt wird, welches Item auf welchen Faktor (latente Variable) laden darf. So kann bestimmt werden, ob das vorgegebene Modell angemessen auf die beobachteten Daten passt.</p>
+<p>Es soll untersucht werden, ob die fünf Items zur Messung der Arbeitszufriedenheit eine gute Passung haben. Im ersten Schritt wird hierbei folgende Modellgleichung spezifiziert.</p>
+<pre class="r"><code>konf.fa.1.txt &lt;- &#39;A.zufr. =~ Zufr.1 + Zufr.2 + Zufr.3 + Zufr.4 + Zufr.5&#39; </code></pre>
+<p>Die latente Variable (hier <em>A.zufr.</em>) wird gemessen durch (<em>=~</em>) die die 5 Items <em>Zufr.1 bis Zufr.5</em>. Die Bezeichnung der latenten Variablen kann frei gewählt werden. Allerdings ist zu beachten, dass die genannten Items mit der selben Bezeichnung auch im Datensatz vorhanden sind. Die Modellschätzung erfolgt mit der <em>cfa</em> Funktion.</p>
+<pre class="r"><code>konf.fa.1.fit &lt;- cfa(konf.fa.1.txt, data=Arbeitszufriedenheit)</code></pre>
+<p>Eine detaillierte Übersicht über die Ergebnisse kann mit der <em>summary</em> Funktion angefordert werden. Es werden anschließend nur die wichtigsten Elemente besprochen.</p>
+<pre class="r"><code>summary(konf.fa.1.fit, fit.measures=TRUE)</code></pre>
+<pre><code>## lavaan 0.6-2 ended normally after 24 iterations
+## 
+##   Optimization method                           NLMINB
+##   Number of free parameters                         10
+## 
+##   Number of observations                           185
+## 
+##   Estimator                                         ML
+##   Model Fit Test Statistic                       7.689
+##   Degrees of freedom                                 5
+##   P-value (Chi-square)                           0.174
+## 
+## Model test baseline model:
+## 
+##   Minimum Function Test Statistic              857.480
+##   Degrees of freedom                                10
+##   P-value                                        0.000
+## 
+## User model versus baseline model:
+## 
+##   Comparative Fit Index (CFI)                    0.997
+##   Tucker-Lewis Index (TLI)                       0.994
+## 
+## Loglikelihood and Information Criteria:
+## 
+##   Loglikelihood user model (H0)              -1550.406
+##   Loglikelihood unrestricted model (H1)      -1546.561
+## 
+##   Number of free parameters                         10
+##   Akaike (AIC)                                3120.812
+##   Bayesian (BIC)                              3153.015
+##   Sample-size adjusted Bayesian (BIC)         3121.342
+## 
+## Root Mean Square Error of Approximation:
+## 
+##   RMSEA                                          0.054
+##   90 Percent Confidence Interval          0.000  0.125
+##   P-value RMSEA &lt;= 0.05                          0.392
+## 
+## Standardized Root Mean Square Residual:
+## 
+##   SRMR                                           0.018
+## 
+## Parameter Estimates:
+## 
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+##   Standard Errors                             Standard
+## 
+## Latent Variables:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##   A.zufr. =~                                          
+##     Zufr.1            1.000                           
+##     Zufr.2            0.961    0.045   21.392    0.000
+##     Zufr.3            0.970    0.042   22.901    0.000
+##     Zufr.4            0.952    0.053   17.947    0.000
+##     Zufr.5            0.912    0.073   12.429    0.000
+## 
+## Variances:
+##                    Estimate  Std.Err  z-value  P(&gt;|z|)
+##    .Zufr.1            0.484    0.078    6.231    0.000
+##    .Zufr.2            0.695    0.093    7.455    0.000
+##    .Zufr.3            0.542    0.080    6.763    0.000
+##    .Zufr.4            1.187    0.141    8.401    0.000
+##    .Zufr.5            2.762    0.302    9.146    0.000
+##     A.zufr.           3.375    0.402    8.387    0.000</code></pre>
+<p><strong>lavaan 0.6-2 ended normally after 24 iterations</strong></p>
+<p>Der erste Teil der Ausgabe gibt Aufschluss über die benötigten Iterationen und der verwendeten Stichprobengröße. Des Weiteren wurde ein Chi<sup>2</sup> Test durchgeführt um zu überprüfen, ob die beobachtete Varianz-Kovarianz-Matrix sich signifikant von der modellimplizierten Varianz-Kovarianz-Matrix unterscheidet. Mit p = .174 ist das Ergebnis nicht signifikant. Dies deutet darauf hin, dass das Modell gut auf die Daten passt.</p>
+<p><strong>Latent Variables:</strong></p>
+<p>Dieser Teil der Ergebnisse beinhaltet eine Tabelle über die Ladungskoeffizienten sowie der Varianzen der manifesten und latenten Variablen.</p>
+</div>
+<div id="comparative-observation" class="section level1">
+<h1>3 Comparative observation</h1>
+<p>Die konfirmatorische Faktorenanalyse wird oft eingesetzt, um verschiedene Faktorenmodelle empirisch miteinander zu vergleichen. Für dieses Beispiel soll untersucht werden, ob das zuvor erstellte einfaktorielle Modell besser auf die Daten passt als das nachfolgend erstellte zweifaktorielle Modell.</p>
+<pre class="r"><code>konf.fa.2.txt &lt;- &#39; A.zufr.1  =~ Zufr.1 + Zufr.2 + Zufr.3
+                   A.zufr.2 =~ Zufr.4 + Zufr.5 &#39;</code></pre>
+<p>Es wurde festgelegt, dass die Items Zufr.1 bis Zufr.3 auf den ersten Faktor (<em>A.zufr.1</em>) und die Items Zufr.4 &amp; Zufr.5 auf den zweiten Faktor (*A.zufr.2) laden.</p>
+<pre class="r"><code>konf.fa.2.fit &lt;- cfa(konf.fa.2.txt, data=Arbeitszufriedenheit)</code></pre>
+<p>Mittels der <em>anova</em> Funktion werden die beiden Modelle nun miteinander verglichen.</p>
+<pre class="r"><code>anova(konf.fa.1.fit, konf.fa.2.fit)</code></pre>
+<pre><code>## Chi Square Difference Test
+## 
+##               Df    AIC    BIC  Chisq Chisq diff Df diff Pr(&gt;Chisq)  
+## konf.fa.2.fit  4 3116.8 3152.2 1.6360                                
+## konf.fa.1.fit  5 3120.8 3153.0 7.6895     6.0535       1    0.01388 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Die Spalte <strong>DF</strong> beschreibt die Freiheitsgrade der Modelle. Es folgt das <strong>AIC</strong> (Akaikes Informationskriterium) und das <strong>BIC</strong> (Bayesianische Informationskriterium). Je kleiner diese Werte ausfallen, desto besser passt das Modell auf die Daten. Die Spalte <strong>Chisq</strong> enthält den jeweiligen Chi<sup>2</sup> Wert der beiden Modelle. Für die Fragestellung, welches Modell nun signifikant besser auf die Daten passt, betrachtet man den p-Wert in der Spalte <strong>Pr(&gt;Chisq)</strong>. Dieser ist hier unter .05 und zeigt somit ein signifikantes Ergebnis. Das bedeutet, dass das zweifaktorielle Modell besser auf die Daten passt als das einfaktorielle Modell.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>4 Conclusion</h1>
+<p>Nochmal zusammengefasst:</p>
+<p>Bei der <a href="https://michael-fuchs.netlify.com/2018/10/07/exploratory-factor-analysis/">“exploratorischen Faktorenanalyse”</a> geht es um die Aufdeckung von unbekannten Strukturen der vorliegenden Variablen. Vor der Analyse ist die Anzahl der extrahierenden Faktoren unbekannt. Mit der exploratorischen Faktorenanalyse möchte man nun diese Faktoren “entdecken”. Es handelt sich um ein strukturerkennendes Verfahren.</p>
+<p>Bei der konfirmatorischen Faktorenanalyse existiert hingegen schon eine konkrete Vorstellung über die mögliche Anzahl an Faktoren/latente Variablen. Mittels der konfirmatorischen Faktorenanalyse soll nun die vorgegebene Faktorenstruktur auf ihre Konsistenz mit den vorhandenen Daten ermittelt werden. Es handelt sich um ein strukturüberprüfendes Verfahren.</p>
+</div>

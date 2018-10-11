@@ -1,0 +1,97 @@
+---
+title: Confirmatory Factor Analysis
+author: Michael Fuchs
+date: '2018-10-11'
+slug: confirmatory-factor-analysis
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(psych)
+library(lavaan)
+library(readxl)
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+Arbeitszufriedenheit <- read_excel("Arbeitszufriedenheit.xlsx")
+```
+
+
+#Table of Content
+
++ 1 Introduction
++ 2 One-factorial model
++ 3 Comparative observation
++ 4 Conclusion
+
+#1 Introduction
+
+In dem Beitrag zur ["exploratorischen Faktorenanalyse"](https://michael-fuchs.netlify.com/2018/10/07/exploratory-factor-analysis/) wurde bereits erwähnt, dass die konfirmatorische Faktorenanalyse als Strukturgleichungsmodell angewendet werden sollte, wenn die Faktorstruktur eines Datensatzes bereits bekannt ist. Nachfolgend soll dieses Verfahren vorgestellt werden.
+
+Für die exemplarische Durchführung der konfirmatorischen Faktorenanalyse wurde der Datensatz *Arbeitszufriedenheit* verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=1z2unBqG7CJMJRguwYD3uJGXHO6LLT_qP> abrufbar.
+
+
+#2 One-factorial model
+
+In der konfirmatorischen Faktorenanalyse werden die Beziehungen zwischen den manifesten Variablen und den latenten Variablen untersucht. In diesem Messmodell wird beschrieben, wie die latenten Variablen gemessen werden sollen. Der Unterschied zur exploratorischen Faktorenanalyse besteht darin, dass in der konfirmatorischen Faktorenanalyse sowohl die Anzahl der latenten Variablen als auch die Verbindung der Items zu diesen latenten Variablen festgelegt wird. Dies bedeutet, dass vom Benutzer selber bestimmt wird, welches Item auf welchen Faktor (latente Variable) laden darf. So kann bestimmt werden, ob das vorgegebene Modell angemessen auf die beobachteten Daten passt. 
+
+Es soll untersucht werden, ob die fünf Items zur Messung der Arbeitszufriedenheit eine gute Passung haben. Im ersten Schritt wird hierbei folgende Modellgleichung spezifiziert.
+```{r}
+konf.fa.1.txt <- 'A.zufr. =~ Zufr.1 + Zufr.2 + Zufr.3 + Zufr.4 + Zufr.5' 
+```
+
+Die latente Variable (hier *A.zufr.*) wird gemessen durch (*=~*) die die 5 Items *Zufr.1 bis Zufr.5*. Die Bezeichnung der latenten Variablen kann frei gewählt werden. Allerdings ist zu beachten, dass die genannten Items mit der selben Bezeichnung auch im Datensatz vorhanden sind. Die Modellschätzung erfolgt mit der *cfa* Funktion.
+```{r}
+konf.fa.1.fit <- cfa(konf.fa.1.txt, data=Arbeitszufriedenheit)
+```
+
+Eine detaillierte Übersicht über die Ergebnisse kann mit der *summary* Funktion angefordert werden. Es werden anschließend nur die wichtigsten Elemente besprochen. 
+```{r}
+summary(konf.fa.1.fit, fit.measures=TRUE)
+```
+
+**lavaan 0.6-2 ended normally after 24 iterations**
+
+Der erste Teil der Ausgabe gibt Aufschluss über die benötigten Iterationen und der verwendeten Stichprobengröße. Des Weiteren wurde ein Chi^2^ Test durchgeführt um zu überprüfen, ob die beobachtete Varianz-Kovarianz-Matrix sich signifikant von der modellimplizierten Varianz-Kovarianz-Matrix unterscheidet. Mit p = .174 ist das Ergebnis nicht signifikant. Dies deutet darauf hin, dass das Modell gut auf die Daten passt. 
+
+**Latent Variables:**
+
+Dieser Teil der Ergebnisse beinhaltet eine Tabelle über die Ladungskoeffizienten sowie der Varianzen der manifesten und latenten Variablen. 
+
+
+#3 Comparative observation
+
+Die konfirmatorische Faktorenanalyse wird oft eingesetzt, um verschiedene Faktorenmodelle empirisch miteinander zu vergleichen. Für dieses Beispiel soll untersucht werden, ob das zuvor erstellte einfaktorielle Modell besser auf die Daten passt als das nachfolgend erstellte zweifaktorielle Modell. 
+```{r}
+konf.fa.2.txt <- ' A.zufr.1  =~ Zufr.1 + Zufr.2 + Zufr.3
+                   A.zufr.2 =~ Zufr.4 + Zufr.5 '
+```
+
+Es wurde festgelegt, dass die Items Zufr.1 bis Zufr.3 auf den ersten Faktor (*A.zufr.1*) und die Items Zufr.4 & Zufr.5 auf den zweiten Faktor (*A.zufr.2) laden. 
+```{r}
+konf.fa.2.fit <- cfa(konf.fa.2.txt, data=Arbeitszufriedenheit)
+```
+
+Mittels der *anova* Funktion werden die beiden Modelle nun miteinander verglichen.
+```{r}
+anova(konf.fa.1.fit, konf.fa.2.fit)
+```
+
+Die Spalte **DF** beschreibt die Freiheitsgrade der Modelle. Es folgt das **AIC** (Akaikes Informationskriterium) und das **BIC** (Bayesianische Informationskriterium). Je kleiner diese Werte ausfallen, desto besser passt das Modell auf die Daten. Die Spalte **Chisq** enthält den jeweiligen Chi^2^ Wert der beiden Modelle. Für die Fragestellung, welches Modell nun signifikant besser auf die Daten passt, betrachtet man den p-Wert in der Spalte **Pr(>Chisq)**. Dieser ist hier unter .05 und zeigt somit ein signifikantes Ergebnis. Das bedeutet, dass das zweifaktorielle Modell besser auf die Daten passt als das einfaktorielle Modell.  
+
+
+#4 Conclusion
+
+Nochmal zusammengefasst:
+
+Bei der ["exploratorischen Faktorenanalyse"](https://michael-fuchs.netlify.com/2018/10/07/exploratory-factor-analysis/) geht es um die Aufdeckung von unbekannten Strukturen der vorliegenden Variablen. Vor der Analyse ist die Anzahl der extrahierenden Faktoren unbekannt. Mit der exploratorischen Faktorenanalyse möchte man nun diese Faktoren "entdecken". Es handelt sich um ein strukturerkennendes Verfahren. 
+
+Bei der konfirmatorischen Faktorenanalyse existiert hingegen schon eine konkrete Vorstellung über die mögliche Anzahl an Faktoren/latente Variablen. Mittels der konfirmatorischen Faktorenanalyse soll nun die vorgegebene Faktorenstruktur auf ihre Konsistenz mit den vorhandenen Daten ermittelt werden. Es handelt sich um ein strukturüberprüfendes Verfahren.
+

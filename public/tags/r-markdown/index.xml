@@ -6,10 +6,20 @@
     <description>Recent content in R Markdown on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 07 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 11 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Confirmatory Factor Analysis</title>
+      <link>/2018/10/11/confirmatory-factor-analysis/</link>
+      <pubDate>Thu, 11 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/10/11/confirmatory-factor-analysis/</guid>
+      <description>library(psych)library(lavaan)library(readxl)Arbeitszufriedenheit &amp;lt;- read_excel(&amp;quot;Arbeitszufriedenheit.xlsx&amp;quot;)Table of Content1 Introduction2 One-factorial model3 Comparative observation4 Conclusion1 IntroductionIn dem Beitrag zur “exploratorischen Faktorenanalyse” wurde bereits erwähnt, dass die konfirmatorische Faktorenanalyse als Strukturgleichungsmodell angewendet werden sollte, wenn die Faktorstruktur eines Datensatzes bereits bekannt ist. Nachfolgend soll dieses Verfahren vorgestellt werden.
+Für die exemplarische Durchführung der konfirmatorischen Faktorenanalyse wurde der Datensatz Arbeitszufriedenheit verwendet. Eine Kopie des Datensatzes ist unter https://drive.</description>
+    </item>
     
     <item>
       <title>Exploratory Factor Analysis</title>
