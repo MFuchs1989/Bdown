@@ -17,7 +17,7 @@
       <pubDate>Fri, 12 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/10/12/cleaning-data-with-tidyverse/</guid>
-      <description>library(tidyverse)Table of Content1 Introduction2 gather() and spread()3 separate() and unite()4 delete() and omit()1 IntroductionDie meisten Datensätze mit denen man arbeiten möchte enthalten “unsaubere” Daten. Diese zu bereinigen, stellt demnach eine zentrale Tätigkeit in der Datenanalyse dar. In diesem Beitrag sollen folgende drei Methoden für eine saubere Aufbereitung des Datensatzes vorgesellt werden:
+      <description>library(tidyverse)Table of Content1 Introduction2 gather() and spread()3 separate() and unite()4 delete() and omit()5 Conclusion1 IntroductionDie meisten Datensätze mit denen man arbeiten möchte enthalten “unsaubere” Daten. Diese zu bereinigen, stellt demnach eine zentrale Tätigkeit in der Datenanalyse dar. In diesem Beitrag sollen folgende drei Methoden für eine saubere Aufbereitung des Datensatzes vorgesellt werden:
 gather() and spread()separate() and unite()delete() and omit()Für diesen Post wurde der Datensatz IMDB-Movie-Data von der Statistik Plattform “Kaggle” verwendet.</description>
     </item>
     

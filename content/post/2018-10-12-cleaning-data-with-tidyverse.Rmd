@@ -22,6 +22,7 @@ library(tidyverse)
 + 2 gather() and spread()
 + 3 separate() and unite()
 + 4 delete() and omit()
++ 5 Conclusion
 
 #1 Introduction
 
