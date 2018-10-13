@@ -1,0 +1,236 @@
+---
+title: Cleaning Data with tidyverse
+author: Michael Fuchs
+date: '2018-10-12'
+slug: cleaning-data-with-tidyverse
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+#Table of Content
+
++ 1 Introduction
++ 2 gather() and spread()
++ 3 separate() and unite()
++ 4 delete() and omit()
+
+#1 Introduction
+
+Die meisten Datensätze mit denen man arbeiten möchte enthalten "unsaubere" Daten. Diese zu bereinigen, stellt demnach eine zentrale Tätigkeit in der Datenanalyse dar. In diesem Beitrag sollen folgende drei Methoden für eine saubere Aufbereitung des Datensatzes vorgesellt werden:
+
++ gather() and spread()
++ separate() and unite()
++ delete() and omit()
+
+Für diesen Post wurde der Datensatz *IMDB-Movie-Data* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=13ytotLAXb70lgYHnblPbUWr9cb2z7SaN> abrufbar.
+
+```{r results='hide', message=FALSE, warning=FALSE}
+movie <- read_csv("IMDB-Movie-Data.csv")
+```
+
+#2 gather() and spread()
+
+**Gathering**
+
+Es wird folgender Datensatz erstellt.
+```{r}
+Name <- c("Martin", "Veronika", "Susanne", "Tom", "Vincent")
+Y2014 <- c("48cm", "43cm", "44cm", "49cm", "52cm")
+Y2015 <- c("59cm", "58cm", "60cm", "72cm", "70cm")
+Y2016 <- c("80cm", "77cm", "80cm", "85cm", "90cm")
+Y2017 <- c("92cm", "90cm", "82cm", "95cm", "100cm")
+Y2018 <- c("105cm", "107cm", "103cm", "104cm", "116cm")
+Datensatz1 <- data.frame(Name, Y2014, Y2015, Y2016, Y2017, Y2018)
+Datensatz1
+```
+
+Gemessen wurde die Größe von Neugeborenen im Jahre 2014. Jedes weitere Jahr wurde erneut eine Messung durchgeführt und dokumentiert. Man kann auf diese Weise wunderbar das beispielsweise prozentuale Wachstum von Messung zu Messung berechnen. Was man mit dieser Aufteilung des Datensatzes nicht machen kann, ist eine analytische Betrachtung einer einzelnen Person, da die zugehörigen Daten über mehrere Variablen verstreut sind. Der *gather* Befehl löst dieses Problem, da man mit ihm einen bestehenden Datensatz neu formatieren kann (von einem breiten Format in ein langes Format).  
+```{r}
+df.awkward <- Datensatz1 %>% gather(Y2014, Y2015, Y2016, Y2017, Y2018, key = "Lebensjahr", value = "Größe")
+df.awkward
+```
+
+Noch einfacher geht es auf diese Weise.
+```{r}
+df.easy <- gather(Datensatz1, Lebensjahr, Größe, -Name) 
+df.easy
+```
+
+Nun kann man Auswertungen (z.B. die Entwicklung über die Jahre hinweg) pro Person vornehmen. 
+```{r}
+Beispiel1 <- df.easy %>% filter(Name == "Vincent")
+Beispiel1$Größe <- str_replace(Beispiel1$Größe, "cm", "0")
+Beispiel2 <- as.numeric(Beispiel1$Größe)
+Beispiel3 <- Beispiel2/10
+Beispiel3 %>% plot(type="l", main = "Entwicklung von Vincent", xlab = "Lebensjahre", ylab="Größe in cm")
+```
+
+
+
+**Spreading**
+
+Der Befehl *spread()* bewirkt genau das Gegenteil von *gather()*. Er bringt ein langes Format in ein breites. Es wird folgender Beispieldatensatz neu kreiert.
+
+```{r}
+name <- c("Martin", "Martin", "Veronika", "Veronika", "Susanne", "Susanne", "Tom", "Tom", "Vincent", "Vincent")
+type <- c("hight", "weight", "hight", "weight", "hight", "weight", "hight", "weight", "hight", "weight")
+count <- c(180, 75, 185, 90, 165, 60, 170, 69, 180, 70)
+Datensatz2 <- data.frame(name, type, count)
+Datensatz2
+```
+
+Für eine Auswertung soll der Mittelwert für die Größe und des Gewichts der Versuchsteilnehmer berechnet werden. Dafür muss der Datensatz erneut umformatiert werden. Benötigt werden eigene Spalten für die Variablen "hight" und "weight" pro Person. 
+```{r}
+df.long.syntax <- Datensatz2 %>% spread(key=type, value=count)
+df.long.syntax
+```
+
+Die Zusatzargumente *key=* und *value=* werden von R automatisch erkannt und können daher auch weggelassen werden.
+```{r}
+df.short.syntax <- Datensatz2 %>% spread(type, count)
+df.short.syntax
+```
+
+Nun können die Mittelwerte berechnet werden.
+```{r}
+mean(df.short.syntax$hight)
+mean(df.short.syntax$weight)
+```
+
+#3 separate() and unite()
+
+
+**Separating**
+
+Für die Vorstellung des *separate()* Befehls wird die Spalte `Genre` aus dem Datensatz *IMDB-Movie-Data* verwendet.
+```{r}
+head(movie$Genre)
+```
+
+Den verschiedenen Filmen wurden mehrere Genres zugeordnet. Bedauerlicherweise wurden alle Bezeichnungen in einer Variablen zusammengefasst. Für eine Auswertung der Hauptgenres (das Genre was an erster Stelle genannt wird) müssen die Begriffe erstmal voneinander getrennt werden. *separate()* macht genau dies für uns.
+```{r}
+df.sep <- movie %>% separate(Genre, into = c("main genre", "further genre1", "further genre2")) 
+df.sep %>% select(`main genre`, `further genre1`, `further genre2`) %>% head
+```
+
+Der *separate()* Befehl ist ziemlich simple aufgebaut. Im ersten Argument wird die aufzuteilende Spalte aus dem Datensatz genannt. Anschließend wird bestimmt, unter welchen neuen Variablen die Aufspaltung abgespeichert werden soll. Betrachtet man die Spalte `further genre2` fällt auf, dass in den ersten beiden Zeilen die Bezeichnung "Sci" genannt wird. Eigentlich sollte dort "Sci-Fi" (für Science Fiction) stehen. Dies kommt daher, weil wir R nicht mitgeteilt haben, an welcher Stelle es die Aufteilung vornehmen soll. Der R Befehl wird daher durch das Zusatzargument *sep=* ergänzt.
+```{r}
+df.sep2 <- movie %>% separate(Genre, into = c("main genre", "further genre1", "further genre2"), sep = ",")
+df.sep2 %>% select(`main genre`, `further genre1`, `further genre2`) %>% head
+```
+
+Nun passt das Ergebnis. Filme, denen nur zwei Genres zugeordnet wurden (siehe Film Nummer 3), erhalten in der Spalte `further genre2` (Spalte für das dritte Genre) einen fehlenden Wert. Abschließend wird eine graphische Übersicht über die Hauptgenres erstellt. 
+```{r}
+df.sep2.count <- df.sep2 %>% count(`main genre`)
+ggplot(data=df.sep2.count, aes(x=`main genre`, y=n)) +
+  geom_bar(stat="identity", width=0.5) + coord_flip()
+```
+
+
+An dieser Stelle sollte erwähnt werden, dass der *separate()* Befehl einen entscheidenden Nachteil hat. Um diesen zu demonstrieren, werden die Schauspieler der jeweiligen Filme untersucht. Auch diese sind in einer Variablen zusammengefasst worden und werden nun aufgeteilt.
+```{r}
+df.sep.actor <- movie %>% separate(Actors, into = c("first", "second", "third", "fourth"), sep = ",") %>% select(first, second, third, fourth)
+df.sep.actor
+```
+
+Es soll untersucht werden, in wie vielen Filmen der Schauspieler Bradley Cooper mitgewirkt hat und ob dieser als erster (Haupt-) Schauspieler nominiert wurde oder eine kleinere Rolle innehatte. Um dies herauszufinden, wird der Filterbefehl auf alle vier Spalten angewendet.
+```{r}
+df.sep.actor.bc <- df.sep.actor %>% filter(first == "Bradley Cooper" | second == "Bradley Cooper" | third == "Bradley Cooper" | fourth == "Bradley Cooper")
+df.sep.actor.bc %>% select(first, second, third, fourth)
+```
+
+Als Ergebnis werden vier Filme angezeigt und auch nur mit Bradley Cooper als Hauptdarsteller. Hatte er in der vergangenheit keine weiteren Rollen bekommen oder stimmt etwas mit dem Filterbefehl nicht? Zur Beantwortung der Frage, wird ein Auszug aus der zweiten Spalte (`second`) erstellt (alternativ geht Spalte drei und vier natürlich auch). 
+```{r}
+head(df.sep.actor$second)
+```
+
+Man erkennt hierbei, dass durch die Spaltung mittels dem *separate()* Befehls, teilweise Leerzeichen vor den Namen entstanden sind. Die zuvor verwendeten Filterbefehle für die Spalten `second`, `third` und `fourth` werden entsprechend abgeändert (durch Ergänzung von Leerzeichen vor dem Namen) und erneut durchgeführt. 
+```{r}
+df.sep.actor.bc2 <- df.sep.actor %>% filter(first == "Bradley Cooper" | second == " Bradley Cooper" | third == " Bradley Cooper" | fourth == " Bradley Cooper")
+df.sep.actor.bc2 %>% select(first, second, third, fourth)
+```
+
+Dieses Ergebnis wirkt realistischer. Allerdings merkt man, dass der Filterbefehl hier nicht mehr so zuverlässig eingesetzt werden kann. Abhilfe leistet die *str_detect()* Funktion. Diese stammt aus dem Data Mining Bereich und regiert nicht so sensibel wie *filter()*. Bedeutet in unserem Fall, dass Leerzeichen automatisch ignoriert werden.  
+```{r}
+df.sep.actor.bc3 <- df.sep.actor %>% select(first, second, third, fourth) %>% filter(str_detect(first, "Bradley Cooper") | str_detect(second, "Bradley Cooper") | str_detect(third, "Bradley Cooper") | str_detect(fourth, "Bradley Cooper"))
+df.sep.actor.bc3
+```
+
+Abschließend wird noch der Frage nachgegangen, wie häufig und mit welcher Nominierung Cooper mitgewirkt hat. 
+```{r}
+df.sep.actor.bc3 %>% str_count("Bradley Cooper")
+df.sep.actor.bc3 %>% str_count("Bradley Cooper") %>% barplot(main="Filme von Cooper", names.arg=c("first", "second", "third", "fourth"), cex.names=0.8, ylab="count")
+```
+
+
+**Unite**
+
+Manchmal kann es sinnvoll sein, gewisse Spalten eines Datensatzes zusammen zu führen.
+```{r}
+movie %>% select(Rating, Votes) %>% head() 
+```
+
+*unite* macht genau dies. Das erste Argument der Funktion beinhaltet den neuen Namen der erstellten Variablen. Anschließend werden die beiden Spalten aus dem Datensatz benannt, welche zusammengeführt werden sollen. Abschließend wird mit *sep=* bestimmt, durch welches Zeichen die Werte getrennt werden sollen. 
+```{r}
+df.unite <- movie %>% unite(Rating/Votes, Rating, Votes, sep = "/") %>% 
+  select(`Rating/Votes`) %>% 
+  head()
+df.unite
+```
+
+
+#4 delete() and omit()
+
+
+**Delete**
+
+Nicht immer werden alle Spalten oder Zeilen eines Datensatzes benötigt. Sie können daher gezielt gelöscht werden. 
+
+Folgendes Beispiel zeigt die Löschung der vierten Spalte (`Description`) aus dem Datensatz *IMDB-Movie-Data*.
+```{r}
+del <- movie[, -(4)]
+del
+```
+
+Es können auch gezielt die ersten 6 Zeilen entfernt werden, sodass der Datensatz erst bei Rank 7 beginnt.
+```{r}
+del2 <- movie[-(1:6), ]
+del2
+```
+
+**Omit**
+
+Ist man sich unsicher, ob die Daten noch benötigt werden oder nicht, besteht die Möglichkeit relevante Informationen gezielt zu extrahieren. Dies kann wieder spaltenweise als auch zeilenweise durchgeführt werden. 
+
+
+```{r}
+movie[1:3, ]
+```
+```{r}
+movie[, 5]
+```
+
+#5 Conclusion
+
+
+Ein sauberer Datensatz weißt folgende Kriterien auf:
+
++ Jede Variable bildet eine Spalte
++ Jede Beobachtung bildet eine Reihe
++ Jede Art von Beobachtungseinheit bildet eine Tabelle
+
+Ist eines nicht gegeben, so sollte man für eine gute Auswertbarkeit des Datensatzes diesen entsprechend bereinigen. Die hier vorgestellten Befehle sowie die aus dem Post ["Data Transformation in R"](https://michael-fuchs.netlify.com/2018/08/18/data-transformation-in-r/) helfen dabei ungemein. 
+
+
+
+
+

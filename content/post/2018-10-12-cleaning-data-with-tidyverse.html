@@ -1,0 +1,385 @@
+---
+title: Cleaning Data with tidyverse
+author: Michael Fuchs
+date: '2018-10-12'
+slug: cleaning-data-with-tidyverse
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<pre class="r"><code>library(tidyverse)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 gather() and spread()</li>
+<li>3 separate() and unite()</li>
+<li>4 delete() and omit()</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Die meisten Datensätze mit denen man arbeiten möchte enthalten “unsaubere” Daten. Diese zu bereinigen, stellt demnach eine zentrale Tätigkeit in der Datenanalyse dar. In diesem Beitrag sollen folgende drei Methoden für eine saubere Aufbereitung des Datensatzes vorgesellt werden:</p>
+<ul>
+<li>gather() and spread()</li>
+<li>separate() and unite()</li>
+<li>delete() and omit()</li>
+</ul>
+<p>Für diesen Post wurde der Datensatz <em>IMDB-Movie-Data</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=13ytotLAXb70lgYHnblPbUWr9cb2z7SaN" class="uri">https://drive.google.com/open?id=13ytotLAXb70lgYHnblPbUWr9cb2z7SaN</a> abrufbar.</p>
+<pre class="r"><code>movie &lt;- read_csv(&quot;IMDB-Movie-Data.csv&quot;)</code></pre>
+</div>
+<div id="gather-and-spread" class="section level1">
+<h1>2 gather() and spread()</h1>
+<p><strong>Gathering</strong></p>
+<p>Es wird folgender Datensatz erstellt.</p>
+<pre class="r"><code>Name &lt;- c(&quot;Martin&quot;, &quot;Veronika&quot;, &quot;Susanne&quot;, &quot;Tom&quot;, &quot;Vincent&quot;)
+Y2014 &lt;- c(&quot;48cm&quot;, &quot;43cm&quot;, &quot;44cm&quot;, &quot;49cm&quot;, &quot;52cm&quot;)
+Y2015 &lt;- c(&quot;59cm&quot;, &quot;58cm&quot;, &quot;60cm&quot;, &quot;72cm&quot;, &quot;70cm&quot;)
+Y2016 &lt;- c(&quot;80cm&quot;, &quot;77cm&quot;, &quot;80cm&quot;, &quot;85cm&quot;, &quot;90cm&quot;)
+Y2017 &lt;- c(&quot;92cm&quot;, &quot;90cm&quot;, &quot;82cm&quot;, &quot;95cm&quot;, &quot;100cm&quot;)
+Y2018 &lt;- c(&quot;105cm&quot;, &quot;107cm&quot;, &quot;103cm&quot;, &quot;104cm&quot;, &quot;116cm&quot;)
+Datensatz1 &lt;- data.frame(Name, Y2014, Y2015, Y2016, Y2017, Y2018)
+Datensatz1</code></pre>
+<pre><code>##       Name Y2014 Y2015 Y2016 Y2017 Y2018
+## 1   Martin  48cm  59cm  80cm  92cm 105cm
+## 2 Veronika  43cm  58cm  77cm  90cm 107cm
+## 3  Susanne  44cm  60cm  80cm  82cm 103cm
+## 4      Tom  49cm  72cm  85cm  95cm 104cm
+## 5  Vincent  52cm  70cm  90cm 100cm 116cm</code></pre>
+<p>Gemessen wurde die Größe von Neugeborenen im Jahre 2014. Jedes weitere Jahr wurde erneut eine Messung durchgeführt und dokumentiert. Man kann auf diese Weise wunderbar das beispielsweise prozentuale Wachstum von Messung zu Messung berechnen. Was man mit dieser Aufteilung des Datensatzes nicht machen kann, ist eine analytische Betrachtung einer einzelnen Person, da die zugehörigen Daten über mehrere Variablen verstreut sind. Der <em>gather</em> Befehl löst dieses Problem, da man mit ihm einen bestehenden Datensatz neu formatieren kann (von einem breiten Format in ein langes Format).</p>
+<pre class="r"><code>df.awkward &lt;- Datensatz1 %&gt;% gather(Y2014, Y2015, Y2016, Y2017, Y2018, key = &quot;Lebensjahr&quot;, value = &quot;Größe&quot;)</code></pre>
+<pre><code>## Warning: attributes are not identical across measure variables;
+## they will be dropped</code></pre>
+<pre class="r"><code>df.awkward</code></pre>
+<pre><code>##        Name Lebensjahr Größe
+## 1    Martin      Y2014  48cm
+## 2  Veronika      Y2014  43cm
+## 3   Susanne      Y2014  44cm
+## 4       Tom      Y2014  49cm
+## 5   Vincent      Y2014  52cm
+## 6    Martin      Y2015  59cm
+## 7  Veronika      Y2015  58cm
+## 8   Susanne      Y2015  60cm
+## 9       Tom      Y2015  72cm
+## 10  Vincent      Y2015  70cm
+## 11   Martin      Y2016  80cm
+## 12 Veronika      Y2016  77cm
+## 13  Susanne      Y2016  80cm
+## 14      Tom      Y2016  85cm
+## 15  Vincent      Y2016  90cm
+## 16   Martin      Y2017  92cm
+## 17 Veronika      Y2017  90cm
+## 18  Susanne      Y2017  82cm
+## 19      Tom      Y2017  95cm
+## 20  Vincent      Y2017 100cm
+## 21   Martin      Y2018 105cm
+## 22 Veronika      Y2018 107cm
+## 23  Susanne      Y2018 103cm
+## 24      Tom      Y2018 104cm
+## 25  Vincent      Y2018 116cm</code></pre>
+<p>Noch einfacher geht es auf diese Weise.</p>
+<pre class="r"><code>df.easy &lt;- gather(Datensatz1, Lebensjahr, Größe, -Name) </code></pre>
+<pre><code>## Warning: attributes are not identical across measure variables;
+## they will be dropped</code></pre>
+<pre class="r"><code>df.easy</code></pre>
+<pre><code>##        Name Lebensjahr Größe
+## 1    Martin      Y2014  48cm
+## 2  Veronika      Y2014  43cm
+## 3   Susanne      Y2014  44cm
+## 4       Tom      Y2014  49cm
+## 5   Vincent      Y2014  52cm
+## 6    Martin      Y2015  59cm
+## 7  Veronika      Y2015  58cm
+## 8   Susanne      Y2015  60cm
+## 9       Tom      Y2015  72cm
+## 10  Vincent      Y2015  70cm
+## 11   Martin      Y2016  80cm
+## 12 Veronika      Y2016  77cm
+## 13  Susanne      Y2016  80cm
+## 14      Tom      Y2016  85cm
+## 15  Vincent      Y2016  90cm
+## 16   Martin      Y2017  92cm
+## 17 Veronika      Y2017  90cm
+## 18  Susanne      Y2017  82cm
+## 19      Tom      Y2017  95cm
+## 20  Vincent      Y2017 100cm
+## 21   Martin      Y2018 105cm
+## 22 Veronika      Y2018 107cm
+## 23  Susanne      Y2018 103cm
+## 24      Tom      Y2018 104cm
+## 25  Vincent      Y2018 116cm</code></pre>
+<p>Nun kann man Auswertungen (z.B. die Entwicklung über die Jahre hinweg) pro Person vornehmen.</p>
+<pre class="r"><code>Beispiel1 &lt;- df.easy %&gt;% filter(Name == &quot;Vincent&quot;)
+Beispiel1$Größe &lt;- str_replace(Beispiel1$Größe, &quot;cm&quot;, &quot;0&quot;)
+Beispiel2 &lt;- as.numeric(Beispiel1$Größe)
+Beispiel3 &lt;- Beispiel2/10
+Beispiel3 %&gt;% plot(type=&quot;l&quot;, main = &quot;Entwicklung von Vincent&quot;, xlab = &quot;Lebensjahre&quot;, ylab=&quot;Größe in cm&quot;)</code></pre>
+<p><img src="/post/2018-10-12-cleaning-data-with-tidyverse_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><strong>Spreading</strong></p>
+<p>Der Befehl <em>spread()</em> bewirkt genau das Gegenteil von <em>gather()</em>. Er bringt ein langes Format in ein breites. Es wird folgender Beispieldatensatz neu kreiert.</p>
+<pre class="r"><code>name &lt;- c(&quot;Martin&quot;, &quot;Martin&quot;, &quot;Veronika&quot;, &quot;Veronika&quot;, &quot;Susanne&quot;, &quot;Susanne&quot;, &quot;Tom&quot;, &quot;Tom&quot;, &quot;Vincent&quot;, &quot;Vincent&quot;)
+type &lt;- c(&quot;hight&quot;, &quot;weight&quot;, &quot;hight&quot;, &quot;weight&quot;, &quot;hight&quot;, &quot;weight&quot;, &quot;hight&quot;, &quot;weight&quot;, &quot;hight&quot;, &quot;weight&quot;)
+count &lt;- c(180, 75, 185, 90, 165, 60, 170, 69, 180, 70)
+Datensatz2 &lt;- data.frame(name, type, count)
+Datensatz2</code></pre>
+<pre><code>##        name   type count
+## 1    Martin  hight   180
+## 2    Martin weight    75
+## 3  Veronika  hight   185
+## 4  Veronika weight    90
+## 5   Susanne  hight   165
+## 6   Susanne weight    60
+## 7       Tom  hight   170
+## 8       Tom weight    69
+## 9   Vincent  hight   180
+## 10  Vincent weight    70</code></pre>
+<p>Für eine Auswertung soll der Mittelwert für die Größe und des Gewichts der Versuchsteilnehmer berechnet werden. Dafür muss der Datensatz erneut umformatiert werden. Benötigt werden eigene Spalten für die Variablen “hight” und “weight” pro Person.</p>
+<pre class="r"><code>df.long.syntax &lt;- Datensatz2 %&gt;% spread(key=type, value=count)
+df.long.syntax</code></pre>
+<pre><code>##       name hight weight
+## 1   Martin   180     75
+## 2  Susanne   165     60
+## 3      Tom   170     69
+## 4 Veronika   185     90
+## 5  Vincent   180     70</code></pre>
+<p>Die Zusatzargumente <em>key=</em> und <em>value=</em> werden von R automatisch erkannt und können daher auch weggelassen werden.</p>
+<pre class="r"><code>df.short.syntax &lt;- Datensatz2 %&gt;% spread(type, count)
+df.short.syntax</code></pre>
+<pre><code>##       name hight weight
+## 1   Martin   180     75
+## 2  Susanne   165     60
+## 3      Tom   170     69
+## 4 Veronika   185     90
+## 5  Vincent   180     70</code></pre>
+<p>Nun können die Mittelwerte berechnet werden.</p>
+<pre class="r"><code>mean(df.short.syntax$hight)</code></pre>
+<pre><code>## [1] 176</code></pre>
+<pre class="r"><code>mean(df.short.syntax$weight)</code></pre>
+<pre><code>## [1] 72.8</code></pre>
+</div>
+<div id="separate-and-unite" class="section level1">
+<h1>3 separate() and unite()</h1>
+<p><strong>Separating</strong></p>
+<p>Für die Vorstellung des <em>separate()</em> Befehls wird die Spalte <code>Genre</code> aus dem Datensatz <em>IMDB-Movie-Data</em> verwendet.</p>
+<pre class="r"><code>head(movie$Genre)</code></pre>
+<pre><code>## [1] &quot;Action,Adventure,Sci-Fi&quot;  &quot;Adventure,Mystery,Sci-Fi&quot;
+## [3] &quot;Horror,Thriller&quot;          &quot;Animation,Comedy,Family&quot; 
+## [5] &quot;Action,Adventure,Fantasy&quot; &quot;Action,Adventure,Fantasy&quot;</code></pre>
+<p>Den verschiedenen Filmen wurden mehrere Genres zugeordnet. Bedauerlicherweise wurden alle Bezeichnungen in einer Variablen zusammengefasst. Für eine Auswertung der Hauptgenres (das Genre was an erster Stelle genannt wird) müssen die Begriffe erstmal voneinander getrennt werden. <em>separate()</em> macht genau dies für uns.</p>
+<pre class="r"><code>df.sep &lt;- movie %&gt;% separate(Genre, into = c(&quot;main genre&quot;, &quot;further genre1&quot;, &quot;further genre2&quot;)) </code></pre>
+<pre><code>## Warning: Expected 3 pieces. Additional pieces discarded in 110 rows [1,
+## 2, 13, 20, 25, 33, 35, 36, 37, 49, 61, 65, 68, 81, 86, 95, 98, 103, 110,
+## 122, ...].</code></pre>
+<pre><code>## Warning: Expected 3 pieces. Missing pieces filled with `NA` in 332 rows
+## [3, 8, 18, 19, 22, 26, 28, 29, 31, 32, 40, 42, 43, 45, 47, 50, 53, 58, 60,
+## 69, ...].</code></pre>
+<pre class="r"><code>df.sep %&gt;% select(`main genre`, `further genre1`, `further genre2`) %&gt;% head</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   `main genre` `further genre1` `further genre2`
+##   &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           
+## 1 Action       Adventure        Sci             
+## 2 Adventure    Mystery          Sci             
+## 3 Horror       Thriller         &lt;NA&gt;            
+## 4 Animation    Comedy           Family          
+## 5 Action       Adventure        Fantasy         
+## 6 Action       Adventure        Fantasy</code></pre>
+<p>Der <em>separate()</em> Befehl ist ziemlich simple aufgebaut. Im ersten Argument wird die aufzuteilende Spalte aus dem Datensatz genannt. Anschließend wird bestimmt, unter welchen neuen Variablen die Aufspaltung abgespeichert werden soll. Betrachtet man die Spalte <code>further genre2</code> fällt auf, dass in den ersten beiden Zeilen die Bezeichnung “Sci” genannt wird. Eigentlich sollte dort “Sci-Fi” (für Science Fiction) stehen. Dies kommt daher, weil wir R nicht mitgeteilt haben, an welcher Stelle es die Aufteilung vornehmen soll. Der R Befehl wird daher durch das Zusatzargument <em>sep=</em> ergänzt.</p>
+<pre class="r"><code>df.sep2 &lt;- movie %&gt;% separate(Genre, into = c(&quot;main genre&quot;, &quot;further genre1&quot;, &quot;further genre2&quot;), sep = &quot;,&quot;)</code></pre>
+<pre><code>## Warning: Expected 3 pieces. Missing pieces filled with `NA` in 340 rows
+## [3, 8, 18, 19, 22, 26, 28, 29, 31, 32, 40, 42, 43, 45, 47, 50, 53, 58, 60,
+## 69, ...].</code></pre>
+<pre class="r"><code>df.sep2 %&gt;% select(`main genre`, `further genre1`, `further genre2`) %&gt;% head</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   `main genre` `further genre1` `further genre2`
+##   &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;           
+## 1 Action       Adventure        Sci-Fi          
+## 2 Adventure    Mystery          Sci-Fi          
+## 3 Horror       Thriller         &lt;NA&gt;            
+## 4 Animation    Comedy           Family          
+## 5 Action       Adventure        Fantasy         
+## 6 Action       Adventure        Fantasy</code></pre>
+<p>Nun passt das Ergebnis. Filme, denen nur zwei Genres zugeordnet wurden (siehe Film Nummer 3), erhalten in der Spalte <code>further genre2</code> (Spalte für das dritte Genre) einen fehlenden Wert. Abschließend wird eine graphische Übersicht über die Hauptgenres erstellt.</p>
+<pre class="r"><code>df.sep2.count &lt;- df.sep2 %&gt;% count(`main genre`)
+ggplot(data=df.sep2.count, aes(x=`main genre`, y=n)) +
+  geom_bar(stat=&quot;identity&quot;, width=0.5) + coord_flip()</code></pre>
+<p><img src="/post/2018-10-12-cleaning-data-with-tidyverse_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>An dieser Stelle sollte erwähnt werden, dass der <em>separate()</em> Befehl einen entscheidenden Nachteil hat. Um diesen zu demonstrieren, werden die Schauspieler der jeweiligen Filme untersucht. Auch diese sind in einer Variablen zusammengefasst worden und werden nun aufgeteilt.</p>
+<pre class="r"><code>df.sep.actor &lt;- movie %&gt;% separate(Actors, into = c(&quot;first&quot;, &quot;second&quot;, &quot;third&quot;, &quot;fourth&quot;), sep = &quot;,&quot;) %&gt;% select(first, second, third, fourth)</code></pre>
+<pre><code>## Warning: Expected 4 pieces. Missing pieces filled with `NA` in 1 rows
+## [623].</code></pre>
+<pre class="r"><code>df.sep.actor</code></pre>
+<pre><code>## # A tibble: 1,000 x 4
+##    first            second              third             fourth          
+##    &lt;chr&gt;            &lt;chr&gt;               &lt;chr&gt;             &lt;chr&gt;           
+##  1 Chris Pratt      &quot; Vin Diesel&quot;       &quot; Bradley Cooper&quot; &quot; Zoe Saldana&quot;  
+##  2 Noomi Rapace     &quot; Logan Marshall-G~ &quot; Michael Fassbe~ &quot; Charlize Ther~
+##  3 James McAvoy     &quot; Anya Taylor-Joy&quot;  &quot; Haley Lu Richa~ &quot; Jessica Sula&quot; 
+##  4 Matthew McConau~ Reese Witherspoon   &quot; Seth MacFarlan~ &quot; Scarlett Joha~
+##  5 Will Smith       &quot; Jared Leto&quot;       &quot; Margot Robbie&quot;  &quot; Viola Davis&quot;  
+##  6 Matt Damon       &quot; Tian Jing&quot;        &quot; Willem Dafoe&quot;   &quot; Andy Lau&quot;     
+##  7 Ryan Gosling     &quot; Emma Stone&quot;       &quot; Rosemarie DeWi~ &quot; J.K. Simmons&quot; 
+##  8 Essie Davis      &quot; Andrea Riseborou~ &quot; Julian Barratt&quot; Kenneth Branagh 
+##  9 Charlie Hunnam   &quot; Robert Pattinson&quot; &quot; Sienna Miller&quot;  &quot; Tom Holland&quot;  
+## 10 Jennifer Lawren~ &quot; Chris Pratt&quot;      &quot; Michael Sheen&quot;  Laurence Fishbu~
+## # ... with 990 more rows</code></pre>
+<p>Es soll untersucht werden, in wie vielen Filmen der Schauspieler Bradley Cooper mitgewirkt hat und ob dieser als erster (Haupt-) Schauspieler nominiert wurde oder eine kleinere Rolle innehatte. Um dies herauszufinden, wird der Filterbefehl auf alle vier Spalten angewendet.</p>
+<pre class="r"><code>df.sep.actor.bc &lt;- df.sep.actor %&gt;% filter(first == &quot;Bradley Cooper&quot; | second == &quot;Bradley Cooper&quot; | third == &quot;Bradley Cooper&quot; | fourth == &quot;Bradley Cooper&quot;)
+df.sep.actor.bc %&gt;% select(first, second, third, fourth)</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##   first          second              third            fourth              
+##   &lt;chr&gt;          &lt;chr&gt;               &lt;chr&gt;            &lt;chr&gt;               
+## 1 Bradley Cooper &quot; Sienna Miller&quot;    &quot; Kyle Gallner&quot;  &quot; Cole Konis&quot;       
+## 2 Bradley Cooper &quot; Jennifer Lawrenc~ &quot; Robert De Nir~ &quot; Jacki Weaver&quot;     
+## 3 Bradley Cooper &quot; Anna Friel&quot;       &quot; Abbie Cornish&quot; &quot; Robert De Niro&quot;   
+## 4 Bradley Cooper &quot; Sienna Miller&quot;    &quot; Daniel Brühl&quot;  &quot; Riccardo Scamarci~</code></pre>
+<p>Als Ergebnis werden vier Filme angezeigt und auch nur mit Bradley Cooper als Hauptdarsteller. Hatte er in der vergangenheit keine weiteren Rollen bekommen oder stimmt etwas mit dem Filterbefehl nicht? Zur Beantwortung der Frage, wird ein Auszug aus der zweiten Spalte (<code>second</code>) erstellt (alternativ geht Spalte drei und vier natürlich auch).</p>
+<pre class="r"><code>head(df.sep.actor$second)</code></pre>
+<pre><code>## [1] &quot; Vin Diesel&quot;           &quot; Logan Marshall-Green&quot; &quot; Anya Taylor-Joy&quot;     
+## [4] &quot;Reese Witherspoon&quot;     &quot; Jared Leto&quot;           &quot; Tian Jing&quot;</code></pre>
+<p>Man erkennt hierbei, dass durch die Spaltung mittels dem <em>separate()</em> Befehls, teilweise Leerzeichen vor den Namen entstanden sind. Die zuvor verwendeten Filterbefehle für die Spalten <code>second</code>, <code>third</code> und <code>fourth</code> werden entsprechend abgeändert (durch Ergänzung von Leerzeichen vor dem Namen) und erneut durchgeführt.</p>
+<pre class="r"><code>df.sep.actor.bc2 &lt;- df.sep.actor %&gt;% filter(first == &quot;Bradley Cooper&quot; | second == &quot; Bradley Cooper&quot; | third == &quot; Bradley Cooper&quot; | fourth == &quot; Bradley Cooper&quot;)
+df.sep.actor.bc2 %&gt;% select(first, second, third, fourth)</code></pre>
+<pre><code>## # A tibble: 11 x 4
+##    first            second             third           fourth             
+##    &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;           &lt;chr&gt;              
+##  1 Chris Pratt      &quot; Vin Diesel&quot;      &quot; Bradley Coop~ &quot; Zoe Saldana&quot;     
+##  2 Ryan Gosling     &quot; Bradley Cooper&quot;  &quot; Eva Mendes&quot;   Craig Van Hook     
+##  3 Zach Galifianak~ &quot; Bradley Cooper&quot;  &quot; Justin Barth~ &quot; Ed Helms&quot;        
+##  4 Bradley Cooper   &quot; Sienna Miller&quot;   &quot; Kyle Gallner&quot; &quot; Cole Konis&quot;      
+##  5 Bradley Cooper   &quot; Jennifer Lawren~ &quot; Robert De Ni~ &quot; Jacki Weaver&quot;    
+##  6 Christian Bale   &quot; Amy Adams&quot;       &quot; Bradley Coop~ Jennifer Lawrence  
+##  7 Jennifer Lawren~ &quot; Robert De Niro&quot;  &quot; Bradley Coop~ &quot; Edgar Ramírez&quot;   
+##  8 Bradley Cooper   &quot; Anna Friel&quot;      &quot; Abbie Cornis~ &quot; Robert De Niro&quot;  
+##  9 Bradley Cooper   &quot; Sienna Miller&quot;   &quot; Daniel Brühl&quot; &quot; Riccardo Scamarc~
+## 10 Liam Neeson      &quot; Bradley Cooper&quot;  &quot; Sharlto Copl~ Jessica Biel       
+## 11 Vinnie Jones     &quot; Bradley Cooper&quot;  &quot; Leslie Bibb&quot;  &quot; Brooke Shields&quot;</code></pre>
+<p>Dieses Ergebnis wirkt realistischer. Allerdings merkt man, dass der Filterbefehl hier nicht mehr so zuverlässig eingesetzt werden kann. Abhilfe leistet die <em>str_detect()</em> Funktion. Diese stammt aus dem Data Mining Bereich und regiert nicht so sensibel wie <em>filter()</em>. Bedeutet in unserem Fall, dass Leerzeichen automatisch ignoriert werden.</p>
+<pre class="r"><code>df.sep.actor.bc3 &lt;- df.sep.actor %&gt;% select(first, second, third, fourth) %&gt;% filter(str_detect(first, &quot;Bradley Cooper&quot;) | str_detect(second, &quot;Bradley Cooper&quot;) | str_detect(third, &quot;Bradley Cooper&quot;) | str_detect(fourth, &quot;Bradley Cooper&quot;))
+df.sep.actor.bc3</code></pre>
+<pre><code>## # A tibble: 11 x 4
+##    first            second             third           fourth             
+##    &lt;chr&gt;            &lt;chr&gt;              &lt;chr&gt;           &lt;chr&gt;              
+##  1 Chris Pratt      &quot; Vin Diesel&quot;      &quot; Bradley Coop~ &quot; Zoe Saldana&quot;     
+##  2 Ryan Gosling     &quot; Bradley Cooper&quot;  &quot; Eva Mendes&quot;   Craig Van Hook     
+##  3 Zach Galifianak~ &quot; Bradley Cooper&quot;  &quot; Justin Barth~ &quot; Ed Helms&quot;        
+##  4 Bradley Cooper   &quot; Sienna Miller&quot;   &quot; Kyle Gallner&quot; &quot; Cole Konis&quot;      
+##  5 Bradley Cooper   &quot; Jennifer Lawren~ &quot; Robert De Ni~ &quot; Jacki Weaver&quot;    
+##  6 Christian Bale   &quot; Amy Adams&quot;       &quot; Bradley Coop~ Jennifer Lawrence  
+##  7 Jennifer Lawren~ &quot; Robert De Niro&quot;  &quot; Bradley Coop~ &quot; Edgar Ramírez&quot;   
+##  8 Bradley Cooper   &quot; Anna Friel&quot;      &quot; Abbie Cornis~ &quot; Robert De Niro&quot;  
+##  9 Bradley Cooper   &quot; Sienna Miller&quot;   &quot; Daniel Brühl&quot; &quot; Riccardo Scamarc~
+## 10 Liam Neeson      &quot; Bradley Cooper&quot;  &quot; Sharlto Copl~ Jessica Biel       
+## 11 Vinnie Jones     &quot; Bradley Cooper&quot;  &quot; Leslie Bibb&quot;  &quot; Brooke Shields&quot;</code></pre>
+<p>Abschließend wird noch der Frage nachgegangen, wie häufig und mit welcher Nominierung Cooper mitgewirkt hat.</p>
+<pre class="r"><code>df.sep.actor.bc3 %&gt;% str_count(&quot;Bradley Cooper&quot;)</code></pre>
+<pre><code>## [1] 4 4 3 0</code></pre>
+<pre class="r"><code>df.sep.actor.bc3 %&gt;% str_count(&quot;Bradley Cooper&quot;) %&gt;% barplot(main=&quot;Filme von Cooper&quot;, names.arg=c(&quot;first&quot;, &quot;second&quot;, &quot;third&quot;, &quot;fourth&quot;), cex.names=0.8, ylab=&quot;count&quot;)</code></pre>
+<p><img src="/post/2018-10-12-cleaning-data-with-tidyverse_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><strong>Unite</strong></p>
+<p>Manchmal kann es sinnvoll sein, gewisse Spalten eines Datensatzes zusammen zu führen.</p>
+<pre class="r"><code>movie %&gt;% select(Rating, Votes) %&gt;% head() </code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   Rating  Votes
+##    &lt;dbl&gt;  &lt;int&gt;
+## 1    8.1 757074
+## 2    7   485820
+## 3    7.3 157606
+## 4    7.2  60545
+## 5    6.2 393727
+## 6    6.1  56036</code></pre>
+<p><em>unite</em> macht genau dies. Das erste Argument der Funktion beinhaltet den neuen Namen der erstellten Variablen. Anschließend werden die beiden Spalten aus dem Datensatz benannt, welche zusammengeführt werden sollen. Abschließend wird mit <em>sep=</em> bestimmt, durch welches Zeichen die Werte getrennt werden sollen.</p>
+<pre class="r"><code>df.unite &lt;- movie %&gt;% unite(Rating/Votes, Rating, Votes, sep = &quot;/&quot;) %&gt;% 
+  select(`Rating/Votes`) %&gt;% 
+  head()
+df.unite</code></pre>
+<pre><code>## # A tibble: 6 x 1
+##   `Rating/Votes`
+##   &lt;chr&gt;         
+## 1 8.1/757074    
+## 2 7/485820      
+## 3 7.3/157606    
+## 4 7.2/60545     
+## 5 6.2/393727    
+## 6 6.1/56036</code></pre>
+</div>
+<div id="delete-and-omit" class="section level1">
+<h1>4 delete() and omit()</h1>
+<p><strong>Delete</strong></p>
+<p>Nicht immer werden alle Spalten oder Zeilen eines Datensatzes benötigt. Sie können daher gezielt gelöscht werden.</p>
+<p>Folgendes Beispiel zeigt die Löschung der vierten Spalte (<code>Description</code>) aus dem Datensatz <em>IMDB-Movie-Data</em>.</p>
+<pre class="r"><code>del &lt;- movie[, -(4)]
+del</code></pre>
+<pre><code>## # A tibble: 1,000 x 11
+##     Rank Title Genre Director Actors  Year `Runtime (Minut~ Rating  Votes
+##    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;int&gt;            &lt;int&gt;  &lt;dbl&gt;  &lt;int&gt;
+##  1     1 Guar~ Acti~ James G~ Chris~  2014              121    8.1 757074
+##  2     2 Prom~ Adve~ Ridley ~ Noomi~  2012              124    7   485820
+##  3     3 Split Horr~ M. Nigh~ James~  2016              117    7.3 157606
+##  4     4 Sing  Anim~ Christo~ Matth~  2016              108    7.2  60545
+##  5     5 Suic~ Acti~ David A~ Will ~  2016              123    6.2 393727
+##  6     6 The ~ Acti~ Yimou Z~ Matt ~  2016              103    6.1  56036
+##  7     7 La L~ Come~ Damien ~ Ryan ~  2016              128    8.3 258682
+##  8     8 Mind~ Come~ Sean Fo~ Essie~  2016               89    6.4   2490
+##  9     9 The ~ Acti~ James G~ Charl~  2016              141    7.1   7188
+## 10    10 Pass~ Adve~ Morten ~ Jenni~  2016              116    7   192177
+## # ... with 990 more rows, and 2 more variables: `Revenue
+## #   (Millions)` &lt;dbl&gt;, Metascore &lt;int&gt;</code></pre>
+<p>Es können auch gezielt die ersten 6 Zeilen entfernt werden, sodass der Datensatz erst bei Rank 7 beginnt.</p>
+<pre class="r"><code>del2 &lt;- movie[-(1:6), ]
+del2</code></pre>
+<pre><code>## # A tibble: 994 x 12
+##     Rank Title Genre Description Director Actors  Year `Runtime (Minut~
+##    &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;  &lt;int&gt;            &lt;int&gt;
+##  1     7 La L~ Come~ A jazz pia~ Damien ~ Ryan ~  2016              128
+##  2     8 Mind~ Come~ &quot;A has-bee~ Sean Fo~ Essie~  2016               89
+##  3     9 The ~ Acti~ A true-lif~ James G~ Charl~  2016              141
+##  4    10 Pass~ Adve~ A spacecra~ Morten ~ Jenni~  2016              116
+##  5    11 Fant~ Adve~ The advent~ David Y~ Eddie~  2016              133
+##  6    12 Hidd~ Biog~ The story ~ Theodor~ Taraj~  2016              127
+##  7    13 Rogu~ Acti~ The Rebel ~ Gareth ~ Felic~  2016              133
+##  8    14 Moana Anim~ In Ancient~ Ron Cle~ Auli&#39;~  2016              107
+##  9    15 Colo~ Acti~ Gloria is ~ Nacho V~ Anne ~  2016              109
+## 10    16 The ~ Anim~ The quiet ~ Chris R~ Louis~  2016               87
+## # ... with 984 more rows, and 4 more variables: Rating &lt;dbl&gt;, Votes &lt;int&gt;,
+## #   `Revenue (Millions)` &lt;dbl&gt;, Metascore &lt;int&gt;</code></pre>
+<p><strong>Omit</strong></p>
+<p>Ist man sich unsicher, ob die Daten noch benötigt werden oder nicht, besteht die Möglichkeit relevante Informationen gezielt zu extrahieren. Dies kann wieder spaltenweise als auch zeilenweise durchgeführt werden.</p>
+<pre class="r"><code>movie[1:3, ]</code></pre>
+<pre><code>## # A tibble: 3 x 12
+##    Rank Title Genre Description Director Actors  Year `Runtime (Minut~
+##   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;  &lt;int&gt;            &lt;int&gt;
+## 1     1 Guar~ Acti~ A group of~ James G~ Chris~  2014              121
+## 2     2 Prom~ Adve~ Following ~ Ridley ~ Noomi~  2012              124
+## 3     3 Split Horr~ Three girl~ M. Nigh~ James~  2016              117
+## # ... with 4 more variables: Rating &lt;dbl&gt;, Votes &lt;int&gt;, `Revenue
+## #   (Millions)` &lt;dbl&gt;, Metascore &lt;int&gt;</code></pre>
+<pre class="r"><code>movie[, 5]</code></pre>
+<pre><code>## # A tibble: 1,000 x 1
+##    Director            
+##    &lt;chr&gt;               
+##  1 James Gunn          
+##  2 Ridley Scott        
+##  3 M. Night Shyamalan  
+##  4 Christophe Lourdelet
+##  5 David Ayer          
+##  6 Yimou Zhang         
+##  7 Damien Chazelle     
+##  8 Sean Foley          
+##  9 James Gray          
+## 10 Morten Tyldum       
+## # ... with 990 more rows</code></pre>
+</div>
+<div id="conclusion" class="section level1">
+<h1>5 Conclusion</h1>
+<p>Ein sauberer Datensatz weißt folgende Kriterien auf:</p>
+<ul>
+<li>Jede Variable bildet eine Spalte</li>
+<li>Jede Beobachtung bildet eine Reihe</li>
+<li>Jede Art von Beobachtungseinheit bildet eine Tabelle</li>
+</ul>
+<p>Ist eines nicht gegeben, so sollte man für eine gute Auswertbarkeit des Datensatzes diesen entsprechend bereinigen. Die hier vorgestellten Befehle sowie die aus dem Post <a href="https://michael-fuchs.netlify.com/2018/08/18/data-transformation-in-r/">“Data Transformation in R”</a> helfen dabei ungemein.</p>
+</div>
