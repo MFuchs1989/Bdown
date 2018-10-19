@@ -90,7 +90,7 @@ library(shiny)</code></pre>
 </li>
 <li>Möglichkeit 2: Multiple File (ui.R/server.R)</li>
 </ul>
-<p>Nachfolgend werden für mehrere Beispiele die Syntaxen für beide Varianten dargelegt.</p>
+<p>Nachfolgend wird jeweils nur die Syntax für Variante 1 dargelegt.</p>
 <p>Für diesen Post wurde der Datensatz <em>IMDB-Movie-Data</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=13ytotLAXb70lgYHnblPbUWr9cb2z7SaN" class="uri">https://drive.google.com/open?id=13ytotLAXb70lgYHnblPbUWr9cb2z7SaN</a> abrufbar.</p>
 <pre class="r"><code>movie &lt;- read_csv(&quot;IMDB-Movie-Data.csv&quot;)</code></pre>
 </div>
@@ -154,30 +154,6 @@ server &lt;- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)</code></pre>
-<p><strong>Syntax: Multiple File (ui.R/server.R)</strong></p>
-<p><strong><em>ui.R</em></strong></p>
-<p>library(shiny) library(ggplot2)</p>
-<p>movie2 = read.csv(“movie2.csv”)</p>
-<p>fluidPage( sidebarLayout( sidebarPanel( selectInput(inputId = “y”, label = “Y-axis:”, choices = c(“Spielfilmlaenge”, “Bewertung”, “Waehlerstimmen”, “Einnahmen”, “Metascore”), selected = “Bewertung”),</p>
-<pre><code>  selectInput(inputId = &quot;x&quot;, 
-              label = &quot;X-axis:&quot;,
-              choices = c(&quot;Spielfilmlaenge&quot;, &quot;Bewertung&quot;, &quot;Waehlerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
-              selected = &quot;Spielfilmlänge&quot;),
-  
-  
-  selectInput(inputId = &quot;z&quot;, 
-              label = &quot;Color by:&quot;,
-              choices = c(&quot;Bewertung&quot;, &quot;Genre&quot;),
-              selected = &quot;Genre&quot;)
-),
-
-
-mainPanel(
-  plotOutput(outputId = &quot;scatterplot&quot;)
-)))</code></pre>
-<p><strong><em>server.R</em></strong></p>
-<p>library(shiny) library(ggplot2)</p>
-<p>movie2 = read.csv(“movie2.csv”) function(input, output) { output<span class="math inline">\(scatterplot = renderPlot({  ggplot(data = movie2, aes_string(x = input\)</span>x, y = input<span class="math inline">\(y,  color = input\)</span>z)) + geom_point() })}</p>
 <p><strong><em>Result</em></strong></p>
 <p><a href="https://michael-fuchs-stat.shinyapps.io/P24A/">“Interactive Scatter Plot”</a></p>
 </div>

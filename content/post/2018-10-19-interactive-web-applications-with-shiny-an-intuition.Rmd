@@ -33,7 +33,7 @@ File -> New File -> Shiny Wep App...
 + Möglichkeit 1: Single File (app.R)  
 + Möglichkeit 2: Multiple File (ui.R/server.R)  
 
-Nachfolgend werden für mehrere Beispiele die Syntaxen für beide Varianten dargelegt. 
+Nachfolgend wird jeweils nur die Syntax für Variante 1 dargelegt.
 
 Für diesen Post wurde der Datensatz *IMDB-Movie-Data* von der Statistik Plattform ["Kaggle"](https://www.kaggle.com) verwendet. Eine Kopie des Datensatzes ist unter <https://drive.google.com/open?id=13ytotLAXb70lgYHnblPbUWr9cb2z7SaN> abrufbar.
 
@@ -101,61 +101,6 @@ server <- function(input, output) {
 
 shinyApp(ui = ui, server = server)
 ```
-
-
-**Syntax: Multiple File (ui.R/server.R)**
-
-***ui.R***
-
-
-library(shiny)
-library(ggplot2)
-
-
-movie2 = read.csv("movie2.csv")
-
-fluidPage(
-  sidebarLayout(
-    sidebarPanel(
-      selectInput(inputId = "y", 
-                  label = "Y-axis:",
-                  choices = c("Spielfilmlaenge", "Bewertung", "Waehlerstimmen", "Einnahmen", "Metascore"), 
-                  selected = "Bewertung"),
-      
-      
-      selectInput(inputId = "x", 
-                  label = "X-axis:",
-                  choices = c("Spielfilmlaenge", "Bewertung", "Waehlerstimmen", "Einnahmen", "Metascore"), 
-                  selected = "Spielfilmlänge"),
-      
-      
-      selectInput(inputId = "z", 
-                  label = "Color by:",
-                  choices = c("Bewertung", "Genre"),
-                  selected = "Genre")
-    ),
-    
-    
-    mainPanel(
-      plotOutput(outputId = "scatterplot")
-    )))
-
-
-
-***server.R***
-
-
-library(shiny)
-library(ggplot2)
-
-
-movie2 = read.csv("movie2.csv")
-function(input, output) {
-  output$scatterplot = renderPlot({
-    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
-                                     color = input$z)) +
-      geom_point()
-  })}
 
 
 ***Result***
