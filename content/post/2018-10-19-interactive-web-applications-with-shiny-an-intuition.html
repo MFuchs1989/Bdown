@@ -208,7 +208,7 @@ shinyApp(ui = ui, server = server)</code></pre>
 <p><a href="https://michael-fuchs-stat.shinyapps.io/P24C/">“Interactive Scatter Plot plus Density Plot”</a></p>
 </div>
 <div id="scatter-plot-plus-correlation" class="section level1">
-<h1>5 Scatter Plot plus Correlation</h1>
+<h1>6 Scatter Plot plus Correlation</h1>
 <p><strong>Syntax: Single File (app.R)</strong></p>
 <pre class="r"><code>ui &lt;- fluidPage(
   
@@ -265,7 +265,7 @@ shinyApp(ui = ui, server = server)</code></pre>
 <p><a href="https://michael-fuchs-stat.shinyapps.io/P24D/">“Interactive Scatter Plot plus Correlation”</a></p>
 </div>
 <div id="scatter-plot-plus-regression-analysis" class="section level1">
-<h1>5 Scatter Plot plus regression analysis</h1>
+<h1>7 Scatter Plot plus regression analysis</h1>
 <p><strong>Syntax: Single File (app.R)</strong></p>
 <pre class="r"><code>ui &lt;- fluidPage(
   
@@ -330,6 +330,78 @@ server &lt;- function(input, output) {
     y &lt;- movie2 %&gt;% pull(input$y)
     summ &lt;- summary(lm(y ~ x, data = movie2)) 
     print(summ, digits = 3, signif.stars = FALSE)
+  })
+  
+}
+
+
+shinyApp(ui = ui, server = server)</code></pre>
+<p><strong><em>Result</em></strong></p>
+<p><a href="https://michael-fuchs-stat.shinyapps.io/P24E/">“Interactive Scatter Plot plus regression analysis”</a></p>
+</div>
+<div id="scatter-plot-with-various-slider-input-and-own-naming" class="section level1">
+<h1>8 Scatter Plot with various slider input and own naming</h1>
+<pre class="r"><code>ui &lt;- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      textInput(inputId = &quot;plot_title&quot;, 
+                label = &quot;Plot title&quot;, 
+                placeholder = &quot;Enter text to be used as plot title&quot;),
+      
+      
+      selectInput(inputId = &quot;y&quot;, 
+                  label = &quot;Y-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Bewertung&quot;),
+      
+      
+      selectInput(inputId = &quot;x&quot;, 
+                  label = &quot;X-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Spielfilmlänge&quot;),
+      
+      
+      selectInput(inputId = &quot;z&quot;, 
+                  label = &quot;Color by:&quot;,
+                  choices = c(&quot;Bewertung&quot;, &quot;Genre&quot;),
+                  selected = &quot;Genre&quot;),
+      
+      sliderInput(inputId = &quot;alpha&quot;, 
+                  label = &quot;Alpha:&quot;, 
+                  min = 0, max = 1, 
+                  value = 0.5),
+      
+      
+      sliderInput(inputId = &quot;size&quot;, 
+                  label = &quot;Size:&quot;, 
+                  min = 0, max = 5, 
+                  value = 2)
+      
+    ),
+    
+    
+    
+    
+    mainPanel(
+      plotOutput(outputId = &quot;scatterplot&quot;)
+      
+    )
+  )
+)
+
+
+server &lt;- function(input, output, session) {
+  
+  
+  output$scatterplot &lt;- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y, color = input$z)) +
+      geom_point(alpha = input$alpha, size = input$size) +
+      labs(title = isolate({ input$plot_title }) )
   })
   
 }

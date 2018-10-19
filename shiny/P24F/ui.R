@@ -1,6 +1,6 @@
 library(shiny)
 library(ggplot2)
-library(tidyverse)
+library(tools)
 
 movie2 = read.csv("movie2.csv")
 
@@ -22,16 +22,31 @@ fluidPage(
       selectInput(inputId = "x", 
                   label = "X-axis:",
                   choices = c("Spielfilmlaenge", "Bewertung", "Waehlerstimmen", "Einnahmen", "Metascore"), 
-                  selected = "Spielfilmlänge")
+                  selected = "Spielfilmlänge"),
+      
+      selectInput(inputId = "z", 
+                  label = "Color by:",
+                  choices = c("Bewertung", "Genre"),
+                  selected = "Genre"),
+      
+      sliderInput(inputId = "alpha", 
+                  label = "Alpha:", 
+                  min = 0, max = 1, 
+                  value = 0.5),
+      
+      
+      sliderInput(inputId = "size", 
+                  label = "Size:", 
+                  min = 0, max = 5, 
+                  value = 2)
+      
       
     ),
     
     
     mainPanel(
-      plotOutput(outputId = "scatterplot"),
-      textOutput(outputId = "avg_x"), 
-      textOutput(outputId = "avg_y"), 
-      verbatimTextOutput(outputId = "lmoutput")
+      plotOutput(outputId = "scatterplot")
+      
     )
   )
 )

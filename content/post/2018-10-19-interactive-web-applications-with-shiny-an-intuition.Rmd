@@ -233,7 +233,7 @@ shinyApp(ui = ui, server = server)
 
 
 
-#5 Scatter Plot plus Correlation
+#6 Scatter Plot plus Correlation
 
 **Syntax: Single File (app.R)**
 
@@ -298,7 +298,7 @@ shinyApp(ui = ui, server = server)
 
 
 
-#5 Scatter Plot plus regression analysis
+#7 Scatter Plot plus regression analysis
 
 **Syntax: Single File (app.R)**
 
@@ -366,6 +366,84 @@ server <- function(input, output) {
     y <- movie2 %>% pull(input$y)
     summ <- summary(lm(y ~ x, data = movie2)) 
     print(summ, digits = 3, signif.stars = FALSE)
+  })
+  
+}
+
+
+shinyApp(ui = ui, server = server)
+```
+
+***Result***
+
+["Interactive Scatter Plot plus regression analysis"](https://michael-fuchs-stat.shinyapps.io/P24E/)
+
+
+
+#8 Scatter Plot  with various slider input and own naming 
+
+```{r, results="hide"}
+ui <- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      textInput(inputId = "plot_title", 
+                label = "Plot title", 
+                placeholder = "Enter text to be used as plot title"),
+      
+      
+      selectInput(inputId = "y", 
+                  label = "Y-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Bewertung"),
+      
+      
+      selectInput(inputId = "x", 
+                  label = "X-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Spielfilmlänge"),
+      
+      
+      selectInput(inputId = "z", 
+                  label = "Color by:",
+                  choices = c("Bewertung", "Genre"),
+                  selected = "Genre"),
+      
+      sliderInput(inputId = "alpha", 
+                  label = "Alpha:", 
+                  min = 0, max = 1, 
+                  value = 0.5),
+      
+      
+      sliderInput(inputId = "size", 
+                  label = "Size:", 
+                  min = 0, max = 5, 
+                  value = 2)
+      
+    ),
+    
+    
+    
+    
+    mainPanel(
+      plotOutput(outputId = "scatterplot")
+      
+    )
+  )
+)
+
+
+server <- function(input, output, session) {
+  
+  
+  output$scatterplot <- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y, color = input$z)) +
+      geom_point(alpha = input$alpha, size = input$size) +
+      labs(title = isolate({ input$plot_title }) )
   })
   
 }

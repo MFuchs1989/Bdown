@@ -1,5 +1,6 @@
 library(shiny)
 library(ggplot2)
+library(tidyverse)
 
 
 movie2 = read.csv("movie2.csv")
