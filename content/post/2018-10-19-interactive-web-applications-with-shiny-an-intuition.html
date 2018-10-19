@@ -197,11 +197,143 @@ server &lt;- function(input, output) {
   })
     
   output$densityplot &lt;- renderPlot({
-    ggplot(data = movies, aes_string(x = input$x)) +
+    ggplot(data = movie2, aes_string(x = input$x)) +
       geom_density()
       
   })
 }
+
+shinyApp(ui = ui, server = server)</code></pre>
+<p><strong><em>Result</em></strong></p>
+<p><a href="https://michael-fuchs-stat.shinyapps.io/P24C/">“Interactive Scatter Plot plus Density Plot”</a></p>
+</div>
+<div id="scatter-plot-plus-correlation" class="section level1">
+<h1>5 Scatter Plot plus Correlation</h1>
+<p><strong>Syntax: Single File (app.R)</strong></p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = &quot;y&quot;, 
+                  label = &quot;Y-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Bewertung&quot;),
+      
+      
+      selectInput(inputId = &quot;x&quot;, 
+                  label = &quot;X-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Spielfilmlänge&quot;)
+      
+    ),
+    
+    
+    
+    
+    mainPanel(
+      plotOutput(outputId = &quot;scatterplot&quot;),
+      textOutput(outputId = &quot;correlation&quot;)
+    )
+  )
+)
+
+
+server &lt;- function(input, output) {
+  
+  
+  output$scatterplot &lt;- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+    
+    output$correlation &lt;- renderText({
+     r &lt;- round(cor(movie2[, input$x], movie2[, input$y], use = &quot;pairwise&quot;), 3)
+      paste0(&quot;Correlation = &quot;, r, &quot;Beachte: Wenn die Beziehung zwischen den zwei Variablen nicht linear ist, wird der Korrelationskoeffizient nicht sinnvoll sein.&quot;)
+    
+      
+  })
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+<p><strong><em>Result</em></strong></p>
+<p><a href="https://michael-fuchs-stat.shinyapps.io/P24D/">“Interactive Scatter Plot plus Correlation”</a></p>
+</div>
+<div id="scatter-plot-plus-regression-analysis" class="section level1">
+<h1>5 Scatter Plot plus regression analysis</h1>
+<p><strong>Syntax: Single File (app.R)</strong></p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = &quot;y&quot;, 
+                  label = &quot;Y-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Bewertung&quot;),
+      
+      
+      selectInput(inputId = &quot;x&quot;, 
+                  label = &quot;X-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Spielfilmlänge&quot;)
+      
+    ),
+    
+    
+    
+    
+    mainPanel(
+      plotOutput(outputId = &quot;scatterplot&quot;),
+      textOutput(outputId = &quot;avg_x&quot;), 
+      textOutput(outputId = &quot;avg_y&quot;), 
+      verbatimTextOutput(outputId = &quot;lmoutput&quot;)
+      
+    )
+  )
+)
+
+
+server &lt;- function(input, output) {
+  
+  
+  output$scatterplot &lt;- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+    
+  
+  output$avg_x &lt;- renderText({
+    avg_x &lt;- movie2 %&gt;% pull(input$x) %&gt;% mean() %&gt;% round(2)
+    paste(&quot;Average&quot;, input$x, &quot;=&quot;, avg_x)
+  })
+  
+
+  output$avg_y &lt;- renderText({
+    avg_y &lt;- movie2 %&gt;% pull(input$y) %&gt;% mean() %&gt;% round(2)
+    paste(&quot;Average&quot;, input$y, &quot;=&quot;, avg_y)
+  })
+  
+
+  output$lmoutput &lt;- renderPrint({
+    x &lt;- movie2 %&gt;% pull(input$x)
+    y &lt;- movie2 %&gt;% pull(input$y)
+    summ &lt;- summary(lm(y ~ x, data = movie2)) 
+    print(summ, digits = 3, signif.stars = FALSE)
+  })
+  
+}
+
 
 shinyApp(ui = ui, server = server)</code></pre>
 </div>

@@ -218,7 +218,7 @@ server <- function(input, output) {
   })
     
   output$densityplot <- renderPlot({
-    ggplot(data = movies, aes_string(x = input$x)) +
+    ggplot(data = movie2, aes_string(x = input$x)) +
       geom_density()
       
   })
@@ -227,5 +227,151 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
+***Result***
+
+["Interactive Scatter Plot plus Density Plot"](https://michael-fuchs-stat.shinyapps.io/P24C/)
+
+
+
+#5 Scatter Plot plus Correlation
+
+**Syntax: Single File (app.R)**
+
+```{r, results="hide"}
+ui <- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = "y", 
+                  label = "Y-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Bewertung"),
+      
+      
+      selectInput(inputId = "x", 
+                  label = "X-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Spielfilmlänge")
+      
+    ),
+    
+    
+    
+    
+    mainPanel(
+      plotOutput(outputId = "scatterplot"),
+      textOutput(outputId = "correlation")
+    )
+  )
+)
+
+
+server <- function(input, output) {
+  
+  
+  output$scatterplot <- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+    
+    output$correlation <- renderText({
+     r <- round(cor(movie2[, input$x], movie2[, input$y], use = "pairwise"), 3)
+      paste0("Correlation = ", r, "Beachte: Wenn die Beziehung zwischen den zwei Variablen nicht linear ist, wird der Korrelationskoeffizient nicht sinnvoll sein.")
+    
+      
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+
+***Result***
+
+["Interactive Scatter Plot plus Correlation"](https://michael-fuchs-stat.shinyapps.io/P24D/)
+
+
+
+#5 Scatter Plot plus regression analysis
+
+**Syntax: Single File (app.R)**
+
+```{r, results="hide"}
+ui <- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = "y", 
+                  label = "Y-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Bewertung"),
+      
+      
+      selectInput(inputId = "x", 
+                  label = "X-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Spielfilmlänge")
+      
+    ),
+    
+    
+    
+    
+    mainPanel(
+      plotOutput(outputId = "scatterplot"),
+      textOutput(outputId = "avg_x"), 
+      textOutput(outputId = "avg_y"), 
+      verbatimTextOutput(outputId = "lmoutput")
+      
+    )
+  )
+)
+
+
+server <- function(input, output) {
+  
+  
+  output$scatterplot <- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+    
+  
+  output$avg_x <- renderText({
+    avg_x <- movie2 %>% pull(input$x) %>% mean() %>% round(2)
+    paste("Average", input$x, "=", avg_x)
+  })
+  
+
+  output$avg_y <- renderText({
+    avg_y <- movie2 %>% pull(input$y) %>% mean() %>% round(2)
+    paste("Average", input$y, "=", avg_y)
+  })
+  
+
+  output$lmoutput <- renderPrint({
+    x <- movie2 %>% pull(input$x)
+    y <- movie2 %>% pull(input$y)
+    summ <- summary(lm(y ~ x, data = movie2)) 
+    print(summ, digits = 3, signif.stars = FALSE)
+  })
+  
+}
+
+
+shinyApp(ui = ui, server = server)
+```
 
 

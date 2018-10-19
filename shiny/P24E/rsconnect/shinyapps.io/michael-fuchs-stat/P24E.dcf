@@ -1,12 +1,12 @@
-name: P24C
-title: P24C
+name: P24E
+title: P24E
 username:
 account: michael-fuchs-stat
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 525532
-bundleId: 1652172
-url: https://michael-fuchs-stat.shinyapps.io/P24C/
-when: 1539983361.08967
+appId: 525558
+bundleId: 1652215
+url: https://michael-fuchs-stat.shinyapps.io/P24E/
+when: 1539985351.44494
 asMultiple: FALSE
 asStatic: FALSE
