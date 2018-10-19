@@ -47,7 +47,18 @@ movie %>% separate(Genre, into = c("main genre", "further genre1", "further genr
 
 
 
-```{r}
+["Kaggle"](http://127.0.0.1:3930/)
+
+
+
+
+
+
+
+
+
+#KOPIE
+
 ui <- fluidPage(
   
   
@@ -94,18 +105,5 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
-```
-
-
-
-
-
-
-
-
-
-
-
-
 
 
