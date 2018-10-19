@@ -37,39 +37,85 @@ library(shiny)</code></pre>
 <pre><code>## Warning: Expected 3 pieces. Missing pieces filled with `NA` in 332 rows
 ## [3, 8, 18, 19, 22, 26, 28, 29, 31, 32, 40, 42, 43, 45, 47, 50, 53, 58, 60,
 ## 69, ...].</code></pre>
-<p><a href="http://127.0.0.1:3930/">“Kaggle”</a></p>
+<pre class="r"><code>shinyApp(
+  ui &lt;- fluidPage(
+     selectInput(inputId = &quot;y&quot;, 
+                  label = &quot;Y-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Bewertung&quot;),
+  
+    selectInput(inputId = &quot;x&quot;, 
+                  label = &quot;X-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Spielfilmlänge&quot;),
+      
+      
+    selectInput(inputId = &quot;z&quot;, 
+                  label = &quot;Color by:&quot;,
+                  choices = c(&quot;Bewertung&quot;, &quot;Genre&quot;),
+                  selected = &quot;Genre&quot;)
+  ),
+
+server &lt;- function(input, output) {
+  
+  
+  output$scatterplot &lt;- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+}
+)  </code></pre>
+<iframe data-deferred-src="appb5c3207ce2356db44373c16a6697cc54/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
+<iframe data-deferred-src="appc4ceddb69df5669157df97038414dff4/?w=&amp;__subapp__=1" width="100%" height="500" class="shiny-frame shiny-frame-deferred"></iframe>
 </div>
 <div id="section-kopie" class="section level1">
 <h1>KOPIE</h1>
-<p>ui &lt;- fluidPage(</p>
-<p>sidebarLayout(</p>
-<pre><code>sidebarPanel(
+<pre class="r"><code>ui &lt;- fluidPage(
   
   
-  selectInput(inputId = &quot;y&quot;, 
-              label = &quot;Y-axis:&quot;,
-              choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
-              selected = &quot;Bewertung&quot;),
-  
-  
-  selectInput(inputId = &quot;x&quot;, 
-              label = &quot;X-axis:&quot;,
-              choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
-              selected = &quot;Spielfilmlänge&quot;),
-  
-  
-  selectInput(inputId = &quot;z&quot;, 
-              label = &quot;Color by:&quot;,
-              choices = c(&quot;Bewertung&quot;, &quot;Genre&quot;),
-              selected = &quot;Genre&quot;)
-),
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = &quot;y&quot;, 
+                  label = &quot;Y-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Bewertung&quot;),
+      
+      
+      selectInput(inputId = &quot;x&quot;, 
+                  label = &quot;X-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Spielfilmlänge&quot;),
+      
+      
+      selectInput(inputId = &quot;z&quot;, 
+                  label = &quot;Color by:&quot;,
+                  choices = c(&quot;Bewertung&quot;, &quot;Genre&quot;),
+                  selected = &quot;Genre&quot;)
+    ),
+    
+    
+    mainPanel(
+      plotOutput(outputId = &quot;scatterplot&quot;)
+    )
+  )
+)
 
 
-mainPanel(
-  plotOutput(outputId = &quot;scatterplot&quot;)
-)</code></pre>
-<p>) )</p>
-<p>server &lt;- function(input, output) {</p>
-<p>output<span class="math inline">\(scatterplot &lt;- renderPlot({  ggplot(data = movie2, aes_string(x = input\)</span>x, y = input<span class="math inline">\(y,  color = input\)</span>z)) + geom_point() }) }</p>
-<p>shinyApp(ui = ui, server = server)</p>
+server &lt;- function(input, output) {
+  
+  
+  output$scatterplot &lt;- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+<iframe data-deferred-src="app6abaca577a77a53d65f5494a8f83b1a7/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 </div>

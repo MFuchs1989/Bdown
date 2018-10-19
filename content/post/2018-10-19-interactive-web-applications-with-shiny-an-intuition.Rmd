@@ -47,18 +47,64 @@ movie %>% separate(Genre, into = c("main genre", "further genre1", "further genr
 
 
 
-["Kaggle"](http://127.0.0.1:3930/)
+```{r}
+shinyApp(
+  ui <- fluidPage(
+     selectInput(inputId = "y", 
+                  label = "Y-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Bewertung"),
+  
+    selectInput(inputId = "x", 
+                  label = "X-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Spielfilmlänge"),
+      
+      
+    selectInput(inputId = "z", 
+                  label = "Color by:",
+                  choices = c("Bewertung", "Genre"),
+                  selected = "Genre")
+  ),
+
+server <- function(input, output) {
+  
+  
+  output$scatterplot <- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+}
+)  
+```
 
 
 
+```{r, echo=FALSE}
+shinyApp(
 
+  ui = fluidPage(
+    selectInput("region", "Region:",
+                choices = colnames(WorldPhones)),
+    plotOutput("phonePlot")
+  ),
 
+  server = function(input, output) {
+    output$phonePlot = renderPlot({
+      barplot(WorldPhones[,input$region]*1000,
+              ylab = "Number of Telephones", xlab = "Year")
+    })
+  },
 
+  options = list(height = 500)
+)
+```
 
 
 
 #KOPIE
-
+```{r}
 ui <- fluidPage(
   
   
@@ -105,5 +151,5 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
-
+```
 
