@@ -16,13 +16,13 @@ ui <- fluidPage(
       
       selectInput(inputId = "y", 
                   label = "Y-axis:",
-                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  choices = c("Spielfilmlaenge", "Bewertung", "Waehlerstimmen", "Einnahmen", "Metascore"), 
                   selected = "Bewertung"),
       
       
       selectInput(inputId = "x", 
                   label = "X-axis:",
-                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  choices = c("Spielfilmlaenge", "Bewertung", "Waehlerstimmen", "Einnahmen", "Metascore"), 
                   selected = "Spielfilmlänge"),
       
       
