@@ -109,3 +109,57 @@ shinyApp(ui = ui, server = server)
 
 
 
+#4 Scatter Plot with slider input 
+
+**Syntax: Single File (app.R)**
+```{r, results="hide"}
+ui <- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = "y", 
+                  label = "Y-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Bewertung"),
+      
+      
+      selectInput(inputId = "x", 
+                  label = "X-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Spielfilmlänge"),
+      
+      
+      sliderInput(inputId = "alpha", 
+                  label = "Alpha:", 
+                  min = 0, max = 1, 
+                  value = 0.5)
+    ),
+    
+    
+    
+    
+    mainPanel(
+      plotOutput(outputId = "scatterplot")
+    )
+  )
+)
+
+
+server <- function(input, output) {
+  
+  
+  output$scatterplot <- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point(alpha = input$alpha)
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+

@@ -97,3 +97,55 @@ shinyApp(ui = ui, server = server)</code></pre>
 <p><strong><em>Result</em></strong></p>
 <p><a href="https://michael-fuchs-stat.shinyapps.io/P24A/">“Interactive Scatter Plot”</a></p>
 </div>
+<div id="scatter-plot-with-slider-input" class="section level1">
+<h1>4 Scatter Plot with slider input</h1>
+<p><strong>Syntax: Single File (app.R)</strong></p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = &quot;y&quot;, 
+                  label = &quot;Y-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Bewertung&quot;),
+      
+      
+      selectInput(inputId = &quot;x&quot;, 
+                  label = &quot;X-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Spielfilmlänge&quot;),
+      
+      
+      sliderInput(inputId = &quot;alpha&quot;, 
+                  label = &quot;Alpha:&quot;, 
+                  min = 0, max = 1, 
+                  value = 0.5)
+    ),
+    
+    
+    
+    
+    mainPanel(
+      plotOutput(outputId = &quot;scatterplot&quot;)
+    )
+  )
+)
+
+
+server &lt;- function(input, output) {
+  
+  
+  output$scatterplot &lt;- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point(alpha = input$alpha)
+  })
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+</div>
