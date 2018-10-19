@@ -5,8 +5,8 @@ account: michael-fuchs-stat
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 524593
-bundleId: 1651566
+bundleId: 1651570
 url: https://michael-fuchs-stat.shinyapps.io/P24a/
-when: 1539961228.44912
+when: 1539961368.35326
 asMultiple: FALSE
 asStatic: FALSE

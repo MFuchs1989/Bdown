@@ -1,6 +1,5 @@
 library(shiny)
 
-setwd('C:/Users/Michi/Documents/Bdown/content/shiny/P24a')
 
 ui <- fluidPage(
   
