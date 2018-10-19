@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title> Interactive Web Applications with Shiny. An intuition. - Michael Fuchs</title>
+<meta property="og:title" content=" Interactive Web Applications with Shiny. An intuition. - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+    <li><a href="https://twitter.com/Stat_Michael">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title"> Interactive Web Applications with Shiny. An intuition.</h1>
+
+    
+    <span class="article-date">2018/10/19</span>
+    
+
+    <div class="article-content">
+      <pre class="r"><code>library(tidyverse)
+library(shiny)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Preparation</li>
+<li>3 Scatter Plot</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Shiny ist ein R-Paket, mit dem man interaktive Web-Apps direkt aus R heraus erstellen kann. In R Studio gibt es dafür zwei Möglichkeiten.</p>
+<p>File -&gt; New File -&gt; Shiny Wep App…</p>
+<ul>
+<li>Möglichkeit 1: Single File (app.R)<br />
+</li>
+<li>Möglichkeit 2: Multiple File (ui.R/server.R)</li>
+</ul>
+<p>Nachfolgend werden für mehrere Beispiele die Syntaxen für beide Varianten dargelegt.</p>
+<p>Für diesen Post wurde der Datensatz <em>IMDB-Movie-Data</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=13ytotLAXb70lgYHnblPbUWr9cb2z7SaN" class="uri">https://drive.google.com/open?id=13ytotLAXb70lgYHnblPbUWr9cb2z7SaN</a> abrufbar.</p>
+<pre class="r"><code>movie &lt;- read_csv(&quot;IMDB-Movie-Data.csv&quot;)</code></pre>
+</div>
+<div id="preparation" class="section level1">
+<h1>2 Preparation</h1>
+<pre class="r"><code>movie %&gt;% separate(Genre, into = c(&quot;main genre&quot;, &quot;further genre1&quot;, &quot;further genre2&quot;)) %&gt;% 
+  select(Genre = `main genre`, Titel = Title, Spielfilmlaenge = `Runtime (Minutes)`, Bewertung = Rating, Waehlerstimmen = Votes, Einnahmen = `Revenue (Millions)`, Metascore) -&gt; movie2</code></pre>
+<pre><code>## Warning: Expected 3 pieces. Additional pieces discarded in 110 rows [1,
+## 2, 13, 20, 25, 33, 35, 36, 37, 49, 61, 65, 68, 81, 86, 95, 98, 103, 110,
+## 122, ...].</code></pre>
+<pre><code>## Warning: Expected 3 pieces. Missing pieces filled with `NA` in 332 rows
+## [3, 8, 18, 19, 22, 26, 28, 29, 31, 32, 40, 42, 43, 45, 47, 50, 53, 58, 60,
+## 69, ...].</code></pre>
+</div>
+<div id="scatter-plot" class="section level1">
+<h1>3 Scatter Plot</h1>
+<p><strong>Syntax: Single File (app.R)</strong></p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = &quot;y&quot;, 
+                  label = &quot;Y-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Bewertung&quot;),
+      
+      
+      selectInput(inputId = &quot;x&quot;, 
+                  label = &quot;X-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Spielfilmlänge&quot;),
+      
+      
+      selectInput(inputId = &quot;z&quot;, 
+                  label = &quot;Color by:&quot;,
+                  choices = c(&quot;Bewertung&quot;, &quot;Genre&quot;),
+                  selected = &quot;Genre&quot;)
+    ),
+    
+    
+    mainPanel(
+      plotOutput(outputId = &quot;scatterplot&quot;)
+    )
+  )
+)
+
+
+server &lt;- function(input, output) {
+  
+  
+  output$scatterplot &lt;- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+<p><strong>Multiple File (ui.R/server.R)</strong></p>
+<p><strong><em>ui.R</em></strong></p>
+<p>library(shiny) library(ggplot2)</p>
+<p>movie2 = read.csv(“movie2.csv”)</p>
+<p>fluidPage(</p>
+<p>sidebarLayout(</p>
+<pre><code>sidebarPanel(
+  
+  
+  selectInput(inputId = &quot;y&quot;, 
+              label = &quot;Y-axis:&quot;,
+              choices = c(&quot;Spielfilmlaenge&quot;, &quot;Bewertung&quot;, &quot;Waehlerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+              selected = &quot;Bewertung&quot;),
+  
+  
+  selectInput(inputId = &quot;x&quot;, 
+              label = &quot;X-axis:&quot;,
+              choices = c(&quot;Spielfilmlaenge&quot;, &quot;Bewertung&quot;, &quot;Waehlerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+              selected = &quot;Spielfilmlänge&quot;),
+  
+  
+  selectInput(inputId = &quot;z&quot;, 
+              label = &quot;Color by:&quot;,
+              choices = c(&quot;Bewertung&quot;, &quot;Genre&quot;),
+              selected = &quot;Genre&quot;)
+),
+
+
+mainPanel(
+  plotOutput(outputId = &quot;scatterplot&quot;)
+)</code></pre>
+<p>) )</p>
+<p><strong><em>server.R</em></strong></p>
+<p>library(shiny) library(ggplot2)</p>
+<p>movie2 = read.csv(“movie2.csv”)</p>
+<p>function(input, output) {</p>
+<p>output<span class="math inline">\(scatterplot &lt;- renderPlot({  ggplot(data = movie2, aes_string(x = input\)</span>x, y = input<span class="math inline">\(y,  color = input\)</span>z)) + geom_point() }) }</p>
+<p><strong><em>Result</em></strong></p>
+<p><a href="https://michael-fuchs-stat.shinyapps.io/P24A/">“Interactive Scatter Plot”</a></p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

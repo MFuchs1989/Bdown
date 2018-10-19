@@ -6,10 +6,22 @@
     <description>Recent content on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 12 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 19 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title> Interactive Web Applications with Shiny. An intuition.</title>
+      <link>/2018/10/19/interactive-web-applications-with-shiny-an-intuition/</link>
+      <pubDate>Fri, 19 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/10/19/interactive-web-applications-with-shiny-an-intuition/</guid>
+      <description>library(tidyverse)library(shiny)Table of Content1 Introduction2 Preparation3 Scatter Plot1 IntroductionShiny ist ein R-Paket, mit dem man interaktive Web-Apps direkt aus R heraus erstellen kann. In R Studio gibt es dafür zwei Möglichkeiten.
+File -&amp;gt; New File -&amp;gt; Shiny Wep App…
+Möglichkeit 1: Single File (app.R)
+Möglichkeit 2: Multiple File (ui.R/server.R)Nachfolgend werden für mehrere Beispiele die Syntaxen für beide Varianten dargelegt.</description>
+    </item>
     
     <item>
       <title>Cleaning Data with tidyverse</title>
