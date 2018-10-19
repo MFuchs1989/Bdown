@@ -94,16 +94,12 @@ server &lt;- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)</code></pre>
-<p><strong>Multiple File (ui.R/server.R)</strong></p>
+<p><strong>Syntax: Multiple File (ui.R/server.R)</strong></p>
 <p><strong><em>ui.R</em></strong></p>
 <p>library(shiny) library(ggplot2)</p>
 <p>movie2 = read.csv(“movie2.csv”)</p>
-<p>fluidPage(</p>
-<p>sidebarLayout(</p>
-<pre><code>sidebarPanel(
-  
-  
-  selectInput(inputId = &quot;y&quot;, 
+<p>fluidPage( sidebarLayout( sidebarPanel(</p>
+<pre><code>  selectInput(inputId = &quot;y&quot;, 
               label = &quot;Y-axis:&quot;,
               choices = c(&quot;Spielfilmlaenge&quot;, &quot;Bewertung&quot;, &quot;Waehlerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
               selected = &quot;Bewertung&quot;),
@@ -124,13 +120,11 @@ shinyApp(ui = ui, server = server)</code></pre>
 
 mainPanel(
   plotOutput(outputId = &quot;scatterplot&quot;)
-)</code></pre>
-<p>) )</p>
+)))</code></pre>
 <p><strong><em>server.R</em></strong></p>
 <p>library(shiny) library(ggplot2)</p>
 <p>movie2 = read.csv(“movie2.csv”)</p>
-<p>function(input, output) {</p>
-<p>output<span class="math inline">\(scatterplot &lt;- renderPlot({  ggplot(data = movie2, aes_string(x = input\)</span>x, y = input<span class="math inline">\(y,  color = input\)</span>z)) + geom_point() }) }</p>
+<p>function(input, output) { output<span class="math inline">\(scatterplot &lt;- renderPlot({  ggplot(data = movie2, aes_string(x = input\)</span>x, y = input<span class="math inline">\(y,  color = input\)</span>z)) + geom_point() })}</p>
 <p><strong><em>Result</em></strong></p>
 <p><a href="https://michael-fuchs-stat.shinyapps.io/P24A/">“Interactive Scatter Plot”</a></p>
 </div>

@@ -103,7 +103,7 @@ shinyApp(ui = ui, server = server)
 ```
 
 
-**Multiple File (ui.R/server.R)**
+**Syntax: Multiple File (ui.R/server.R)**
 
 ***ui.R***
 
@@ -111,14 +111,11 @@ shinyApp(ui = ui, server = server)
 library(shiny)
 library(ggplot2)
 
+
 movie2 = read.csv("movie2.csv")
 
 fluidPage(
-  
-  
   sidebarLayout(
-    
-    
     sidebarPanel(
       
       
@@ -143,9 +140,7 @@ fluidPage(
     
     mainPanel(
       plotOutput(outputId = "scatterplot")
-    )
-  )
-)
+    )))
 
 
 
@@ -159,14 +154,11 @@ library(ggplot2)
 movie2 = read.csv("movie2.csv")
 
 function(input, output) {
-  
-  
   output$scatterplot <- renderPlot({
     ggplot(data = movie2, aes_string(x = input$x, y = input$y,
                                      color = input$z)) +
       geom_point()
-  })
-}
+  })}
 
 
 ***Result***
