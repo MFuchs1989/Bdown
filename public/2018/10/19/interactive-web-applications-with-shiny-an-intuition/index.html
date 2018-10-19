@@ -61,7 +61,7 @@
 
   <article class="article">
     
-    <span class="article-duration">1 min read</span>
+    <span class="article-duration">2 min read</span>
     
 
     <h1 class="article-title">Interactive Web Applications with Shiny. An intuition.</h1>
@@ -71,15 +71,13 @@
     
 
     <div class="article-content">
-      <pre class="r"><code>library(tidyverse)</code></pre>
+      <pre class="r"><code>library(tidyverse)
+library(shiny)</code></pre>
 <div id="section-table-of-content" class="section level1">
 <h1>Table of Content</h1>
 <ul>
 <li>1 Introduction</li>
-<li>2 gather() and spread()</li>
-<li>3 separate() and unite()</li>
-<li>4 delete() and omit()</li>
-<li>5 Conclusion</li>
+<li>2</li>
 </ul>
 </div>
 <div id="section-introduction" class="section level1">
@@ -87,8 +85,61 @@
 <p>Für diesen Post wurde der Datensatz <em>IMDB-Movie-Data</em> von der Statistik Plattform <a href="https://www.kaggle.com">“Kaggle”</a> verwendet. Eine Kopie des Datensatzes ist unter <a href="https://drive.google.com/open?id=13ytotLAXb70lgYHnblPbUWr9cb2z7SaN" class="uri">https://drive.google.com/open?id=13ytotLAXb70lgYHnblPbUWr9cb2z7SaN</a> abrufbar.</p>
 <pre class="r"><code>movie &lt;- read_csv(&quot;IMDB-Movie-Data.csv&quot;)</code></pre>
 </div>
-<div id="section-section" class="section level1">
-<h1>2</h1>
+<div id="section-preparation" class="section level1">
+<h1>2 Preparation</h1>
+<pre class="r"><code>movie %&gt;% separate(Genre, into = c(&quot;main genre&quot;, &quot;further genre1&quot;, &quot;further genre2&quot;)) %&gt;% 
+  select(Genre = `main genre`, Titel = Title, Spielfilmlänge = `Runtime (Minutes)`, Bewertung = Rating,     Wählerstimmen = Votes, Einnahmen = `Revenue (Millions)`, Metascore) -&gt; movie2</code></pre>
+<pre><code>## Warning: Expected 3 pieces. Additional pieces discarded in 110 rows [1,
+## 2, 13, 20, 25, 33, 35, 36, 37, 49, 61, 65, 68, 81, 86, 95, 98, 103, 110,
+## 122, ...].</code></pre>
+<pre><code>## Warning: Expected 3 pieces. Missing pieces filled with `NA` in 332 rows
+## [3, 8, 18, 19, 22, 26, 28, 29, 31, 32, 40, 42, 43, 45, 47, 50, 53, 58, 60,
+## 69, ...].</code></pre>
+<pre class="r"><code>ui &lt;- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = &quot;y&quot;, 
+                  label = &quot;Y-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Bewertung&quot;),
+      
+      
+      selectInput(inputId = &quot;x&quot;, 
+                  label = &quot;X-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Spielfilmlänge&quot;),
+      
+      
+      selectInput(inputId = &quot;z&quot;, 
+                  label = &quot;Color by:&quot;,
+                  choices = c(&quot;Bewertung&quot;, &quot;Genre&quot;),
+                  selected = &quot;Genre&quot;)
+    ),
+    
+    
+    mainPanel(
+      plotOutput(outputId = &quot;scatterplot&quot;)
+    )
+  )
+)
+
+
+server &lt;- function(input, output) {
+  
+  
+  output$scatterplot &lt;- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+}</code></pre>
+<p>shinyApp(ui = ui, server = server)</p>
 </div>
 
     </div>
@@ -126,6 +177,9 @@
 
 
     
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
 
     
   </body>
