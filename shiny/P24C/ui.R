@@ -1,33 +1,34 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
+library(ggplot2)
 
-# Define UI for application that draws a histogram
-shinyUI(fluidPage(
+movie2 = read.csv("movie2.csv")
+
+fluidPage(
   
-  # Application title
-  titlePanel("Old Faithful Geyser Data"),
   
-  # Sidebar with a slider input for number of bins 
   sidebarLayout(
+    
+    
     sidebarPanel(
-       sliderInput("bins",
-                   "Number of bins:",
-                   min = 1,
-                   max = 50,
-                   value = 30)
+      
+      
+      selectInput(inputId = "y", 
+                  label = "Y-axis:",
+                  choices = c("Spielfilmlaenge", "Bewertung", "Waehlerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Bewertung"),
+      
+      
+      selectInput(inputId = "x", 
+                  label = "X-axis:",
+                  choices = c("Spielfilmlaenge", "Bewertung", "Waehlerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Spielfilmlänge")
+      
     ),
     
-    # Show a plot of the generated distribution
+    
     mainPanel(
-       plotOutput("distPlot")
+      plotOutput(outputId = "scatterplot"),
+      plotOutput(outputId = "densityplot", height = 200)
     )
   )
-))
+)
