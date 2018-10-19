@@ -1,8 +1,7 @@
 library(shiny)
+library(tidyverse)
 
-
-setwd("C:/Users/Michi/Documents/Bdown/content/shiny/P24a")
-movie <- read_csv("IMDB-Movie-Data.csv")
+movie <- read_csv("C:/Users/Michi/Documents/Bdown/content/shiny/P24a/IMDB-Movie-Data.csv")
 
 movie %>% separate(Genre, into = c("main genre", "further genre1", "further genre2")) %>% 
   select(Genre = `main genre`, Titel = Title, Spielfilmlänge = `Runtime (Minutes)`, Bewertung = Rating,     Wählerstimmen = Votes, Einnahmen = `Revenue (Millions)`, Metascore) -> movie2
