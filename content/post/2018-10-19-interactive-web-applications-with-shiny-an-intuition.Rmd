@@ -163,3 +163,69 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 ```
 
+
+***Result***
+
+["Interactive Scatter Plot with slider input"](https://michael-fuchs-stat.shinyapps.io/P24B/)
+
+
+
+#5 Scatter Plot plus Density Plot
+
+**Syntax: Single File (app.R)**
+
+```{r, results="hide"}
+ui <- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = "y", 
+                  label = "Y-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Bewertung"),
+      
+      
+      selectInput(inputId = "x", 
+                  label = "X-axis:",
+                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
+                  selected = "Spielfilmlänge")
+      
+    ),
+    
+    
+    
+    
+    mainPanel(
+      plotOutput(outputId = "scatterplot"),
+      plotOutput(outputId = "densityplot", height = 200)
+    )
+  )
+)
+
+
+server <- function(input, output) {
+  
+  
+  output$scatterplot <- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+    
+  output$densityplot <- renderPlot({
+    ggplot(data = movies, aes_string(x = input$x)) +
+      geom_density()
+      
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+
+

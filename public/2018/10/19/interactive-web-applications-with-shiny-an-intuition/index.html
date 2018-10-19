@@ -61,7 +61,7 @@
 
   <article class="article">
     
-    <span class="article-duration">2 min read</span>
+    <span class="article-duration">3 min read</span>
     
 
     <h1 class="article-title"> Interactive Web Applications with Shiny. An intuition.</h1>
@@ -204,6 +204,62 @@ server &lt;- function(input, output) {
     ggplot(data = movie2, aes_string(x = input$x, y = input$y,
                                      color = input$z)) +
       geom_point(alpha = input$alpha)
+  })
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+<p><strong><em>Result</em></strong></p>
+<p><a href="https://michael-fuchs-stat.shinyapps.io/P24B/">“Interactive Scatter Plot with slider input”</a></p>
+</div>
+<div id="scatter-plot-plus-density-plot" class="section level1">
+<h1>5 Scatter Plot plus Density Plot</h1>
+<p><strong>Syntax: Single File (app.R)</strong></p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = &quot;y&quot;, 
+                  label = &quot;Y-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Bewertung&quot;),
+      
+      
+      selectInput(inputId = &quot;x&quot;, 
+                  label = &quot;X-axis:&quot;,
+                  choices = c(&quot;Spielfilmlänge&quot;, &quot;Bewertung&quot;, &quot;Wählerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Spielfilmlänge&quot;)
+      
+    ),
+    
+    
+    
+    
+    mainPanel(
+      plotOutput(outputId = &quot;scatterplot&quot;),
+      plotOutput(outputId = &quot;densityplot&quot;, height = 200)
+    )
+  )
+)
+
+
+server &lt;- function(input, output) {
+  
+  
+  output$scatterplot &lt;- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+    
+  output$densityplot &lt;- renderPlot({
+    ggplot(data = movies, aes_string(x = input$x)) +
+      geom_density()
+      
   })
 }
 
