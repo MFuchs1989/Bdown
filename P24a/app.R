@@ -2,7 +2,6 @@
 library(shiny)
 library(tidyverse)
 
-movie2 <- read_csv("movie2.csv")
 
 
 ui <- fluidPage(
