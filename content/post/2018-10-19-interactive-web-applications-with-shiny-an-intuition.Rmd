@@ -22,7 +22,11 @@ library(shiny)
 
 + 1 Introduction
 + 2 Preparation
-+ 3 Scatter Plot
++ ["3 Scatter Plot with slider input"](https://michael-fuchs-stat.shinyapps.io/P24B/)
++ ["4 Scatter Plot plus Density Plot "](https://michael-fuchs-stat.shinyapps.io/P24C/)
++ ["5 Scatter Plot plus Correlation"](https://michael-fuchs-stat.shinyapps.io/P24D/)
++ ["6 Scatter Plot plus regression analysis"](https://michael-fuchs-stat.shinyapps.io/P24E/)
++ 7 Conclusion
 
 #1 Introduction
 
@@ -49,67 +53,8 @@ movie %>% separate(Genre, into = c("main genre", "further genre1", "further genr
   select(Genre = `main genre`, Titel = Title, Spielfilmlaenge = `Runtime (Minutes)`, Bewertung = Rating, Waehlerstimmen = Votes, Einnahmen = `Revenue (Millions)`, Metascore) -> movie2
 ```
 
-#3 Scatter Plot
 
-**Syntax: Single File (app.R)**
-
-```{r, results="hide"}
-ui <- fluidPage(
-  
-  
-  sidebarLayout(
-    
-    
-    sidebarPanel(
-      
-      
-      selectInput(inputId = "y", 
-                  label = "Y-axis:",
-                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
-                  selected = "Bewertung"),
-      
-      
-      selectInput(inputId = "x", 
-                  label = "X-axis:",
-                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
-                  selected = "Spielfilmlänge"),
-      
-      
-      selectInput(inputId = "z", 
-                  label = "Color by:",
-                  choices = c("Bewertung", "Genre"),
-                  selected = "Genre")
-    ),
-    
-    
-    mainPanel(
-      plotOutput(outputId = "scatterplot")
-    )
-  )
-)
-
-
-server <- function(input, output) {
-  
-  
-  output$scatterplot <- renderPlot({
-    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
-                                     color = input$z)) +
-      geom_point()
-  })
-}
-
-shinyApp(ui = ui, server = server)
-```
-
-
-***Result***
-
-["Interactive Scatter Plot"](https://michael-fuchs-stat.shinyapps.io/P24A/)
-
-
-
-#4 Scatter Plot with slider input 
+#3 Scatter Plot with slider input 
 
 **Syntax: Single File (app.R)**
 ```{r, results="hide"}
@@ -170,7 +115,7 @@ shinyApp(ui = ui, server = server)
 
 
 
-#5 Scatter Plot plus Density Plot
+#4 Scatter Plot plus Density Plot
 
 **Syntax: Single File (app.R)**
 
@@ -233,7 +178,7 @@ shinyApp(ui = ui, server = server)
 
 
 
-#6 Scatter Plot plus Correlation
+#5 Scatter Plot plus Correlation
 
 **Syntax: Single File (app.R)**
 
@@ -298,7 +243,7 @@ shinyApp(ui = ui, server = server)
 
 
 
-#7 Scatter Plot plus regression analysis
+#6 Scatter Plot plus regression analysis
 
 **Syntax: Single File (app.R)**
 
@@ -379,77 +324,6 @@ shinyApp(ui = ui, server = server)
 ["Interactive Scatter Plot plus regression analysis"](https://michael-fuchs-stat.shinyapps.io/P24E/)
 
 
+#7 Conclusion
 
-#8 Scatter Plot  with various slider input and own naming 
-
-```{r, results="hide"}
-ui <- fluidPage(
-  
-  
-  sidebarLayout(
-    
-    
-    sidebarPanel(
-      
-      textInput(inputId = "plot_title", 
-                label = "Plot title", 
-                placeholder = "Enter text to be used as plot title"),
-      
-      
-      selectInput(inputId = "y", 
-                  label = "Y-axis:",
-                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
-                  selected = "Bewertung"),
-      
-      
-      selectInput(inputId = "x", 
-                  label = "X-axis:",
-                  choices = c("Spielfilmlänge", "Bewertung", "Wählerstimmen", "Einnahmen", "Metascore"), 
-                  selected = "Spielfilmlänge"),
-      
-      
-      selectInput(inputId = "z", 
-                  label = "Color by:",
-                  choices = c("Bewertung", "Genre"),
-                  selected = "Genre"),
-      
-      sliderInput(inputId = "alpha", 
-                  label = "Alpha:", 
-                  min = 0, max = 1, 
-                  value = 0.5),
-      
-      
-      sliderInput(inputId = "size", 
-                  label = "Size:", 
-                  min = 0, max = 5, 
-                  value = 2)
-      
-    ),
-    
-    
-    
-    
-    mainPanel(
-      plotOutput(outputId = "scatterplot")
-      
-    )
-  )
-)
-
-
-server <- function(input, output, session) {
-  
-  
-  output$scatterplot <- renderPlot({
-    ggplot(data = movie2, aes_string(x = input$x, y = input$y, color = input$z)) +
-      geom_point(alpha = input$alpha, size = input$size) +
-      labs(title = isolate({ input$plot_title }) )
-  })
-  
-}
-
-
-shinyApp(ui = ui, server = server)
-```
-
-
+Dies war lediglich nur ein sehr kleiner Einblick in das Package shiny. Interaktive Diagramme lassen sich auf diese Weise relativ leicht erstellen und als app.R zu anderen R-Usern verschicken. Hat der Empfänger keine Zugriff auf R, so kann man die erstellten Diagramme auch online stellen (siehe hier: ["shinyapps.io"](https://www.shinyapps.io)) und per Link verschicken.
