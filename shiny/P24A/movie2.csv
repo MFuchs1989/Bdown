@@ -1,0 +1,1001 @@
+"Genre","Titel","Spielfilmlaenge","Bewertung","Waehlerstimmen","Einnahmen","Metascore"
+"1","Action","Guardians of the Galaxy",121,8.1,757074,333.13,76
+"2","Adventure","Prometheus",124,7,485820,126.46,65
+"3","Horror","Split",117,7.3,157606,138.12,62
+"4","Animation","Sing",108,7.2,60545,270.32,59
+"5","Action","Suicide Squad",123,6.2,393727,325.02,40
+"6","Action","The Great Wall",103,6.1,56036,45.13,42
+"7","Comedy","La La Land",128,8.3,258682,151.06,93
+"8","Comedy","Mindhorn",89,6.4,2490,NA,71
+"9","Action","The Lost City of Z",141,7.1,7188,8.01,78
+"10","Adventure","Passengers",116,7,192177,100.01,41
+"11","Adventure","Fantastic Beasts and Where to Find Them",133,7.5,232072,234.02,66
+"12","Biography","Hidden Figures",127,7.8,93103,169.27,74
+"13","Action","Rogue One",133,7.9,323118,532.17,65
+"14","Animation","Moana",107,7.7,118151,248.75,81
+"15","Action","Colossal",109,6.4,8612,2.87,70
+"16","Animation","The Secret Life of Pets",87,6.6,120259,368.31,61
+"17","Biography","Hacksaw Ridge",139,8.2,211760,67.12,71
+"18","Action","Jason Bourne",123,6.7,150823,162.16,58
+"19","Biography","Lion",118,8.1,102061,51.69,69
+"20","Drama","Arrival",116,8,340798,100.5,81
+"21","Adventure","Gold",120,6.7,19053,7.22,49
+"22","Drama","Manchester by the Sea",137,7.9,134213,47.7,96
+"23","Crime","Hounds of Love",108,6.7,1115,NA,72
+"24","Animation","Trolls",92,6.5,38552,153.69,56
+"25","Action","Independence Day: Resurgence",120,5.3,127553,103.14,32
+"26","Comedy","Paris pieds nus",83,6.8,222,NA,NA
+"27","Action","Bahubali: The Beginning",159,8.3,76193,6.5,NA
+"28","Horror","Dead Awake",99,4.7,523,0.01,NA
+"29","Comedy","Bad Moms",100,6.2,66540,113.08,60
+"30","Action","Assassin's Creed",115,5.9,112813,54.65,36
+"31","Comedy","Why Him?",111,6.3,48123,60.31,39
+"32","Drama","Nocturnal Animals",116,7.5,126030,10.64,67
+"33","Action","X-Men: Apocalypse",144,7.1,275510,155.33,52
+"34","Action","Deadpool",108,8,627797,363.02,65
+"35","Action","Resident Evil: The Final Chapter",107,5.6,46165,26.84,49
+"36","Action","Captain America: Civil War",147,7.9,411656,408.08,75
+"37","Adventure","Interstellar",169,8.6,1047747,187.99,74
+"38","Action","Doctor Strange",115,7.6,293732,232.6,72
+"39","Action","The Magnificent Seven",132,6.9,122853,93.38,54
+"40","Comedy","5- 25- 77",113,7.1,241,NA,NA
+"41","Animation","Sausage Party",89,6.3,120690,97.66,66
+"42","Drama","Moonlight",111,7.5,135095,27.85,99
+"43","Horror","Don't Fuck in the Woods",73,2.7,496,NA,NA
+"44","Biography","The Founder",115,7.2,37033,12.79,66
+"45","Drama","Lowriders",99,6.3,279,4.21,57
+"46","Action","Pirates of the Caribbean: On Stranger Tides",136,6.7,395025,241.06,45
+"47","Drama","Miss Sloane",132,7.3,17818,3.44,64
+"48","Adventure","Fallen",91,5.6,5103,NA,NA
+"49","Action","Star Trek Beyond",122,7.1,164567,158.8,68
+"50","Drama","The Last Face",130,3.7,987,NA,16
+"51","Action","Star Wars: Episode VII - The Force Awakens",136,8.1,661608,936.63,81
+"52","Action","Underworld: Blood Wars",91,5.8,41362,30.35,23
+"53","Comedy","Mother's Day",118,5.6,20221,32.46,18
+"54","Action","John Wick",101,7.2,321933,43,68
+"55","Action","The Dark Knight",152,9,1791916,533.32,82
+"56","Adventure","Silence",161,7.3,49190,7.08,79
+"57","Crime","Don't Breathe",88,7.2,121103,89.21,71
+"58","Drama","Me Before You",106,7.4,113322,56.23,51
+"59","Comedy","Their Finest",117,7,3739,3.18,76
+"60","Biography","Sully",96,7.5,137608,125.07,74
+"61","Action","Batman v Superman: Dawn of Justice",151,6.7,472307,330.25,44
+"62","Horror","The Autopsy of Jane Doe",86,6.8,35870,NA,65
+"63","Crime","The Girl on the Train",112,6.5,102177,75.31,48
+"64","Drama","Fifty Shades of Grey",125,4.1,244474,166.15,46
+"65","Drama","The Prestige",130,8.5,913152,53.08,66
+"66","Action","Kingsman: The Secret Service",129,7.7,440209,128.25,58
+"67","Drama","Patriots Day",133,7.4,39784,31.86,69
+"68","Action","Mad Max: Fury Road",120,8.1,632842,153.63,90
+"69","Drama","Wakefield",106,7.5,291,0.01,61
+"70","Action","Deepwater Horizon",107,7.2,89849,61.28,68
+"71","Drama","The Promise",133,5.9,149791,NA,49
+"72","Action","Allied",124,7.1,78079,40.07,60
+"73","Drama","A Monster Calls",108,7.5,39134,3.73,76
+"74","Drama","Collateral Beauty",97,6.8,43977,30.98,23
+"75","Animation","Zootopia",108,8.1,296853,341.26,78
+"76","Action","Pirates of the Caribbean: At World's End",169,7.1,498821,309.4,50
+"77","Action","The Avengers",143,8.1,1045588,623.28,69
+"78","Adventure","Inglourious Basterds",153,8.3,959065,120.52,69
+"79","Action","Pirates of the Caribbean: Dead Man's Chest",151,7.3,552027,423.03,53
+"80","Action","Ghostbusters",116,5.3,147717,128.34,60
+"81","Action","Inception",148,8.8,1583625,292.57,74
+"82","Comedy","Captain Fantastic",118,7.9,105081,5.88,72
+"83","Biography","The Wolf of Wall Street",180,8.2,865134,116.87,75
+"84","Crime","Gone Girl",149,8.1,636243,167.74,79
+"85","Action","Furious Seven",137,7.2,301249,350.03,67
+"86","Action","Jurassic World",124,7,455169,652.18,59
+"87","Crime","Live by Night",129,6.4,27869,10.38,49
+"88","Action","Avatar",162,7.8,935408,760.51,83
+"89","Crime","The Hateful Eight",187,7.8,341170,54.12,68
+"90","Action","The Accountant",128,7.4,162122,86.2,51
+"91","Crime","Prisoners",153,8.1,431185,60.96,74
+"92","Action","Warcraft",123,7,187547,47.17,32
+"93","Drama","The Help",146,8.1,342429,169.71,62
+"94","Comedy","War Dogs",114,7.1,106463,43.02,57
+"95","Action","Avengers: Age of Ultron",141,7.4,516895,458.99,66
+"96","Action","The Nice Guys",116,7.4,175067,36.25,70
+"97","Animation","Kimi no na wa",106,8.6,34110,4.68,79
+"98","Horror","The Void",90,5.8,9247,0.15,62
+"99","Drama","Personal Shopper",105,6.3,10181,1.29,77
+"100","Crime","The Departed",151,8.5,937414,132.37,85
+"101","Biography","Legend",132,7,108836,1.87,55
+"102","Action","Thor",115,7,570814,181.02,57
+"103","Adventure","The Martian",144,8,556097,228.43,80
+"104","Crime","Contratiempo",106,7.9,7204,NA,NA
+"105","Action","The Man from U.N.C.L.E.",116,7.3,202973,45.43,56
+"106","Crime","Hell or High Water",102,7.7,115546,26.86,88
+"107","Comedy","The Comedian",120,5.4,1954,1.66,40
+"108","Action","The Legend of Tarzan",110,6.3,117590,126.59,44
+"109","Drama","All We Had",105,5.8,1004,NA,48
+"110","Drama","Ex Machina",108,7.7,339797,25.44,78
+"111","Action","The Belko Experiment",89,6.3,3712,10.16,44
+"112","Biography","12 Years a Slave",134,8.1,486338,56.67,96
+"113","Romance","The Bad Batch",118,6.1,512,NA,65
+"114","Action","300",117,7.7,637104,210.59,52
+"115","Adventure","Harry Potter and the Deathly Hallows: Part 2",130,8.1,590595,380.96,87
+"116","Comedy","Office Christmas Party",105,5.8,30761,54.73,42
+"117","Horror","The Neon Demon",118,6.2,50359,1.33,51
+"118","Action","Dangal",161,8.8,48969,11.15,NA
+"119","Drama","10 Cloverfield Lane",104,7.2,192968,71.9,76
+"120","Animation","Finding Dory",97,7.4,157026,486.29,77
+"121","Adventure","Miss Peregrine's Home for Peculiar Children",127,6.7,101058,87.24,57
+"122","Adventure","Divergent",139,6.7,362093,150.83,48
+"123","Adventure","Mike and Dave Need Wedding Dates",98,6,53183,46.01,51
+"124","Action","Boyka: Undisputed IV",86,7.4,10428,NA,NA
+"125","Action","The Dark Knight Rises",164,8.5,1222645,448.13,78
+"126","Adventure","The Jungle Book",106,7.5,198243,364,77
+"127","Action","Transformers: Age of Extinction",165,5.7,255483,245.43,32
+"128","Adventure","Nerve",96,6.6,69651,38.56,58
+"129","Comedy","Mamma Mia!",108,6.4,153481,143.7,51
+"130","Adventure","The Revenant",156,8,499424,183.64,76
+"131","Drama","Fences",139,7.3,50953,57.64,79
+"132","Adventure","Into the Woods",125,6,109756,128,69
+"133","Drama","The Shallows",86,6.4,78328,55.12,59
+"134","Drama","Whiplash",107,8.5,477276,13.09,88
+"135","Action","Furious 6",130,7.1,318051,238.67,61
+"136","Crime","The Place Beyond the Pines",140,7.3,200090,21.38,68
+"137","Crime","No Country for Old Men",122,8.1,660286,74.27,91
+"138","Drama","The Great Gatsby",143,7.3,386102,144.81,55
+"139","Mystery","Shutter Island",138,8.1,855604,127.97,63
+"140","Mystery","Brimstone",148,7.1,13004,NA,44
+"141","Action","Star Trek",127,8,526324,257.7,82
+"142","Comedy","Diary of a Wimpy Kid",94,6.2,34184,64,56
+"143","Biography","The Big Short",130,7.8,246360,70.24,81
+"144","Drama","Room",118,8.2,224132,14.68,86
+"145","Drama","Django Unchained",165,8.4,1039115,162.8,81
+"146","Drama","Ah-ga-ssi",144,8.1,33418,2.01,84
+"147","Comedy","The Edge of Seventeen",104,7.4,47694,14.26,77
+"148","Action","Watchmen",162,7.6,410249,107.5,56
+"149","Comedy","Superbad",113,7.6,442082,121.46,76
+"150","Action","Inferno",121,6.2,97623,34.26,42
+"151","Adventure","The BFG",117,6.4,50853,55.47,66
+"152","Adventure","The Hunger Games",142,7.2,735604,408,68
+"153","Drama","White Girl",88,5.8,4299,0.2,65
+"154","Action","Sicario",121,7.6,243230,46.88,82
+"155","Drama","Twin Peaks: The Missing Pieces",91,8.1,1973,NA,NA
+"156","Action","Aliens vs Predator - Requiem",94,4.7,97618,41.8,29
+"157","Action","Pacific Rim",131,7,400519,101.79,64
+"158","Comedy","Crazy, Stupid, Love.",118,7.4,396714,84.24,68
+"159","Action","Scott Pilgrim vs. the World",112,7.5,291457,31.49,69
+"160","Action","Hot Fuzz",121,7.9,373244,23.62,81
+"161","Thriller","Mine",106,6,5926,NA,40
+"162","Action","Free Fire",90,7,6946,1.8,63
+"163","Action","X-Men: Days of Future Past",132,8,552298,233.91,74
+"164","Action","Jack Reacher: Never Go Back",118,6.1,78043,58.4,47
+"165","Action","Casino Royale",144,8,495106,167.01,80
+"166","Drama","Twilight",122,5.2,361449,191.45,56
+"167","Action","Now You See Me 2",129,6.5,156567,65.03,46
+"168","Biography","Woman in Gold",109,7.3,39723,33.31,51
+"169","Action","13 Hours",144,7.3,76935,52.82,48
+"170","Action","Spectre",148,6.8,308981,200.07,60
+"171","Crime","Nightcrawler",118,7.9,332476,32.28,76
+"172","Animation","Kubo and the Two Strings",101,7.9,72778,48.02,84
+"173","Adventure","Beyond the Gates",84,5.2,2127,NA,59
+"174","Drama","Her",126,8,390531,25.56,90
+"175","Animation","Frozen",102,7.5,451894,400.74,74
+"176","Action","Tomorrowland",130,6.5,143069,93.42,60
+"177","Action","Dawn of the Planet of the Apes",130,7.6,337777,208.54,79
+"178","Action","Tropic Thunder",107,7,321442,110.42,71
+"179","Horror","The Conjuring 2",134,7.4,137203,102.46,65
+"180","Action","Ant-Man",117,7.3,368912,180.19,64
+"181","Comedy","Bridget Jones's Baby",118,6.7,43086,24.09,59
+"182","Horror","The VVitch: A New-England Folktale",92,6.8,101781,25.14,83
+"183","Drama","Cinderella",105,7,117018,201.15,67
+"184","Sci","Realive",112,5.9,1176,NA,NA
+"185","Drama","Forushande",124,8,22389,3.4,85
+"186","Drama","Love",135,6,24003,NA,51
+"187","Drama","Billy Lynn's Long Halftime Walk",113,6.3,11944,1.72,53
+"188","Drama","Crimson Peak",119,6.6,97454,31.06,66
+"189","Crime","Drive",100,7.8,461509,35.05,78
+"190","Comedy","Trainwreck",125,6.3,106364,110.01,75
+"191","Drama","The Light Between Oceans",133,7.2,27382,12.53,60
+"192","Drama","Below Her Mouth",94,5.6,1445,NA,42
+"193","Crime","Spotlight",128,8.1,268282,44.99,93
+"194","Horror","Morgan",92,5.8,22107,3.91,48
+"195","Action","Warrior",140,8.2,355722,13.65,71
+"196","Action","Captain America: The First Avenger",124,6.9,547368,176.64,66
+"197","Crime","Hacker",95,6.3,3799,NA,NA
+"198","Adventure","Into the Wild",148,8.1,459304,18.35,73
+"199","Biography","The Imitation Game",114,8.1,532353,91.12,73
+"200","Action","Central Intelligence",107,6.3,97082,127.38,52
+"201","Action","Edge of Tomorrow",113,7.9,471815,100.19,71
+"202","Drama","A Cure for Wellness",146,6.5,12193,8.1,47
+"203","Biography","Snowden",134,7.3,79855,21.48,58
+"204","Action","Iron Man",126,7.9,737719,318.3,79
+"205","Action","Allegiant",120,5.7,70504,66,33
+"206","Action","X: First Class",132,7.8,550011,146.41,65
+"207","Drama","Raw (II)",99,7.5,5435,0.51,81
+"208","Comedy","Paterson",118,7.5,26089,2.14,90
+"209","Comedy","Bridesmaids",125,6.8,227912,169.08,75
+"210","Drama","The Girl with All the Gifts",111,6.7,23713,NA,67
+"211","Action","San Andreas",114,6.1,161396,155.18,43
+"212","Drama","Spring Breakers",94,5.3,114290,14.12,63
+"213","Action","Transformers",144,7.1,531112,318.76,61
+"214","Action","Old Boy",104,5.8,54679,NA,49
+"215","Action","Thor: The Dark World",112,7,443584,206.36,54
+"216","Action","Gods of Egypt",126,5.5,73568,31.14,25
+"217","Action","Captain America: The Winter Soldier",136,7.8,542362,259.75,70
+"218","Action","Monster Trucks",104,5.7,7044,33.04,41
+"219","Drama","A Dark Song",100,6.1,1703,NA,67
+"220","Action","Kick-Ass",117,7.7,456749,48.04,66
+"221","Action","Hardcore Henry",96,6.7,61098,9.24,51
+"222","Animation","Cars",117,7.1,283445,244.05,73
+"223","Horror","It Follows",100,6.9,136399,14.67,83
+"224","Crime","The Girl with the Dragon Tattoo",158,7.8,348551,102.52,71
+"225","Comedy","We're the Millers",110,7,334867,150.37,44
+"226","Drama","American Honey",163,7,19660,0.66,79
+"227","Comedy","The Lobster",119,7.1,121313,8.7,82
+"228","Action","Predators",107,6.4,179450,52,51
+"229","Action","Maleficent",97,7,268877,241.41,56
+"230","Horror","Rupture",102,4.8,2382,NA,35
+"231","Drama","Pan's Labyrinth",118,8.2,498879,37.62,98
+"232","Crime","A Kind of Murder",95,5.2,3305,0,50
+"233","Action","Apocalypto",139,7.8,247926,50.86,68
+"234","Action","Mission: Impossible - Rogue Nation",131,7.4,257472,195,75
+"235","Action","The Huntsman: Winter's War",114,6.1,66766,47.95,35
+"236","Drama","The Perks of Being a Wallflower",102,8,377336,17.74,67
+"237","Biography","Jackie",100,6.8,41446,13.96,81
+"238","Drama","The Disappointments Room",85,3.9,4895,2.41,31
+"239","Adventure","The Grand Budapest Hotel",99,8.1,530881,59.07,88
+"240","Action","The Host",125,5.9,96852,26.62,35
+"241","Action","Fury",134,7.6,332234,85.71,64
+"242","Animation","Inside Out",95,8.2,416689,356.45,94
+"243","Animation","Rock Dog",90,5.8,1109,9.4,48
+"244","Action","Terminator Genisys",126,6.5,205365,89.73,38
+"245","Adventure","Percy Jackson & the Olympians: The Lightning Thief",118,5.9,148949,88.76,47
+"246","Drama","Les Misérables",158,7.6,257426,148.78,63
+"247","Drama","Children of Men",109,7.9,382910,35.29,84
+"248","Comedy","20th Century Women",119,7.4,14708,5.66,83
+"249","Action","Spy",119,7.1,188017,110.82,75
+"250","Biography","The Intouchables",112,8.6,557965,13.18,57
+"251","Comedy","Bonjour Anne",92,4.9,178,0.32,50
+"252","Drama","Kynodontas",94,7.3,50946,0.11,73
+"253","Biography","Straight Outta Compton",147,7.9,139831,161.03,72
+"254","Action","The Amazing Spider-Man 2",142,6.7,342183,202.85,53
+"255","Horror","The Conjuring",112,7.5,330305,137.39,68
+"256","Comedy","The Hangover",100,7.8,611563,277.31,73
+"257","Action","Battleship",131,5.8,210349,65.17,41
+"258","Action","Rise of the Planet of the Apes",105,7.6,422290,176.74,68
+"259","Horror","Lights Out",81,6.4,69823,67.24,58
+"260","Drama","Norman: The Moderate Rise and Tragic Fall of a New York Fixer",118,7.1,664,2.27,76
+"261","Comedy","Birdman or (The Unexpected Virtue of Ignorance)",119,7.8,440299,42.34,88
+"262","Drama","Black Swan",108,8,581518,106.95,79
+"263","Comedy","Dear White People",108,6.2,21715,4.4,79
+"264","Drama","Nymphomaniac: Vol. I",117,7,90556,0.79,64
+"265","Action","Teenage Mutant Ninja Turtles: Out of the Shadows",112,6,59312,0.54,40
+"266","Drama","Knock Knock",99,4.9,53441,0.03,53
+"267","Comedy","Dirty Grandpa",102,6,75137,35.54,18
+"268","Drama","Cloud Atlas",172,7.5,298651,27.1,55
+"269","Action","X-Men Origins: Wolverine",107,6.7,388447,179.88,40
+"270","Horror","Satanic",85,3.7,2384,NA,NA
+"271","Action","Skyfall",143,7.8,547386,304.36,81
+"272","Adventure","The Hobbit: An Unexpected Journey",169,7.9,668651,303,58
+"273","Action","21 Jump Street",110,7.2,432046,138.45,69
+"274","Comedy","Sing Street",106,8,52144,3.23,79
+"275","Animation","Ballerina",89,6.8,4729,NA,NA
+"276","Action","Oblivion",124,7,410125,89.02,54
+"277","Action","22 Jump Street",112,7.1,280110,191.62,71
+"278","Crime","Zodiac",157,7.7,329683,33.05,78
+"279","Comedy","Everybody Wants Some!!",117,7,36312,3.37,83
+"280","Action","Iron Man Three",130,7.2,591023,408.99,62
+"281","Crime","Now You See Me",115,7.3,492324,117.7,50
+"282","Action","Sherlock Holmes",128,7.6,501769,209.02,57
+"283","Thriller","Death Proof",113,7.1,220236,NA,NA
+"284","Biography","The Danish Girl",119,7,110773,12.71,66
+"285","Action","Hercules",98,6,122838,72.66,47
+"286","Action","Sucker Punch",110,6.1,204874,36.38,33
+"287","Action","Keeping Up with the Joneses",105,5.8,30405,14.9,34
+"288","Action","Jupiter Ascending",127,5.3,150121,47.38,40
+"289","Action","Masterminds",95,5.8,26508,17.36,47
+"290","Thriller","Iris",99,6.1,726,NA,NA
+"291","Action","Busanhaeng",118,7.5,58782,2.13,72
+"292","Comedy","Pitch Perfect",112,7.2,226631,65,66
+"293","Comedy","Neighbors 2: Sorority Rising",92,5.7,76327,55.29,58
+"294","Drama","The Exception",107,7.7,96,NA,NA
+"295","Action","Man of Steel",143,7.1,577010,291.02,55
+"296","Drama","The Choice",111,6.6,20514,18.71,26
+"297","Animation","Ice Age: Collision Course",94,5.7,34523,64.06,34
+"298","Comedy","The Devil Wears Prada",109,6.8,302268,124.73,62
+"299","Biography","The Infiltrator",127,7.1,43929,15.43,66
+"300","Drama","There Will Be Blood",158,8.1,400682,40.22,92
+"301","Action","The Equalizer",132,7.2,249425,101.53,57
+"302","Action","Lone Survivor",121,7.5,218996,125.07,60
+"303","Horror","The Cabin in the Woods",95,7,295554,42.04,72
+"304","Comedy","The House Bunny",97,5.5,67033,48.24,55
+"305","Comedy","She's Out of My League",104,6.4,105619,31.58,46
+"306","Comedy","Inherent Vice",148,6.7,69509,8.09,81
+"307","Adventure","Alice Through the Looking Glass",113,6.2,57207,77.04,34
+"308","Crime","Vincent N Roxxy",110,5.5,403,NA,NA
+"309","Action","The Fast and the Furious: Tokyo Drift",104,6,193479,62.49,45
+"310","Comedy","How to Be Single",110,6.1,59886,46.81,51
+"311","Biography","The Blind Side",129,7.7,237221,255.95,53
+"312","Drama","La vie d'Adèle",180,7.8,103150,2.2,88
+"313","Drama","The Babadook",93,6.8,132580,0.92,86
+"314","Adventure","The Hobbit: The Battle of the Five Armies",144,7.4,385598,255.11,59
+"315","Adventure","Harry Potter and the Order of the Phoenix",138,7.5,385325,292,71
+"316","Action","Snowpiercer",126,7,199048,4.56,84
+"317","Action","The 5th Wave",112,5.2,73093,34.91,33
+"318","Action","The Stakelander",81,5.3,1263,NA,NA
+"319","Comedy","The Visit",94,6.2,81429,65.07,55
+"320","Action","Fast Five",131,7.3,300803,209.81,66
+"321","Crime","Step Up",104,6.5,95960,65.27,48
+"322","Drama","Lovesong",84,6.4,616,0.01,74
+"323","Action","RocknRolla",114,7.3,203096,5.69,53
+"324","Action","In Time",109,6.7,319025,37.55,53
+"325","Biography","The Social Network",120,7.7,510100,96.92,95
+"326","Action","The Last Witch Hunter",106,6,71149,27.36,34
+"327","Drama","Victor Frankenstein",110,6,37975,5.77,36
+"328","Biography","A Street Cat Named Bob",103,7.4,12643,0.04,54
+"329","Crime","Green Room",95,7,62885,3.22,79
+"330","Crime","Blackhat",133,5.4,43085,7.1,51
+"331","Animation","Storks",87,6.9,34248,72.66,56
+"332","Action","American Sniper",133,7.3,353305,350.12,72
+"333","Biography","Dallas Buyers Club",117,8,352801,27.3,84
+"334","Biography","Lincoln",150,7.4,207497,182.2,86
+"335","Action","Rush",123,8.1,339722,26.9,75
+"336","Drama","Before I Wake",97,6.1,18201,NA,NA
+"337","Comedy","Silver Linings Playbook",122,7.8,564364,132.09,81
+"338","Drama","Tracktown",88,5.9,115,NA,64
+"339","Drama","The Fault in Our Stars",126,7.8,271301,124.87,69
+"340","Comedy","Blended",117,6.5,93764,46.28,31
+"341","Action","Fast & Furious",107,6.6,217464,155.02,46
+"342","Action","Looper",119,7.4,452369,66.47,84
+"343","Action","White House Down",131,6.4,173320,73.1,52
+"344","Adventure","Pete's Dragon",102,6.8,36322,76.2,71
+"345","Action","Spider-Man 3",139,6.2,406219,336.53,59
+"346","Action","The Three Musketeers",110,5.8,92329,20.32,35
+"347","Adventure","Stardust",127,7.7,220664,38.35,66
+"348","Crime","American Hustle",138,7.3,379088,150.12,90
+"349","Comedy","Jennifer's Body",102,5.1,96617,16.2,47
+"350","Comedy","Midnight in Paris",94,7.7,320323,56.82,81
+"351","Drama","Lady Macbeth",89,7.3,1396,NA,83
+"352","Drama","Joy",124,6.6,97679,56.44,56
+"353","Comedy","The Dressmaker",119,7.1,33352,2.02,47
+"354","Comedy","Café Society",96,6.7,45579,11.08,64
+"355","Adventure","Insurgent",119,6.3,171970,130,42
+"356","Action","Seventh Son",102,5.5,59958,17.18,30
+"357","Comedy","Demain tout commence",118,7.4,5496,NA,NA
+"358","Biography","The Theory of Everything",123,7.7,299718,35.89,72
+"359","Comedy","This Is the End",107,6.6,327838,101.47,67
+"360","Comedy","About Time",123,7.8,221600,15.29,55
+"361","Comedy","Step Brothers",98,6.9,223065,100.47,51
+"362","Horror","Clown",100,5.7,14248,0.05,42
+"363","Action","Star Trek Into Darkness",132,7.8,417663,228.76,72
+"364","Adventure","Zombieland",88,7.7,409403,75.59,73
+"365","Comedy","Hail, Caesar!",106,6.3,89059,30,72
+"366","Drama","Slumdog Millionaire",120,8,677044,141.32,86
+"367","Adventure","The Twilight Saga: Breaking Dawn - Part 2",115,5.5,194329,292.3,52
+"368","Drama","American Wrestler: The Wizard",117,6.9,286,NA,NA
+"369","Action","The Amazing Spider-Man",136,7,474320,262.03,66
+"370","Action","Ben-Hur",123,5.7,28326,26.38,38
+"371","Action","Sleight",89,6,702,3.85,62
+"372","Action","The Maze Runner",113,6.8,335531,102.41,57
+"373","Action","Criminal",113,6.3,38430,14.27,36
+"374","Action","Wanted",110,6.7,312495,134.57,64
+"375","Biography","Florence Foster Jenkins",111,6.9,31776,27.37,71
+"376","Action","Collide",99,5.7,7583,2.2,33
+"377","Biography","Black Mass",123,6.9,135706,62.56,68
+"378","Drama","Creed",133,7.6,175673,109.71,82
+"379","Adventure","Swiss Army Man",97,7.1,61812,4.21,64
+"380","Action","The Expendables 3",126,6.1,137568,39.29,35
+"381","Comedy","What We Do in the Shadows",86,7.6,84016,3.33,76
+"382","Drama","Southpaw",124,7.4,169083,52.42,57
+"383","Horror","Hush",81,6.6,45867,NA,67
+"384","Drama","Bridge of Spies",142,7.6,217938,72.31,81
+"385","Animation","The Lego Movie",100,7.8,266508,257.76,83
+"386","Action","Everest",121,7.1,154647,43.25,64
+"387","Action","Pixels",105,5.6,101092,78.75,27
+"388","Action","Robin Hood",140,6.7,221117,105.22,53
+"389","Action","The Wolverine",126,6.7,355362,132.55,60
+"390","Action","John Carter",132,6.6,220667,73.06,51
+"391","Action","Keanu",100,6.3,31913,20.57,63
+"392","Action","The Gunman",115,5.8,31194,10.64,39
+"393","Biography","Steve Jobs",122,7.2,116112,17.75,82
+"394","Comedy","Whisky Galore",98,5,102,NA,43
+"395","Comedy","Grown Ups 2",101,5.4,114482,133.67,19
+"396","Drama","The Age of Adaline",112,7.2,112288,42.48,51
+"397","Action","The Incredible Hulk",112,6.8,342355,134.52,61
+"398","Comedy","Couples Retreat",113,5.5,86417,109.18,23
+"399","Comedy","Absolutely Anything",85,6,26587,NA,31
+"400","Comedy","Magic Mike",110,6.1,113686,113.71,72
+"401","Animation","Minions",91,6.4,159830,336.03,56
+"402","Horror","The Black Room",91,3.9,240,NA,71
+"403","Action","Bronson",92,7.1,93972,0.1,NA
+"404","Animation","Despicable Me",95,7.7,410607,251.5,72
+"405","Drama","The Best of Me",118,6.7,49041,26.76,29
+"406","Drama","The Invitation",100,6.7,40529,0.23,74
+"407","Drama","Zero Dark Thirty",157,7.4,226661,95.72,95
+"408","Animation","Tangled",100,7.8,316459,200.81,71
+"409","Action","The Hunger Games: Mockingjay - Part 2",137,6.6,202380,281.67,65
+"410","Adventure","Vacation",99,6.1,74589,58.88,34
+"411","Action","Taken",93,7.8,502961,145,50
+"412","Comedy","Pitch Perfect 2",115,6.5,108306,183.44,63
+"413","Animation","Monsters University",104,7.3,252119,268.49,65
+"414","Crime","Elle",130,7.2,35417,NA,89
+"415","Action","Mechanic: Resurrection",98,5.6,48161,21.2,38
+"416","Comedy","Tusk",102,5.4,34546,1.82,55
+"417","Drama","The Headhunter's Calling",108,6.9,164,NA,85
+"418","Drama","Atonement",123,7.8,202890,50.92,NA
+"419","Adventure","Harry Potter and the Deathly Hallows: Part 1",146,7.7,357213,294.98,65
+"420","Drama","Shame",101,7.2,155010,4,72
+"421","Action","Hanna",111,6.8,164208,40.25,65
+"422","Drama","The Babysitters",88,5.7,8914,0.04,35
+"423","Action","Pride and Prejudice and Zombies",108,5.8,35003,10.91,45
+"424","Action","300: Rise of an Empire",102,6.2,237887,106.37,48
+"425","Action","London Has Fallen",99,5.9,100702,62.4,28
+"426","Drama","The Curious Case of Benjamin Button",166,7.8,485075,127.49,70
+"427","Action","Sin City: A Dame to Kill For",102,6.5,122185,13.75,46
+"428","Action","The Bourne Ultimatum",115,8.1,525700,227.14,85
+"429","Horror","Srpski film",104,5.2,43648,NA,55
+"430","Action","The Purge: Election Year",109,6,54216,79,NA
+"431","Comedy","3 Idiots",170,8.4,238789,6.52,67
+"432","Comedy","Zoolander 2",102,4.7,48297,28.84,34
+"433","Action","World War Z",116,7,494819,202.35,63
+"434","Action","Mission: Impossible - Ghost Protocol",132,7.4,382459,209.36,73
+"435","Action","Let Me Make You a Martyr",102,6.4,223,NA,56
+"436","Comedy","Filth",97,7.1,81301,0.03,NA
+"437","Drama","The Longest Ride",123,7.1,58421,37.43,33
+"438","Drama","The imposible",114,7.6,156189,19,73
+"439","Action","Kick-Ass 2",103,6.6,214825,28.75,41
+"440","Comedy","Folk Hero & Funny Guy",88,5.6,220,NA,63
+"441","Adventure","Oz the Great and Powerful",130,6.3,181521,234.9,44
+"442","Drama","Brooklyn",117,7.5,94977,38.32,87
+"443","Animation","Coraline",100,7.7,156620,75.28,80
+"444","Drama","Blue Valentine",112,7.4,151409,9.7,81
+"445","Thriller","The Thinning",81,6,4531,NA,31
+"446","Adventure","Silent Hill",125,6.6,184152,46.98,NA
+"447","Action","Dredd",95,7.1,213764,13.4,59
+"448","Adventure","Hunt for the Wilderpeople",101,7.9,52331,5.2,81
+"449","Animation","Big Hero 6",102,7.8,309186,222.49,74
+"450","Drama","Carrie",100,5.9,113272,35.27,53
+"451","Action","Iron Man 2",124,7,556666,312.06,57
+"452","Comedy","Demolition",101,7,58720,1.82,49
+"453","Action","Pandorum",108,6.8,126656,10.33,28
+"454","Action","Olympus Has Fallen",119,6.5,214994,98.9,41
+"455","Action","I Am Number Four",109,6.1,202682,55.09,36
+"456","Drama","Jagten",115,8.3,192263,0.61,76
+"457","Comedy","The Proposal",108,6.7,241709,163.95,48
+"458","Comedy","Get Hard",100,6,95119,90.35,34
+"459","Comedy","Just Go with It",117,6.4,182069,103.03,33
+"460","Drama","Revolutionary Road",119,7.3,159736,22.88,69
+"461","Crime","The Town",125,7.6,294553,92.17,74
+"462","Horror","The Boy",97,6,51235,35.79,42
+"463","Biography","Denial",109,6.6,8229,4.07,63
+"464","Drama","Predestination",97,7.5,187760,NA,69
+"465","Adventure","Goosebumps",103,6.3,57602,80.02,60
+"466","Action","Sherlock Holmes: A Game of Shadows",129,7.5,357436,186.83,48
+"467","Action","Salt",100,6.4,255813,118.31,65
+"468","Mystery","Enemy",91,6.9,111558,1.01,61
+"469","Action","District 9",112,8,556794,115.65,81
+"470","Action","The Other Guys",107,6.7,199900,119.22,64
+"471","Biography","American Gangster",157,7.8,337835,130.13,76
+"472","Biography","Marie Antoinette",123,6.4,83941,15.96,65
+"473","Action","2012",158,5.8,297984,166.11,49
+"474","Adventure","Harry Potter and the Half-Blood Prince",153,7.5,351059,301.96,78
+"475","Biography","Argo",120,7.7,481274,136.02,86
+"476","Biography","Eddie the Eagle",106,7.4,56332,15.79,54
+"477","Drama","The Lives of Others",137,8.5,278103,11.28,89
+"478","Horror","Pet",94,5.7,8404,NA,48
+"479","Drama","Paint It Black",96,8.3,61,NA,71
+"480","Drama","Macbeth",113,6.7,41642,NA,71
+"481","Comedy","Forgetting Sarah Marshall",111,7.2,226619,62.88,67
+"482","Drama","The Giver",97,6.5,93799,45.09,47
+"483","Action","Triple 9",115,6.3,48400,12.63,52
+"484","Comedy","Perfetti sconosciuti",97,7.7,17584,NA,43
+"485","Animation","Angry Birds",97,6.3,55781,107.51,NA
+"486","Adventure","Moonrise Kingdom",94,7.8,254446,45.51,84
+"487","Comedy","Hairspray",117,6.7,102954,118.82,81
+"488","Drama","Safe Haven",115,6.7,84765,71.35,34
+"489","Comedy","Focus",105,6.6,166489,53.85,56
+"490","Animation","Ratatouille",111,8,504039,206.44,96
+"491","Drama","Stake Land",98,6.5,36091,0.02,66
+"492","Action","The Book of Eli",118,6.9,241359,94.82,53
+"493","Action","Cloverfield",85,7,313803,80.03,64
+"494","Action","Point Break",114,5.3,44553,28.77,34
+"495","Drama","Under the Skin",108,6.3,94707,2.61,78
+"496","Drama","I Am Legend",101,7.2,565721,256.39,65
+"497","Action","Men in Black 3",106,6.8,278379,179.02,58
+"498","Mystery","Super 8",112,7.1,298913,126.98,72
+"499","Crime","Law Abiding Citizen",109,7.4,228339,73.34,34
+"500","Animation","Up",96,8.3,722203,292.98,88
+"501","Action","Maze Runner: The Scorch Trials",131,6.3,159364,81.69,43
+"502","Drama","Carol",118,7.2,77995,0.25,95
+"503","Crime","Imperium",109,6.5,27428,NA,68
+"504","Comedy","Youth",124,7.3,52636,2.7,64
+"505","Drama","Mr. Nobody",141,7.9,166872,NA,63
+"506","Crime","City of Tiny Lights",110,5.7,291,NA,54
+"507","Crime","Savages",131,6.5,107960,47.31,59
+"508","Comedy","(500) Days of Summer",95,7.7,398972,32.39,76
+"509","Comedy","Movie 43",94,4.3,83625,8.83,18
+"510","Drama","Gravity",91,7.8,622089,274.08,96
+"511","Drama","The Boy in the Striped Pyjamas",94,7.8,144614,9.03,55
+"512","Action","Shooter",124,7.2,267820,46.98,53
+"513","Sci","The Happening",91,5,170897,64.51,34
+"514","Adventure","Bone Tomahawk",132,7.1,47289,66.01,72
+"515","Comedy","Magic Mike XXL",115,5.7,42506,NA,60
+"516","Comedy","Easy A",92,7.1,294950,58.4,72
+"517","Action","Exodus: Gods and Kings",150,6,137299,65.01,52
+"518","Action","Chappie",120,6.9,188769,31.57,41
+"519","Adventure","The Hobbit: The Desolation of Smaug",161,7.9,513744,258.36,66
+"520","Drama","Half of a Yellow Sun",111,6.2,1356,0.05,51
+"521","Biography","Anthropoid",120,7.2,24100,2.96,59
+"522","Crime","The Counselor",117,5.3,84927,16.97,48
+"523","Action","Viking",133,4.7,1830,23.05,57
+"524","Biography","Whiskey Tango Foxtrot",112,6.6,36156,NA,NA
+"525","Crime","Trust",106,7,36043,0.06,60
+"526","Action","Birth of the Dragon",103,3.9,552,93.05,61
+"527","Action","Elysium",109,6.6,358932,NA,NA
+"528","Adventure","The Green Inferno",100,5.4,26461,7.19,38
+"529","Action","Godzilla",123,6.4,318058,200.66,62
+"530","Action","The Bourne Legacy",135,6.7,245374,113.17,61
+"531","Comedy","A Good Year",117,6.9,74674,7.46,47
+"532","Horror","Friend Request",92,5.4,12758,64.03,59
+"533","Action","Deja Vu",126,7,253858,NA,NA
+"534","Action","Lucy",89,6.4,352698,126.55,61
+"535","Biography","A Quiet Passion",125,7.2,1024,1.08,77
+"536","Action","Need for Speed",132,6.5,143389,43.57,39
+"537","Action","Jack Reacher",130,7,250811,58.68,50
+"538","Action","The Do-Over",108,5.7,24761,0.54,22
+"539","Crime","True Crimes",92,7.3,198,NA,43
+"540","Crime","American Pastoral",108,6.1,7115,NA,NA
+"541","Mystery","The Ghost Writer",128,7.2,137964,15.52,77
+"542","Mystery","Limitless",105,7.4,444417,79.24,59
+"543","Action","Spectral",107,6.3,27042,NA,39
+"544","Drama","P.S. I Love You",126,7.1,177247,53.68,NA
+"545","Drama","Zipper",103,5.7,4912,NA,39
+"546","Drama","Midnight Special",112,6.7,54787,3.71,76
+"547","Comedy","Don't Think Twice",92,6.8,10485,4.42,83
+"548","Adventure","Alice in Wonderland",108,6.5,324898,334.19,53
+"549","Biography","Chuck",98,6.8,391,0.11,68
+"550","Drama","I, Daniel Blake",100,7.9,22941,NA,77
+"551","Comedy","The Break-Up",106,5.8,106381,118.68,45
+"552","Biography","Loving",123,7.1,17141,7.7,79
+"553","Action","Fantastic Four",100,4.3,121847,56.11,27
+"554","Drama","The Survivalist",104,6.3,9187,NA,80
+"555","Drama","Colonia",106,7.1,30074,NA,33
+"556","Mystery","The Boy Next Door",91,4.6,30180,35.39,30
+"557","Mystery","The Gift",108,7.1,96688,43.77,77
+"558","Action","Dracula Untold",92,6.3,148504,55.94,40
+"559","Action","In the Heart of the Sea",122,6.9,90372,24.99,47
+"560","Adventure","Idiocracy",84,6.6,115355,0.44,66
+"561","Action","The Expendables",103,6.5,283282,102.98,45
+"562","Fantasy","Evil Dead",91,6.5,133113,54.24,57
+"563","Horror","Sinister",110,6.8,171169,48.06,53
+"564","Animation","Wreck-It Ralph",101,7.8,290559,189.41,72
+"565","Action","Snow White and the Huntsman",127,6.1,239772,155.11,57
+"566","Adventure","Pan",111,5.8,47804,34.96,36
+"567","Action","Transformers: Dark of the Moon",154,6.3,338369,352.36,42
+"568","Comedy","Juno",96,7.5,432461,143.49,81
+"569","Comedy","A Hologram for the King",98,6.1,26521,4.2,58
+"570","Crime","Money Monster",98,6.5,68654,41.01,55
+"571","Comedy","The Other Woman",109,6,110825,83.91,39
+"572","Animation","Enchanted",107,7.1,150353,127.71,75
+"573","Comedy","The Intern",121,7.1,159582,75.27,51
+"574","Comedy","Little Miss Sunshine",101,7.8,374044,59.89,80
+"575","Biography","Bleed for This",117,6.8,11900,4.85,62
+"576","Action","Clash of the Titans",106,5.8,238206,163.19,39
+"577","Action","The Finest Hours",117,6.8,44425,27.55,58
+"578","Action","Tron",125,6.8,273959,172.05,49
+"579","Action","The Hunger Games: Catching Fire",146,7.6,525646,424.65,76
+"580","Crime","All Good Things",101,6.3,44158,0.58,57
+"581","Action","Kickboxer: Vengeance",90,4.9,6809,131.56,37
+"582","Action","The Last Airbender",103,4.2,125129,NA,20
+"583","Comedy","Sex Tape",94,5.1,89885,38.54,36
+"584","Comedy","What to Expect When You're Expecting",110,5.7,60059,41.1,41
+"585","Biography","Moneyball",133,7.6,297395,75.61,87
+"586","Action","Ghost Rider",114,5.2,190673,115.8,35
+"587","Biography","Unbroken",137,7.2,114006,115.6,59
+"588","Action","Immortals",110,6,142900,83.5,46
+"589","Adventure","Sunshine",107,7.3,199860,3.68,64
+"590","Animation","Brave",93,7.2,293941,237.28,69
+"591","Drama","Män som hatar kvinnor",152,7.8,182074,10.1,76
+"592","Drama","Adoration",112,6.2,25208,0.32,37
+"593","Crime","The Drop",106,7.1,116118,10.72,69
+"594","Comedy","She's the Man",105,6.4,122864,2.34,45
+"595","Comedy","Daddy's Home",96,6.1,68306,150.32,42
+"596","Drama","Let Me In",116,7.2,97141,12.13,79
+"597","Action","Never Back Down",110,6.6,84083,24.85,39
+"598","Action","Grimsby",83,6.2,63408,6.86,44
+"599","Drama","Moon",97,7.9,277123,5.01,67
+"600","Animation","Megamind",95,7.3,183926,148.34,63
+"601","Action","Gangster Squad",113,6.7,181432,46,40
+"602","Action","Blood Father",88,6.4,40357,93.95,66
+"603","Comedy","He's Just Not That Into You",129,6.4,137684,NA,47
+"604","Animation","Kung Fu Panda 3",95,7.2,89791,143.52,66
+"605","Crime","The Rise of the Krays",110,5.1,1630,6.53,90
+"606","Drama","Handsome Devil",95,7.4,338,NA,NA
+"607","Drama","Winter's Bone",100,7.2,116435,NA,NA
+"608","Comedy","Horrible Bosses",98,6.9,368556,117.53,57
+"609","Drama","Mommy",139,8.1,33560,3.49,74
+"610","Action","Hellboy II: The Golden Army",120,7,216932,75.75,78
+"611","Drama","Beautiful Creatures",124,6.2,71822,19.45,52
+"612","Comedy","Toni Erdmann",162,7.6,24387,1.48,93
+"613","Drama","The Lovely Bones",135,6.7,130702,43.98,42
+"614","Biography","The Assassination of Jesse James by the Coward Robert Ford",160,7.5,143564,3.9,68
+"615","Comedy","Don Jon",90,6.6,199973,24.48,66
+"616","Action","Bastille Day",92,6.3,21089,0.04,48
+"617","Sci","2307: Winter's Dream",101,4,277,20.76,53
+"618","Action","Free State of Jones",139,6.9,29895,NA,NA
+"619","Action","Mr. Right",95,6.3,30053,0.03,52
+"620","Adventure","The Secret Life of Walter Mitty",114,7.3,249877,58.23,54
+"621","Comedy","Dope",103,7.3,66400,17.47,72
+"622","Action","Underworld Awakening",88,6.4,127157,62.32,39
+"623","Drama","Antichrist",108,6.6,94069,0.4,49
+"624","Horror","Friday the 13th",97,5.6,78631,65,34
+"625","Action","Taken 3",109,6,144715,89.25,26
+"626","Action","Total Recall",118,6.3,210965,58.88,43
+"627","Action","X-Men: The Last Stand",104,6.7,406540,234.36,58
+"628","Comedy","The Escort",88,6,7181,NA,46
+"629","Crime","The Whole Truth",93,6.1,10700,NA,NA
+"630","Adventure","Night at the Museum: Secret of the Tomb",98,6.2,74886,113.73,47
+"631","Comedy","Love & Other Drugs",112,6.7,151519,32.36,55
+"632","Comedy","The Interview",112,6.6,261536,6.11,52
+"633","Comedy","The Host",120,7,73491,2.2,85
+"634","Drama","Megan Is Missing",85,4.9,6683,NA,94
+"635","Animation","WALL·E",98,8.4,776897,223.81,NA
+"636","Comedy","Knocked Up",129,7,309398,148.73,85
+"637","Mystery","Source Code",93,7.5,404884,54.7,74
+"638","Crime","Lawless",116,7.3,195360,37.4,58
+"639","Drama","Unfriended",83,5.6,50402,31.54,59
+"640","Comedy","American Reunion",113,6.7,178471,56.72,49
+"641","Biography","The Pursuit of Happyness",117,8,361105,162.59,64
+"642","Comedy","Relatos salvajes",122,8.1,110100,3.08,77
+"643","Comedy","The Ridiculous 6",119,4.8,31149,NA,18
+"644","Drama","Frantz",113,7.5,4304,0.86,73
+"645","Drama","Viral",85,5.5,3564,NA,72
+"646","Drama","Gran Torino",116,8.2,595779,148.09,NA
+"647","Comedy","Burnt",101,6.6,76469,13.65,42
+"648","Fantasy","Tall Men",133,3.2,173,NA,57
+"649","Drama","Sleeping Beauty",101,5.3,27006,0.03,NA
+"650","Action","Vampire Academy",104,5.6,44111,7.79,30
+"651","Drama","Sweeney Todd: The Demon Barber of Fleet Street",116,7.4,296289,52.88,83
+"652","Crime","Solace",101,6.4,36300,NA,36
+"653","Horror","Insidious",103,6.8,219916,53.99,52
+"654","Comedy","Popstar: Never Stop Never Stopping",87,6.7,30875,9.39,68
+"655","Drama","The Levelling",83,6.4,482,NA,82
+"656","Biography","Public Enemies",140,7,240323,97.03,70
+"657","Drama","Boyhood",165,7.9,286722,25.36,100
+"658","Action","Teenage Mutant Ninja Turtles",101,5.9,178527,190.87,31
+"659","Crime","Eastern Promises",100,7.7,198006,17.11,82
+"660","Drama","The Daughter",96,6.7,2798,0.03,62
+"661","Action","Pineapple Express",111,7,267872,87.34,64
+"662","Comedy","The First Time",95,6.9,54027,0.02,55
+"663","Crime","Gone Baby Gone",114,7.7,206707,20.3,72
+"664","Action","The Heat",117,6.6,140151,159.58,60
+"665","Drama","L'avenir",102,7.1,5796,0.28,88
+"666","Drama","Anna Karenina",129,6.6,75291,12.8,63
+"667","Crime","Regression",106,5.7,26320,0.05,32
+"668","Adventure","Ted 2",115,6.3,136323,81.26,48
+"669","Comedy","Pain & Gain",129,6.5,168875,49.87,45
+"670","Adventure","Blood Diamond",143,8,422014,57.37,64
+"671","Biography","Devil's Knot",114,6.1,15514,NA,42
+"672","Crime","Child 44",137,6.5,47703,1.21,41
+"673","Drama","The Hurt Locker",131,7.6,352023,15.7,94
+"674","Action","Green Lantern",114,5.6,231907,116.59,39
+"675","Action","War on Everyone",98,5.9,9285,NA,50
+"676","Horror","The Mist",126,7.2,233346,25.59,58
+"677","Action","Escape Plan",115,6.7,188004,25.12,49
+"678","Comedy","Love, Rosie",102,7.2,80415,0.01,44
+"679","Comedy","The DUFF",101,6.5,57874,34.02,56
+"680","Action","The Age of Shadows",140,7.2,2403,0.54,78
+"681","Action","The Hunger Games: Mockingjay - Part 1",123,6.7,331902,337.1,64
+"682","Drama","We Need to Talk About Kevin",112,7.5,104953,1.74,68
+"683","Comedy","Love & Friendship",90,6.5,16164,14.01,87
+"684","Action","The Mortal Instruments: City of Bones",130,5.9,112313,31.17,33
+"685","Drama","Seven Pounds",123,7.7,245144,69.95,36
+"686","Biography","The King's Speech",118,8,534388,138.8,88
+"687","Biography","Hunger",96,7.6,54486,0.15,82
+"688","Action","Jumper",88,6.1,252503,80.17,35
+"689","Animation","Toy Story 3",103,8.3,586669,414.98,92
+"690","Drama","Tinker Tailor Soldier Spy",122,7.1,157053,24.1,85
+"691","Action","Resident Evil: Retribution",96,5.4,114144,42.35,39
+"692","Drama","Dear Zindagi",151,7.8,23540,1.4,56
+"693","Biography","Genius",104,6.5,10708,1.36,NA
+"694","Action","Pompeii",105,5.5,90188,23.22,39
+"695","Adventure","Life of Pi",127,7.9,471109,124.98,79
+"696","Drama","Hachi: A Dog's Tale",93,8.1,177602,NA,61
+"697","Comedy","10 Years",100,6.1,19636,0.2,NA
+"698","Drama","I Origins",106,7.3,86271,0.33,57
+"699","Action","Live Free or Die Hard",128,7.2,347567,134.52,69
+"700","Comedy","The Matchbreaker",94,5.5,1427,NA,44
+"701","Crime","Funny Games",111,6.5,73835,1.29,NA
+"702","Comedy","Ted",106,7,494641,218.63,62
+"703","Action","RED",111,7.1,250012,90.36,60
+"704","Adventure","Australia",165,6.6,106115,49.55,53
+"705","Action","Faster",98,6.5,83788,23.23,44
+"706","Crime","The Neighbor",87,5.8,4754,NA,60
+"707","Romance","The Adjustment Bureau",106,7.1,208632,62.45,NA
+"708","Comedy","The Hollars",88,6.5,5908,1.02,53
+"709","Crime","The Judge",141,7.4,146812,47.11,48
+"710","Crime","Closed Circuit",96,6.2,18437,5.73,50
+"711","Action","Transformers: Revenge of the Fallen",150,6,335757,402.08,35
+"712","Animation","La tortue rouge",80,7.6,11482,0.92,86
+"713","Animation","The Book of Life",95,7.3,50388,50.15,67
+"714","Drama","Incendies",131,8.2,92863,6.86,80
+"715","Comedy","The Heartbreak Kid",116,5.8,74664,36.77,46
+"716","Animation","Happy Feet",108,6.5,141141,197.99,77
+"717","Comedy","Entourage",104,6.6,64557,32.36,38
+"718","Horror","The Strangers",86,6.2,96718,52.53,47
+"719","Action","Noah",138,5.8,209700,101.16,68
+"720","Comedy","Neighbors",97,6.4,236500,150.06,68
+"721","Drama","Nymphomaniac: Vol. II",123,6.7,65824,0.33,60
+"722","Adventure","Wild",115,7.1,95553,37.88,76
+"723","Comedy","Grown Ups",102,6,190385,162,30
+"724","Horror","Blair Witch",89,5.1,26088,20.75,47
+"725","Action","The Karate Kid",140,6.2,127983,176.59,61
+"726","Comedy","Dark Shadows",113,6.2,209326,79.71,55
+"727","Comedy","Friends with Benefits",109,6.6,286543,55.8,63
+"728","Drama","The Illusionist",110,7.6,309934,39.83,68
+"729","Action","The A-Team",117,6.8,219116,77.21,47
+"730","Thriller","The Guest",100,6.7,71069,0.32,76
+"731","Comedy","The Internship",119,6.3,166342,44.67,42
+"732","Adventure","Paul",104,7,201707,37.37,57
+"733","Comedy","This Beautiful Fantastic",100,6.9,688,NA,51
+"734","Mystery","The Da Vinci Code",149,6.6,338280,217.54,46
+"735","Comedy","Mr. Church",104,7.7,16163,0.69,37
+"736","Adventure","Hugo",126,7.5,259182,73.82,83
+"737","Horror","The Blackcoat's Daughter",93,5.6,4155,0.02,68
+"738","Action","Body of Lies",128,7.1,182305,39.38,57
+"739","Drama","Knight of Cups",118,5.7,17439,0.56,53
+"740","Action","The Mummy: Tomb of the Dragon Emperor",112,5.2,124554,102.18,31
+"741","Comedy","The Boss",99,5.4,29642,63.03,40
+"742","Action","Hands of Stone",111,6.6,8998,4.71,54
+"743","Drama","El secreto de sus ojos",129,8.2,144524,20.17,80
+"744","Adventure","True Grit",110,7.6,254904,171.03,80
+"745","Drama","We Are Your Friends",96,6.2,25903,3.59,46
+"746","Comedy","A Million Ways to Die in the West",116,6.1,144779,42.62,44
+"747","Thriller","Only for One Night",86,4.6,313,NA,60
+"748","Comedy","Rules Don't Apply",127,5.7,3731,3.65,NA
+"749","Horror","Ouija: Origin of Evil",99,6.1,30035,34.9,65
+"750","Adventure","Percy Jackson: Sea of Monsters",106,5.9,91684,68.56,39
+"751","Crime","Fracture",113,7.2,148943,39,68
+"752","Horror","Oculus",104,6.5,92875,27.69,61
+"753","Comedy","In Bruges",107,7.9,322536,7.76,67
+"754","Action","This Means War",103,6.3,154400,54.76,31
+"755","Biography","Lída Baarová",106,5,353,NA,64
+"756","Adventure","The Road",111,7.3,187302,0.06,NA
+"757","Drama","Lavender",92,5.2,2083,NA,46
+"758","Drama","Deuces",87,6.6,256,NA,36
+"759","Action","Conan the Barbarian",113,5.2,84893,21.27,NA
+"760","Action","The Fighter",116,7.8,290056,93.57,79
+"761","Drama","August Rush",114,7.5,91229,31.66,38
+"762","Comedy","Chef",114,7.3,151970,31.24,68
+"763","Drama","Eye in the Sky",102,7.3,57826,18.7,73
+"764","Action","Eagle Eye",118,6.6,156158,101.11,43
+"765","Horror","The Purge",85,5.7,154588,64.42,41
+"766","Comedy","PK",153,8.2,103279,10.57,51
+"767","Action","Ender's Game",114,6.7,194236,61.66,NA
+"768","Action","Indiana Jones and the Kingdom of the Crystal Skull",122,6.2,351361,317.01,65
+"769","Drama","Paper Towns",109,6.3,72515,31.99,56
+"770","Drama","High-Rise",119,5.7,25928,0.34,65
+"771","Action","Quantum of Solace",106,6.6,347798,168.37,58
+"772","Action","The Assignment",95,4.5,2043,NA,34
+"773","Animation","How to Train Your Dragon",98,8.1,523893,217.39,74
+"774","Drama","Lady in the Water",110,5.6,82701,42.27,36
+"775","Drama","The Fountain",96,7.3,199193,10.14,51
+"776","Animation","Cars 2",106,6.2,110490,191.45,57
+"777","Horror","31",102,5.1,10871,0.78,35
+"778","Action","Final Girl",90,4.7,9026,NA,56
+"779","Comedy","Chalk It Up",90,4.8,499,NA,NA
+"780","Biography","The Man Who Knew Infinity",108,7.2,29912,3.86,NA
+"781","Action","Unknown",113,6.9,218679,61.09,56
+"782","Action","Self/less",117,6.5,67196,12.28,34
+"783","Crime","Mr. Brooks",120,7.3,128146,28.48,45
+"784","Comedy","Tramps",82,6.5,1031,NA,77
+"785","Comedy","Before We Go",95,6.9,31370,0.04,31
+"786","Biography","Captain Phillips",134,7.8,346154,107.1,83
+"787","Drama","The Secret Scripture",108,6.8,378,NA,37
+"788","Action","Max Steel",92,4.6,11555,3.77,22
+"789","Animation","Hotel Transylvania 2",89,6.7,69157,169.69,44
+"790","Action","Hancock",92,6.4,366138,227.95,49
+"791","Comedy","Sisters",118,6,50241,87.03,58
+"792","Comedy","The Family",111,6.3,92868,36.92,42
+"793","Comedy","Zack and Miri Make a Porno",101,6.6,154936,31.45,56
+"794","Animation","Ma vie de Courgette",66,7.8,4370,0.29,85
+"795","Action","Man on a Ledge",102,6.6,129252,18.6,40
+"796","Comedy","No Strings Attached",108,6.2,178243,70.63,50
+"797","Adventure","Rescue Dawn",120,7.3,87887,5.48,77
+"798","Animation","Despicable Me 2",98,7.4,304837,368.05,62
+"799","Crime","A Walk Among the Tombstones",114,6.5,93883,25.98,57
+"800","Action","The World's End",109,7,199813,26,81
+"801","Comedy","Yoga Hosers",88,4.3,7091,NA,23
+"802","Comedy","Seven Psychopaths",110,7.2,196652,14.99,66
+"803","Animation","Beowulf",115,6.2,146566,82.16,59
+"804","Action","Jack Ryan: Shadow Recruit",105,6.2,103681,50.55,57
+"805","Fantasy","1408",104,6.8,221073,71.98,64
+"806","Crime","The Gambler",111,6,52537,33.63,55
+"807","Action","Prince of Persia: The Sands of Time",116,6.6,233148,90.76,50
+"808","Comedy","The Spectacular Now",95,7.1,115751,6.85,82
+"809","Biography","A United Kingdom",111,6.8,4771,3.9,65
+"810","Action","USS Indianapolis: Men of Courage",128,5.2,4964,NA,30
+"811","Action","Turbo Kid",93,6.7,19309,0.05,60
+"812","Horror","Mama",100,6.2,142560,71.59,57
+"813","Horror","Orphan",123,7,153448,41.57,42
+"814","Comedy","To Rome with Love",112,6.3,72050,16.68,54
+"815","Animation","Fantastic Mr. Fox",87,7.8,149779,21,83
+"816","Crime","Inside Man",129,7.6,285441,88.5,76
+"817","Crime","I.T.",95,5.4,8755,NA,27
+"818","Adventure","127 Hours",94,7.6,294010,18.33,82
+"819","Horror","Annabelle",99,5.4,91106,84.26,37
+"820","Horror","Wolves at the Door",73,4.6,564,NA,63
+"821","Drama","Suite Française",107,6.9,13711,NA,NA
+"822","Adventure","The Imaginarium of Doctor Parnassus",123,6.8,130153,7.69,65
+"823","Action","G.I. Joe: The Rise of Cobra",118,5.8,180105,150.17,32
+"824","Biography","Christine",119,7,5855,0.3,72
+"825","Drama","Man Down",90,5.8,4779,NA,27
+"826","Horror","Crawlspace",88,5.3,1427,NA,25
+"827","Drama","Shut In",91,4.6,5715,6.88,NA
+"828","Action","The Warriors Gate",108,5.3,1391,NA,77
+"829","Action","Grindhouse",191,7.6,160350,25.03,NA
+"830","Comedy","Disaster Movie",87,1.9,77207,14.17,15
+"831","Drama","Rocky Balboa",102,7.2,171356,70.27,63
+"832","Comedy","Diary of a Wimpy Kid: Dog Days",94,6.4,16917,49,54
+"833","Drama","Jane Eyre",120,7.4,67464,11.23,76
+"834","Action","Fool's Gold",112,5.7,62719,70.22,29
+"835","Comedy","The Dictator",83,6.4,225394,59.62,58
+"836","Mystery","The Loft",108,6.3,38804,5.98,24
+"837","Crime","Bacalaureat",128,7.5,5531,0.13,84
+"838","Action","You Don't Mess with the Zohan",113,5.5,163144,100.02,54
+"839","Crime","Exposed",102,4.2,8409,NA,23
+"840","Biography","Maudie",115,7.8,346,NA,60
+"841","Comedy","Horrible Bosses 2",108,6.3,125190,54.41,40
+"842","Drama","A Bigger Splash",125,6.4,15232,1.98,74
+"843","Drama","Melancholia",135,7.1,137117,3.03,80
+"844","Animation","The Princess and the Frog",97,7.1,95480,104.37,73
+"845","Action","Unstoppable",98,6.8,157499,81.56,69
+"846","Drama","Flight",138,7.3,276347,93.75,76
+"847","Animation","Home",94,6.7,77447,177.34,55
+"848","Crime","La migliore offerta",131,7.8,77986,0.09,49
+"849","Thriller","Mean Dreams",108,6.3,1066,NA,64
+"850","Biography","42",128,7.5,69659,95,62
+"851","Crime","21",123,6.8,198395,81.16,48
+"852","Drama","Begin Again",104,7.4,111875,16.17,62
+"853","Crime","Out of the Furnace",116,6.8,88829,11.33,63
+"854","Drama","Vicky Cristina Barcelona",96,7.1,208770,23.21,70
+"855","Animation","Kung Fu Panda",92,7.6,329788,215.4,73
+"856","Comedy","Barbershop: The Next Cut",111,5.9,9993,54.01,67
+"857","Action","Terminator Salvation",115,6.6,297093,125.32,49
+"858","Biography","Freedom Writers",123,7.5,55648,36.58,64
+"859","Horror","The Hills Have Eyes",107,6.4,136642,41.78,52
+"860","Biography","Changeling",141,7.8,206793,35.71,63
+"861","Drama","Remember Me",113,7.2,119376,19.06,40
+"862","Animation","Koe no katachi",129,8.4,2421,NA,80
+"863","Comedy","Alexander and the Terrible, Horrible, No Good, Very Bad Day",81,6.2,32310,66.95,54
+"864","Drama","Locke",85,7.1,100890,1.36,81
+"865","Mystery","The 9th Life of Louis Drax",108,6.3,6175,NA,41
+"866","Drama","Horns",120,6.5,61060,0.16,46
+"867","Drama","Indignation",110,6.9,7402,3.4,78
+"868","Biography","The Stanford Prison Experiment",122,6.9,20907,0.64,67
+"869","Comedy","Diary of a Wimpy Kid: Rodrick Rules",99,6.6,20194,52.69,51
+"870","Action","Mission: Impossible III",126,6.9,270429,133.38,66
+"871","Comedy","En man som heter Ove",116,7.7,21569,3.36,70
+"872","Action","Dragonball Evolution",85,2.7,59512,9.35,45
+"873","Action","Red Dawn",93,5.4,64584,44.8,31
+"874","Drama","One Day",107,7,113599,13.77,48
+"875","Comedy","Life as We Know It",114,6.6,101301,53.36,39
+"876","Drama","28 Weeks Later",100,7,221858,28.64,78
+"877","Comedy","Warm Bodies",98,6.9,193579,66.36,59
+"878","Drama","Blue Jasmine",98,7.3,160592,33.4,78
+"879","Action","G.I. Joe: Retaliation",110,5.8,152145,122.51,41
+"880","Action","Wrath of the Titans",99,5.8,159230,83.64,37
+"881","Action","Shin Gojira",120,6.9,8365,1.91,68
+"882","Biography","Saving Mr. Banks",125,7.5,125693,83.3,65
+"883","Drama","Transcendence",119,6.3,184564,23.01,42
+"884","Animation","Rio",96,6.9,173919,143.62,63
+"885","Drama","Equals",101,6.1,16361,0.03,43
+"886","Drama","Babel",143,7.5,253417,34.3,69
+"887","Drama","The Tree of Life",139,6.8,143517,13.3,85
+"888","Drama","The Lucky One",101,6.5,82874,60.44,39
+"889","Comedy","Piranha 3D",88,5.5,75262,25,53
+"890","Comedy","50/50",100,7.7,281625,34.96,72
+"891","Crime","The Intent",104,3.5,202,NA,59
+"892","Comedy","This Is 40",134,6.2,108156,67.52,NA
+"893","Action","Real Steel",127,7.1,264480,85.46,56
+"894","Comedy","Sex and the City",145,5.5,102547,152.64,53
+"895","Action","Rambo",92,7.1,187077,42.72,46
+"896","Action","Planet Terror",105,7.1,174553,NA,55
+"897","Biography","Concussion",123,7.1,61274,34.53,NA
+"898","Adventure","The Fall",117,7.9,93036,2.28,64
+"899","Comedy","The Ugly Truth",96,6.5,172558,88.92,28
+"900","Comedy","Bride Wars",89,5.5,83976,58.72,24
+"901","Comedy","Sleeping with Other People",101,6.5,27730,0.81,64
+"902","Action","Snakes on a Plane",105,5.6,118905,34.01,58
+"903","Comedy","What If",98,6.8,55243,3.45,59
+"904","Animation","How to Train Your Dragon 2",102,7.9,237565,177,76
+"905","Action","RoboCop",117,6.2,190833,58.61,52
+"906","Drama","In Dubious Battle",110,6.2,1455,NA,43
+"907","Comedy","Hello, My Name Is Doris",95,6.7,12361,14.44,63
+"908","Crime","Ocean's Thirteen",122,6.9,269581,117.14,62
+"909","Comedy","Slither",95,6.5,64351,7.77,69
+"910","Drama","Contagion",106,6.6,187004,75.64,70
+"911","Drama","Il racconto dei racconti - Tale of Tales",133,6.4,17565,0.08,72
+"912","Thriller","I Am the Pretty Thing That Lives in the House",87,4.7,4204,NA,68
+"913","Adventure","Bridge to Terabithia",96,7.2,117297,82.23,74
+"914","Mystery","Coherence",89,7.2,66265,0.07,65
+"915","Biography","Notorious",122,6.7,33007,36.84,60
+"916","Drama","Goksung",156,7.5,17962,0.79,81
+"917","Action","The Expendables 2",103,6.6,257395,85.02,51
+"918","Crime","The Girl Next Door",91,6.7,19351,NA,29
+"919","Crime","Perfume: The Story of a Murderer",147,7.5,199387,2.21,56
+"920","Adventure","The Golden Compass",113,6.1,155078,70.08,51
+"921","Action","Centurion",97,6.4,67801,0.12,62
+"922","Action","Scouts Guide to the Zombie Apocalypse",93,6.3,31651,3.64,32
+"923","Comedy","17 Again",102,6.4,152808,64.15,48
+"924","Action","No Escape",103,6.8,57921,27.29,38
+"925","Action","Superman Returns",154,6.1,246797,200.07,72
+"926","Adventure","The Twilight Saga: Breaking Dawn - Part 1",117,4.9,190244,281.28,45
+"927","Drama","Precious",110,7.3,91623,47.54,79
+"928","Drama","The Sea of Trees",110,5.9,7475,0.02,23
+"929","Comedy","Good Kids",86,6.1,3843,NA,86
+"930","Drama","The Master",144,7.1,112902,16.38,NA
+"931","Comedy","Footloose",113,5.9,39380,51.78,58
+"932","Drama","If I Stay",107,6.8,92170,50.46,46
+"933","Drama","The Ticket",97,5.4,924,NA,52
+"934","Thriller","Detour",97,6.3,2205,NA,46
+"935","Comedy","The Love Witch",120,6.2,4669,0.22,82
+"936","Action","Talladega Nights: The Ballad of Ricky Bobby",108,6.6,137502,148.21,66
+"937","Horror","The Human Centipede (First Sequence)",92,4.4,60655,0.18,33
+"938","Comedy","Super",96,6.8,64535,0.32,50
+"939","Action","The Siege of Jadotville",108,7.3,14689,NA,83
+"940","Drama","Up in the Air",109,7.4,279694,83.81,NA
+"941","Horror","The Midnight Meat Train",98,6.1,50255,0.07,58
+"942","Adventure","The Twilight Saga: Eclipse",124,4.9,192740,300.52,58
+"943","Thriller","Transpecos",86,5.8,1292,NA,73
+"944","Comedy","What's Your Number?",106,6.1,62095,13.99,35
+"945","Action","Riddick",119,6.4,132098,42,49
+"946","Fantasy","Triangle",99,6.9,72533,NA,66
+"947","Biography","The Butler",132,7.2,93322,116.63,NA
+"948","Crime","King Cobra",91,5.6,3990,0.03,48
+"949","Action","After Earth",100,4.9,166512,60.52,33
+"950","Adventure","Kicks",80,6.1,2417,0.15,69
+"951","Comedy","Me and Earl and the Dying Girl",105,7.8,92076,6.74,74
+"952","Comedy","The Descendants",115,7.3,211348,82.62,84
+"953","Comedy","Sex and the City 2",146,4.3,62403,95.33,27
+"954","Adventure","The Kings of Summer",95,7.2,65653,1.29,61
+"955","Action","Death Race",105,6.4,173731,36.06,43
+"956","Comedy","That Awkward Moment",94,6.2,81823,26.05,36
+"957","Action","Legion",100,5.2,84158,40.17,32
+"958","Crime","End of Watch",109,7.7,192190,40.98,68
+"959","Action","3 Days to Kill",117,6.2,73567,30.69,40
+"960","Crime","Lucky Number Slevin",110,7.8,271940,22.49,53
+"961","Crime","Trance",101,7,97141,2.32,61
+"962","Drama","Into the Forest",101,5.9,10220,0.01,59
+"963","Biography","The Other Boleyn Girl",115,6.7,88260,26.81,50
+"964","Crime","I Spit on Your Grave",108,6.3,60133,0.09,27
+"965","Drama","Custody",104,6.9,280,NA,72
+"966","Drama","Inland Empire",180,7,44227,NA,NA
+"967","Adventure","L'odyssée",122,6.7,1810,NA,70
+"968","Adventure","The Walk",123,7.3,92378,10.14,NA
+"969","Action","Wrecker",83,3.5,1210,NA,37
+"970","Action","The Lone Ranger",150,6.5,190855,89.29,NA
+"971","Horror","Texas Chainsaw 3D",92,4.8,37060,34.33,62
+"972","Drama","Disturbia",105,6.9,193491,80.05,NA
+"973","Comedy","Rock of Ages",123,5.9,64513,38.51,47
+"974","Horror","Scream 4",111,6.2,108544,38.18,52
+"975","Biography","Queen of Katwe",124,7.4,6753,8.81,73
+"976","Comedy","My Big Fat Greek Wedding 2",94,6,20966,59.57,37
+"977","Drama","Dark Places",113,6.2,31634,NA,39
+"978","Comedy","Amateur Night",92,5,2229,NA,38
+"979","Drama","It's Only the End of the World",97,7,10658,NA,48
+"980","Drama","The Skin I Live In",120,7.6,108772,3.19,70
+"981","Biography","Miracles from Heaven",109,7,12048,61.69,44
+"982","Comedy","Annie",118,5.3,27312,85.91,33
+"983","Drama","Across the Universe",133,7.4,95172,24.34,56
+"984","Comedy","Let's Be Cops",104,6.5,112729,82.39,30
+"985","Adventure","Max",111,6.8,21405,42.65,47
+"986","Adventure","Your Highness",102,5.6,87904,21.56,31
+"987","Horror","Final Destination 5",92,5.9,88000,42.58,50
+"988","Drama","Endless Love",104,6.3,33688,23.39,30
+"989","Horror","Martyrs",99,7.1,63785,NA,89
+"990","Biography","Selma",128,7.5,67637,52.07,NA
+"991","Action","Underworld: Rise of the Lycans",92,6.6,129708,45.8,44
+"992","Drama","Taare Zameen Par",165,8.5,102697,1.2,42
+"993","Comedy","Take Me Home Tonight",97,6.3,45419,6.92,NA
+"994","Action","Resident Evil: Afterlife",97,5.9,140900,60.13,37
+"995","Comedy","Project X",88,6.7,164088,54.72,48
+"996","Crime","Secret in Their Eyes",111,6.2,27585,NA,45
+"997","Horror","Hostel: Part II",94,5.5,73152,17.54,46
+"998","Drama","Step Up 2: The Streets",98,6.2,70699,58.01,50
+"999","Adventure","Search Party",93,5.6,4881,NA,22
+"1000","Comedy","Nine Lives",87,5.3,12435,19.64,11

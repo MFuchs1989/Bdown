@@ -1,10 +1,9 @@
-
 library(shiny)
-library(tidyverse)
+library(ggplot2)
 
+movie2 = read.csv("movie2.csv")
 
-
-ui <- fluidPage(
+fluidPage(
   
   
   sidebarLayout(
@@ -37,20 +36,3 @@ ui <- fluidPage(
     )
   )
 )
-
-
-server <- function(input, output) {
-  
-  
-  output$scatterplot <- renderPlot({
-    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
-                                     color = input$z)) +
-      geom_point()
-  })
-}
-
-shinyApp(ui = ui, server = server)
-
-
-
-
