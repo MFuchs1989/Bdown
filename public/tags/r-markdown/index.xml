@@ -6,20 +6,10 @@
     <description>Recent content in R Markdown on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 12 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Interactive Web Applications with Shiny. An intuition.</title>
-      <link>/2018/10/19/interactive-web-applications-with-shiny-an-intuition/</link>
-      <pubDate>Fri, 19 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/2018/10/19/interactive-web-applications-with-shiny-an-intuition/</guid>
-      <description>library(tidyverse)library(shiny)Table of Content1 Introduction21 IntroductionFür diesen Post wurde der Datensatz IMDB-Movie-Data von der Statistik Plattform “Kaggle” verwendet. Eine Kopie des Datensatzes ist unter https://drive.google.com/open?id=13ytotLAXb70lgYHnblPbUWr9cb2z7SaN abrufbar.
-movie &amp;lt;- read_csv(&amp;quot;IMDB-Movie-Data.csv&amp;quot;)2 Preparationmovie %&amp;gt;% separate(Genre, into = c(&amp;quot;main genre&amp;quot;, &amp;quot;further genre1&amp;quot;, &amp;quot;further genre2&amp;quot;)) %&amp;gt;% select(Genre = `main genre`, Titel = Title, Spielfilmlänge = `Runtime (Minutes)`, Bewertung = Rating, Wählerstimmen = Votes, Einnahmen = `Revenue (Millions)`, Metascore) -&amp;gt; movie2## Warning: Expected 3 pieces.</description>
-    </item>
     
     <item>
       <title>Cleaning Data with tidyverse</title>
