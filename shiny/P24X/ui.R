@@ -13,6 +13,11 @@ fluidPage(
     sidebarPanel(
       
       
+      textInput(inputId = "plot_title", 
+                label = "Plot title", 
+                placeholder = "Enter text to be used as plot title"),
+      
+      
       selectInput(inputId = "y", 
                   label = "Y-axis:",
                   choices = c("Spielfilmlaenge", "Bewertung", "Waehlerstimmen", "Einnahmen", "Metascore"), 

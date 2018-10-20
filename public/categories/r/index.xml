@@ -17,7 +17,7 @@
       <pubDate>Fri, 19 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/10/19/interactive-web-applications-with-shiny-an-intuition/</guid>
-      <description>library(tidyverse)library(shiny)Table of Content1 Introduction2 Preparation“3 Scatter Plot with slider input”“4 Scatter Plot plus Density Plot”“5 Scatter Plot plus Correlation”“6 Scatter Plot plus regression analysis”7 Conclusion1 IntroductionShiny ist ein R-Paket, mit dem man interaktive Web-Apps direkt aus R heraus erstellen kann. In R Studio gibt es dafür zwei Möglichkeiten.
+      <description>library(tidyverse)library(shiny)Table of Content1 Introduction2 Preparation“3 Scatter Plot”“4 Scatter Plot with slider input”“5 Scatter Plot plus Density Plot”“6 Scatter Plot plus Correlation”“7 Scatter Plot plus regression analysis”8 Conclusion1 IntroductionShiny ist ein R-Paket, mit dem man interaktive Web-Apps direkt aus R heraus erstellen kann. In R Studio gibt es dafür zwei Möglichkeiten.
 File -&amp;gt; New File -&amp;gt; Shiny Wep App…</description>
     </item>
     

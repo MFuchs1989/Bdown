@@ -61,7 +61,7 @@
 
   <article class="article">
     
-    <span class="article-duration">4 min read</span>
+    <span class="article-duration">5 min read</span>
     
 
     <h1 class="article-title"> Interactive Web Applications with Shiny. An intuition.</h1>
@@ -78,11 +78,12 @@ library(shiny)</code></pre>
 <ul>
 <li>1 Introduction</li>
 <li>2 Preparation</li>
-<li><a href="https://michael-fuchs-stat.shinyapps.io/P24B/">“3 Scatter Plot with slider input”</a></li>
-<li><a href="https://michael-fuchs-stat.shinyapps.io/P24C/">“4 Scatter Plot plus Density Plot”</a></li>
-<li><a href="https://michael-fuchs-stat.shinyapps.io/P24D/">“5 Scatter Plot plus Correlation”</a></li>
-<li><a href="https://michael-fuchs-stat.shinyapps.io/P24E/">“6 Scatter Plot plus regression analysis”</a></li>
-<li>7 Conclusion</li>
+<li><a href="https://michael-fuchs-stat2.shinyapps.io/P24A/">“3 Scatter Plot”</a></li>
+<li><a href="https://michael-fuchs-stat.shinyapps.io/P24B/">“4 Scatter Plot with slider input”</a></li>
+<li><a href="https://michael-fuchs-stat.shinyapps.io/P24C/">“5 Scatter Plot plus Density Plot”</a></li>
+<li><a href="https://michael-fuchs-stat.shinyapps.io/P24D/">“6 Scatter Plot plus Correlation”</a></li>
+<li><a href="https://michael-fuchs-stat.shinyapps.io/P24E/">“7 Scatter Plot plus regression analysis”</a></li>
+<li>8 Conclusion</li>
 </ul>
 </div>
 <div id="introduction" class="section level1">
@@ -109,8 +110,62 @@ library(shiny)</code></pre>
 ## [3, 8, 18, 19, 22, 26, 28, 29, 31, 32, 40, 42, 43, 45, 47, 50, 53, 58, 60,
 ## 69, ...].</code></pre>
 </div>
+<div id="scatter-plot" class="section level1">
+<h1>3 Scatter Plot</h1>
+<p><strong>Syntax: Single File (app.R)</strong></p>
+<pre class="r"><code>ui &lt;- fluidPage(
+  
+  
+  sidebarLayout(
+    
+    
+    sidebarPanel(
+      
+      
+      selectInput(inputId = &quot;y&quot;, 
+                  label = &quot;Y-axis:&quot;,
+                  choices = c(&quot;Spielfilmlaenge&quot;, &quot;Bewertung&quot;, &quot;Waehlerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Bewertung&quot;),
+      
+      
+      selectInput(inputId = &quot;x&quot;, 
+                  label = &quot;X-axis:&quot;,
+                  choices = c(&quot;Spielfilmlaenge&quot;, &quot;Bewertung&quot;, &quot;Waehlerstimmen&quot;, &quot;Einnahmen&quot;, &quot;Metascore&quot;), 
+                  selected = &quot;Spielfilmlänge&quot;),
+      
+      
+      selectInput(inputId = &quot;z&quot;, 
+                  label = &quot;Color by:&quot;,
+                  choices = c(&quot;Bewertung&quot;, &quot;Genre&quot;),
+                  selected = &quot;Genre&quot;)
+    ),
+    
+    
+    
+    
+    mainPanel(
+      plotOutput(outputId = &quot;scatterplot&quot;)
+    )
+  )
+)
+
+
+server &lt;- function(input, output) {
+  
+  
+  output$scatterplot &lt;- renderPlot({
+    ggplot(data = movie2, aes_string(x = input$x, y = input$y,
+                                     color = input$z)) +
+      geom_point()
+  })
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+<p><strong><em>Result</em></strong></p>
+<p><a href="https://michael-fuchs-stat2.shinyapps.io/P24A/">“Interactive Scatter Plot”</a></p>
+</div>
 <div id="scatter-plot-with-slider-input" class="section level1">
-<h1>3 Scatter Plot with slider input</h1>
+<h1>4 Scatter Plot with slider input</h1>
 <p><strong>Syntax: Single File (app.R)</strong></p>
 <pre class="r"><code>ui &lt;- fluidPage(
   
@@ -164,7 +219,7 @@ shinyApp(ui = ui, server = server)</code></pre>
 <p><a href="https://michael-fuchs-stat.shinyapps.io/P24B/">“Interactive Scatter Plot with slider input”</a></p>
 </div>
 <div id="scatter-plot-plus-density-plot" class="section level1">
-<h1>4 Scatter Plot plus Density Plot</h1>
+<h1>5 Scatter Plot plus Density Plot</h1>
 <p><strong>Syntax: Single File (app.R)</strong></p>
 <pre class="r"><code>ui &lt;- fluidPage(
   
@@ -220,7 +275,7 @@ shinyApp(ui = ui, server = server)</code></pre>
 <p><a href="https://michael-fuchs-stat.shinyapps.io/P24C/">“Interactive Scatter Plot plus Density Plot”</a></p>
 </div>
 <div id="scatter-plot-plus-correlation" class="section level1">
-<h1>5 Scatter Plot plus Correlation</h1>
+<h1>6 Scatter Plot plus Correlation</h1>
 <p><strong>Syntax: Single File (app.R)</strong></p>
 <pre class="r"><code>ui &lt;- fluidPage(
   
@@ -277,7 +332,7 @@ shinyApp(ui = ui, server = server)</code></pre>
 <p><a href="https://michael-fuchs-stat.shinyapps.io/P24D/">“Interactive Scatter Plot plus Correlation”</a></p>
 </div>
 <div id="scatter-plot-plus-regression-analysis" class="section level1">
-<h1>6 Scatter Plot plus regression analysis</h1>
+<h1>7 Scatter Plot plus regression analysis</h1>
 <p><strong>Syntax: Single File (app.R)</strong></p>
 <pre class="r"><code>ui &lt;- fluidPage(
   
@@ -352,7 +407,7 @@ shinyApp(ui = ui, server = server)</code></pre>
 <p><a href="https://michael-fuchs-stat.shinyapps.io/P24E/">“Interactive Scatter Plot plus regression analysis”</a></p>
 </div>
 <div id="conclusion" class="section level1">
-<h1>7 Conclusion</h1>
+<h1>8 Conclusion</h1>
 <p>Dies war lediglich nur ein sehr kleiner Einblick in das Package shiny. Interaktive Diagramme lassen sich auf diese Weise relativ leicht erstellen und als app.R zu anderen R-Usern verschicken. Hat der Empfänger keine Zugriff auf R, so kann man die erstellten Diagramme auch online stellen (siehe hier: <a href="https://www.shinyapps.io">“shinyapps.io”</a>) und per Link verschicken.</p>
 </div>
 
