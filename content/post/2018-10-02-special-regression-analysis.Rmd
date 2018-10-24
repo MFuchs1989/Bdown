@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(psych)
 library(rockchalk)
+library(bda)
 ```
 ```{r results='hide', message=FALSE, warning=FALSE}
 affairs <- read_csv("Affairs.csv")
@@ -29,10 +30,11 @@ affairs <- read_csv("Affairs.csv")
 + 1 Introduction
 + 2 Categorical predictors
 + 3 Moderated regression
-+ 4 Non-linear regression
-+ 5 Analysis of covariance (ANCOVA)
-+ 6 Logistic regression
-+ 7 Conclusion
++ 4 Mediation
++ 5 Non-linear regression
++ 6 Analysis of covariance (ANCOVA)
++ 7 Logistic regression
++ 8 Conclusion
 
 #1 Introduction
 
@@ -59,7 +61,9 @@ Das durchschnittliche Alter in der Referenzgruppe "Gruppe1" beträgt 30,44 Jahre
 
 #3 Moderated regression
 
-Bei der moderierten Regression wird überprüft, ob der Einfluss eines Prädiktors auf das Kriterium von der Ausprägung einer dritten Moderatorvariable abhängt. Für die nachfolgende Untersuchung ist es ratsam, die verwendeten Prädiktoren zu zentrieren (siehe hierzu auch Post ["Change Variables in R"](https://michael-fuchs.netlify.com/2018/08/24/edit-variables-in-r/) Punkt 4.4). Es soll untersucht werden, ob die Anzahl der Affären (`affairs`) vom Alter (`age`) und vom Bildungsstand (`education`) abhängig sind. Das Alter soll hierbei der Prädiktor (X) sein, die Anzahl der Affären das Kriterium (Y) und der Bildungsstand (Z) soll als Moderatorvariable dienen. 
+Bei der moderierten Regression / Moderation wird überprüft, ob der Einfluss eines Prädiktors auf das Kriterium von der Ausprägung einer dritten Moderatorvariablen abhängt. Der Einfluss der Moderatorvariablen ändert also den Effekt zwischen Prädiktor und Kriterium. Dies äußert sich so, dass die Beziehung zwischen Prädiktor und Kriterium je nach Ausprägung der Moderatorvariablen unterschiedlich ausfällt. Statistisch gesprochen liegt eine Interaktion zwischen Prädiktor und Moderatorvariable vor. Bei der Moderation wird ein Regressionsmodell mit folgenden drei Faktoren gerechnet: mit dem Prädiktor, mit der Moderatorvariable und die Interaktion zwischen dem Prädiktor und der Moderatorvariable. Diese drei Faktoren wirken auf das Kriterium. Wird in diesem Modell die Interaktion signifikant, so liegt eine signifikante Moderation vor.
+
+Für die nachfolgende Untersuchung ist es ratsam, die verwendeten Prädiktoren zu zentrieren (siehe hierzu auch Post ["Change Variables in R"](https://michael-fuchs.netlify.com/2018/08/24/edit-variables-in-r/) Punkt 4.4). Es soll untersucht werden, ob die Anzahl der Affären (`affairs`) vom Alter (`age`) und vom Bildungsstand (`education`) abhängig sind. Das Alter soll hierbei der Prädiktor (X) sein, die Anzahl der Affären das Kriterium (Y) und der Bildungsstand (Z) soll als Moderatorvariable dienen. 
 
 
 ```{r}
@@ -96,7 +100,18 @@ testSlopes(Steigung)
 Das Regressionsgewicht ist signifikant von Null verschieden, wenn der Wert der Moderatorvariablen kleiner als -0,99 oder größer als 6,98 ist. 
 
 
+#4 Mediation
 
+Entgegengesetzt zur Moderation steht bei der Mediation die Mediatorvariable in Beziehung sowohl zu dem Prädiktor als auch zum Kriterium. Der direkte Effekt zwischen Prädiktor und Kriterium wird durch den indirekten Effekt über die Mediatorvariable erklärt. Es werden erneut mehrere Regressionsmodelle gerechnet. Wenn folgende Bedingungen erfüllt sind, liegt eine signifikante Mediation vor:
+
++ im ersten Modell (Prädiktor -> Kriterium) ist der Regressionskoeffizient von dem Prädiktor signifikant,
++ im zweiten Modell (Prädiktor -> Mediatorvariable) ist der Regressionskoeffizient von dem Prädiktor signifikant,
++ im dritten Modell (Prädiktor und Mediatorvariable -> Kriterium) ist der Regressionskoeffizient von der Mediatorvariable signifikant und
++ im dritten Modell ist der Regressionskoeffizient von dem Prädiktor kleiner als im ersten Modell.
+
+
+Nachfolgend soll untersucht werden, ob die Anzahl der Affären (`affairs`) vom Alter (`age`) und vom Bildungsstand (`education`) abhängig sind. Das Alter soll hierbei der Prädiktor (X) sein, die Anzahl der Affären das Kriterium (Y) und der Bildungsstand (Z) soll als Mediatorvariable dienen.
+Eine Mediation kann folgender maßen berechnet werden.
 
 ```{r}
 affairs$age.cen <- as.numeric(scale(affairs$age, scale = FALSE))
@@ -109,11 +124,24 @@ mediate(y = affairs.normal ~ age.cen + (education.cen), data = affairs)
 summary(mediate(y = affairs.normal ~ age.cen + (education.cen), data = affairs))
 ```
 
+**Ergebnisse:**
+
++ age -> education: b = 0,03, se = 0,01, p = .001
++ education -> affairs: b = -0,02, se = 0,06, p = .705
++ Totaler Effekt age -> affairs: b = 0,03, se = 0,01, p = .02
++ Direkter Effekt age -> affairs: b = 0,03, se = 0,01, p = .018
++ Indirekter Effekt age -> affairs: b = 0, 95% KI = [-0,01 - 0]
+
+Der Sobel Test überprüft anschließend noch den indirekten Effekt auf signifikanz.
+```{r}
+mediation.test(education.cen, age.cen, affairs.normal)
+```
+
+Mit p = .707 liegt keine signifikante Mediation vor.
 
 
 
-
-#4 Non-linear regression
+#5 Non-linear regression
 
 Bei nicht linearen Regressionen soll untersucht werden, ob die Auswirkung einer Variablen X auf das Kriterium Y ab einen gewissen Grad stärker zunimmt, abnimmt oder sich sogar in die entgegengesetzte Richtung umschwenkt. Beispielhaft kann man hier Untersuchungen zum Kaffeekonsum erwähnen. Kaffee (beziehungsweise das Koffein) bewirkt zum Anfang eine positive Auswirkung auf die Konzentration. Ab einer bestimmten Menge an Kaffee flacht die Auswirkungen auf die Konzentrationsfähigkeit ab und bewirkt bei weiterer Zuführung von Koffein sogar eine Beeinträchtigung der Konzentration.
 
@@ -138,7 +166,7 @@ abline(lm(affairs.normal ~ years.married.cen))
 ```
 
 
-#5 Analysis of covariance (ANCOVA)
+#6 Analysis of covariance (ANCOVA)
 
 Die Kovarianzanalyse erlaubt die Kombination von kategorialen und metrischen Prädiktoren in einem einzigen linearen Modell. Im Nachfolgenden soll der Einfluss des Alters (zentriert) und des Geschlechts auf die Anzahl an Affären untersucht werden.
 ```{r}
@@ -164,7 +192,7 @@ testSlopes(Steigung2)
 
 Dieser Ausgabe kann entnommen werden, dass weder das Lebensalter bei Frauen (p = .053) noch das bei Männern (p= .172) signifikant mit der Anzahl an Affären zusammenhängt. 
 
-#6 Logistic regression
+#7 Logistic regression
 
 Die bisherig vorgestellten speziellen Regressionsmodelle hatten die Gemeinsamkeit, dass das untersuchte Kriterium metrisch war. Mit der logistischen Regression ist es möglich, eine kategoriale abhängige Variable zu analysieren. Diese muss auch nicht zwingend dichotom sein, sondern kann auch mehr als zwei Ausprägungen besitzen. 
 
@@ -231,9 +259,9 @@ Die Spalte *Deviance* enthält den Chi^2-Wert (die Differenz der beiden Devianze
 
 
 
-#7 Conclusion
+#8 Conclusion
 
-Ergänzend zu dem Post ["Regression Analysis"](https://michael-fuchs.netlify.com/2018/09/21/regression-analysis/) wurde in diesem Beitrag die Aufnahme von kategorialen Prädiktoren (Punkt 2) in lineare Regressionsmodelle behandelt. Des Weiteren wurde gezeigt, wie eine moderierte Regression (Punkt 3) durchgeführt und interpretiert werden kann. Die Modellierung nicht-linearer Zusammenhänge wurde unter Punkt 4 thematisiert. Zum Schluss war die logistische Regression (Punkt 5), bei der eine dichotome abhängige Variable vorlag, zentral. 
+Ergänzend zu dem Post ["Regression Analysis"](https://michael-fuchs.netlify.com/2018/09/21/regression-analysis/) wurde in diesem Beitrag die Aufnahme von kategorialen Prädiktoren (Punkt 2) in lineare Regressionsmodelle behandelt. Des Weiteren wurde gezeigt, wie eine Moderation (Punkt 3) und eine Mediation (Punkt 4) durchgeführt und interpretiert werden kann. Die Modellierung nicht-linearer Zusammenhänge wurde unter Punkt 5 thematisiert. Zum Schluss war die Kovarianzanalyse (Punkt 6) und die logistische Regression (Punkt 7), bei der eine dichotome abhängige Variable vorlag, zentral. 
 
 
 
