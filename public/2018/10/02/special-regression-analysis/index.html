@@ -61,7 +61,7 @@
 
   <article class="article">
     
-    <span class="article-duration">13 min read</span>
+    <span class="article-duration">14 min read</span>
     
 
     <h1 class="article-title">Special Regression Analysis</h1>
@@ -124,7 +124,7 @@ summary(lm.kat)</code></pre>
 </div>
 <div id="moderated-regression" class="section level1">
 <h1>3 Moderated regression</h1>
-<p>Bei der moderierten Regression wird überprüft, ob der Einfluss eines Prädiktors auf das Kriterium von der Ausprägung einer dritten Moderatorvariable abhängt. Für die nachfolgende Untersuchung ist es ratsam, die verwendeten Variablen zu zentrieren (siehe hierzu auch Post <a href="https://michael-fuchs.netlify.com/2018/08/24/edit-variables-in-r/">“Change Variables in R”</a> Punkt 4.4). Es soll untersucht werden, ob die Anzahl der Affären (<code>affairs</code>) vom Alter (<code>age</code>) und vom Bildungsstand (<code>education</code>) abhängig sind. Das Alter soll hierbei der Prädiktor (X) sein, die Anzahl der Affären das Kriterium (Y) und der Bildungsstand (Z) soll als Moderatorvariable dienen.</p>
+<p>Bei der moderierten Regression wird überprüft, ob der Einfluss eines Prädiktors auf das Kriterium von der Ausprägung einer dritten Moderatorvariable abhängt. Für die nachfolgende Untersuchung ist es ratsam, die verwendeten Prädiktoren zu zentrieren (siehe hierzu auch Post <a href="https://michael-fuchs.netlify.com/2018/08/24/edit-variables-in-r/">“Change Variables in R”</a> Punkt 4.4). Es soll untersucht werden, ob die Anzahl der Affären (<code>affairs</code>) vom Alter (<code>age</code>) und vom Bildungsstand (<code>education</code>) abhängig sind. Das Alter soll hierbei der Prädiktor (X) sein, die Anzahl der Affären das Kriterium (Y) und der Bildungsstand (Z) soll als Moderatorvariable dienen.</p>
 <pre class="r"><code>age.cen &lt;- as.numeric(scale(affairs$age, scale = FALSE))
 education.cen &lt;- as.numeric(scale(affairs$education, scale = FALSE))
 affairs.normal &lt;- as.numeric(affairs$affairs)
@@ -193,6 +193,52 @@ summary(lm.mod)</code></pre>
 ## -0.9901723  6.9786332 
 ## cause the slope of (b1 + b2*education.cen)age.cen to be statistically significant</code></pre>
 <p>Das Regressionsgewicht ist signifikant von Null verschieden, wenn der Wert der Moderatorvariablen kleiner als -0,99 oder größer als 6,98 ist.</p>
+<pre class="r"><code>affairs$age.cen &lt;- as.numeric(scale(affairs$age, scale = FALSE))
+affairs$education.cen &lt;- as.numeric(scale(affairs$education, scale = FALSE))
+affairs$affairs.normal &lt;- as.numeric(affairs$affairs)
+
+
+m.mod &lt;- mediate(affairs.normal ~ age.cen + (education.cen), data = affairs)
+mediate(y = affairs.normal ~ age.cen + (education.cen), data = affairs)</code></pre>
+<p><img src="/post/2018-10-02-special-regression-analysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre><code>## 
+## Mediation/Moderation Analysis 
+## Call: mediate(y = affairs.normal ~ age.cen + (education.cen), data = affairs)
+## 
+## The DV (Y) was  affairs.normal . The IV (X) was  age.cen . The mediating variable(s) =  education.cen .
+## 
+## Total effect(c) of  age.cen  on  affairs.normal  =  0.03   S.E. =  0.01  t  =  2.34  df=  598   with p =  0.02
+## Direct effect (c&#39;) of  age.cen  on  affairs.normal  removing  education.cen  =  0.03   S.E. =  0.01  t  =  2.37  df=  598   with p =  0.018
+## Indirect effect (ab) of  age.cen  on  affairs.normal  through  education.cen   =  0 
+## Mean bootstrapped indirect effect =  0  with standard error =  0  Lower CI =  -0.01    Upper CI =  0
+## R = 0.1 R2 = 0.01   F = 2.81 on 2 and 598 DF   p-value:  0.0611 
+## 
+##  To see the longer output, specify short = FALSE in the print statement or ask for the summary</code></pre>
+<pre class="r"><code>summary(mediate(y = affairs.normal ~ age.cen + (education.cen), data = affairs))</code></pre>
+<pre><code>## Call: mediate(y = affairs.normal ~ age.cen + (education.cen), data = affairs)
+## 
+##  Total effect estimates (c) 
+##         affairs.normal   se    t  df   Prob
+## age.cen           0.03 0.01 2.34 598 0.0195
+## 
+## Direct effect estimates     (c&#39;) 
+##               affairs.normal   se     t  df   Prob
+## age.cen                 0.03 0.01  2.37 598 0.0181
+## education.cen          -0.02 0.06 -0.38 598 0.7050
+## 
+## R = 0.1 R2 = 0.01   F = 2.81 on 2 and 598 DF   p-value:  0.0611 
+## 
+##  &#39;a&#39;  effect estimates 
+##         education.cen   se    t  df    Prob
+## age.cen          0.03 0.01 3.32 599 0.00094
+## 
+##  &#39;b&#39;  effect estimates 
+##               affairs.normal   se     t  df  Prob
+## education.cen          -0.02 0.06 -0.38 598 0.705
+## 
+##  &#39;ab&#39;  effect estimates 
+##         affairs.normal boot sd lower upper
+## age.cen              0    0  0 -0.01     0</code></pre>
 </div>
 <div id="non-linear-regression" class="section level1">
 <h1>4 Non-linear regression</h1>
@@ -226,7 +272,7 @@ summary(lm.nlm)</code></pre>
 <pre class="r"><code>plot(years.married.cen, affairs.normal, xlab = &quot;Anzahl verheirateter Jahre zentriert&quot;, ylab = &quot;Affären vs. Treue&quot;)
 curve(1.720059 + 0.114330*x - 0.008524*(x^2), add=TRUE)
 abline(lm(affairs.normal ~ years.married.cen))</code></pre>
-<p><img src="/post/2018-10-02-special-regression-analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="/post/2018-10-02-special-regression-analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 </div>
 <div id="analysis-of-covariance-ancova" class="section level1">
 <h1>5 Analysis of covariance (ANCOVA)</h1>
@@ -261,7 +307,7 @@ summary(cov)</code></pre>
 ## F-statistic: 1.906 on 3 and 597 DF,  p-value: 0.1275</code></pre>
 <p>Der vorhergesagt Wert (Intercept) für Frauen (wg erster Stelle der <em>table(sex)</em> Funktion) beträgt 1,49 bei durchschnittlichem Alter. Der Koeffizient <em>age.cen</em> beschreibt den Zusammenhang zwischen Alter und der Anzahl an Affären für Frauen. Der Koeffizient <em>sexmale</em> drückt hier den Unterschied zwischen Männer und Frauen hinsichtlich der Anzahl an Affären bei durchschnittlichem Lebensalter aus. Der Interaktionseffekt (<em>age.cen:sexmale</em>) beschreibt das Ausmaß, in dem sich die Stärke des Zusammenhangs zwischen Alter und Anzahl an Affären für Männer von den Frauen unterscheidet. In dem vorangegangenen Beispiel sind weder die Haupteffekte noch der Interaktionseffekt statistisch signifikant. Wäre der Interaktionseffekt signifikant gewesen, so würde sich zur besseren Interpretation (wie bei der moderierten Regression) die Berechnung und die graphische Darstellung der bedingten Regressionsgleichungen anbieten.</p>
 <pre class="r"><code>Steigung2 &lt;- plotSlopes(cov, plotx = &quot;age.cen&quot;, modx = &quot;sex&quot;)</code></pre>
-<p><img src="/post/2018-10-02-special-regression-analysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="/post/2018-10-02-special-regression-analysis_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>Anschließend wird noch ein Signifikanztest für die beiden Regressionsgewichte durchgeführt.</p>
 <pre class="r"><code>testSlopes(Steigung2)</code></pre>
 <pre><code>## These are the straight-line &quot;simple slopes&quot; of the variable age.cen  

@@ -59,7 +59,7 @@ Das durchschnittliche Alter in der Referenzgruppe "Gruppe1" beträgt 30,44 Jahre
 
 #3 Moderated regression
 
-Bei der moderierten Regression wird überprüft, ob der Einfluss eines Prädiktors auf das Kriterium von der Ausprägung einer dritten Moderatorvariable abhängt. Für die nachfolgende Untersuchung ist es ratsam, die verwendeten Variablen zu zentrieren (siehe hierzu auch Post ["Change Variables in R"](https://michael-fuchs.netlify.com/2018/08/24/edit-variables-in-r/) Punkt 4.4). Es soll untersucht werden, ob die Anzahl der Affären (`affairs`) vom Alter (`age`) und vom Bildungsstand (`education`) abhängig sind. Das Alter soll hierbei der Prädiktor (X) sein, die Anzahl der Affären das Kriterium (Y) und der Bildungsstand (Z) soll als Moderatorvariable dienen. 
+Bei der moderierten Regression wird überprüft, ob der Einfluss eines Prädiktors auf das Kriterium von der Ausprägung einer dritten Moderatorvariable abhängt. Für die nachfolgende Untersuchung ist es ratsam, die verwendeten Prädiktoren zu zentrieren (siehe hierzu auch Post ["Change Variables in R"](https://michael-fuchs.netlify.com/2018/08/24/edit-variables-in-r/) Punkt 4.4). Es soll untersucht werden, ob die Anzahl der Affären (`affairs`) vom Alter (`age`) und vom Bildungsstand (`education`) abhängig sind. Das Alter soll hierbei der Prädiktor (X) sein, die Anzahl der Affären das Kriterium (Y) und der Bildungsstand (Z) soll als Moderatorvariable dienen. 
 
 
 ```{r}
@@ -94,6 +94,23 @@ testSlopes(Steigung)
 ```
 
 Das Regressionsgewicht ist signifikant von Null verschieden, wenn der Wert der Moderatorvariablen kleiner als -0,99 oder größer als 6,98 ist. 
+
+
+
+
+```{r}
+affairs$age.cen <- as.numeric(scale(affairs$age, scale = FALSE))
+affairs$education.cen <- as.numeric(scale(affairs$education, scale = FALSE))
+affairs$affairs.normal <- as.numeric(affairs$affairs)
+
+
+m.mod <- mediate(affairs.normal ~ age.cen + (education.cen), data = affairs)
+mediate(y = affairs.normal ~ age.cen + (education.cen), data = affairs)
+summary(mediate(y = affairs.normal ~ age.cen + (education.cen), data = affairs))
+```
+
+
+
 
 
 #4 Non-linear regression
