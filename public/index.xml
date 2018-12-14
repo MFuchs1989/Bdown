@@ -17,7 +17,7 @@
       <pubDate>Thu, 13 Dec 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/12/13/web-scraping-and-text-mining-an-intuition/</guid>
-      <description>library(tidyverse)library(rvest)library(RColorBrewer)library(wordcloud)library(tidytext)Table of Content1 Introduction21 IntroductionThe amount of data and information available on the Internet is growing exponentially. The amount of data available on the Web opens up new possibilities for a data scientist, such as web scraping. In today’s world, all the data we need is already available on the Internet. The only thing that prevents some people from using them is accessing them.</description>
+      <description>library(tidyverse)library(rvest)library(RColorBrewer)library(wordcloud)library(tidytext)Table of Content1 Introduction2 What is Web Scraping?3 Annotation4 The web scraping process5 A few graphic analysis6 A brief insight of text mining7 Conclusion1 IntroductionThe amount of data and information available on the Internet is growing exponentially. The amount of data available on the Web opens up new possibilities for a data scientist, such as web scraping.</description>
     </item>
     
     <item>

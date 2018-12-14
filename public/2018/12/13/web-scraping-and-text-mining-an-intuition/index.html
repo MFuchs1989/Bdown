@@ -80,7 +80,12 @@ library(tidytext)</code></pre>
 <h1>Table of Content</h1>
 <ul>
 <li>1 Introduction</li>
-<li>2</li>
+<li>2 What is Web Scraping?</li>
+<li>3 Annotation</li>
+<li>4 The web scraping process</li>
+<li>5 A few graphic analysis</li>
+<li>6 A brief insight of text mining</li>
+<li>7 Conclusion</li>
 </ul>
 </div>
 <div id="introduction" class="section level1">
@@ -184,7 +189,7 @@ ggplot(movies_df_2, aes(x=Genre, y=n)) +
 <p><img src="/post/2018-12-13-web-scraping-and-text-mining-an-intuition_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="a-brief-insight-of-text-mining" class="section level1">
-<h1>5 A brief insight of text mining</h1>
+<h1>6 A brief insight of text mining</h1>
 <p>I am interested in the words used within the movie description.</p>
 <pre class="r"><code>movies_df$Description &lt;- as.character(movies_df$Description)
 text &lt;- movies_df %&gt;% select(Description)
@@ -236,7 +241,7 @@ tidy_text &lt;- tidy_text %&gt;% anti_join(stop_words)</code></pre>
 <p><img src="/post/2018-12-13-web-scraping-and-text-mining-an-intuition_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 </div>
 <div id="conclusion" class="section level1">
-<h1>6 Conclusion</h1>
+<h1>7 Conclusion</h1>
 <p>One might wonder, what you actually web scraping need for. The answer es as short as simple: the possibilities with web scraping are almost unlimited.</p>
 </div>
 
