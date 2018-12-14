@@ -1,0 +1,181 @@
+---
+title: Web Scraping and Text Mining. An intuition.
+author: Michael Fuchs
+date: '2018-12-13'
+slug: web-scraping-and-text-mining-an-intuition
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<pre class="r"><code>library(tidyverse)
+library(rvest)
+library(RColorBrewer)
+library(wordcloud)
+library(tidytext)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>The amount of data and information available on the Internet is growing exponentially. The amount of data available on the Web opens up new possibilities for a data scientist, such as web scraping. In today’s world, all the data we need is already available on the Internet. The only thing that prevents some people from using them is accessing them. With the help of this post, this barrier can be overcome.</p>
+</div>
+<div id="what-is-web-scraping" class="section level1">
+<h1>2 What is Web Scraping?</h1>
+<p>Web scraping is a technique for converting the data present in unstructured format (HTML tags) over the web to the structured format which can easily be accessed and used. In this post, the most popular feature films of the year 2018 will be removed from the <a href="https://www.imdb.com/search/title?count=100&amp;release_date=2016,2016&amp;title_type=feature">“IMDb”</a> website.</p>
+</div>
+<div id="annotation" class="section level1">
+<h1>3 Annotation</h1>
+<p>For users who are not very familiar with HTML and CSS, I recommend using the open source software called Selector Gadget, which is more than enough for anyone to do web scraping. You can download the Selector Gadget extension <a href="https://selectorgadget.com/">“here”</a>.</p>
+</div>
+<div id="the-web-scraping-process" class="section level1">
+<h1>4 The web scraping process</h1>
+<pre class="r"><code>url &lt;- &quot;http://www.imdb.com/search/title?count=100&amp;release_date=2016,2016&amp;title_type=feature&quot;
+webpage &lt;- read_html(url)
+
+
+rank_data_html &lt;- html_nodes(webpage,&#39;.text-primary&#39;)
+rank_data &lt;- html_text(rank_data_html)
+rank_data&lt;-as.numeric(rank_data)
+
+title_data_html &lt;- html_nodes(webpage,&#39;.lister-item-header a&#39;)
+title_data &lt;- html_text(title_data_html)
+
+description_data_html &lt;- html_nodes(webpage,&#39;.ratings-bar+ .text-muted&#39;)
+description_data &lt;- html_text(description_data_html)
+description_data&lt;-gsub(&quot;\n&quot;,&quot;&quot;,description_data)
+
+runtime_data_html &lt;- html_nodes(webpage,&#39;.text-muted .runtime&#39;)
+runtime_data &lt;- html_text(runtime_data_html)
+runtime_data&lt;-gsub(&quot; min&quot;,&quot;&quot;,runtime_data)
+runtime_data&lt;-as.numeric(runtime_data)
+
+genre_data_html &lt;- html_nodes(webpage,&#39;.genre&#39;)
+genre_data &lt;- html_text(genre_data_html)
+genre_data&lt;-gsub(&quot;\n&quot;,&quot;&quot;,genre_data)
+genre_data&lt;-gsub(&quot; &quot;,&quot;&quot;,genre_data)
+genre_data&lt;-gsub(&quot;,.*&quot;,&quot;&quot;,genre_data)
+genre_data&lt;-as.factor(genre_data)
+
+rating_data_html &lt;- html_nodes(webpage,&#39;.ratings-imdb-rating strong&#39;)
+rating_data &lt;- html_text(rating_data_html)
+rating_data&lt;-as.numeric(rating_data)
+
+votes_data_html &lt;- html_nodes(webpage,&#39;.sort-num_votes-visible span:nth-child(2)&#39;)
+votes_data &lt;- html_text(votes_data_html)
+votes_data&lt;-gsub(&quot;,&quot;,&quot;&quot;,votes_data)
+votes_data&lt;-as.numeric(votes_data)
+
+directors_data_html &lt;- html_nodes(webpage,&#39;.text-muted+ p a:nth-child(1)&#39;)
+directors_data &lt;- html_text(directors_data_html)
+directors_data&lt;-as.factor(directors_data)
+
+actors_data_html &lt;- html_nodes(webpage,&#39;.lister-item-content .ghost+ a&#39;)
+actors_data &lt;- html_text(actors_data_html)
+actors_data&lt;-as.factor(actors_data)
+
+
+
+
+movies_df&lt;-data.frame(Rank = rank_data, Title = title_data,
+                      
+                      Description = description_data, Runtime = runtime_data,
+                      
+                      Genre = genre_data, Rating = rating_data,
+                      
+                      Votes = votes_data, Director = directors_data, Actor = actors_data)
+
+
+
+glimpse(movies_df)</code></pre>
+<pre><code>## Observations: 100
+## Variables: 9
+## $ Rank        &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,...
+## $ Title       &lt;fct&gt; Phantastische Tierwesen und wo sie zu finden sind,...
+## $ Description &lt;fct&gt;     The adventures of writer Newt Scamander in New...
+## $ Runtime     &lt;dbl&gt; 133, 106, 123, 117, 108, 116, 147, 133, 105, 116, ...
+## $ Genre       &lt;fct&gt; Adventure, Adventure, Action, Horror, Action, Dram...
+## $ Rating      &lt;dbl&gt; 7.3, 7.4, 6.1, 7.3, 8.0, 7.0, 7.8, 7.8, 5.8, 7.9, ...
+## $ Votes       &lt;dbl&gt; 338250, 233381, 505590, 298641, 780515, 293013, 53...
+## $ Director    &lt;fct&gt; David Yates, Jon Favreau, David Ayer, M. Night Shy...
+## $ Actor       &lt;fct&gt; Eddie Redmayne, Neel Sethi, Will Smith, James McAv...</code></pre>
+</div>
+<div id="a-few-graphic-analysis" class="section level1">
+<h1>5 A few graphic analysis</h1>
+<p>Now we are able to analyze the pulled data. Below are some examples:</p>
+<pre class="r"><code>qplot(data = movies_df,Runtime,fill = Genre, bins = 30)</code></pre>
+<p><img src="/post/2018-12-13-web-scraping-and-text-mining-an-intuition_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(movies_df,aes(x=Runtime,y=Rating))+
+  geom_point(aes(size=Votes,col=Genre))</code></pre>
+<p><img src="/post/2018-12-13-web-scraping-and-text-mining-an-intuition_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(movies_df,aes(x=Runtime,y=Votes))+
+  geom_point(aes(size=Rating,col=Genre))</code></pre>
+<p><img src="/post/2018-12-13-web-scraping-and-text-mining-an-intuition_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>movies_df_2 &lt;- movies_df %&gt;% count(Genre)
+ggplot(movies_df_2, aes(x=Genre, y=n)) +
+  geom_bar(stat=&quot;identity&quot;, width=0.5) + coord_flip()</code></pre>
+<p><img src="/post/2018-12-13-web-scraping-and-text-mining-an-intuition_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="a-brief-insight-of-text-mining" class="section level1">
+<h1>5 A brief insight of text mining</h1>
+<p>I am interested in the words used within the movie description.</p>
+<pre class="r"><code>movies_df$Description &lt;- as.character(movies_df$Description)
+text &lt;- movies_df %&gt;% select(Description)
+tidy_text &lt;- text %&gt;% unnest_tokens(word, Description)
+tidy_text %&gt;% count(word, sort = TRUE)</code></pre>
+<pre><code>## # A tibble: 1,254 x 2
+##    word      n
+##    &lt;chr&gt; &lt;int&gt;
+##  1 a       163
+##  2 the     161
+##  3 to       91
+##  4 of       89
+##  5 in       66
+##  6 and      58
+##  7 his      31
+##  8 with     28
+##  9 is       26
+## 10 an       25
+## # ... with 1,244 more rows</code></pre>
+<p>Ok, we see some unwanted stop words… Let’s fix this:</p>
+<pre class="r"><code>data(&quot;stop_words&quot;)
+
+tidy_text &lt;- tidy_text %&gt;% anti_join(stop_words)</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<pre class="r"><code>tidy_text %&gt;% count(word, sort = TRUE)</code></pre>
+<pre><code>## # A tibble: 1,056 x 2
+##    word         n
+##    &lt;chr&gt;    &lt;int&gt;
+##  1 world       12
+##  2 life        10
+##  3 american     7
+##  4 father       7
+##  5 journey      7
+##  6 city         6
+##  7 save         6
+##  8 story        6
+##  9 death        5
+## 10 home         5
+## # ... with 1,046 more rows</code></pre>
+<p>We can also visualize this</p>
+<pre class="r"><code>tidy_text %&gt;% count(word, sort = TRUE) %&gt;% filter(n &gt; 4) %&gt;% mutate(word = reorder(word, n)) %&gt;%
+  ggplot(aes(word, n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip()</code></pre>
+<p><img src="/post/2018-12-13-web-scraping-and-text-mining-an-intuition_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>tidy_text %&gt;% anti_join(stop_words) %&gt;% count(word) %&gt;% with(wordcloud(word, n, max.words = 100))</code></pre>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<p><img src="/post/2018-12-13-web-scraping-and-text-mining-an-intuition_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>6 Conclusion</h1>
+<p>One might wonder, what you actually web scraping need for. The answer es as short as simple: the possibilities with web scraping are almost unlimited.</p>
+</div>

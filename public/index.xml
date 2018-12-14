@@ -6,10 +6,19 @@
     <description>Recent content on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 13 Dec 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Web Scraping and Text Mining. An intuition.</title>
+      <link>/2018/12/13/web-scraping-and-text-mining-an-intuition/</link>
+      <pubDate>Thu, 13 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/12/13/web-scraping-and-text-mining-an-intuition/</guid>
+      <description>library(tidyverse)library(rvest)library(RColorBrewer)library(wordcloud)library(tidytext)Table of Content1 Introduction21 IntroductionThe amount of data and information available on the Internet is growing exponentially. The amount of data available on the Web opens up new possibilities for a data scientist, such as web scraping. In today’s world, all the data we need is already available on the Internet. The only thing that prevents some people from using them is accessing them.</description>
+    </item>
     
     <item>
       <title> Interactive Web Applications with Shiny. An intuition.</title>

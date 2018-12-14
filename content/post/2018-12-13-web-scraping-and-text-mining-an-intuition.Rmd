@@ -1,0 +1,177 @@
+---
+title: Web Scraping and Text Mining. An intuition.
+author: Michael Fuchs
+date: '2018-12-13'
+slug: web-scraping-and-text-mining-an-intuition
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(rvest)
+library(RColorBrewer)
+library(wordcloud)
+library(tidytext)
+```
+
+#Table of Content
+
++ 1 Introduction
++ 2 
+
+
+#1 Introduction
+
+The amount of data and information available on the Internet is growing exponentially. The amount of data available on the Web opens up new possibilities for a data scientist, such as web scraping. In today's world, all the data we need is already available on the Internet. The only thing that prevents some people from using them is accessing them. With the help of this post, this barrier can be overcome.
+
+
+#2 What is Web Scraping?
+
+Web scraping is a technique for converting the data present in unstructured format (HTML tags) over the web to the structured format which can easily be accessed and used. In this post, the most popular feature films of the year 2018 will be removed from the ["IMDb"](https://www.imdb.com/search/title?count=100&release_date=2016,2016&title_type=feature) website.
+
+#3 Annotation
+
+For users who are not very familiar with HTML and CSS, I recommend using the open source software called Selector Gadget, which is more than enough for anyone to do web scraping. You can download the Selector Gadget extension ["here"](https://selectorgadget.com/).
+
+
+#4 The web scraping process
+
+```{r}
+
+url <- "http://www.imdb.com/search/title?count=100&release_date=2016,2016&title_type=feature"
+webpage <- read_html(url)
+
+
+rank_data_html <- html_nodes(webpage,'.text-primary')
+rank_data <- html_text(rank_data_html)
+rank_data<-as.numeric(rank_data)
+
+title_data_html <- html_nodes(webpage,'.lister-item-header a')
+title_data <- html_text(title_data_html)
+
+description_data_html <- html_nodes(webpage,'.ratings-bar+ .text-muted')
+description_data <- html_text(description_data_html)
+description_data<-gsub("\n","",description_data)
+
+runtime_data_html <- html_nodes(webpage,'.text-muted .runtime')
+runtime_data <- html_text(runtime_data_html)
+runtime_data<-gsub(" min","",runtime_data)
+runtime_data<-as.numeric(runtime_data)
+
+genre_data_html <- html_nodes(webpage,'.genre')
+genre_data <- html_text(genre_data_html)
+genre_data<-gsub("\n","",genre_data)
+genre_data<-gsub(" ","",genre_data)
+genre_data<-gsub(",.*","",genre_data)
+genre_data<-as.factor(genre_data)
+
+rating_data_html <- html_nodes(webpage,'.ratings-imdb-rating strong')
+rating_data <- html_text(rating_data_html)
+rating_data<-as.numeric(rating_data)
+
+votes_data_html <- html_nodes(webpage,'.sort-num_votes-visible span:nth-child(2)')
+votes_data <- html_text(votes_data_html)
+votes_data<-gsub(",","",votes_data)
+votes_data<-as.numeric(votes_data)
+
+directors_data_html <- html_nodes(webpage,'.text-muted+ p a:nth-child(1)')
+directors_data <- html_text(directors_data_html)
+directors_data<-as.factor(directors_data)
+
+actors_data_html <- html_nodes(webpage,'.lister-item-content .ghost+ a')
+actors_data <- html_text(actors_data_html)
+actors_data<-as.factor(actors_data)
+
+
+
+
+movies_df<-data.frame(Rank = rank_data, Title = title_data,
+                      
+                      Description = description_data, Runtime = runtime_data,
+                      
+                      Genre = genre_data, Rating = rating_data,
+                      
+                      Votes = votes_data, Director = directors_data, Actor = actors_data)
+
+
+
+glimpse(movies_df)
+
+
+```
+
+
+#5 A few graphic analysis
+
+
+Now we are able to analyze the pulled data. Below are some examples:
+
+
+```{r}
+qplot(data = movies_df,Runtime,fill = Genre, bins = 30)
+```
+```{r}
+ggplot(movies_df,aes(x=Runtime,y=Rating))+
+  geom_point(aes(size=Votes,col=Genre))
+```
+```{r}
+ggplot(movies_df,aes(x=Runtime,y=Votes))+
+  geom_point(aes(size=Rating,col=Genre))
+```
+```{r}
+movies_df_2 <- movies_df %>% count(Genre)
+ggplot(movies_df_2, aes(x=Genre, y=n)) +
+  geom_bar(stat="identity", width=0.5) + coord_flip()
+```
+
+
+#5 A brief insight of text mining
+
+I am interested in the words used within the movie description.
+
+```{r}
+movies_df$Description <- as.character(movies_df$Description)
+text <- movies_df %>% select(Description)
+tidy_text <- text %>% unnest_tokens(word, Description)
+tidy_text %>% count(word, sort = TRUE)
+```
+
+Ok, we see some unwanted stop words...
+Let's fix this:
+
+```{r}
+data("stop_words")
+
+tidy_text <- tidy_text %>% anti_join(stop_words)
+
+tidy_text %>% count(word, sort = TRUE)
+```
+
+
+We can also visualize this
+
+```{r}
+tidy_text %>% count(word, sort = TRUE) %>% filter(n > 4) %>% mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip()
+```
+
+```{r}
+tidy_text %>% anti_join(stop_words) %>% count(word) %>% with(wordcloud(word, n, max.words = 100))
+```
+
+
+#6 Conclusion
+
+One might wonder, what you actually web scraping need for. The answer es as short as simple: the possibilities with web scraping are almost unlimited.
+
