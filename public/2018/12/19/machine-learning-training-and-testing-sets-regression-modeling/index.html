@@ -92,7 +92,8 @@
 <div id="creation-of-two-dependent-variables" class="section level1">
 <h1>2 Creation of two dependent variables</h1>
 <p>In the first step, two interdependent variables are generated.</p>
-<pre class="r"><code>x &lt;- rnorm(100, 2, 1)
+<pre class="r"><code>set.seed(123)
+x &lt;- rnorm(100, 2, 1)
 y &lt;- exp(x) + rnorm(7, 0, 1)</code></pre>
 <pre><code>## Warning in exp(x) + rnorm(7, 0, 1): Länge des längeren Objektes
 ##       ist kein Vielfaches der Länge des kürzeren Objektes</code></pre>
@@ -107,18 +108,18 @@ abline(a = coef(linear[1], b = coef(linear[2], lty = 2)))</code></pre>
 ## 
 ## Residuals:
 ##    Min     1Q Median     3Q    Max 
-## -8.757 -6.048 -2.431  1.917 48.820 
+## -5.457 -4.115 -2.108  1.310 28.695 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  -14.646      2.256  -6.492  3.5e-09 ***
-## x             13.485      1.004  13.429  &lt; 2e-16 ***
+## (Intercept) -13.4079     1.6402  -8.175 1.07e-12 ***
+## x            12.0637     0.7196  16.764  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 9.862 on 98 degrees of freedom
-## Multiple R-squared:  0.6479, Adjusted R-squared:  0.6443 
-## F-statistic: 180.3 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 6.536 on 98 degrees of freedom
+## Multiple R-squared:  0.7414, Adjusted R-squared:  0.7388 
+## F-statistic:   281 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div id="train-and-test-the-simple-regression-model" class="section level1">
 <h1>3 Train and test the simple regression model</h1>
@@ -136,15 +137,15 @@ train.output &lt;- predict(train.linear, test.data)</code></pre>
                       SE = ((train.output - test.data$y)^2/length(train.output)))
 
 head(RMSE.df)</code></pre>
-<pre><code>##    predicted     actual          SE
-## 6  22.321484 16.6759492  1.59360324
-## 10 43.877682 86.4671438 90.69311316
-## 18  3.402436  2.3673990  0.05356511
-## 21  5.583836  5.5309396  0.00013990
-## 23 -7.723548  0.2264205  3.16009986
-## 32  5.433504  2.9935479  0.29766928</code></pre>
+<pre><code>##    predicted    actual           SE
+## 6  29.249080 41.016228 6.923288e+00
+## 9   2.895065  3.974740 5.828484e-02
+## 11 23.861977 24.782946 4.240916e-02
+## 15  4.332535  3.527879 3.237358e-02
+## 20  5.243763  4.560276 2.335772e-02
+## 25  3.573288  3.607379 5.810787e-05</code></pre>
 <pre class="r"><code>sqrt(sum(RMSE.df$SE))</code></pre>
-<pre><code>## [1] 10.6735</code></pre>
+<pre><code>## [1] 8.065677</code></pre>
 <p>We get a RMSE value of 8.15. To see how good this value is, it can be compared to other RMSE values.</p>
 </div>
 <div id="train-and-test-the-polynomial-regression-model" class="section level1">
@@ -156,15 +157,15 @@ RMSE.polyn.df &lt;- data.frame(predicted = polyn.output, actual = test.data$y,
                                   SE = ((polyn.output - test.data$y)^2/length(polyn.output)))
 
 head(RMSE.polyn.df)</code></pre>
-<pre><code>##    predicted     actual         SE
-## 6  15.470405 16.6759492 0.07266679
-## 10 87.466424 86.4671438 0.04992809
-## 18  3.901215  2.3673990 0.11762952
-## 21  4.623741  5.5309396 0.04115046
-## 23  1.227808  0.2264205 0.05013880
-## 32  4.571842  2.9935479 0.12455057</code></pre>
+<pre><code>##    predicted    actual           SE
+## 6  41.203433 41.016228 1.752296e-03
+## 9   3.333099  3.974740 2.058515e-02
+## 11 24.954389 24.782946 1.469629e-03
+## 15  3.873118  3.527879 5.959505e-03
+## 20  4.245259  4.560276 4.961783e-03
+## 25  3.581171  3.607379 3.434285e-05</code></pre>
 <pre class="r"><code>sqrt(sum(RMSE.polyn.df$SE))</code></pre>
-<pre><code>## [1] 1.387238</code></pre>
+<pre><code>## [1] 0.4690057</code></pre>
 <p>With a RMSE value of 0.79, we can see that the quality of the prediction has already improved significantly.</p>
 </div>
 <div id="train-and-test-the-exponential-regression-model" class="section level1">
@@ -176,15 +177,15 @@ RMSE.exponential.df &lt;- data.frame(predicted = exponential.output, actual = te
                                   SE = ((exponential.output - test.data$y)^2/length(exponential.output)))
 
 head(RMSE.exponential.df)</code></pre>
-<pre><code>##    predicted     actual         SE
-## 6  15.763099 16.6759492 0.04166478
-## 10 87.395915 86.4671438 0.04313083
-## 18  3.702882  2.3673990 0.08917579
-## 21  4.323283  5.5309396 0.07292177
-## 23  1.921979  0.2264205 0.14374587
-## 32  4.276605  2.9935479 0.08231182</code></pre>
+<pre><code>##    predicted    actual           SE
+## 6  40.807386 41.016228 2.180737e-03
+## 9   3.291509  3.974740 2.334023e-02
+## 11 24.788044 24.782946 1.299666e-06
+## 15  3.811601  3.527879 4.024919e-03
+## 20  4.178644  4.560276 7.282133e-03
+## 25  3.528361  3.607379 3.121932e-04</code></pre>
 <pre class="r"><code>sqrt(sum(RMSE.exponential.df$SE))</code></pre>
-<pre><code>## [1] 1.329125</code></pre>
+<pre><code>## [1] 0.3703497</code></pre>
 <p>An even better predictive value we get in this case with the exponential regression model. RMSE = 0.53</p>
 </div>
 <div id="conclusion" class="section level1">
