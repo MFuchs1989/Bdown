@@ -22,10 +22,10 @@
     
     <item>
       <title>Machine Learning - Training and Testing Sets: Regression Modeling</title>
-      <link>/2018/12/19/machine-learning-training-and-testing-sets-regression-modeling/</link>
-      <pubDate>Wed, 19 Dec 2018 00:00:00 +0000</pubDate>
+      <link>/2018/12/18/machine-learning-training-and-testing-sets-regression-modeling/</link>
+      <pubDate>Tue, 18 Dec 2018 00:00:00 +0000</pubDate>
       
-      <guid>/2018/12/19/machine-learning-training-and-testing-sets-regression-modeling/</guid>
+      <guid>/2018/12/18/machine-learning-training-and-testing-sets-regression-modeling/</guid>
       <description>library(tidyverse)Table of Content1 Introduction2 Creation of two dependent variables3 Train and test the simple regression model4 Train and test the polynomial regression model5 Train and test the exponential regression model6 Conclusion1 IntroductionThis post deals with the subject of machine learning. In particular, the training and testing of data for a regression analysis will be considered.
 2 Creation of two dependent variablesIn the first step, two interdependent variables are generated.</description>
     </item>

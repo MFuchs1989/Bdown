@@ -1,7 +1,7 @@
 ---
 title: 'Machine Learning - Training and Testing Sets: Regression Modeling'
 author: Michael Fuchs
-date: '2018-12-19'
+date: '2018-12-18'
 slug: machine-learning-training-and-testing-sets-regression-modeling
 categories:
   - R
