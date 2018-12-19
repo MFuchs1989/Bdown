@@ -1,0 +1,104 @@
+---
+title: Machine Learning - Cross-Validation
+author: Michael Fuchs
+date: '2018-12-20'
+slug: machine-learning-cross-validation
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<pre class="r"><code>library(tidyverse)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Creation of two dependent variables</li>
+<li>3 Train and test the regression model with a simple random sample</li>
+<li>4 Train and test the regression model with cross validation</li>
+<li>5 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Cross validation is a technique for evaluating the performance of a model in machine learning. With new datasets, which were not used in the training phase, the quality of the prediction is checked. This is done by partitioning a record into subsets for training and testing the algorithm. Because cross-validation does not use all data when developing a model, it is a commonly used method to prevent over-fitting during exercise. Each pass of cross validation involves random partitioning of the original record into a training set and a test set. The training set is used to train an algorithm for supervised machine learning and the test set is used to evaluate its performance. This process is repeated several times and the mean cross-validation error is used as the performance indicator.</p>
+</div>
+<div id="creation-of-two-dependent-variables" class="section level1">
+<h1>2 Creation of two dependent variables</h1>
+<pre class="r"><code>set.seed(123)
+
+
+x &lt;- rnorm(200, 2, 1)
+y &lt;- exp(x) + rnorm(9, 2, 3)</code></pre>
+<pre><code>## Warning in exp(x) + rnorm(9, 2, 3): Länge des längeren Objektes
+##       ist kein Vielfaches der Länge des kürzeren Objektes</code></pre>
+<pre class="r"><code>linear &lt;- lm(y  ~ x)
+
+plot(x, y)
+abline(a = coef(linear[1], b = coef(linear[2], lty = 2)))</code></pre>
+<p><img src="/post/2018-12-20-machine-learning-cross-validation_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>data &lt;- data.frame(x, y)</code></pre>
+</div>
+<div id="train-and-test-the-regression-model-with-a-simple-random-sample" class="section level1">
+<h1>3 Train and test the regression model with a simple random sample</h1>
+<pre class="r"><code>data.samples &lt;- sample(1:nrow(data), nrow(data) * 0.7, replace = FALSE)
+
+training.data &lt;- data[data.samples, ]
+test.data &lt;- data[-data.samples, ]
+
+train.linear &lt;- lm(y ~ x, training.data)
+train.output &lt;- predict(train.linear, test.data)
+
+
+RMSE.df &lt;- data.frame(predicted = train.output, actual = test.data$y, 
+                      SE = ((train.output - test.data$y)^2/length(train.output)))
+
+head(RMSE.df)</code></pre>
+<pre><code>##    predicted    actual          SE
+## 2  12.313998 11.807050 0.004283269
+## 5  17.685741  9.165855 1.209807474
+## 12 21.130655 11.793545 1.453027186
+## 13 21.742714 14.661266 0.835781802
+## 15  7.447376  4.809545 0.115969244
+## 19 26.234560 23.496352 0.124963020</code></pre>
+<pre class="r"><code>sqrt(sum(RMSE.df$SE))</code></pre>
+<pre><code>## [1] 8.453015</code></pre>
+</div>
+<div id="train-and-test-the-regression-model-with-cross-validation" class="section level1">
+<h1>4 Train and test the regression model with cross validation</h1>
+<pre class="r"><code>set.seed(123)
+
+x &lt;- rnorm(200, 2, 1)
+y &lt;- exp(x) + rnorm(9, 2, 3)</code></pre>
+<pre><code>## Warning in exp(x) + rnorm(9, 2, 3): Länge des längeren Objektes
+##       ist kein Vielfaches der Länge des kürzeren Objektes</code></pre>
+<pre class="r"><code>data &lt;- data.frame(x, y)
+
+data.shuffled &lt;- data[sample(nrow(data)), ]
+folds &lt;- cut(seq(1, nrow(data)), breaks = 10, labels = FALSE)
+
+errors &lt;- c(0)
+
+for(i in 1:10) {
+  fold.indexes &lt;- which(folds == i, arr.ind = TRUE)
+  test.data &lt;- data[fold.indexes, ]
+  training.data &lt;- data[-fold.indexes, ]
+  train.linear &lt;- lm(y ~ x, training.data)
+  train.output &lt;- predict(train.linear, test.data)
+  errors &lt;- c(errors, sqrt(sum(((train.output - test.data$y)^2/length(train.output)))))
+  }
+
+
+errors[2:11]</code></pre>
+<pre><code>##  [1]  7.056986  5.701666  7.530482  8.845505  7.015440  6.856132  7.850848
+##  [8]  9.096584 33.358992  6.809931</code></pre>
+<pre class="r"><code>mean(errors[2:11])</code></pre>
+<pre><code>## [1] 10.01226</code></pre>
+</div>
+<div id="conclusion" class="section level1">
+<h1>5 Conclusion</h1>
+<p>In this case, we can see that cross-validation is worse than simple sampling.</p>
+</div>

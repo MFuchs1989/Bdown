@@ -1,0 +1,112 @@
+---
+title: Machine Learning - Cross-Validation
+author: Michael Fuchs
+date: '2018-12-20'
+slug: machine-learning-cross-validation
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+#Table of Content
+
++ 1 Introduction
++ 2 Creation of two dependent variables
++ 3 Train and test the regression model with a simple random sample 
++ 4 Train and test the regression model with cross validation
++ 5 Conclusion
+
+#1 Introduction
+
+Cross validation is a technique for evaluating the performance of a model in machine learning. With new datasets, which were not used in the training phase, the quality of the prediction is checked. This is done by partitioning a record into subsets for training and testing the algorithm. Because cross-validation does not use all data when developing a model, it is a commonly used method to prevent over-fitting during exercise. Each pass of cross validation involves random partitioning of the original record into a training set and a test set. The training set is used to train an algorithm for supervised machine learning and the test set is used to evaluate its performance. This process is repeated several times and the mean cross-validation error is used as the performance indicator.
+
+
+#2 Creation of two dependent variables
+```{r}
+set.seed(123)
+
+
+x <- rnorm(200, 2, 1)
+y <- exp(x) + rnorm(9, 2, 3)
+
+
+
+linear <- lm(y  ~ x)
+
+plot(x, y)
+abline(a = coef(linear[1], b = coef(linear[2], lty = 2)))
+
+
+
+data <- data.frame(x, y)
+```
+
+
+#3 Train and test the regression model with a simple random sample 
+
+```{r}
+data.samples <- sample(1:nrow(data), nrow(data) * 0.7, replace = FALSE)
+
+training.data <- data[data.samples, ]
+test.data <- data[-data.samples, ]
+
+train.linear <- lm(y ~ x, training.data)
+train.output <- predict(train.linear, test.data)
+
+
+RMSE.df <- data.frame(predicted = train.output, actual = test.data$y, 
+                      SE = ((train.output - test.data$y)^2/length(train.output)))
+
+head(RMSE.df)
+```
+```{r}
+sqrt(sum(RMSE.df$SE))
+```
+
+
+#4 Train and test the regression model with cross validation
+```{r}
+set.seed(123)
+
+x <- rnorm(200, 2, 1)
+y <- exp(x) + rnorm(9, 2, 3)
+
+data <- data.frame(x, y)
+
+data.shuffled <- data[sample(nrow(data)), ]
+folds <- cut(seq(1, nrow(data)), breaks = 10, labels = FALSE)
+
+errors <- c(0)
+
+for(i in 1:10) {
+  fold.indexes <- which(folds == i, arr.ind = TRUE)
+  test.data <- data[fold.indexes, ]
+  training.data <- data[-fold.indexes, ]
+  train.linear <- lm(y ~ x, training.data)
+  train.output <- predict(train.linear, test.data)
+  errors <- c(errors, sqrt(sum(((train.output - test.data$y)^2/length(train.output)))))
+  }
+
+
+errors[2:11]
+```
+
+```{r}
+mean(errors[2:11])
+```
+
+
+# 5 Conclusion
+
+In this case, we can see that cross-validation is worse than simple sampling.
+
+
