@@ -1,0 +1,135 @@
+---
+title: 'Machine Learning - Training and Testing Sets: Regression Modeling'
+author: Michael Fuchs
+date: '2018-12-19'
+slug: machine-learning-training-and-testing-sets-regression-modeling
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+#Table of Content
+
++ 1 Introduction
++ 2 Creation of two dependent variables
++ 3 Train and test the simple regression model
++ 4 Train and test the polynomial regression model
++ 5 Train and test the exponential regression model
++ 6 Conclusion
+
+#1 Introduction
+
+This post deals with the subject of machine learning. In particular, the training and testing of data for a regression analysis will be considered.
+
+
+#2 Creation of two dependent variables
+
+
+In the first step, two interdependent variables are generated.
+
+
+```{r}
+x <- rnorm(100, 2, 1)
+y <- exp(x) + rnorm(7, 0, 1)
+linear <- lm(y  ~ x)
+```
+
+```{r}
+plot(x, y)
+abline(a = coef(linear[1], b = coef(linear[2], lty = 2)))
+```
+```{r}
+summary(linear)
+```
+
+
+#3 Train and test the simple regression model
+
+Subsequently, the newly created data set is divided into a training part (80%) and a test part (20%).
+
+```{r}
+data <- data.frame(x, y)
+data.samples <- sample(1:nrow(data), nrow(data) * 0.8, replace = FALSE)
+training.data <- data[data.samples, ]
+test.data <- data[-data.samples, ]
+```
+
+
+Now the regression model can be traniniert with the training data.
+```{r}
+train.linear <- lm(y ~ x, training.data)
+train.output <- predict(train.linear, test.data)
+```
+
+
+The quality of the prediction can be determined using the root mean square error (RMSE).
+
+$$RMSE = \sqrt{\frac{1}{n}\Sigma_{i=1}^{n}{\Big(\frac{d_i -f_i}{\sigma_i}\Big)^2}}$$
+
+```{r}
+RMSE.df <- data.frame(predicted = train.output, actual = test.data$y, 
+                      SE = ((train.output - test.data$y)^2/length(train.output)))
+
+head(RMSE.df)
+```
+```{r}
+sqrt(sum(RMSE.df$SE))
+```
+
+We get a RMSE value of 8.15.
+To see how good this value is, it can be compared to other RMSE values.
+
+
+#4 Train and test the polynomial regression model
+
+```{r}
+train.polyn <- lm(y ~ poly(x, 4), training.data)
+polyn.output <- predict(train.polyn, test.data)
+
+RMSE.polyn.df <- data.frame(predicted = polyn.output, actual = test.data$y, 
+                                  SE = ((polyn.output - test.data$y)^2/length(polyn.output)))
+
+head(RMSE.polyn.df)
+```
+```{r}
+sqrt(sum(RMSE.polyn.df$SE))
+```
+
+With a RMSE value of 0.79, we can see that the quality of the prediction has already improved significantly.
+
+
+#5 Train and test the exponential regression model
+
+```{r}
+train.exponential <- lm(y ~ exp(x) + x, training.data)
+exponential.output <- predict(train.exponential, test.data)
+
+RMSE.exponential.df <- data.frame(predicted = exponential.output, actual = test.data$y, 
+                                  SE = ((exponential.output - test.data$y)^2/length(exponential.output)))
+
+head(RMSE.exponential.df)
+```
+```{r}
+sqrt(sum(RMSE.exponential.df$SE))
+```
+
+
+An even better predictive value we get in this case with the exponential regression model.
+RMSE = 0.53
+
+
+#6 Conclusion
+
+This should be a brief demonstration of how regression models can be trained and their predictive power improved.
+
+
