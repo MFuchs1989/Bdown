@@ -87,7 +87,7 @@ head(RMSE.df)
 sqrt(sum(RMSE.df$SE))
 ```
 
-We get a RMSE value of 8.15.
+We get a RMSE value of 8.07.
 To see how good this value is, it can be compared to other RMSE values.
 
 
@@ -106,7 +106,7 @@ head(RMSE.polyn.df)
 sqrt(sum(RMSE.polyn.df$SE))
 ```
 
-With a RMSE value of 0.79, we can see that the quality of the prediction has already improved significantly.
+With a RMSE value of 0.47, we can see that the quality of the prediction has already improved significantly.
 
 
 #5 Train and test the exponential regression model
@@ -126,7 +126,7 @@ sqrt(sum(RMSE.exponential.df$SE))
 
 
 An even better predictive value we get in this case with the exponential regression model.
-RMSE = 0.53
+RMSE = 0.37
 
 
 #6 Conclusion
