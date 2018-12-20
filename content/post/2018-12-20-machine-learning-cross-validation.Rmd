@@ -21,8 +21,8 @@ library(tidyverse)
 
 + 1 Introduction
 + 2 Creation of two dependent variables
-+ 3 Train and test the regression model with a simple random sample 
-+ 4 Train and test the regression model with cross validation
++ 3 The training and testing of a regression model with a simple random sample 
++ 4 The training and testing of a regression model with cross validation
 + 5 Conclusion
 
 #1 Introduction
@@ -51,7 +51,7 @@ data <- data.frame(x, y)
 ```
 
 
-#3 Train and test the regression model with a simple random sample 
+#3 The training and testing of a regression model with a simple random sample 
 
 ```{r}
 data.samples <- sample(1:nrow(data), nrow(data) * 0.7, replace = FALSE)
@@ -73,7 +73,7 @@ sqrt(sum(RMSE.df$SE))
 ```
 
 
-#4 Train and test the regression model with cross validation
+#4 The training and testing of a regression model with cross validation
 ```{r}
 set.seed(123)
 

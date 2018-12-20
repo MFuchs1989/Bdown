@@ -17,7 +17,7 @@
       <pubDate>Wed, 19 Dec 2018 00:00:00 +0000</pubDate>
       
       <guid>/2018/12/19/machine-learning-cross-validation/</guid>
-      <description>library(tidyverse)Table of Content1 Introduction2 Creation of two dependent variables3 Train and test the regression model with a simple random sample4 Train and test the regression model with cross validation5 Conclusion1 IntroductionCross validation is a technique for evaluating the performance of a model in machine learning. With new datasets, which were not used in the training phase, the quality of the prediction is checked.</description>
+      <description>library(tidyverse)Table of Content1 Introduction2 Creation of two dependent variables3 The training and testing of a regression model with a simple random sample4 The training and testing of a regression model with cross validation5 Conclusion1 IntroductionCross validation is a technique for evaluating the performance of a model in machine learning. With new datasets, which were not used in the training phase, the quality of the prediction is checked.</description>
     </item>
     
     <item>

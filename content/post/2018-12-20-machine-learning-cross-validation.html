@@ -17,8 +17,8 @@ tags:
 <ul>
 <li>1 Introduction</li>
 <li>2 Creation of two dependent variables</li>
-<li>3 Train and test the regression model with a simple random sample</li>
-<li>4 Train and test the regression model with cross validation</li>
+<li>3 The training and testing of a regression model with a simple random sample</li>
+<li>4 The training and testing of a regression model with cross validation</li>
 <li>5 Conclusion</li>
 </ul>
 </div>
@@ -42,8 +42,8 @@ abline(a = coef(linear[1], b = coef(linear[2], lty = 2)))</code></pre>
 <p><img src="/post/2018-12-20-machine-learning-cross-validation_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <pre class="r"><code>data &lt;- data.frame(x, y)</code></pre>
 </div>
-<div id="train-and-test-the-regression-model-with-a-simple-random-sample" class="section level1">
-<h1>3 Train and test the regression model with a simple random sample</h1>
+<div id="the-training-and-testing-of-a-regression-model-with-a-simple-random-sample" class="section level1">
+<h1>3 The training and testing of a regression model with a simple random sample</h1>
 <pre class="r"><code>data.samples &lt;- sample(1:nrow(data), nrow(data) * 0.7, replace = FALSE)
 
 training.data &lt;- data[data.samples, ]
@@ -67,8 +67,8 @@ head(RMSE.df)</code></pre>
 <pre class="r"><code>sqrt(sum(RMSE.df$SE))</code></pre>
 <pre><code>## [1] 8.453015</code></pre>
 </div>
-<div id="train-and-test-the-regression-model-with-cross-validation" class="section level1">
-<h1>4 Train and test the regression model with cross validation</h1>
+<div id="the-training-and-testing-of-a-regression-model-with-cross-validation" class="section level1">
+<h1>4 The training and testing of a regression model with cross validation</h1>
 <pre class="r"><code>set.seed(123)
 
 x &lt;- rnorm(200, 2, 1)
