@@ -228,7 +228,30 @@ Noten</code></pre>
 ## 1      10      2.0
 ## 2      14      2.8
 ## 3      12      2.4</code></pre>
-<p>Wir erkennen, dass die Werte von Summe_Noten und Notendurchschnitt gleich sind mit rowSums und rowMeans.</p>
+<p>Wir erkennen, dass die Werte von Summe_Noten und Notendurchschnitt gleich sind mit rowSums und rowMeans. Allerdings lässt sich die rowSums und rowMeans Funktion auch einfacher verwenden.</p>
+<pre class="r"><code>Noten$rowSums2 &lt;- rowSums(Noten[,2:6])
+Noten$rowMeans2 &lt;- rowMeans(Noten[,2:6])
+Noten</code></pre>
+<pre><code>##     Gewicht Note1 Note2 Note3 Note4 Note5 Summe_Noten Notendurchschnitt
+## 1 Christian     2     3     2     1     2          10               2.0
+## 2     Maria     3     1     4     2     4          14               2.8
+## 3   Andreas     1     5     1     2     3          12               2.4
+##   rowSums rowMeans rowSums2 rowMeans2
+## 1      10      2.0       10       2.0
+## 2      14      2.8       14       2.8
+## 3      12      2.4       12       2.4</code></pre>
+<pre class="r"><code>Noten$Teilsumme &lt;- rowSums(Noten[,c(2:3, 5:6)])
+#entspricht Note1 + Note2 + Note4 + Note5
+Noten</code></pre>
+<pre><code>##     Gewicht Note1 Note2 Note3 Note4 Note5 Summe_Noten Notendurchschnitt
+## 1 Christian     2     3     2     1     2          10               2.0
+## 2     Maria     3     1     4     2     4          14               2.8
+## 3   Andreas     1     5     1     2     3          12               2.4
+##   rowSums rowMeans rowSums2 rowMeans2 Teilsumme
+## 1      10      2.0       10       2.0         8
+## 2      14      2.8       14       2.8        10
+## 3      12      2.4       12       2.4        11</code></pre>
+<p>Datensatz1$new &lt;- rowSums( Datensatz1[ ,c(1:2, 3:4)])</p>
 </div>
 <div id="center-and-standardize-variables" class="section level2">
 <h2>4.4 Center and standardize variables</h2>
@@ -287,10 +310,10 @@ Noten</code></pre>
 ## 1 Christian     2     3     2     1     2          10               2.0
 ## 2     Maria     3     1     4     2     4          14               2.8
 ## 3   Andreas     1     5     1     2     3          12               2.4
-##   rowSums rowMeans Note5.r
-## 1      10      2.0       5
-## 2      14      2.8       3
-## 3      12      2.4       4</code></pre>
+##   rowSums rowMeans rowSums2 rowMeans2 Teilsumme Note5.r
+## 1      10      2.0       10       2.0         8       5
+## 2      14      2.8       14       2.8        10       3
+## 3      12      2.4       12       2.4        11       4</code></pre>
 </div>
 <div id="turn-over-single-values" class="section level2">
 <h2>4.6 turn over single values</h2>
@@ -335,10 +358,10 @@ Noten</code></pre>
 ## 1 Christian     2     3     2     1     2          10               2.0
 ## 2     Maria     3     1     4     2     4          14               2.8
 ## 3   Andreas     1     5     1     2     3          12               2.4
-##   rowSums rowMeans Note5.r Note5.r2
-## 1      10      2.0       5        5
-## 2      14      2.8       3        3
-## 3      12      2.4       4        4</code></pre>
+##   rowSums rowMeans rowSums2 rowMeans2 Teilsumme Note5.r Note5.r2
+## 1      10      2.0       10       2.0         8       5        5
+## 2      14      2.8       14       2.8        10       3        3
+## 3      12      2.4       12       2.4        11       4        4</code></pre>
 </div>
 </div>
 </div>

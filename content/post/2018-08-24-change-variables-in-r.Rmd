@@ -229,7 +229,20 @@ Noten$rowMeans <- rowMeans(Noten[c("Note1","Note2","Note3","Note4","Note5")], na
 Noten
 ```
 
-Wir erkennen, dass die Werte von Summe_Noten und Notendurchschnitt gleich sind mit rowSums und rowMeans. 
+Wir erkennen, dass die Werte von Summe_Noten und Notendurchschnitt gleich sind mit rowSums und rowMeans. Allerdings lässt sich die rowSums und rowMeans Funktion auch einfacher verwenden.
+```{r}
+Noten$rowSums2 <- rowSums(Noten[,2:6])
+Noten$rowMeans2 <- rowMeans(Noten[,2:6])
+Noten
+```
+
+```{r}
+Noten$Teilsumme <- rowSums(Noten[,c(2:3, 5:6)])
+#entspricht Note1 + Note2 + Note4 + Note5
+Noten
+```
+
+Datensatz1$new <- rowSums( Datensatz1[ ,c(1:2, 3:4)])
 
 ##4.4 Center and standardize variables
 
