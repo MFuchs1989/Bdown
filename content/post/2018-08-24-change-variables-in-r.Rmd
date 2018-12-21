@@ -242,7 +242,6 @@ Noten$Teilsumme <- rowSums(Noten[,c(2:3, 5:6)])
 Noten
 ```
 
-Datensatz1$new <- rowSums( Datensatz1[ ,c(1:2, 3:4)])
 
 ##4.4 Center and standardize variables
 
