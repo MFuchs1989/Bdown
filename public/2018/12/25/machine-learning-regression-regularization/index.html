@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Machine Learning - Regression Regularization - Michael Fuchs</title>
+<meta property="og:title" content="Machine Learning - Regression Regularization - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+    <li><a href="https://twitter.com/Stat_Michael">Twitter</a></li>
+    
+    <li><a href="https://www.xing.com/profile/Michael_Fuchs426/cv?sc_o=mxb_p">XING</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">5 min read</span>
+    
+
+    <h1 class="article-title">Machine Learning - Regression Regularization</h1>
+
+    
+    <span class="article-date">2018/12/25</span>
+    
+
+    <div class="article-content">
+      <pre class="r"><code>library(tidyverse)
+library(lasso2)</code></pre>
+<pre class="r"><code>mtcars &lt;- read_csv(&quot;mtcars.csv&quot;)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 The regularization of a regression</li>
+<li>3 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Regularization is the tuning of the preferred complexity of the statistical model, so that the predictive ability of the model is improved. If you do not use regularization, the model can become too complex and over-fit, or too simple and under-fit the data.</p>
+<p>For this post the dataset <em>mtcars</em> from the statistic platform <em>Kaggle</em> <a href="https://www.kaggle.com" class="uri">https://www.kaggle.com</a> was used. A copy of the record is available at <a href="https://drive.google.com/open?id=1u7cDZoOUg9ah8ZG3aiUWmUgts8RTL4iR" class="uri">https://drive.google.com/open?id=1u7cDZoOUg9ah8ZG3aiUWmUgts8RTL4iR</a> abrufbar.</p>
+</div>
+<div id="the-regularization-of-a-regression" class="section level1">
+<h1>2 The regularization of a regression</h1>
+<p>First, we get an overview of the record we have.</p>
+<pre class="r"><code>glimpse(mtcars)</code></pre>
+<pre><code>## Observations: 32
+## Variables: 12
+## $ X1   &lt;chr&gt; &quot;Mazda RX4&quot;, &quot;Mazda RX4 Wag&quot;, &quot;Datsun 710&quot;, &quot;Hornet 4 Dri...
+## $ mpg  &lt;dbl&gt; 21.0, 21.0, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19....
+## $ cyl  &lt;int&gt; 6, 6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, 8, 8, 8, 8, 4, 4, ...
+## $ disp &lt;dbl&gt; 160.0, 160.0, 108.0, 258.0, 360.0, 225.0, 360.0, 146.7, 1...
+## $ hp   &lt;int&gt; 110, 110, 93, 110, 175, 105, 245, 62, 95, 123, 123, 180, ...
+## $ drat &lt;dbl&gt; 3.90, 3.90, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 3.9...
+## $ wt   &lt;dbl&gt; 2.620, 2.875, 2.320, 3.215, 3.440, 3.460, 3.570, 3.190, 3...
+## $ qsec &lt;dbl&gt; 16.46, 17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20.00, 2...
+## $ vs   &lt;int&gt; 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, ...
+## $ am   &lt;int&gt; 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, ...
+## $ gear &lt;int&gt; 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, ...
+## $ carb &lt;int&gt; 4, 4, 1, 1, 2, 1, 4, 2, 2, 4, 4, 3, 3, 3, 4, 4, 4, 1, 2, ...</code></pre>
+<p>The main question we ask ourselves is the following: Which influencing factors determine the fuel consumption (mpg = miles per gallon) of the cars significantly?</p>
+<p>With a simple linear model, we get the following values.</p>
+<pre class="r"><code>mtcars.tidy &lt;- mtcars[,-1]
+lm.all &lt;- lm(mpg ~ ., data = mtcars.tidy)
+summary(lm.all)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ ., data = mtcars.tidy)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.4506 -1.6044 -0.1196  1.2193  4.6271 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) 12.30337   18.71788   0.657   0.5181  
+## cyl         -0.11144    1.04502  -0.107   0.9161  
+## disp         0.01334    0.01786   0.747   0.4635  
+## hp          -0.02148    0.02177  -0.987   0.3350  
+## drat         0.78711    1.63537   0.481   0.6353  
+## wt          -3.71530    1.89441  -1.961   0.0633 .
+## qsec         0.82104    0.73084   1.123   0.2739  
+## vs           0.31776    2.10451   0.151   0.8814  
+## am           2.52023    2.05665   1.225   0.2340  
+## gear         0.65541    1.49326   0.439   0.6652  
+## carb        -0.19942    0.82875  -0.241   0.8122  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.65 on 21 degrees of freedom
+## Multiple R-squared:  0.869,  Adjusted R-squared:  0.8066 
+## F-statistic: 13.93 on 10 and 21 DF,  p-value: 3.793e-07</code></pre>
+<p>We see that each variable has at least a minor impact on gas mileage. Now, with the help of regularization, we try to find out which influences really are important for a correct prediction.</p>
+<pre class="r"><code>lm.lasso &lt;- l1ce(mpg ~ ., data = mtcars.tidy)
+summary(lm.lasso)$coefficients</code></pre>
+<pre><code>##                   Value  Std. Error     Z score   Pr(&gt;|Z|)
+## (Intercept) 36.01809203 18.92587647  1.90311355 0.05702573
+## cyl         -0.86225790  1.12177221 -0.76865686 0.44209704
+## disp         0.00000000  0.01912781  0.00000000 1.00000000
+## hp          -0.01399880  0.02384398 -0.58709992 0.55713660
+## drat         0.05501092  1.78394922  0.03083659 0.97539986
+## wt          -2.68868427  2.05683876 -1.30719254 0.19114733
+## qsec         0.00000000  0.75361628  0.00000000 1.00000000
+## vs           0.00000000  2.31605743  0.00000000 1.00000000
+## am           0.44530641  2.14959278  0.20715850 0.83588608
+## gear         0.00000000  1.62955841  0.00000000 1.00000000
+## carb        -0.09506985  0.91237207 -0.10420075 0.91701004</code></pre>
+<p>It can be seen that the <em>l1ce-function</em> has reduced the influence of the variables <em>disp</em>, <em>qsec</em> and <em>gear</em> to 0. These variables should not be considered in the next model.</p>
+<pre class="r"><code>lm.lasso2 &lt;- l1ce(mpg ~ cyl + hp + drat + wt + am + carb, data = mtcars.tidy)
+summary(lm.lasso2)$coefficients</code></pre>
+<pre><code>##                    Value Std. Error     Z score    Pr(&gt;|Z|)
+## (Intercept) 31.446025119 11.4534952  2.74553965 0.006041147
+## cyl         -0.789829796  0.9371848 -0.84276842 0.399357971
+## hp          -0.001280132  0.0236353 -0.05416188 0.956806194
+## drat         0.000000000  2.2516551  0.00000000 1.000000000
+## wt          -1.952148210  1.4344649 -1.36088945 0.173548628
+## am           0.000000000  2.3316618  0.00000000 1.000000000
+## carb         0.000000000  0.7107026  0.00000000 1.000000000</code></pre>
+<p>Now the influence of the variables <em>drat</em>, <em>am</em> and <em>carb</em> has been reduced to 0. The following model will be changed accordingly.</p>
+<pre class="r"><code>lm.lasso3 &lt;- l1ce(mpg ~ cyl + hp + wt, data = mtcars.tidy)
+summary(lm.lasso3)$coefficients</code></pre>
+<pre><code>##                  Value Std. Error    Z score  Pr(&gt;|Z|)
+## (Intercept) 30.2106931 1.97117597 15.3262284 0.0000000
+## cyl         -0.7220771 0.82941877 -0.8705821 0.3839824
+## hp           0.0000000 0.01748364  0.0000000 1.0000000
+## wt          -1.7568469 1.07478525 -1.6346028 0.1021324</code></pre>
+<p>OK another adaptation is necessary.</p>
+<pre class="r"><code>lm.lasso4 &lt;- l1ce(mpg ~ cyl + wt, data = mtcars.tidy)
+summary(lm.lasso4)$coefficients</code></pre>
+<pre><code>##                  Value Std. Error   Z score  Pr(&gt;|Z|)
+## (Intercept) 29.8694933  1.4029760 21.290096 0.0000000
+## cyl         -0.6937847  0.5873288 -1.181254 0.2375017
+## wt          -1.7052064  1.0720172 -1.590652 0.1116879</code></pre>
+<p>Perfect. The final model is: mpg = 29,87 - 0,69cyl - 1,71wt</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>3 Conclusion</h1>
+<p>By selecting a suitable complexity, one obtains a model which can predict the data as best as possible. In addition to the lasso method shown, there are other well-known methods such as the ridge regression or elastic net regression, which use the regularization.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

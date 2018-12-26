@@ -1,0 +1,114 @@
+---
+title: Machine Learning - Regression Regularization
+author: Michael Fuchs
+date: '2018-12-25'
+slug: machine-learning-regression-regularization
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(lasso2)
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+mtcars <- read_csv("mtcars.csv")
+```
+
+
+#Table of Content
+
++ 1 Introduction
++ 2 The regularization of a regression
++ 3 Conclusion
+
+
+#1 Introduction
+
+Regularization is the tuning of the preferred complexity of the statistical model, so that the predictive ability of the model is improved. If you do not use regularization, the model can become too complex and over-fit, or too simple and under-fit the data.
+
+For this post the dataset *mtcars* from the statistic platform *Kaggle* <https://www.kaggle.com> was used. A copy of the record is available at  <https://drive.google.com/open?id=1u7cDZoOUg9ah8ZG3aiUWmUgts8RTL4iR> abrufbar.
+
+
+#2 The regularization of a regression
+
+
+First, we get an overview of the record we have.
+
+```{r}
+glimpse(mtcars)
+```
+
+The main question we ask ourselves is the following: 
+Which influencing factors determine the fuel consumption (mpg = miles per gallon) of the cars significantly?
+
+
+With a simple linear model, we get the following values.
+
+```{r}
+mtcars.tidy <- mtcars[,-1]
+lm.all <- lm(mpg ~ ., data = mtcars.tidy)
+summary(lm.all)
+```
+
+We see that each variable has at least a minor impact on gas mileage.
+Now, with the help of regularization, we try to find out which influences really are important for a correct prediction.
+
+```{r}
+lm.lasso <- l1ce(mpg ~ ., data = mtcars.tidy)
+summary(lm.lasso)$coefficients
+```
+
+
+It can be seen that the *l1ce-function* has reduced the influence of the variables *disp*, *qsec* and *gear* to 0. These variables should not be considered in the next model.
+
+```{r}
+lm.lasso2 <- l1ce(mpg ~ cyl + hp + drat + wt + am + carb, data = mtcars.tidy)
+summary(lm.lasso2)$coefficients
+```
+
+
+Now the influence of the variables *drat*, *am* and *carb* has been reduced to 0. The following model will be changed accordingly.
+
+```{r}
+lm.lasso3 <- l1ce(mpg ~ cyl + hp + wt, data = mtcars.tidy)
+summary(lm.lasso3)$coefficients
+```
+
+
+OK another adaptation is necessary.
+
+```{r}
+lm.lasso4 <- l1ce(mpg ~ cyl + wt, data = mtcars.tidy)
+summary(lm.lasso4)$coefficients
+```
+
+
+Perfect. The final model is: mpg = 29,87 - 0,69cyl - 1,71wt
+
+
+#3 Conclusion
+
+
+By selecting a suitable complexity, one obtains a model which can predict the data as best as possible. In addition to the lasso method shown, there are other well-known methods such as the ridge regression or elastic net regression, which use the regularization.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
