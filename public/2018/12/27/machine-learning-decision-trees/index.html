@@ -170,16 +170,16 @@ text(fit3, use.n = TRUE, all=TRUE, cex=.8)</code></pre>
 <p>A precise way of knowing which parts to prune is to look at a tree’s complexity paramete, often refered to as the “CP”, which you can request with the <em>plotcp</em> function.</p>
 <pre class="r"><code>plotcp(fit3)</code></pre>
 <p><img src="/post/2018-12-27-machine-learning-decision-trees_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<p>The complexy parameter is the amount by which splitting that tree node will improve the relative error.In the figure above, splitting it once improve the error by 0.29, and then less so for each additional split. You can see from the plot that the relative error is minimized at a tree size of 4 and the complexity paramter is below the dotted line threshold.</p>
+<p>The complexy parameter is the amount by which splitting that tree node will improve the relative error.In the figure above, splitting it once improve the error by 0.29, and then less so for each additional split. You can see from the plot that the relative error is minimized at a tree size of 3 and the complexity paramter is below the dotted line threshold.</p>
 <p>You can extract all these values programmatically from the model’s <em>cptable</em>, as follows:</p>
 <pre class="r"><code>fit3$cptable</code></pre>
 <pre><code>##           CP nsplit rel error    xerror       xstd
-## 1 0.62288527      0 1.0000000 1.0509830 0.18116378
-## 2 0.13206061      1 0.3771147 0.5446509 0.10669220
-## 3 0.02544094      2 0.2450541 0.3828827 0.08490572
-## 4 0.01772069      3 0.2196132 0.4182631 0.08608345
-## 5 0.01000000      4 0.2018925 0.4410350 0.08948925</code></pre>
-<p>You can see that the error is minimized at tree size 4. Now let’s prune the previously created tree.</p>
+## 1 0.62288527      0 1.0000000 1.0543309 0.18267599
+## 2 0.13206061      1 0.3771147 0.5402530 0.10471499
+## 3 0.02544094      2 0.2450541 0.3803522 0.08502028
+## 4 0.01772069      3 0.2196132 0.3961299 0.08565664
+## 5 0.01000000      4 0.2018925 0.3992410 0.08273746</code></pre>
+<p>You can see that the error is minimized at tree size 3. Now let’s prune the previously created tree.</p>
 <pre class="r"><code>fit3.pruned &lt;- prune(fit3, cp = fit3$cptable[which.min(fit3$cptable[,&quot;xerror&quot;]), &quot;CP&quot;])</code></pre>
 <pre class="r"><code>par(mfrow = c(1, 2))
 
