@@ -1,0 +1,190 @@
+---
+title: Machine Learning - Decision Trees
+author: Michael Fuchs
+date: '2018-12-27'
+slug: machine-learning-decision-trees
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<pre class="r"><code>library(tidyverse)
+library(rpart)
+library(caret)
+library(randomForest)
+library(party)</code></pre>
+<pre class="r"><code>cu_summary &lt;- read_csv(&quot;cu.summary.csv&quot;)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 A simple tree model</li>
+<li>2.1 Tree entropy and information gain</li>
+<li>2.2 Visualize a simple tree model</li>
+<li>3 Prune tree</li>
+<li>4 Decision trees for regression</li>
+<li>5 Decision trees for classification</li>
+<li>6 Conditional inference trees</li>
+<li>7 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Decision trees are ordered, directed trees that serve to represent decision rules. The graphical representation as a tree diagram illustrates hierarchically successive decisions. Decision trees are an important part of information processing. They are often used not only in the field of data mining to derive strategies for route guidance, but also in machine learning. The process helps us in decision-making, as it visualizes different possibilities and scenarios.</p>
+<p>For this post the dataset <em>cu.summary</em> from the package <a href="https://cran.r-project.org/web/packages/rpart/index.html">“rpart”</a> was used. A copy of the record is available at <a href="https://drive.google.com/open?id=1o8rinf_SUZzsfAc_K7nI6Z7uhYyy_bZi" class="uri">https://drive.google.com/open?id=1o8rinf_SUZzsfAc_K7nI6Z7uhYyy_bZi</a>.</p>
+</div>
+<div id="a-simple-tree-model" class="section level1">
+<h1>2 A simple tree model</h1>
+<p>Let’s create an own decision tree as a fitting example.</p>
+<pre class="r"><code>a &lt;- c(&quot;cloudy&quot;, &quot;rainy&quot;, &quot;sunny&quot;, &quot;cloudy&quot;, &quot;cloudy&quot;, &quot;rainy&quot;, &quot;rainy&quot;, &quot;cloudy&quot;, &quot;sunny&quot;, &quot;sunny&quot;, &quot;rainy&quot;, &quot;sunny&quot;, &quot;sunny&quot;)
+b &lt;- c(&quot;low&quot;, &quot;low&quot;, &quot;high&quot;, &quot;high&quot;, &quot;low&quot;, &quot;high&quot;, &quot;high&quot;, &quot;high&quot;, &quot;low&quot;, &quot;low&quot;, &quot;low&quot;, &quot;low&quot;, &quot;high&quot;)
+c &lt;- c(&quot;high&quot;, &quot;normal&quot;, &quot;normal&quot;, &quot;high&quot;, &quot;normal&quot;, &quot;high&quot;, &quot;normal&quot;, &quot;normal&quot;, &quot;high&quot;, &quot;normal&quot;, &quot;normal&quot;, &quot;high&quot;, &quot;high&quot;)
+d &lt;- c(&quot;yes&quot;, &quot;yes&quot;, &quot;yes&quot;, &quot;yes&quot;, &quot;yes&quot;, &quot;no&quot;, &quot;no&quot;, &quot;yes&quot;, &quot;no&quot;, &quot;yes&quot;, &quot;yes&quot;, &quot;no&quot;, &quot;no&quot;)
+df &lt;- data.frame(a, b, c, d)
+colnames(df) &lt;- c(&quot;Sky.Condition&quot;, &quot;Wind.Speed&quot;, &quot;Humidity&quot;, &quot;Result&quot;)
+df</code></pre>
+<pre><code>##    Sky.Condition Wind.Speed Humidity Result
+## 1         cloudy        low     high    yes
+## 2          rainy        low   normal    yes
+## 3          sunny       high   normal    yes
+## 4         cloudy       high     high    yes
+## 5         cloudy        low   normal    yes
+## 6          rainy       high     high     no
+## 7          rainy       high   normal     no
+## 8         cloudy       high   normal    yes
+## 9          sunny        low     high     no
+## 10         sunny        low   normal    yes
+## 11         rainy        low   normal    yes
+## 12         sunny        low     high     no
+## 13         sunny       high     high     no</code></pre>
+</div>
+<div id="tree-entropy-and-information-gain" class="section level1">
+<h1>2.1 Tree entropy and information gain</h1>
+<p><strong>Definition of entropy</strong>: Entropy is the measures of impurity, disorder or uncertainty in a bunch of examples.</p>
+<p>Entropy controls how a Decision Tree decides to split the data. It actually effects how a Decision Tree draws its boundaries.</p>
+<p><strong>Definition of information gain</strong>: Information gain measures how much “information” a feature gives us about the class.</p>
+<p>Why it matter ?</p>
+<ul>
+<li>Information gain is the main key that is used by Decision Tree Algorithms to construct a Decision Tree.</li>
+<li>Decision Trees algorithm will always tries to maximize Information gain.</li>
+<li>An attribute with highest Information gain will tested/split first.</li>
+</ul>
+<p>Within R you can use the <em>VarImpPlot()</em> function to get a quick glance to see how to split the tree from the top down.</p>
+<pre class="r"><code>fit &lt;- randomForest(factor(Result) ~ ., data = df)
+varImpPlot(fit)</code></pre>
+<p><img src="/post/2018-12-27-machine-learning-decision-trees_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="visualize-a-simple-tree-model" class="section level1">
+<h1>2.2 Visualize a simple tree model</h1>
+<pre class="r"><code>fit2 &lt;- rpart(Result~Sky.Condition + Wind.Speed + Humidity, method = &quot;anova&quot;, data = df, 
+              control =rpart.control(minsplit =1,minbucket=1, cp=0))
+
+
+plot(fit2, uniform = TRUE, margin=0.1)
+text(fit2, use.n = TRUE, all=TRUE, cex=.8)</code></pre>
+<p><img src="/post/2018-12-27-machine-learning-decision-trees_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="prune-tree" class="section level1">
+<h1>3 Prune tree</h1>
+<p>Overfitting is a general problem with decision trees. One solution is to prune the decision tree accordingly. Let’s look at the record we want to use for this example.</p>
+<pre class="r"><code>glimpse(cu_summary)</code></pre>
+<pre><code>## Observations: 117
+## Variables: 6
+## $ X1          &lt;chr&gt; &quot;Acura Integra 4&quot;, &quot;Dodge Colt 4&quot;, &quot;Dodge Omni 4&quot;,...
+## $ Price       &lt;int&gt; 11950, 6851, 6995, 8895, 7402, 6319, 6695, 10125, ...
+## $ Country     &lt;chr&gt; &quot;Japan&quot;, &quot;Japan&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;USA&quot;, &quot;Korea&quot;, &quot;J...
+## $ Reliability &lt;chr&gt; &quot;Much better&quot;, NA, &quot;Much worse&quot;, &quot;better&quot;, &quot;worse&quot;...
+## $ Mileage     &lt;int&gt; NA, NA, NA, 33, 33, 37, NA, NA, 32, NA, 32, 26, NA...
+## $ Type        &lt;chr&gt; &quot;Small&quot;, &quot;Small&quot;, &quot;Small&quot;, &quot;Small&quot;, &quot;Small&quot;, &quot;Smal...</code></pre>
+<p>In this case we want to model a vehicle’s fuel efficiency, as given by the Mileage variable. Since Mileage is a numerical variable, it becomes a regression model as a result.</p>
+<pre class="r"><code>fit3 &lt;- rpart(Mileage~Price + Reliability + Type + Country, method = &quot;anova&quot;, data = cu_summary)
+
+plot(fit3, uniform = TRUE, margin=0.1)
+text(fit3, use.n = TRUE, all=TRUE, cex=.8)</code></pre>
+<p><img src="/post/2018-12-27-machine-learning-decision-trees_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>A precise way of knowing which parts to prune is to look at a tree’s complexity paramete, often refered to as the “CP”, which you can request with the <em>plotcp</em> function.</p>
+<pre class="r"><code>plotcp(fit3)</code></pre>
+<p><img src="/post/2018-12-27-machine-learning-decision-trees_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The complexy parameter is the amount by which splitting that tree node will improve the relative error.In the figure above, splitting it once improve the error by 0.29, and then less so for each additional split. You can see from the plot that the relative error is minimized at a tree size of 4 and the complexity paramter is below the dotted line threshold.</p>
+<p>You can extract all these values programmatically from the model’s <em>cptable</em>, as follows:</p>
+<pre class="r"><code>fit3$cptable</code></pre>
+<pre><code>##           CP nsplit rel error    xerror       xstd
+## 1 0.62288527      0 1.0000000 1.0509830 0.18116378
+## 2 0.13206061      1 0.3771147 0.5446509 0.10669220
+## 3 0.02544094      2 0.2450541 0.3828827 0.08490572
+## 4 0.01772069      3 0.2196132 0.4182631 0.08608345
+## 5 0.01000000      4 0.2018925 0.4410350 0.08948925</code></pre>
+<p>You can see that the error is minimized at tree size 4. Now let’s prune the previously created tree.</p>
+<pre class="r"><code>fit3.pruned &lt;- prune(fit3, cp = fit3$cptable[which.min(fit3$cptable[,&quot;xerror&quot;]), &quot;CP&quot;])</code></pre>
+<pre class="r"><code>par(mfrow = c(1, 2))
+
+plot(fit3, uniform = TRUE, margin=0.1, main = &quot;Original decision tree&quot;)
+text(fit3, use.n = TRUE, all=TRUE, cex=.8)
+
+plot(fit3.pruned, uniform = TRUE, margin=0.1, main = &quot;Pruned decision tree&quot;)
+text(fit3.pruned, use.n = TRUE, all=TRUE, cex=.8)</code></pre>
+<p><img src="/post/2018-12-27-machine-learning-decision-trees_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>This example takes the complexity parameter and passes it to the <em>prune()</em> function to effectively eliminate any splits that don’t make the model reduce its error.</p>
+</div>
+<div id="decision-trees-for-regression" class="section level1">
+<h1>4 Decision trees for regression</h1>
+<pre class="r"><code>cu.summary.compl &lt;-  cu_summary[complete.cases(cu_summary), ]
+nrow(cu.summary.compl)
+
+data.samples &lt;- sample(1:nrow(cu.summary.compl), nrow(cu.summary.compl)* 0.7, replace = FALSE)
+
+training.data1 &lt;- cu.summary.compl[data.samples, ]
+test.data1 &lt;- cu.summary.compl[-data.samples, ]
+
+fit4 &lt;- rpart(Mileage~Price + Reliability + Type + Country, method = &quot;anova&quot;, data = training.data1)
+
+fit4.pruned &lt;- prune(fit4, cp = fit4$cptable[which.min(fit4$cptable[,&quot;xerror&quot;]), &quot;CP&quot;])
+
+fit4.prediction &lt;- predict(fit4.pruned, test.data1)
+
+fit4.output &lt;- data.frame(test.data1$Mileage, fit4.prediction)
+
+fit4.RMSE &lt;- sqrt(sum((fit4.output$test.data1.Mileage -fit4.output$fit4.prediction)^2)
+                  /nrow(fit4.output))
+
+fit4.RMSE</code></pre>
+</div>
+<div id="decision-trees-for-classification" class="section level1">
+<h1>5 Decision trees for classification</h1>
+<pre class="r"><code>cu.summary.compl &lt;- cu_summary[complete.cases(cu_summary), ]
+
+data.samples &lt;- sample(1:nrow(cu.summary.compl), nrow(cu.summary.compl)* 0.7, replace = FALSE)
+
+training.data2 &lt;- cu.summary.compl[data.samples, ]
+test.data2 &lt;- cu.summary.compl[-data.samples, ]
+
+fit5 &lt;- rpart(Type~Price + Reliability + Mileage + Country, method = &quot;class&quot;, data = training.data2)
+
+fit5.pruned &lt;- prune(fit5, cp = fit5$cptable[which.min(fit5$cptable[,&quot;xerror&quot;]), &quot;CP&quot;])
+
+fit5.prediction &lt;- predict(fit5.pruned, test.data2, type = &quot;class&quot;)
+
+table(fit5.prediction, test.data2$Type)</code></pre>
+</div>
+<div id="conditional-inference-trees" class="section level1">
+<h1>6 Conditional inference trees</h1>
+<p>Conditional inference trees estimate a regression relationship by binary recursive partitioning in a conditional inference framework.</p>
+<pre class="r"><code>cu.summary.new &lt;- cu_summary[ ,2:6]</code></pre>
+<p>Here’s an example of a conditional inference tree regression</p>
+<pre class="r"><code>fit6 &lt;- ctree(Mileage ~ Price + factor(Reliability) + factor(Type) + factor(Country), data = na.omit(cu.summary.new))
+plot(fit6)</code></pre>
+<p><img src="/post/2018-12-27-machine-learning-decision-trees_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>And here an other example of a conditional inference tree classification</p>
+<pre class="r"><code>fit7 &lt;- ctree(factor(Type) ~ Price + factor(Reliability) + Mileage + factor(Country), data = na.omit(cu.summary.new))
+plot(fit7)</code></pre>
+<p><img src="/post/2018-12-27-machine-learning-decision-trees_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>7 Conclusion</h1>
+<p>Advantages and disadvantages of decision trees:</p>
+<p>Due to their structure, decision trees are easy to understand, interpret and visualize. In doing so, a variable check or feature selection is implicitly performed. Both numerical and non-numerical data can be processed simultaneously relatively little effort on the part of the user for the data preparation requires.</p>
+<p>On the other hand, too complex trees can be created that do not generalize the data well. This is called over-fitting. Small variations in the data can also make the trees unstable, creating a tree that does not solve the problem. This phenomenon is called variance.</p>
+</div>

@@ -6,10 +6,19 @@
     <description>Recent content in R Markdown on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 25 Dec 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Dec 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Machine Learning - Decision Trees</title>
+      <link>/2018/12/27/machine-learning-decision-trees/</link>
+      <pubDate>Thu, 27 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/12/27/machine-learning-decision-trees/</guid>
+      <description>library(tidyverse)library(rpart)library(caret)library(randomForest)library(party)cu_summary &amp;lt;- read_csv(&amp;quot;cu.summary.csv&amp;quot;)Table of Content1 Introduction2 A simple tree model2.1 Tree entropy and information gain2.2 Visualize a simple tree model3 Prune tree4 Decision trees for regression5 Decision trees for classification6 Conditional inference trees7 Conclusion1 IntroductionDecision trees are ordered, directed trees that serve to represent decision rules. The graphical representation as a tree diagram illustrates hierarchically successive decisions.</description>
+    </item>
     
     <item>
       <title>Machine Learning - Regression Regularization</title>
