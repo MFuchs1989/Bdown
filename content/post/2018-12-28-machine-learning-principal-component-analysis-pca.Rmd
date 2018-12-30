@@ -1,0 +1,119 @@
+---
+title: Machine Learning - Principal Component Analysis (PCA)
+author: Michael Fuchs
+date: '2018-12-28'
+slug: machine-learning-principal-component-analysis-pca
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+```{r results='hide', message=FALSE, warning=FALSE}
+mtcars <- read_csv("mtcars.csv")
+```
+
+
+#Table of Content
+
++ 1 Introduction
++ 2 The way PCA works
++ 3 Conclusion
+
+
+
+#1 Introduction
+
+Principal Component Analysis (PCA) is used when you want to structure or simplify a large data set. An attempt is made to reduce the total number of measured variables while still accounting for the largest possible portion of the variance of all variables. The PCA works purely exploratory and searches in the data for a linear pattern that best describes the data set.
+
+
+One of the biggest problems with multivariate data is that they can not be displayed two-dimensionally, so they can not be displayed on the computer screen. The more variables a record has, the more complicated the situation becomes. This leads to the fact that one no longer recognizes existing relationships. The central idea of the principal component analysis is now to project the data onto a two-dimensional plane in such a way that the required relationships become visible. The visible structure of the projected data depends on the direction of the projection.
+
+For this post the dataset *mtcars* from the statistic platform ["Kaggle"](https://www.kaggle.com) was used. A copy of the record is available at  <https://drive.google.com/open?id=1u7cDZoOUg9ah8ZG3aiUWmUgts8RTL4iR>.
+
+
+#2 The way PCA works
+
+PCA's usefulness for dimensionality reduction of data can be helpful for visualizing complex data patterns. The example below is intended to illustrate this.
+
+
+```{r}
+head(mtcars)
+```
+
+Let's have a look which features of the mtcars dataset might be correlated with one another. 
+
+```{r}
+pairs(mtcars[, 2:8], lower.panel = NULL)
+```
+
+At first glance of the data, it looks like there are some well-correlated values, with many of them corresponding to the vehicle's weight variable (wt). 
+
+Now we are trying to reduce some of these variables'dependencies and generate a more simplified picture of the data. 
+
+```{r}
+PCA <- princomp(mtcars[, 2:8], scores = TRUE, cor = TRUE)
+summary(PCA)
+```
+
+This table shows how important each of these principal components are to the overall dataset. We can also plot this.
+
+```{r}
+plot(PCA)
+```
+
+We can see Comp.1 + Comp.2 explains upward of 89% of the dataset with just two features instead of 7 that we started with. But what does Comp.1 and so on mean to us?
+
+```{r}
+PCA$loadings[, 1:5]
+```
+
+Since only Comp.1 and 2 are relevant for the further analysis, the following step focuses only on these two components.
+
+Now we are looking for the dominant positive or negative value within these components:
+
++ Comp.1 is correlated to *mpg* and *cyl*
++ Comp.2 is correlated to *qsec*, *gear* and *am*
+
+
+If you wanted to see this kind of information in a more graphical sence, you can plot the scores of the principal components as shown in the following graphic.
+
+```{r}
+scores.df <- data.frame(PCA$scores)
+scores.df$No <- row.names(scores.df)
+mtcars$No <- row.names(mtcars)
+scores.df.new <- merge(scores.df, mtcars, by = "No")
+```
+
+
+```{r}
+plot(x = scores.df.new$Comp.1, y = scores.df.new$Comp.2, xlab = "Comp1 (mpg, cyl)", ylab = "Comp2 (qsec, gear, am)")
+text(scores.df.new$Comp.1, scores.df.new$Comp.2, labels = scores.df.new$X1, cex = 0.7, pos = 3)
+```
+
+
+#3 Conclusion
+
+
+Principal component analysis (PCA) and factor analysis factor analysis are similar because they both simplify the structure of a set of variables. However, there are some important differences between these two methods:
+
++ Principal component analysis starts with finding a low-dimensional linear subspace that best describes the data. Since the subspace is linear, it can be described by a linear model. It is therefore a descriptive explorative process. The factor analysis uses a linear model and tries to approximate the observed covariance or correlation matrix. It is therefore a model-based process.
+
++ In principal component analysis, there is a clear ranking of the vectors, given by the descending eigenvalues of the covariance or correlation matrix. In the factor analysis, the dimension of the factor space is first defined and all vectors stand side by side with equal rights.
+
++ In principal component analysis, a p-dimensional random vector x is represented by a linear combination of random vectors chosen so that the first addend explains as much of the variance of x as possible, the second addend as much as possible of the remaining variance, and so on. The principal component analysis is intended to explain the total variance of the variables as completely as possible. The aim of the factor analysis is to determine the covariances or correlations between the variables.
+
+
+Principal component analysis is used to reduce the data to a smaller number of components. Factor analysis is used to determine the constructs underlying the data.
+
+
+
+

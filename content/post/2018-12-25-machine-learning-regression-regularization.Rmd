@@ -34,7 +34,7 @@ mtcars <- read_csv("mtcars.csv")
 
 Regularization is the tuning of the preferred complexity of the statistical model, so that the predictive ability of the model is improved. If you do not use regularization, the model can become too complex and over-fit, or too simple and under-fit the data.
 
-For this post the dataset *mtcars* from the statistic platform *Kaggle* <https://www.kaggle.com> was used. A copy of the record is available at  <https://drive.google.com/open?id=1u7cDZoOUg9ah8ZG3aiUWmUgts8RTL4iR>.
+For this post the dataset *mtcars* from the statistic platform ["Kaggle"](https://www.kaggle.com) was used. A copy of the record is available at  <https://drive.google.com/open?id=1u7cDZoOUg9ah8ZG3aiUWmUgts8RTL4iR>.
 
 
 #2 The regularization of a regression
