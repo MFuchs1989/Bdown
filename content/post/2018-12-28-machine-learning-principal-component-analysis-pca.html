@@ -18,7 +18,7 @@ tags:
 <ul>
 <li>1 Introduction</li>
 <li>2 The way PCA works</li>
-<li>3 Conclusion</li>
+<li>3 Closing word</li>
 </ul>
 </div>
 <div id="introduction" class="section level1">
@@ -84,8 +84,8 @@ scores.df.new &lt;- merge(scores.df, mtcars, by = &quot;No&quot;)</code></pre>
 text(scores.df.new$Comp.1, scores.df.new$Comp.2, labels = scores.df.new$X1, cex = 0.7, pos = 3)</code></pre>
 <p><img src="/post/2018-12-28-machine-learning-principal-component-analysis-pca_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
-<div id="conclusion" class="section level1">
-<h1>3 Conclusion</h1>
+<div id="closing-word" class="section level1">
+<h1>3 Closing word</h1>
 <p>Principal component analysis (PCA) and factor analysis factor analysis are similar because they both simplify the structure of a set of variables. However, there are some important differences between these two methods:</p>
 <ul>
 <li><p>Principal component analysis starts with finding a low-dimensional linear subspace that best describes the data. Since the subspace is linear, it can be described by a linear model. It is therefore a descriptive explorative process. The factor analysis uses a linear model and tries to approximate the observed covariance or correlation matrix. It is therefore a model-based process.</p></li>

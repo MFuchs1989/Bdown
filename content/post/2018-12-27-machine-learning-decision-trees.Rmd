@@ -36,7 +36,7 @@ cu_summary <- read_csv("cu.summary.csv")
 + 4 Decision trees for regression
 + 5 Decision trees for classification
 + 6 Conditional inference trees
-+ 7 Conclusion
++ 7 Closing word
 
 #1 Introduction
 
@@ -216,7 +216,7 @@ fit7 <- ctree(factor(Type) ~ Price + factor(Reliability) + Mileage + factor(Coun
 plot(fit7)
 ```
 
-#7 Conclusion
+#7 Closing word
 
 Advantages and disadvantages of decision trees:
 

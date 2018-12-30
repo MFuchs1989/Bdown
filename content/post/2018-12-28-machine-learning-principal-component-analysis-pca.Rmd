@@ -26,7 +26,7 @@ mtcars <- read_csv("mtcars.csv")
 
 + 1 Introduction
 + 2 The way PCA works
-+ 3 Conclusion
++ 3 Closing word
 
 
 
@@ -100,7 +100,7 @@ text(scores.df.new$Comp.1, scores.df.new$Comp.2, labels = scores.df.new$X1, cex 
 ```
 
 
-#3 Conclusion
+#3 Closing word
 
 
 Principal component analysis (PCA) and factor analysis factor analysis are similar because they both simplify the structure of a set of variables. However, there are some important differences between these two methods:

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Machine Learning - Linear Discriminant Analysis (LDA) - Michael Fuchs</title>
+<meta property="og:title" content="Machine Learning - Linear Discriminant Analysis (LDA) - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+    <li><a href="https://twitter.com/Stat_Michael">Twitter</a></li>
+    
+    <li><a href="https://www.xing.com/profile/Michael_Fuchs426/cv?sc_o=mxb_p">XING</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">4 min read</span>
+    
+
+    <h1 class="article-title">Machine Learning - Linear Discriminant Analysis (LDA)</h1>
+
+    
+    <span class="article-date">2018/12/29</span>
+    
+
+    <div class="article-content">
+      <pre class="r"><code>library(tidyverse)
+library(MASS)
+library(gridExtra)</code></pre>
+<pre class="r"><code>iris &lt;- read_csv(&quot;Iris_Data.csv&quot;)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 The way LDA works</li>
+<li>3 PCA vs. LDA</li>
+<li>4 Closing word</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>Linear discriminant analysis (LDA) is a type of linear combination, a mathematical process using various data items and applying functions to that set to separately analyze multiple classes of objects or items. LDA is most commonly used as dimensionality reduction technique in the pre-processing step for pattern-classification and machine learning applications. The main target is to project a dataset onto a lower-dimensional space with good class-separability in order avoid overfitting and also reduce computational costs.</p>
+<p>For this post the dataset <em>Iris_Data</em> from the statistic platform <a href="https://www.kaggle.com">“Kaggle”</a> was used. A copy of the record is available at <a href="https://drive.google.com/open?id=12zICkGCSYfsptsgpdSJeWRvRwULq6ftc" class="uri">https://drive.google.com/open?id=12zICkGCSYfsptsgpdSJeWRvRwULq6ftc</a>.</p>
+</div>
+<div id="the-way-lda-works" class="section level1">
+<h1>2 The way LDA works</h1>
+<p>The general LDA approach is very similar to a Principal Component Analysis, but in addition to finding the component axes that maximize the variance of our data (PCA), we are additionally interested in the axes that maximize the separation between multiple classes (LDA).</p>
+<p>As a first step we need to establish what the prior distribution of data is.</p>
+<pre class="r"><code>table(iris$species)</code></pre>
+<pre><code>## 
+##     Iris-setosa Iris-versicolor  Iris-virginica 
+##              50              50              50</code></pre>
+<p>Here there are three classes, all equally distributed. The prior distirbution in this case would be 1/3 for each class.</p>
+<pre class="r"><code>iris.LDA &lt;- lda(species ~ ., data = iris, prior = c(1/3, 1/3, 1/3))
+iris.LDA</code></pre>
+<pre><code>## Call:
+## lda(species ~ ., data = iris, prior = c(1/3, 1/3, 1/3))
+## 
+## Prior probabilities of groups:
+##     Iris-setosa Iris-versicolor  Iris-virginica 
+##       0.3333333       0.3333333       0.3333333 
+## 
+## Group means:
+##                 sepal_length sepal_width petal_length petal_width
+## Iris-setosa            5.006       3.418        1.464       0.244
+## Iris-versicolor        5.936       2.770        4.260       1.326
+## Iris-virginica         6.588       2.974        5.552       2.026
+## 
+## Coefficients of linear discriminants:
+##                     LD1         LD2
+## sepal_length  0.8192685  0.03285975
+## sepal_width   1.5478732  2.15471106
+## petal_length -2.1849406 -0.93024679
+## petal_width  -2.8538500  2.80600460
+## 
+## Proportion of trace:
+##    LD1    LD2 
+## 0.9915 0.0085</code></pre>
+<p>The output here shows that the first value (LD1) describes 99% of the variance in the data and the other one (LD2) 0.8%.Another way to calculate this would be:</p>
+<pre class="r"><code>iris.LDA$svd^2/sum(iris.LDA$svd^2)</code></pre>
+<pre><code>## [1] 0.991472476 0.008527524</code></pre>
+<p>Here you can see how the two linear discriminants are related to each of the features in the data:</p>
+<pre class="r"><code>iris.LDA$scaling</code></pre>
+<pre><code>##                     LD1         LD2
+## sepal_length  0.8192685  0.03285975
+## sepal_width   1.5478732  2.15471106
+## petal_length -2.1849406 -0.93024679
+## petal_width  -2.8538500  2.80600460</code></pre>
+<p>Now we’ll have a look how well the LDA model compares with the actual answers for the iris species data:</p>
+<pre class="r"><code>iris.LDA.prediction &lt;- predict(iris.LDA, newdata = iris)
+table(iris.LDA.prediction$class, iris$species)</code></pre>
+<pre><code>##                  
+##                   Iris-setosa Iris-versicolor Iris-virginica
+##   Iris-setosa              50               0              0
+##   Iris-versicolor           0              48              1
+##   Iris-virginica            0               2             49</code></pre>
+</div>
+<div id="pca-vs.lda" class="section level1">
+<h1>3 PCA vs. LDA</h1>
+<p>The last step is to compare the two models (PCA and LDA). As a note: PCA is an unsupervised learner and LDA a supervised one. Supervised models will tend to be better at separating data than unsupervised ones. Let’s see which model has better geared.</p>
+<pre class="r"><code>iris.PCA &lt;- prcomp(iris[, -5], center = T, scale. = T)
+
+combined.methods &lt;- data.frame(species = iris[, &quot;species&quot;], pca = iris.PCA$x, lda = iris.LDA.prediction$x)
+
+LDA.plot &lt;- ggplot(combined.methods) + 
+  geom_point(aes(lda.LD1, lda.LD2, shape = species, color = species)) + 
+  scale_shape_manual(values = c(0, 1, 2)) +
+  ggtitle(&quot;Classification with LDA&quot;)
+
+
+PCA.plot &lt;- ggplot(combined.methods) + 
+  geom_point(aes(pca.PC1, pca.PC2, shape = species, color = species)) + 
+  scale_shape_manual(values = c(0, 1, 2)) +
+  ggtitle(&quot;Classification with PCA&quot;)
+
+grid.arrange(PCA.plot, LDA.plot)</code></pre>
+<p><img src="/post/2018-12-29-machine-learning-linear-discriminant-analysis-lda_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>In both models the setosa data is well separated from the rest, but it looks like LDA performs better at keeping the overlap between versicolor and virginica to a minimum.</p>
+</div>
+<div id="closing-word" class="section level1">
+<h1>4 Closing word</h1>
+<p>Principal Component Analysis vs. Linear Discriminant Analysis:</p>
+<p>Both Linear Discriminant Analysis and Principal Component Analysis are linear transformation techniques that are commonly used for dimensionality reduction. PCA can be described as an unsupervised algorithm, since it ignores class labels and its goal is to find the directions that maximize the variance in a dataset. In contrast to PCA, LDA is supervised and computes the directions that will represent the axes that that maximize the separation between multiple classes. Although it might sound intuitive that LDA is superior to PCA for a multi-class classification task where the class labels are known, this might not always the case. In practice, it is also not uncommon to use both LDA and PCA in combination: E.g., PCA for dimensionality reduction followed by an LDA.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
