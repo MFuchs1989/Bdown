@@ -1,0 +1,60 @@
+---
+title: Machine Learning - k-Means algorithm. An intuition.
+author: Michael Fuchs
+date: '2019-01-02'
+slug: machine-learning-k-means-algorithm-an-intuition
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<pre class="r"><code>library(tidyverse)
+library(mclust)</code></pre>
+<pre class="r"><code>cities15000_csv &lt;- read_csv(&quot;cities15000.csv&quot;)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 k-Means</li>
+<li>3 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>The k-means algorithm is a calculation method that can be used for grouping objects, the so-called cluster analysis. Thanks to the efficient calculation of the cluster centers and the low memory requirements, the algorithm is very well suited for the analysis of large amounts of data, as is usual in the big data environment.</p>
+<p>The k-means algorithm is one of the most commonly used mathematical methods for grouping objects (cluster analysis). The algorithm is able to determine from a set of similar objects with a previously known number of groups the respective centers of the clusters. Because it is a very efficient method that can handle many different data types, and memory requirements are low, the k-Means algorithm is suitable for data analysis in the big data environment.</p>
+<p>For this post the dataset <em>cities15000</em> from the statistic platform <a href="https://www.kaggle.com">“Kaggle”</a> was used. A copy of the record is available at <a href="https://drive.google.com/open?id=1PyXaRTuQ0v9RMa8EKh-dUmG9QHNiuE0Y" class="uri">https://drive.google.com/open?id=1PyXaRTuQ0v9RMa8EKh-dUmG9QHNiuE0Y</a>.</p>
+</div>
+<div id="k-means" class="section level1">
+<h1>2 k-Means</h1>
+<p>The dataset we have contains information (including longitude and latitude) about 23 thousand cities around the world.</p>
+<pre class="r"><code>nrow(cities15000_csv)</code></pre>
+<pre><code>## [1] 23469</code></pre>
+<p>We now want to test the functionality of the k-Means algorithm on the basis of the 5k largest cities.</p>
+<pre class="r"><code>WorldCities &lt;- cities15000_csv %&gt;% arrange(desc(population)) %&gt;%
+                  head(5000) %&gt;% select(longitude, latitude)
+
+glimpse(WorldCities)</code></pre>
+<pre><code>## Observations: 5,000
+## Variables: 2
+## $ longitude &lt;dbl&gt; 121.45806, 28.94966, -58.37723, 72.88261, -99.12766,...
+## $ latitude  &lt;dbl&gt; 31.22222, 41.01384, -34.61315, 19.07283, 19.42847, 3...</code></pre>
+<pre class="r"><code>clust &lt;- WorldCities %&gt;% kmeans(centers = 6) %&gt;%
+          fitted(&quot;classes&quot;) %&gt;% as.character()
+
+WorldCities &lt;- WorldCities %&gt;% mutate(cluster = clust)
+
+WorldCities %&gt;% ggplot(aes(x=longitude, y=latitude)) + 
+                  geom_point(aes(color=cluster), alpha = 0.5) + 
+                  ggtitle(&quot;The world&#39;s 5.000 largest cities, clustered by the 6-means cluster algorithm&quot;) +
+                  xlab(&quot;Longitude&quot;) + ylab(&quot;Latitude&quot;)</code></pre>
+<p><img src="/post/2019-01-02-machine-learning-k-means-algorithm-an-intuition_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>k-Means works pretty well at first glance !</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>3 Conclusion</h1>
+<p>Cluster analysis is a technique that divides a certain number of objects into homogeneous groups. The goal is that the different objects within a group are as similar as possible after the division has been made. The properties of the objects are divided into dimensions. The groups are called clusters. The k-means algorithm applies to multi-dimensional objects and approaches the cluster centers through repetitive recalculations until no significant change occurs.</p>
+</div>
