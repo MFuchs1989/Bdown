@@ -86,15 +86,6 @@ For this post the dataset mtcars from the statistic platform “Kaggle” was us
     </item>
     
     <item>
-      <title>Join functions in R</title>
-      <link>/2018/11/19/join-functions-in-r/</link>
-      <pubDate>Mon, 19 Nov 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/2018/11/19/join-functions-in-r/</guid>
-      <description>library(tidyverse)library(gganimate)library(gifski)library(png)x &amp;lt;- data_frame(id = 1:3,x = paste0(&amp;quot;x&amp;quot;, 1:3))y &amp;lt;- data_frame(id = (1:4)[-3],y = paste0(&amp;quot;y&amp;quot;, (1:4)[-3]))# Functions ----proc_data &amp;lt;- function(x, .id = &amp;quot;x&amp;quot;) {colors &amp;lt;- scales::brewer_pal(type = &amp;quot;qual&amp;quot;, &amp;quot;Set1&amp;quot;)(max(x$id))x %&amp;gt;%mutate(.y = -row_number()) %&amp;gt;%tidyr::gather(&amp;quot;label&amp;quot;, &amp;quot;value&amp;quot;, -.y) %&amp;gt;%mutate(value = as.character(value)) %&amp;gt;%group_by(.y) %&amp;gt;%mutate(.x = 1:n(),.id = .id,color = ifelse(label == &amp;quot;id&amp;quot;, value, max(x$id) + 1),color = colors[as.</description>
-    </item>
-    
-    <item>
       <title> Interactive Web Applications with Shiny. An intuition.</title>
       <link>/2018/10/19/interactive-web-applications-with-shiny-an-intuition/</link>
       <pubDate>Fri, 19 Oct 2018 00:00:00 +0000</pubDate>
