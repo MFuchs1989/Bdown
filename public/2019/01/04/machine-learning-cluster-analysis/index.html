@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Machine Learning - Cluster Analysis - Michael Fuchs</title>
+<meta property="og:title" content="Machine Learning - Cluster Analysis - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+    <li><a href="https://twitter.com/Stat_Michael">Twitter</a></li>
+    
+    <li><a href="https://www.xing.com/profile/Michael_Fuchs426/cv?sc_o=mxb_p">XING</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">12 min read</span>
+    
+
+    <h1 class="article-title">Machine Learning - Cluster Analysis</h1>
+
+    
+    <span class="article-date">2019/01/04</span>
+    
+
+    <div class="article-content">
+      <pre class="r"><code>library(tidyverse)
+library(gridExtra)
+library(cluster)    
+library(factoextra)
+library(mclust)
+library(dbscan)</code></pre>
+<pre class="r"><code>iris &lt;- read_csv(&quot;Iris_Data.csv&quot;)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Preparation</li>
+<li>3 k-Means</li>
+<li>3.1 Choosing k</li>
+<li>4 Hierachical clustering</li>
+<li>5 Model based clustering</li>
+<li>6 Density based clustering</li>
+<li>7 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>The cluster analysis groups examination objects into natural groups (so-called “clusters”). The objects to be examined may be individuals, objects as well as countries or organizations. By applying cluster analytic methods, these objects can be clustered by their properties. Each cluster should be as homogeneous as possible while the clusters should be as different as possible.</p>
+<p>Cluster analytical methods have an exploratory character, since one does not make any inferential statistical conclusions about the population, but rather tries to discover a structure in a data-driven manner. The researchers play an important role in this, since the result is influenced, among other things, by the choice of the clustering algorithm.</p>
+<p>The question of cluster analysis is often shortened as follows: “Can the objects being examined be combined into natural clusters?”</p>
+<p>For this post the dataset <em>Iris_Data</em> from the statistic platform <a href="https://www.kaggle.com">“Kaggle”</a> was used. A copy of the record is available at <a href="https://drive.google.com/open?id=12zICkGCSYfsptsgpdSJeWRvRwULq6ftc" class="uri">https://drive.google.com/open?id=12zICkGCSYfsptsgpdSJeWRvRwULq6ftc</a>.</p>
+</div>
+<div id="preparation" class="section level1">
+<h1>2 Preparation</h1>
+<p>To perform a cluster analysis in R, generally, the data should be prepared as follows:</p>
+<ul>
+<li>Rows are observations (individuals) and columns are variables</li>
+<li>Any missing value in the data must be removed or estimated.</li>
+<li>The data must be standardized (i.e., scaled) to make variables comparable.</li>
+</ul>
+<pre class="r"><code>iris$species &lt;- as.factor(iris$species)
+irisScaled &lt;- scale(iris[, -5])
+sum(is.na(irisScaled))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>In the following, several cluster methods will be presented.</p>
+</div>
+<div id="k-means" class="section level1">
+<h1>3 k-Means</h1>
+<pre class="r"><code>fitK &lt;- kmeans(irisScaled, centers = 3, nstart = 25)
+fitK</code></pre>
+<pre><code>## K-means clustering with 3 clusters of sizes 53, 47, 50
+## 
+## Cluster means:
+##   sepal_length sepal_width petal_length petal_width
+## 1  -0.05005221  -0.8773526    0.3463713   0.2811215
+## 2   1.13217737   0.0962759    0.9929445   1.0137756
+## 3  -1.01119138   0.8394944   -1.3005215  -1.2509379
+## 
+## Clustering vector:
+##   [1] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+##  [36] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 2 2 2 1 1 1 2 1 1 1 1 1 1 1 1 2 1 1 1 1
+##  [71] 2 1 1 1 1 2 2 2 1 1 1 1 1 1 1 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 2 2 2
+## [106] 2 1 2 2 2 2 2 2 1 1 2 2 2 2 1 2 1 2 1 2 2 1 2 2 2 2 2 2 1 1 2 2 2 1 2
+## [141] 2 2 1 2 2 2 1 2 2 1
+## 
+## Within cluster sum of squares by cluster:
+## [1] 44.25778 47.60995 48.15831
+##  (between_SS / total_SS =  76.5 %)
+## 
+## Available components:
+## 
+## [1] &quot;cluster&quot;      &quot;centers&quot;      &quot;totss&quot;        &quot;withinss&quot;    
+## [5] &quot;tot.withinss&quot; &quot;betweenss&quot;    &quot;size&quot;         &quot;iter&quot;        
+## [9] &quot;ifault&quot;</code></pre>
+<pre class="r"><code>plot(iris, col = fitK$cluster)</code></pre>
+<p><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="choosing-k" class="section level1">
+<h1>3.1 Choosing k</h1>
+<p>There are several ways to determine the number of k. One option is to do this <strong>via visualization</strong>.</p>
+<pre class="r"><code>fitK3 &lt;- kmeans(irisScaled, centers = 4, nstart = 25)
+fitK4 &lt;- kmeans(irisScaled, centers = 5, nstart = 25)
+fitK5 &lt;- kmeans(irisScaled, centers = 6, nstart = 25)
+
+# plots to compare
+p1 &lt;- fviz_cluster(fitK, geom = &quot;point&quot;, data = irisScaled) + ggtitle(&quot;k = 3&quot;)
+p2 &lt;- fviz_cluster(fitK3, geom = &quot;point&quot;,  data = irisScaled) + ggtitle(&quot;k = 4&quot;)
+p3 &lt;- fviz_cluster(fitK4, geom = &quot;point&quot;,  data = irisScaled) + ggtitle(&quot;k = 5&quot;)
+p4 &lt;- fviz_cluster(fitK5, geom = &quot;point&quot;,  data = irisScaled) + ggtitle(&quot;k = 6&quot;)
+
+
+grid.arrange(p1, p2, p3, p4, nrow = 2)</code></pre>
+<p><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Another possibility would be to look at the <strong>outputs of different variants for k</strong>. The following example calculates k Means for k: 1 to 5.</p>
+<pre class="r"><code>k &lt;- list()
+for(i in 1:5){
+  k[[i]] &lt;- kmeans(irisScaled, i)
+}
+
+k</code></pre>
+<pre><code>## [[1]]
+## K-means clustering with 1 clusters of sizes 150
+## 
+## Cluster means:
+##    sepal_length  sepal_width  petal_length  petal_width
+## 1 -9.793092e-16 4.455695e-16 -4.988602e-16 1.206442e-16
+## 
+## Clustering vector:
+##   [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [36] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [71] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+## [106] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+## [141] 1 1 1 1 1 1 1 1 1 1
+## 
+## Within cluster sum of squares by cluster:
+## [1] 596
+##  (between_SS / total_SS =   0.0 %)
+## 
+## Available components:
+## 
+## [1] &quot;cluster&quot;      &quot;centers&quot;      &quot;totss&quot;        &quot;withinss&quot;    
+## [5] &quot;tot.withinss&quot; &quot;betweenss&quot;    &quot;size&quot;         &quot;iter&quot;        
+## [9] &quot;ifault&quot;      
+## 
+## [[2]]
+## K-means clustering with 2 clusters of sizes 50, 100
+## 
+## Cluster means:
+##   sepal_length sepal_width petal_length petal_width
+## 1   -1.0111914   0.8394944   -1.3005215  -1.2509379
+## 2    0.5055957  -0.4197472    0.6502607   0.6254689
+## 
+## Clustering vector:
+##   [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [36] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+##  [71] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [106] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
+## [141] 2 2 2 2 2 2 2 2 2 2
+## 
+## Within cluster sum of squares by cluster:
+## [1]  48.15831 174.08215
+##  (between_SS / total_SS =  62.7 %)
+## 
+## Available components:
+## 
+## [1] &quot;cluster&quot;      &quot;centers&quot;      &quot;totss&quot;        &quot;withinss&quot;    
+## [5] &quot;tot.withinss&quot; &quot;betweenss&quot;    &quot;size&quot;         &quot;iter&quot;        
+## [9] &quot;ifault&quot;      
+## 
+## [[3]]
+## K-means clustering with 3 clusters of sizes 50, 47, 53
+## 
+## Cluster means:
+##   sepal_length sepal_width petal_length petal_width
+## 1  -1.01119138   0.8394944   -1.3005215  -1.2509379
+## 2   1.13217737   0.0962759    0.9929445   1.0137756
+## 3  -0.05005221  -0.8773526    0.3463713   0.2811215
+## 
+## Clustering vector:
+##   [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+##  [36] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 3 3 3 2 3 3 3 3 3 3 3 3 2 3 3 3 3
+##  [71] 2 3 3 3 3 2 2 2 3 3 3 3 3 3 3 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 2 3 2 2 2
+## [106] 2 3 2 2 2 2 2 2 3 3 2 2 2 2 3 2 3 2 3 2 2 3 2 2 2 2 2 2 3 3 2 2 2 3 2
+## [141] 2 2 3 2 2 2 3 2 2 3
+## 
+## Within cluster sum of squares by cluster:
+## [1] 48.15831 47.60995 44.25778
+##  (between_SS / total_SS =  76.5 %)
+## 
+## Available components:
+## 
+## [1] &quot;cluster&quot;      &quot;centers&quot;      &quot;totss&quot;        &quot;withinss&quot;    
+## [5] &quot;tot.withinss&quot; &quot;betweenss&quot;    &quot;size&quot;         &quot;iter&quot;        
+## [9] &quot;ifault&quot;      
+## 
+## [[4]]
+## K-means clustering with 4 clusters of sizes 22, 29, 49, 50
+## 
+## Cluster means:
+##   sepal_length sepal_width petal_length petal_width
+## 1   -0.4201099  -1.4244568   0.03888306  -0.0518577
+## 2    1.3926646   0.2412870   1.15694270   1.2126820
+## 3   -0.9987207   0.8921158  -1.29862458  -1.2524354
+## 4    0.3558492  -0.3874590   0.58451677   0.5468485
+## 
+## Clustering vector:
+##   [1] 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+##  [36] 3 3 3 3 3 3 1 3 3 3 3 3 3 3 3 2 4 2 1 4 4 4 1 4 1 1 4 1 4 4 4 4 1 1 1
+##  [71] 4 4 4 4 4 4 4 4 4 1 1 1 1 4 4 4 4 1 4 1 1 4 1 1 1 4 4 4 1 4 2 4 2 4 2
+## [106] 2 1 2 4 2 2 4 2 4 4 2 4 2 2 1 2 4 2 4 2 2 4 4 4 2 2 2 4 4 4 2 2 4 4 2
+## [141] 2 2 4 2 2 2 4 4 2 4
+## 
+## Within cluster sum of squares by cluster:
+## [1] 17.08819 26.99662 40.97891 29.68156
+##  (between_SS / total_SS =  80.7 %)
+## 
+## Available components:
+## 
+## [1] &quot;cluster&quot;      &quot;centers&quot;      &quot;totss&quot;        &quot;withinss&quot;    
+## [5] &quot;tot.withinss&quot; &quot;betweenss&quot;    &quot;size&quot;         &quot;iter&quot;        
+## [9] &quot;ifault&quot;      
+## 
+## [[5]]
+## K-means clustering with 5 clusters of sizes 26, 24, 29, 23, 48
+## 
+## Cluster means:
+##   sepal_length sepal_width petal_length petal_width
+## 1   -1.2971217   0.2036643   -1.3040964 -1.29347351
+## 2   -0.7014335   1.5283103   -1.2966486 -1.20485757
+## 3    1.3926646   0.2412870    1.1569427  1.21268196
+## 4   -0.3516137  -1.3278291    0.1022793  0.01314138
+## 5    0.3804044  -0.3839995    0.6067148  0.56410134
+## 
+## Clustering vector:
+##   [1] 2 1 1 1 2 2 1 1 1 1 2 1 1 1 2 2 2 2 2 2 2 2 2 1 1 1 1 2 2 1 1 2 2 2 1
+##  [36] 1 2 1 1 1 2 1 1 2 2 1 2 1 2 1 3 5 3 4 5 5 5 4 5 4 4 5 4 5 4 5 5 4 4 4
+##  [71] 5 5 5 5 5 5 5 5 5 4 4 4 4 5 5 5 5 4 5 4 4 5 4 4 4 5 5 5 4 4 3 5 3 5 3
+## [106] 3 4 3 5 3 3 5 3 5 5 3 5 3 3 4 3 5 3 5 3 3 5 5 5 3 3 3 5 5 5 3 3 5 5 3
+## [141] 3 3 5 3 3 3 5 5 3 5
+## 
+## Within cluster sum of squares by cluster:
+## [1]  9.803125 11.929538 26.996617 13.745359 27.921119
+##  (between_SS / total_SS =  84.8 %)
+## 
+## Available components:
+## 
+## [1] &quot;cluster&quot;      &quot;centers&quot;      &quot;totss&quot;        &quot;withinss&quot;    
+## [5] &quot;tot.withinss&quot; &quot;betweenss&quot;    &quot;size&quot;         &quot;iter&quot;        
+## [9] &quot;ifault&quot;</code></pre>
+<p>Another option is the <strong>“elbow” method</strong>.</p>
+<pre class="r"><code>betweenss_totss &lt;- list()
+for(i in 1:5){
+  betweenss_totss[[i]] &lt;- k[[i]]$betweenss/k[[i]]$totss
+}
+
+plot(1:5, betweenss_totss, type = &quot;b&quot;, ylab = &quot;Between SS / Total SS&quot;, xlab = &quot;Cluster (k)&quot;)</code></pre>
+<p><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><strong>Average Silhouette Method</strong></p>
+<pre class="r"><code>fviz_nbclust(irisScaled, kmeans, method = &quot;silhouette&quot;)</code></pre>
+<p><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><strong>Gap Statistic Method</strong></p>
+<pre class="r"><code>set.seed(123)
+gap_stat &lt;- clusGap(irisScaled, FUN = kmeans, nstart = 25,
+                    K.max = 10, B = 50)</code></pre>
+<pre class="r"><code>fviz_gap_stat(gap_stat)</code></pre>
+<p><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>It can be seen that the results for k fall differently. From that I advise always different methods to test.</p>
+<p>Here we can see the final result with k=3.</p>
+<pre class="r"><code>fviz_cluster(fitK, data = irisScaled)</code></pre>
+<p><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+<div id="transfer-the-found-clusters" class="section level1">
+<h1>3.2 Transfer the found clusters</h1>
+<p>The corresponding assignment of the found clusters should now be transferred to the original data record.</p>
+<pre class="r"><code>out &lt;- cbind(iris, clusterNum = fitK$cluster)
+head(out)</code></pre>
+<pre><code>##   sepal_length sepal_width petal_length petal_width     species clusterNum
+## 1          5.1         3.5          1.4         0.2 Iris-setosa          3
+## 2          4.9         3.0          1.4         0.2 Iris-setosa          3
+## 3          4.7         3.2          1.3         0.2 Iris-setosa          3
+## 4          4.6         3.1          1.5         0.2 Iris-setosa          3
+## 5          5.0         3.6          1.4         0.2 Iris-setosa          3
+## 6          5.4         3.9          1.7         0.4 Iris-setosa          3</code></pre>
+</div>
+<div id="hierachical-clustering" class="section level1">
+<h1>4 Hierachical clustering</h1>
+<p>Hierarchical clustering involves creating clusters that have a predetermined ordering from top to bottom.</p>
+<pre class="r"><code>d &lt;- dist(irisScaled)
+
+fitH &lt;- hclust(d, &quot;ward.D&quot;)
+plot(fitH)</code></pre>
+<p><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>clusters &lt;- cutree(fitH, 3)
+plot(iris, col = clusters)</code></pre>
+<p><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+<div id="model-based-clustering" class="section level1">
+<h1>5 Model based clustering</h1>
+<p>The traditional clustering methods, such as hierarchical clustering and k-means clustering, are heuristic and are not based on formal models. Furthermore, k-means algorithm is commonly randomnly initialized, so different runs of k-means will often yield different results. Additionally, k-means requires the user to specify the the optimal number of clusters.</p>
+<p>An alternative is model-based clustering, which consider the data as coming from a distribution that is mixture of two or more clusters. Unlike k-means, the model-based clustering uses a soft assignment, where each data point has a probability of belonging to each cluster.</p>
+<pre class="r"><code>fitM &lt;- Mclust(irisScaled)
+fitM
+
+plot(fitM)</code></pre>
+<p><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-16-1.png" width="672" /><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-16-2.png" width="672" /><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-16-3.png" width="672" /><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-16-4.png" width="672" /></p>
+</div>
+<div id="density-based-clustering" class="section level1">
+<h1>6 Density based clustering</h1>
+<p>The Density-Based Clustering tool works by detecting areas where points are concentrated and separated by empty and low-density areas. Points that are not part of a cluster are marked as noise. This tool uses unsupervised machine learning clustering algorithms that automatically detect patterns based on purely spatial locations and the distance to a specified number of neighbors.</p>
+<pre class="r"><code>kNNdistplot(irisScaled, k = 3)
+abline(h = 0.7, col = &quot;red&quot;, lty = 2)</code></pre>
+<p><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>fitD &lt;- dbscan(irisScaled, eps = 0.7, minPts = 5)
+fitD</code></pre>
+<pre><code>## DBSCAN clustering for 150 objects.
+## Parameters: eps = 0.7, minPts = 5
+## The clustering contains 2 cluster(s) and 8 noise points.
+## 
+##  0  1  2 
+##  8 48 94 
+## 
+## Available fields: cluster, eps, minPts</code></pre>
+<pre class="r"><code>plot(iris, col = fitD$cluster)</code></pre>
+<p><img src="/post/2019-01-04-machine-learning-cluster-analysis_files/figure-html/unnamed-chunk-17-2.png" width="672" /></p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>7 Conclusion</h1>
+<p>In this post several types of clustering methods were shown. As the last example shows, not every algorithm is suitable for every record. From this point of view, you should always try several options in order to finally choose the best algorithm for your data.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

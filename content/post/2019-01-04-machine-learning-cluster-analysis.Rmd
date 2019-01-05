@@ -1,0 +1,229 @@
+---
+title: Machine Learning - Cluster Analysis
+author: Michael Fuchs
+date: '2019-01-04'
+slug: machine-learning-cluster-analysis
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(gridExtra)
+library(cluster)    
+library(factoextra)
+library(mclust)
+library(dbscan)
+```
+
+```{r results='hide', message=FALSE, warning=FALSE}
+iris <- read_csv("Iris_Data.csv")
+```
+
+
+#Table of Content
+
++ 1 Introduction
++ 2 Preparation
++ 3 k-Means
++ 3.1 Choosing k
++ 4 Hierachical clustering
++ 5 Model based clustering
++ 6 Density based clustering
++ 7 Conclusion
+
+
+#1 Introduction
+
+The cluster analysis groups examination objects into natural groups (so-called "clusters"). The objects to be examined may be individuals, objects as well as countries or organizations. By applying cluster analytic methods, these objects can be clustered by their properties. Each cluster should be as homogeneous as possible while the clusters should be as different as possible.
+
+Cluster analytical methods have an exploratory character, since one does not make any inferential statistical conclusions about the population, but rather tries to discover a structure in a data-driven manner. The researchers play an important role in this, since the result is influenced, among other things, by the choice of the clustering algorithm.
+
+The question of cluster analysis is often shortened as follows:
+"Can the objects being examined be combined into natural clusters?"
+
+
+For this post the dataset *Iris_Data* from the statistic platform ["Kaggle"](https://www.kaggle.com) was used. A copy of the record is available at  <https://drive.google.com/open?id=12zICkGCSYfsptsgpdSJeWRvRwULq6ftc>.
+
+
+#2 Preparation
+
+To perform a cluster analysis in R, generally, the data should be prepared as follows:
+
++ Rows are observations (individuals) and columns are variables
++ Any missing value in the data must be removed or estimated.
++ The data must be standardized (i.e., scaled) to make variables comparable. 
+
+```{r}
+iris$species <- as.factor(iris$species)
+irisScaled <- scale(iris[, -5])
+sum(is.na(irisScaled))
+```
+
+
+In the following, several cluster methods will be presented.
+
+
+#3 k-Means
+
+
+```{r}
+fitK <- kmeans(irisScaled, centers = 3, nstart = 25)
+fitK
+```
+```{r}
+plot(iris, col = fitK$cluster)
+```
+
+
+#3.1 Choosing k
+
+There are several ways to determine the number of k. One option is to do this **via visualization**.
+
+```{r}
+fitK3 <- kmeans(irisScaled, centers = 4, nstart = 25)
+fitK4 <- kmeans(irisScaled, centers = 5, nstart = 25)
+fitK5 <- kmeans(irisScaled, centers = 6, nstart = 25)
+
+# plots to compare
+p1 <- fviz_cluster(fitK, geom = "point", data = irisScaled) + ggtitle("k = 3")
+p2 <- fviz_cluster(fitK3, geom = "point",  data = irisScaled) + ggtitle("k = 4")
+p3 <- fviz_cluster(fitK4, geom = "point",  data = irisScaled) + ggtitle("k = 5")
+p4 <- fviz_cluster(fitK5, geom = "point",  data = irisScaled) + ggtitle("k = 6")
+
+
+grid.arrange(p1, p2, p3, p4, nrow = 2)
+```
+
+
+Another possibility would be to look at the **outputs of different variants for k**. 
+The following example calculates k Means for k: 1 to 5.
+
+```{r}
+k <- list()
+for(i in 1:5){
+  k[[i]] <- kmeans(irisScaled, i)
+}
+
+k
+```
+
+
+
+Another option is the **"elbow" method**.
+
+```{r}
+betweenss_totss <- list()
+for(i in 1:5){
+  betweenss_totss[[i]] <- k[[i]]$betweenss/k[[i]]$totss
+}
+
+plot(1:5, betweenss_totss, type = "b", ylab = "Between SS / Total SS", xlab = "Cluster (k)")
+```
+
+**Average Silhouette Method**
+
+
+```{r}
+fviz_nbclust(irisScaled, kmeans, method = "silhouette")
+```
+
+
+**Gap Statistic Method**
+
+```{r}
+set.seed(123)
+gap_stat <- clusGap(irisScaled, FUN = kmeans, nstart = 25,
+                    K.max = 10, B = 50)
+```
+
+
+
+```{r}
+fviz_gap_stat(gap_stat)
+```
+
+
+It can be seen that the results for k fall differently. From that I advise always different methods to test.
+
+Here we can see the final result with k=3.
+
+```{r}
+fviz_cluster(fitK, data = irisScaled)
+```
+
+
+#3.2 Transfer the found clusters
+
+
+The corresponding assignment of the found clusters should now be transferred to the original data record.
+
+```{r}
+out <- cbind(iris, clusterNum = fitK$cluster)
+head(out)
+```
+
+#4 Hierachical clustering
+
+Hierarchical clustering involves creating clusters that have a predetermined ordering from top to bottom.
+
+```{r}
+d <- dist(irisScaled)
+
+fitH <- hclust(d, "ward.D")
+plot(fitH)
+```
+
+```{r}
+clusters <- cutree(fitH, 3)
+plot(iris, col = clusters)
+```
+
+
+
+#5 Model based clustering
+
+The traditional clustering methods, such as hierarchical clustering and k-means clustering, are heuristic and are not based on formal models. Furthermore, k-means algorithm is commonly randomnly initialized, so different runs of k-means will often yield different results. Additionally, k-means requires the user to specify the the optimal number of clusters.
+
+An alternative is model-based clustering, which consider the data as coming from a distribution that is mixture of two or more clusters. Unlike k-means, the model-based clustering uses a soft assignment, where each data point has a probability of belonging to each cluster.
+
+```{r, results='hide'}
+fitM <- Mclust(irisScaled)
+fitM
+
+plot(fitM)
+```
+
+
+
+#6 Density based clustering
+
+
+The Density-Based Clustering tool works by detecting areas where points are concentrated and separated by empty and low-density areas. Points that are not part of a cluster are marked as noise. This tool uses unsupervised machine learning clustering algorithms that automatically detect patterns based on purely spatial locations and the distance to a specified number of neighbors.
+
+```{r}
+kNNdistplot(irisScaled, k = 3)
+abline(h = 0.7, col = "red", lty = 2)
+
+fitD <- dbscan(irisScaled, eps = 0.7, minPts = 5)
+fitD
+
+plot(iris, col = fitD$cluster)
+```
+
+
+
+#7 Conclusion
+
+
+In this post several types of clustering methods were shown. As the last example shows, not every algorithm is suitable for every record. From this point of view, you should always try several options in order to finally choose the best algorithm for your data.
+
+
+
