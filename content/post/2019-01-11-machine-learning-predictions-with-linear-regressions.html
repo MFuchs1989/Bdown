@@ -1,0 +1,709 @@
+---
+title: Machine Learning - Predictions with linear regressions
+author: Michael Fuchs
+date: '2019-01-11'
+slug: machine-learning-predictions-with-linear-regressions
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+
+
+<pre class="r"><code>library(tidyverse)
+library(caret)
+library(car)
+library(glmnet)</code></pre>
+<pre class="r"><code>machine &lt;- read_csv(&quot;machine.csv&quot;)
+cars &lt;- read_csv(&quot;cars.csv&quot;)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Presentation of the data records used</li>
+<li>3 Dividing the data into a training part and a test part</li>
+<li>4 Removing problematic features</li>
+<li>4.1 Machine dataset</li>
+<li>4.2 Cars dataset</li>
+<li>5 Assessing linear regression models</li>
+<li>6 How to check some summary outputs individually</li>
+<li>6.1 Residual analysis</li>
+<li>6.2 Significance tests for linear regression</li>
+<li>6.3 Residual standard error (RSE)</li>
+<li>6.4 R<sup>2</sup></li>
+<li>7 Test set performance with the MSE</li>
+<li>8 Problems with linear regression</li>
+<li>8.1 Multicollinearity</li>
+<li>8.2 Outliers</li>
+<li>8.2.1 Compare RSE</li>
+<li>8.2.2 Compare MSE</li>
+<li>9 Future selection</li>
+<li>9.1 Forward selection</li>
+<li>9.2 Backward selection</li>
+<li>9.3 Comparing the calculated MSE</li>
+<li>10 Regularization</li>
+<li>11 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>I have already written several general contributions on linear regression models (<a href="https://michael-fuchs.netlify.com/2018/09/21/regression-analysis/">“here”</a> and <a href="https://michael-fuchs.netlify.com/2018/10/02/special-regression-analysis/">“here”</a>). Likewise, I have already taken up the issue of how linear regression models can be trained and tested (<a href="https://michael-fuchs.netlify.com/2018/12/18/machine-learning-training-and-testing-sets-regression-modeling/">“Machine Learning - Training and Testing Sets: Regression Modeling”</a>) and how unimportant variables can be identified (<a href="https://michael-fuchs.netlify.com/2018/12/25/machine-learning-regression-regularization/">“Machine Learning - Regression Regularization”</a>).</p>
+<p>In this publication, the prediction of the dependent variables from two different data networks should be central. In particular, the potential for improvement of the predictive power of the created models shall be considered.</p>
+<p>For this post the dataset <em>machine</em> from the UCI- Machine Learning Repository platform <a href="https://archive.ics.uci.edu/ml/datasets.html">“UCI”</a> was used as well as the dataset <em>cars</em> from the caret-package. A copy of the records is available at <a href="https://drive.google.com/open?id=1tMtpU5xEkijF-GceVEmGwRQCVrhWNrvf" class="uri">https://drive.google.com/open?id=1tMtpU5xEkijF-GceVEmGwRQCVrhWNrvf</a> (machine) and <a href="https://drive.google.com/open?id=1E_NWwWEBBby456SuHt3qxHrsDpTzcUuv" class="uri">https://drive.google.com/open?id=1E_NWwWEBBby456SuHt3qxHrsDpTzcUuv</a> (cars).</p>
+</div>
+<div id="presentation-of-the-data-records-used" class="section level1">
+<h1>2 Presentation of the data records used</h1>
+<p>The first dataframe (machine) contains the characteristics of different CPU models, such as the cycle time and the amount cache memory. PRP will be the dependent variable.The variables that are superfluous for this study are excluded in advance.</p>
+<pre class="r"><code>machine &lt;- machine[, 4:10]
+head(machine, n = 5)</code></pre>
+<pre><code>## # A tibble: 5 x 7
+##    MYCT  MMIN  MMAX  CACH CHMIN CHMAX   PRP
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+## 1   125   256  6000   256    16   128   198
+## 2    29  8000 32000    32     8    32   269
+## 3    29  8000 32000    32     8    32   220
+## 4    29  8000 32000    32     8    32   172
+## 5    29  8000 16000    32     8    16   132</code></pre>
+<p>The second datafame (cars) contains details about different used car components, such as the number of cylinders or the number of miles the car has been driven.</p>
+<pre class="r"><code>cars &lt;- cars[, -1]
+glimpse(cars)</code></pre>
+<pre><code>## Observations: 804
+## Variables: 18
+## $ Price       &lt;dbl&gt; 22661.05, 21725.01, 29142.71, 30731.94, 33358.77, ...
+## $ Mileage     &lt;int&gt; 20105, 13457, 31655, 22479, 17590, 23635, 17381, 2...
+## $ Cylinder    &lt;int&gt; 6, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,...
+## $ Doors       &lt;int&gt; 4, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 4, 4, 4, 4,...
+## $ Cruise      &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ Sound       &lt;int&gt; 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1,...
+## $ Leather     &lt;int&gt; 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1,...
+## $ Buick       &lt;int&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ Cadillac    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ Chevy       &lt;int&gt; 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ Pontiac     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ Saab        &lt;int&gt; 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ Saturn      &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ convertible &lt;int&gt; 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ coupe       &lt;int&gt; 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ hatchback   &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ sedan       &lt;int&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ wagon       &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...</code></pre>
+</div>
+<div id="dividing-the-data-into-a-training-part-and-a-test-part" class="section level1">
+<h1>3 Dividing the data into a training part and a test part</h1>
+<pre class="r"><code>machine_sampling_vector &lt;- createDataPartition(machine$PRP, p = 0.85, list = FALSE)
+machine_train &lt;- machine[machine_sampling_vector,]
+machine_train_labels &lt;- machine$PRP[machine_sampling_vector]
+machine_test &lt;- machine[-machine_sampling_vector,]
+machine_test_labels &lt;- machine$PRP[-machine_sampling_vector]
+machine_train_features &lt;- machine[, 1:6]</code></pre>
+<pre class="r"><code>cars_sampling_vector &lt;- createDataPartition(cars$Price, p = 0.85, list = FALSE)
+cars_train &lt;- cars[cars_sampling_vector,]
+cars_train_labels &lt;- cars$Price[cars_sampling_vector]
+cars_test &lt;- cars[-cars_sampling_vector,]
+cars_test_labels &lt;- cars$Price[-cars_sampling_vector]
+cars_train_features &lt;- cars[,-1]</code></pre>
+</div>
+<div id="removing-problematic-features" class="section level1">
+<h1>4 Removing problematic features</h1>
+<p>Highly correlated variables can influence the prediction of a linear model. From this point of view, it is recommended to overcome this in the first step and to exclude problematic features.</p>
+</div>
+<div id="machine-dataset" class="section level1">
+<h1>4.1 Machine dataset</h1>
+<pre class="r"><code>set.seed(4352345)
+
+machine_correlations &lt;- cor(machine_train_features)
+findCorrelation(machine_correlations)</code></pre>
+<pre><code>## integer(0)</code></pre>
+<p>As we can see, there is no correlation above 0.9 (by default). Let’s check correlations of 0.75 by this.</p>
+<pre class="r"><code>findCorrelation(machine_correlations, cutoff = 0.75)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>cor(machine_train$MMIN, machine_train$MMAX)</code></pre>
+<pre><code>## [1] 0.7325856</code></pre>
+<p>Ok we have three of them but 0.75 should not be problematic.</p>
+<pre class="r"><code>findLinearCombos(machine_correlations)</code></pre>
+<pre><code>## $linearCombos
+## list()
+## 
+## $remove
+## NULL</code></pre>
+</div>
+<div id="cars-dataset" class="section level1">
+<h1>4.2 Cars dataset</h1>
+<p>Let’s have a look at the cars dataset.</p>
+<pre class="r"><code>set.seed(232455)
+cars_cor &lt;- cor(cars_train_features)
+findCorrelation(cars_cor)</code></pre>
+<pre><code>## integer(0)</code></pre>
+<pre class="r"><code>findCorrelation(cars_cor, cutoff = 0.75)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>Again three correlations between 0.75 and 0.9 (by default). One example of these three are the correlation betwenn the variables <em>Doors</em> and <em>Coupe</em>.</p>
+<pre class="r"><code>cor(cars$Doors,cars$coupe)</code></pre>
+<pre><code>## [1] -0.8254435</code></pre>
+<pre class="r"><code>table(cars$coupe,cars$Doors)</code></pre>
+<pre><code>##    
+##       2   4
+##   0  50 614
+##   1 140   0</code></pre>
+<p>Another usefull function is the <em>findLinearCombos</em> function to detect exact linear combinations of other features.</p>
+<pre class="r"><code>findLinearCombos(cars)</code></pre>
+<pre><code>## $linearCombos
+## $linearCombos[[1]]
+## [1] 15  4  8  9 10 11 12 13 14
+## 
+## $linearCombos[[2]]
+##  [1] 18  4  8  9 10 11 12 13 16 17
+## 
+## 
+## $remove
+## [1] 15 18</code></pre>
+<p>Here we are advised to drop the <em>coupe</em> and <em>wagon</em> columns, which are the 15th and 18th features, respectively, because they are exact linear combinations of other features. Note that the division into a training part and a test part must be redone.</p>
+<pre class="r"><code>cars &lt;- cars[,c(-15, -18)]
+cars_sampling_vector &lt;- createDataPartition(cars$Price, p = 0.85, list = FALSE)
+cars_train &lt;- cars[cars_sampling_vector,]
+cars_train_labels &lt;- cars$Price[cars_sampling_vector]
+cars_test &lt;- cars[-cars_sampling_vector,]
+cars_test_labels &lt;- cars$Price[-cars_sampling_vector]
+cars_train_features &lt;- cars[,-1]</code></pre>
+</div>
+<div id="assessing-linear-regression-models" class="section level1">
+<h1>5 Assessing linear regression models</h1>
+<p>Once all the problematic features have been identified and excluded, it is time to create the regression models.</p>
+<pre class="r"><code>machine_model1 &lt;- lm(PRP ~ ., data = machine_train)
+cars_model1 &lt;- lm(Price ~ ., data = cars_train)</code></pre>
+<p>Here the summary for the machine_model1:</p>
+<pre class="r"><code>summary(machine_model1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = PRP ~ ., data = machine_train)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -171.19  -24.18    5.24   22.64  454.24 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -4.323e+01  8.906e+00  -4.854 2.70e-06 ***
+## MYCT         3.281e-02  1.844e-02   1.779    0.077 .  
+## MMIN         1.135e-02  2.154e-03   5.267 4.11e-07 ***
+## MMAX         5.557e-03  6.746e-04   8.237 4.30e-14 ***
+## CACH         7.427e-01  1.423e-01   5.218 5.16e-07 ***
+## CHMIN        3.712e-01  8.870e-01   0.418    0.676    
+## CHMAX        1.091e+00  2.355e-01   4.635 7.02e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 58.8 on 172 degrees of freedom
+## Multiple R-squared:  0.8214, Adjusted R-squared:  0.8152 
+## F-statistic: 131.9 on 6 and 172 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>And here the summary for the cars_model1:</p>
+<pre class="r"><code>summary(cars_model1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Price ~ ., data = cars_train)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -9324.8 -1606.7   150.5  1444.6 13461.0 
+## 
+## Coefficients: (1 not defined because of singularities)
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -954.1919  1071.2553  -0.891  0.37340    
+## Mileage        -0.1877     0.0137 -13.693  &lt; 2e-16 ***
+## Cylinder     3640.5417   123.5788  29.459  &lt; 2e-16 ***
+## Doors        1552.4008   284.3939   5.459 6.77e-08 ***
+## Cruise        330.0989   324.8880   1.016  0.30998    
+## Sound         388.4549   256.3885   1.515  0.13022    
+## Leather       851.3683   274.5213   3.101  0.00201 ** 
+## Buick        1104.4670   595.0681   1.856  0.06389 .  
+## Cadillac    13288.4889   673.6959  19.725  &lt; 2e-16 ***
+## Chevy        -553.1553   468.0745  -1.182  0.23772    
+## Pontiac     -1450.8865   524.9950  -2.764  0.00587 ** 
+## Saab        12199.2093   600.4454  20.317  &lt; 2e-16 ***
+## Saturn              NA         NA      NA       NA    
+## convertible 11270.4878   597.5162  18.862  &lt; 2e-16 ***
+## hatchback   -6375.4970   669.6840  -9.520  &lt; 2e-16 ***
+## sedan       -4441.9152   490.8347  -9.050  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2947 on 669 degrees of freedom
+## Multiple R-squared:  0.912,  Adjusted R-squared:  0.9101 
+## F-statistic: 495.1 on 14 and 669 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Please note the following message from the output: “Coefficients: (1 not defined because of singularities)”. This occurs because we still have features whose effect on the output is indiscernible form other features due to underlying dependencies. We can identify this variable using the <em>alias</em> function.</p>
+<pre class="r"><code>alias(cars_model1)</code></pre>
+<pre><code>## Model :
+## Price ~ Mileage + Cylinder + Doors + Cruise + Sound + Leather + 
+##     Buick + Cadillac + Chevy + Pontiac + Saab + Saturn + convertible + 
+##     hatchback + sedan
+## 
+## Complete :
+##        (Intercept) Mileage Cylinder Doors Cruise Sound Leather Buick
+## Saturn  1           0       0        0     0      0     0      -1   
+##        Cadillac Chevy Pontiac Saab convertible hatchback sedan
+## Saturn -1       -1    -1      -1    0           0         0</code></pre>
+<p>Now we know, that we have to remove the <em>Saturn</em> variable.</p>
+<pre class="r"><code>cars_model2 &lt;- lm(Price ~. -Saturn, data = cars_train)
+summary(cars_model2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Price ~ . - Saturn, data = cars_train)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -9324.8 -1606.7   150.5  1444.6 13461.0 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -954.1919  1071.2553  -0.891  0.37340    
+## Mileage        -0.1877     0.0137 -13.693  &lt; 2e-16 ***
+## Cylinder     3640.5417   123.5788  29.459  &lt; 2e-16 ***
+## Doors        1552.4008   284.3939   5.459 6.77e-08 ***
+## Cruise        330.0989   324.8880   1.016  0.30998    
+## Sound         388.4549   256.3885   1.515  0.13022    
+## Leather       851.3683   274.5213   3.101  0.00201 ** 
+## Buick        1104.4670   595.0681   1.856  0.06389 .  
+## Cadillac    13288.4889   673.6959  19.725  &lt; 2e-16 ***
+## Chevy        -553.1553   468.0745  -1.182  0.23772    
+## Pontiac     -1450.8865   524.9950  -2.764  0.00587 ** 
+## Saab        12199.2093   600.4454  20.317  &lt; 2e-16 ***
+## convertible 11270.4878   597.5162  18.862  &lt; 2e-16 ***
+## hatchback   -6375.4970   669.6840  -9.520  &lt; 2e-16 ***
+## sedan       -4441.9152   490.8347  -9.050  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2947 on 669 degrees of freedom
+## Multiple R-squared:  0.912,  Adjusted R-squared:  0.9101 
+## F-statistic: 495.1 on 14 and 669 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Perfect!</p>
+</div>
+<div id="how-to-check-some-summary-outputs-individually" class="section level1">
+<h1>6 How to check some summary outputs individually</h1>
+<p>All the information which we receive with the summary command can also be calculated automatically:</p>
+</div>
+<div id="residual-analysis" class="section level1">
+<h1>6.1 Residual analysis</h1>
+<p>A residual is simply the error our model makes for a paritcular observation.</p>
+<pre class="r"><code>summary(cars_model2$residuals)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## -9324.8 -1606.7   150.5     0.0  1444.6 13461.0</code></pre>
+<pre class="r"><code>mean(cars_train$Price)</code></pre>
+<pre><code>## [1] 21320.2</code></pre>
+<p>With this information we can say that the average selling price of a car in our training data is around 21k Dollar, and 50% of our predictions are roughly within +- 1.6k of the correct value.</p>
+<p>A useful way to graphically compare the quantiles of the distributions of two quantitative variables is the quantile-quantile diagram.</p>
+<pre class="r"><code>par(mfrow = c(2, 1))
+machine_residuals &lt;- machine_model1$residuals
+qqnorm(machine_residuals, main = &quot;Normal Q-Q Plot for CPU data set&quot;)
+qqline(machine_residuals)
+cars_residuals &lt;- cars_model2$residuals
+qqnorm(cars_residuals, main = &quot;Normal Q-Q Plot for Cars data set&quot;)
+qqline(cars_residuals)</code></pre>
+<p><img src="/post/2019-01-11-machine-learning-predictions-with-linear-regressions_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>As we can see the residuals from both models seem to lie reasonably close to the theoretical quantiles of a normal distribution, although the fit isn’t perfect, as is typical with most real-world data.</p>
+</div>
+<div id="significance-tests-for-linear-regression" class="section level1">
+<h1>6.2 Significance tests for linear regression</h1>
+<p>Let’s have a look at the machine_model1 output again:</p>
+<pre class="r"><code>summary(machine_model1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = PRP ~ ., data = machine_train)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -171.19  -24.18    5.24   22.64  454.24 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -4.323e+01  8.906e+00  -4.854 2.70e-06 ***
+## MYCT         3.281e-02  1.844e-02   1.779    0.077 .  
+## MMIN         1.135e-02  2.154e-03   5.267 4.11e-07 ***
+## MMAX         5.557e-03  6.746e-04   8.237 4.30e-14 ***
+## CACH         7.427e-01  1.423e-01   5.218 5.16e-07 ***
+## CHMIN        3.712e-01  8.870e-01   0.418    0.676    
+## CHMAX        1.091e+00  2.355e-01   4.635 7.02e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 58.8 on 172 degrees of freedom
+## Multiple R-squared:  0.8214, Adjusted R-squared:  0.8152 
+## F-statistic: 131.9 on 6 and 172 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>We can compute some figures manually, eg. the t-value and p-value of the MYCT variable:</p>
+<pre class="r"><code>q &lt;- 5.210e-02 / 1.885e-02
+q</code></pre>
+<pre><code>## [1] 2.763926</code></pre>
+<pre class="r"><code>pt(q, df = 172, lower.tail = F) * 2</code></pre>
+<pre><code>## [1] 0.006333496</code></pre>
+</div>
+<div id="residual-standard-error-rse" class="section level1">
+<h1>6.3 Residual Standard Error (RSE)</h1>
+<p>We define a metric known as the Residual Standard Error, which estimates the standard deviation of our model compared to the target function.</p>
+<p>We can compute the RSE for our two models using the preceding formular as follows:</p>
+<pre class="r"><code>n_machine &lt;- nrow(machine_train)
+k_machine &lt;- length(machine_model1$coefficients) - 1
+sqrt(sum(machine_model1$residuals ^ 2) / (n_machine - k_machine - 1))</code></pre>
+<pre><code>## [1] 58.8013</code></pre>
+<pre class="r"><code>n_cars &lt;- nrow(cars_train)
+k_cars &lt;- length(cars_model2$coefficients) - 1
+sqrt(sum(cars_model2$residuals ^ 2) / (n_cars - k_cars - 1))</code></pre>
+<pre><code>## [1] 2946.98</code></pre>
+<p>To interpret the RSE values for our two models, we neet to compare them with the mean of our output variables.</p>
+<pre class="r"><code>mean(machine_train$PRP)</code></pre>
+<pre><code>## [1] 99.00559</code></pre>
+<pre class="r"><code>mean(cars_train$Price)</code></pre>
+<pre><code>## [1] 21320.2</code></pre>
+<p>We can see:</p>
+<ul>
+<li>RSE machine_train: 60,95 and mean 102,51</li>
+<li>RSE cars_train: 2.946,98 and mean 2.132,20</li>
+</ul>
+</div>
+<div id="r2" class="section level1">
+<h1>6.4 R<sup>2</sup></h1>
+<p>Now let’s compute R<sup>2</sup> manually to compare different regression models.</p>
+<pre class="r"><code>compute_rsquared &lt;- function(x, y) {
+  rss &lt;- sum((x - y) ^ 2)
+  tss &lt;- sum((y - mean(y)) ^ 2)
+  return(1 - (rss / tss))
+}
+
+compute_rsquared(machine_model1$fitted.values, machine_train$PRP)</code></pre>
+<pre><code>## [1] 0.8214248</code></pre>
+<pre class="r"><code>compute_rsquared(cars_model2$fitted.values, cars_train$Price)</code></pre>
+<pre><code>## [1] 0.9119826</code></pre>
+</div>
+<div id="adjusted-r2" class="section level1">
+<h1>6.5 Adjusted R<sup>2</sup></h1>
+<p>We can also do the same manual calculation for the adjusted R<sup>2</sup>.</p>
+<pre class="r"><code>compute_adjusted_rsquared &lt;- function(x, y, k) {
+  n &lt;- length(y)
+  r2 &lt;- compute_rsquared(x, y)
+  return(1 - ((1 - r2) * (n - 1) / (n - k - 1)))
+}
+
+compute_adjusted_rsquared(machine_model1$fitted.values, machine_train$PRP, k_machine)</code></pre>
+<pre><code>## [1] 0.8151954</code></pre>
+<pre class="r"><code>compute_adjusted_rsquared(cars_model2$fitted.values, cars_train$Price, k_cars)</code></pre>
+<pre><code>## [1] 0.9101407</code></pre>
+</div>
+<div id="test-set-performance-with-the-mse" class="section level1">
+<h1>7 Test set performance with the MSE</h1>
+<p>Now it’s time to check the test set performance of our models. We can do this by the Mean Squared Error (<strong>MSE</strong>).</p>
+<pre class="r"><code>machine_model1_predictions &lt;- predict(machine_model1, machine_test)
+cars_model2_predictions &lt;- predict(cars_model2, cars_test)</code></pre>
+<p>Here is the required function for it:</p>
+<pre class="r"><code>compute_mse &lt;- function(predictions, actual) { 
+  mean( (predictions - actual) ^ 2 ) 
+}</code></pre>
+</div>
+<div id="mse-for-the-machine-dataset" class="section level1">
+<h1>7.1 MSE for the machine dataset</h1>
+<p>Now we can compare the training and the test MSE for both models</p>
+<pre class="r"><code>compute_mse(machine_model1$fitted.values, machine_train$PRP)</code></pre>
+<pre><code>## [1] 3322.38</code></pre>
+<pre class="r"><code>compute_mse(machine_model1_predictions, machine_test$PRP)</code></pre>
+<pre><code>## [1] 6100.072</code></pre>
+</div>
+<div id="mse-for-the-cars-dataset" class="section level1">
+<h1>7.2 MSE for the cars dataset</h1>
+<pre class="r"><code>compute_mse(cars_model2$fitted.values, cars_train$Price)</code></pre>
+<pre><code>## [1] 8494240</code></pre>
+<pre class="r"><code>compute_mse(cars_model2_predictions, cars_test$Price)</code></pre>
+<pre><code>## [1] 7180150</code></pre>
+</div>
+<div id="problems-with-linear-regression" class="section level1">
+<h1>8 Problems with linear regression</h1>
+<p>In my post <a href="https://michael-fuchs.netlify.com/2018/09/21/regression-analysis/">“Regression Analysis”</a> paragraph 5 Model assumption I have already addressed several aspects that must be taken into account when creating a regression model. For the present investigation of the two datasets two aspects are dealt with in detail.</p>
+</div>
+<div id="multicollinearity" class="section level1">
+<h1>8.1 Multicollinearity</h1>
+<p>Multicollinearity is a problem of regression analysis and occurs when two or more explanatory variables have a very strong correlation with each other. We can check this with the <em>vif</em> function.</p>
+<pre class="r"><code>vif(cars_model2)</code></pre>
+<pre><code>##     Mileage    Cylinder       Doors      Cruise       Sound     Leather 
+##    1.010779    2.305737    4.663813    1.527898    1.137607    1.205977 
+##       Buick    Cadillac       Chevy     Pontiac        Saab convertible 
+##    2.464238    3.158473    4.138318    3.201605    3.515018    1.620590 
+##   hatchback       sedan 
+##    2.481131    4.550556</code></pre>
+<p>These values can also be calculated manually by us. Here is the example for the calculation of the value for the variable Sedan</p>
+<pre class="r"><code>sedan_model &lt;- lm(sedan ~ .-Price -Saturn, data = cars_train)
+sedan_r2 &lt;- compute_rsquared(sedan_model$fitted.values, cars_train$sedan)
+1 / (1-sedan_r2)</code></pre>
+<pre><code>## [1] 4.550556</code></pre>
+</div>
+<div id="outliers" class="section level1">
+<h1>8.2 Outliers</h1>
+<p>Outliers should always be taken into account in predictive models, as they can greatly influence the forecast, as the following example shows:</p>
+<pre class="r"><code>scatterplot(machine_model1$fitted.values, machine_model1$residuals, id = TRUE, xlab = &quot;Fitted Values&quot;, ylab = &quot;Residuals&quot;, main = &quot;Searching for outliers&quot;)</code></pre>
+<p><img src="/post/2019-01-11-machine-learning-predictions-with-linear-regressions_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<pre><code>## [1]  26 170</code></pre>
+<p>As we can see in the graphic line 172 is an outlier. Now we check what effect it has when we exclude line 172 from the training part.</p>
+<pre class="r"><code>machine_model2 &lt;- lm(PRP ~ ., data = machine_train[!(rownames(machine_train)) %in% c(171),])
+
+summary(machine_model2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = PRP ~ ., data = machine_train[!(rownames(machine_train)) %in% 
+##     c(171), ])
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -171.21  -24.27    4.93   22.74  453.78 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -4.353e+01  8.970e+00  -4.853 2.72e-06 ***
+## MYCT         3.306e-02  1.851e-02   1.787   0.0758 .  
+## MMIN         1.137e-02  2.161e-03   5.262 4.23e-07 ***
+## MMAX         5.558e-03  6.764e-04   8.218 4.93e-14 ***
+## CACH         7.431e-01  1.427e-01   5.207 5.46e-07 ***
+## CHMIN        3.703e-01  8.893e-01   0.416   0.6777    
+## CHMAX        1.094e+00  2.362e-01   4.631 7.16e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 58.95 on 171 degrees of freedom
+## Multiple R-squared:  0.8211, Adjusted R-squared:  0.8149 
+## F-statistic: 130.8 on 6 and 171 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div id="compare-rse" class="section level1">
+<h1>8.2.1 Compare RSE</h1>
+<pre class="r"><code>sqrt(sum(machine_model1$residuals ^ 2) / (n_machine - k_machine - 1))</code></pre>
+<pre><code>## [1] 58.8013</code></pre>
+<pre class="r"><code>k_machine &lt;- length(machine_model2$coefficients) - 1
+sqrt(sum(machine_model2$residuals ^ 2) / (n_machine - k_machine - 1))</code></pre>
+<pre><code>## [1] 58.78032</code></pre>
+<p>Here we cas see the imporvement of RSE:</p>
+<ul>
+<li>machine_model1: 58,43</li>
+<li>machine_model2: 57,81</li>
+</ul>
+</div>
+<div id="compare-mse" class="section level1">
+<h1>8.2.2 Compare MSE</h1>
+<pre class="r"><code>compute_mse(machine_model1_predictions, machine_test$PRP)</code></pre>
+<pre><code>## [1] 6100.072</code></pre>
+<pre class="r"><code>machine_model2_predictions &lt;- predict(machine_model2, machine_test)
+compute_mse(machine_model2_predictions, machine_test$PRP)</code></pre>
+<pre><code>## [1] 6079.883</code></pre>
+<p>Here we cas see the imporvement of MSE:</p>
+<ul>
+<li>machine_model1: 6.191,99</li>
+<li>machine_model2: 5.197,30</li>
+</ul>
+</div>
+<div id="future-selection" class="section level1">
+<h1>9 Future selection</h1>
+<p>Future selection is a machine learning approach, that uses only a subset of the available features for a learning algorithm. To do this we need the null-modell of both regression models.</p>
+<pre class="r"><code>machine_model_null &lt;- lm(PRP ~ 1, data = machine_train[!(rownames(machine_train)) %in% c(171),])
+cars_model_null &lt;- lm(Price ~ 1, data = cars_train)</code></pre>
+<p>There are two types of future selection to operate: the forward selection and the backward selection (both demonstrated below). Note that the lower the AIC, the better the model.</p>
+</div>
+<div id="forward-selection" class="section level1">
+<h1>9.1 Forward selection</h1>
+<pre class="r"><code>machine_model3 &lt;- step(machine_model_null, scope = list(lower = machine_model_null, upper = machine_model2), direction = &quot;forward&quot;)</code></pre>
+<pre><code>## Start:  AIC=1752.54
+## PRP ~ 1
+## 
+##         Df Sum of Sq     RSS    AIC
+## + MMAX   1   2276009 1046662 1548.9
+## + MMIN   1   1826019 1496652 1612.6
+## + CACH   1   1496698 1825972 1648.0
+## + CHMIN  1   1178370 2144301 1676.6
+## + CHMAX  1   1012430 2310241 1689.8
+## + MYCT   1    359448 2963223 1734.2
+## &lt;none&gt;               3322670 1752.5
+## 
+## Step:  AIC=1548.92
+## PRP ~ MMAX
+## 
+##         Df Sum of Sq     RSS    AIC
+## + CACH   1    303681  742980 1489.9
+## + CHMAX  1    141152  905510 1525.1
+## + MMIN   1    131646  915016 1527.0
+## + CHMIN  1    116885  929777 1529.8
+## &lt;none&gt;               1046662 1548.9
+## + MYCT   1       399 1046263 1550.8
+## 
+## Step:  AIC=1489.92
+## PRP ~ MMAX + CACH
+## 
+##         Df Sum of Sq    RSS    AIC
+## + MMIN   1     51048 691932 1479.2
+## + CHMAX  1     44196 698784 1481.0
+## + CHMIN  1     15166 727814 1488.2
+## &lt;none&gt;               742980 1489.9
+## + MYCT   1      3597 739384 1491.1
+## 
+## Step:  AIC=1479.25
+## PRP ~ MMAX + CACH + MMIN
+## 
+##         Df Sum of Sq    RSS    AIC
+## + CHMAX  1     86113 605820 1457.6
+## + CHMIN  1     15218 676714 1477.3
+## &lt;none&gt;               691932 1479.2
+## + MYCT   1      6645 685287 1479.5
+## 
+## Step:  AIC=1457.59
+## PRP ~ MMAX + CACH + MMIN + CHMAX
+## 
+##         Df Sum of Sq    RSS    AIC
+## + MYCT   1   10935.4 594884 1456.3
+## &lt;none&gt;               605820 1457.6
+## + CHMIN  1     445.8 605374 1459.5
+## 
+## Step:  AIC=1456.35
+## PRP ~ MMAX + CACH + MMIN + CHMAX + MYCT
+## 
+##         Df Sum of Sq    RSS    AIC
+## &lt;none&gt;               594884 1456.3
+## + CHMIN  1    602.44 594282 1458.2</code></pre>
+</div>
+<div id="backward-selection" class="section level1">
+<h1>9.2 Backward selection</h1>
+<pre class="r"><code>cars_model3 &lt;- step(cars_model2, scope = list(lower=cars_model_null, upper=cars_model2), direction = &quot;backward&quot;)</code></pre>
+<pre><code>## Start:  AIC=10943.15
+## Price ~ (Mileage + Cylinder + Doors + Cruise + Sound + Leather + 
+##     Buick + Cadillac + Chevy + Pontiac + Saab + Saturn + convertible + 
+##     hatchback + sedan) - Saturn
+## 
+##               Df  Sum of Sq        RSS   AIC
+## - Cruise       1    8965517 5.8190e+09 10942
+## - Chevy        1   12128825 5.8222e+09 10943
+## &lt;none&gt;                      5.8101e+09 10943
+## - Sound        1   19936038 5.8300e+09 10944
+## - Buick        1   29917592 5.8400e+09 10945
+## - Pontiac      1   66330149 5.8764e+09 10949
+## - Leather      1   83529042 5.8936e+09 10951
+## - Doors        1  258774670 6.0688e+09 10971
+## - sedan        1  711253593 6.5213e+09 11020
+## - hatchback    1  787123343 6.5972e+09 11028
+## - Mileage      1 1628457114 7.4385e+09 11110
+## - convertible  1 3089872204 8.8999e+09 11233
+## - Cadillac     1 3378919374 9.1890e+09 11255
+## - Saab         1 3584848386 9.3949e+09 11270
+## - Cylinder     1 7537000798 1.3347e+10 11510
+## 
+## Step:  AIC=10942.21
+## Price ~ Mileage + Cylinder + Doors + Sound + Leather + Buick + 
+##     Cadillac + Chevy + Pontiac + Saab + convertible + hatchback + 
+##     sedan
+## 
+##               Df  Sum of Sq        RSS   AIC
+## - Chevy        1   10734999 5.8298e+09 10942
+## &lt;none&gt;                      5.8190e+09 10942
+## - Sound        1   19463662 5.8385e+09 10942
+## - Buick        1   37194240 5.8562e+09 10945
+## - Pontiac      1   62264122 5.8813e+09 10948
+## - Leather      1   79857151 5.8989e+09 10950
+## - Doors        1  250565726 6.0696e+09 10969
+## - sedan        1  702606593 6.5216e+09 11018
+## - hatchback    1  799801230 6.6188e+09 11028
+## - Mileage      1 1627871584 7.4469e+09 11109
+## - convertible  1 3083777412 8.9028e+09 11231
+## - Cadillac     1 3435104166 9.2541e+09 11258
+## - Saab         1 4278879697 1.0098e+10 11317
+## - Cylinder     1 8759032122 1.4578e+10 11568
+## 
+## Step:  AIC=10941.47
+## Price ~ Mileage + Cylinder + Doors + Sound + Leather + Buick + 
+##     Cadillac + Pontiac + Saab + convertible + hatchback + sedan
+## 
+##               Df  Sum of Sq        RSS   AIC
+## - Sound        1   14688227 5.8444e+09 10941
+## &lt;none&gt;                      5.8298e+09 10942
+## - Pontiac      1   65251178 5.8950e+09 10947
+## - Leather      1   73361774 5.9031e+09 10948
+## - Buick        1  115999019 5.9458e+09 10953
+## - Doors        1  245319746 6.0751e+09 10968
+## - sedan        1  694814270 6.5246e+09 11016
+## - hatchback    1  818546970 6.6483e+09 11029
+## - Mileage      1 1622995083 7.4528e+09 11108
+## - convertible  1 3073952745 8.9037e+09 11229
+## - Cadillac     1 6258054649 1.2088e+10 11438
+## - Saab         1 7945339575 1.3775e+10 11528
+## - Cylinder     1 8894577205 1.4724e+10 11573
+## 
+## Step:  AIC=10941.19
+## Price ~ Mileage + Cylinder + Doors + Leather + Buick + Cadillac + 
+##     Pontiac + Saab + convertible + hatchback + sedan
+## 
+##               Df  Sum of Sq        RSS   AIC
+## &lt;none&gt;                      5.8444e+09 10941
+## - Pontiac      1   68715350 5.9132e+09 10947
+## - Leather      1   90021969 5.9345e+09 10950
+## - Buick        1  116103135 5.9606e+09 10953
+## - Doors        1  234387137 6.0788e+09 10966
+## - sedan        1  680504789 6.5250e+09 11014
+## - hatchback    1  804484578 6.6489e+09 11027
+## - Mileage      1 1626427264 7.4709e+09 11107
+## - convertible  1 3059834923 8.9043e+09 11227
+## - Cadillac     1 6243366434 1.2088e+10 11436
+## - Saab         1 7931559540 1.3776e+10 11526
+## - Cylinder     1 8883669163 1.4728e+10 11571</code></pre>
+</div>
+<div id="comparing-the-calculated-mse" class="section level1">
+<h1>9.3 Comparing the calculated MSE</h1>
+<p>Now we can again calculate the MSE for the best models selected by the feature selection:</p>
+<pre class="r"><code>machine_model3_predictions &lt;- predict(machine_model3, machine_test)
+compute_mse(machine_model3_predictions, machine_test$PRP)</code></pre>
+<pre><code>## [1] 5993.263</code></pre>
+<pre class="r"><code>cars_model3_predictions &lt;- predict(cars_model3, cars_test)
+compute_mse(cars_model3_predictions, cars_test$Price)</code></pre>
+<pre><code>## [1] 7262383</code></pre>
+<p>Let’s compare the results with the previous models:</p>
+<p><strong>Machine dataset:</strong></p>
+<ul>
+<li>MSE machine_model1_predictions: 6.191,99</li>
+<li>MSE machine_model2_predictions: 5.197,30</li>
+<li>MSE machine_model3_predictions: 5.057,91</li>
+</ul>
+<p><strong>Cars dataset:</strong></p>
+<ul>
+<li>MSE cars_model2_predictions: 7.180.150</li>
+<li>MSE cars_model3_predictions: 7.262.383</li>
+</ul>
+</div>
+<div id="regularization" class="section level1">
+<h1>10 Regularization</h1>
+<p>In addition to the future selection just shown, a regularization can also be used. In the following two methods will be shown on the basis of the car dataset: the ridge method and the lasso method.</p>
+<pre class="r"><code>cars_train_mat &lt;- model.matrix(Price ~ .-Saturn, cars_train)[,-1]
+lambdas &lt;- 10 ^ seq(8, -4, length = 250)
+cars_models_ridge &lt;- glmnet(cars_train_mat, cars_train$Price, alpha = 0, lambda = lambdas)
+cars_models_lasso &lt;- glmnet(cars_train_mat, cars_train$Price, alpha = 1, lambda = lambdas)</code></pre>
+<p>Here we can see how the Ridge Regression and the Lasso method works:</p>
+<pre class="r"><code>layout(matrix(c(1, 2), 1, 2))
+plot(cars_models_ridge, xvar = &quot;lambda&quot;, main = &quot;Ridge Regression&quot;)
+plot(cars_models_lasso, xvar = &quot;lambda&quot;, main = &quot;Lasso&quot;)</code></pre>
+<p><img src="/post/2019-01-11-machine-learning-predictions-with-linear-regressions_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+<p>Here is a calculation to determine the best lambda for the two methods:</p>
+<pre class="r"><code>ridge.cv &lt;- cv.glmnet(cars_train_mat, cars_train$Price, alpha = 0)
+lambda_ridge &lt;- ridge.cv$lambda.min
+lambda_ridge</code></pre>
+<pre><code>## [1] 704.2</code></pre>
+<pre class="r"><code>lasso.cv &lt;- cv.glmnet(cars_train_mat, cars_train$Price, alpha = 1)
+lambda_lasso &lt;- lasso.cv$lambda.min
+lambda_lasso</code></pre>
+<pre><code>## [1] 11.47671</code></pre>
+<p>Again we’ll compare the new MSE:</p>
+<pre class="r"><code>cars_test_mat &lt;- model.matrix(Price ~ . -Saturn, cars_test)[,-1]
+cars_ridge_predictions &lt;- predict(cars_models_ridge, s = lambda_ridge, newx = cars_test_mat)
+compute_mse(cars_ridge_predictions, cars_test$Price)</code></pre>
+<pre><code>## [1] 7672071</code></pre>
+<pre class="r"><code>cars_lasso_predictions &lt;- predict(cars_models_lasso, s = lambda_lasso, newx = cars_test_mat)
+compute_mse(cars_lasso_predictions, cars_test$Price)</code></pre>
+<pre><code>## [1] 7173818</code></pre>
+<p>The lasso-model performs best. Here again an overview of the different cars model prediction MSEs:</p>
+<ul>
+<li>MSE cars_model2_predictions: 7.180.150</li>
+<li>MSE cars_model3_predictions: 7.262.383</li>
+<li>MSE cars_model_lasso_predictions: 7.173.818</li>
+</ul>
+</div>
+<div id="conclusion" class="section level1">
+<h1>11 Conclusion</h1>
+<p>We have seen how to significantly improve the performance of linear models.</p>
+<p>Machine_model3_predictions with MSE 5.057,91 proved to be the best for the machine data set. We achieved this result with the forward selection.</p>
+<p>In contrast to that cars_model_lasso_predictions with MSE 7.173.818 proved to be the best for the cars data set.</p>
+</div>

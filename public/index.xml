@@ -6,10 +6,19 @@
     <description>Recent content on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 11 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Machine Learning - Predictions with linear regressions</title>
+      <link>/2019/01/11/machine-learning-predictions-with-linear-regressions/</link>
+      <pubDate>Fri, 11 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/01/11/machine-learning-predictions-with-linear-regressions/</guid>
+      <description>library(tidyverse)library(caret)library(car)library(glmnet)machine &amp;lt;- read_csv(&amp;quot;machine.csv&amp;quot;)cars &amp;lt;- read_csv(&amp;quot;cars.csv&amp;quot;)Table of Content1 Introduction2 Presentation of the data records used3 Dividing the data into a training part and a test part4 Removing problematic features4.1 Machine dataset4.2 Cars dataset5 Assessing linear regression models6 How to check some summary outputs individually6.1 Residual analysis6.2 Significance tests for linear regression6.3 Residual standard error (RSE)6.</description>
+    </item>
     
     <item>
       <title>Machine Learning - Cluster Analysis</title>
