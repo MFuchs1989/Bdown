@@ -161,7 +161,7 @@ findLinearCombos(cars)
 Here we are advised to drop the *coupe* and *wagon* columns, which are the 15th and 18th features, respectively, because they are exact linear combinations of other features. Note that the division into a training part and a test part must be redone.
 
 ```{r}
-set.seed(232555)
+set.seed(232455)
 cars <- cars[,c(-15, -18)]
 cars_sampling_vector <- createDataPartition(cars$Price, p = 0.85, list = FALSE)
 cars_train <- cars[cars_sampling_vector,]
