@@ -84,7 +84,7 @@ glimpse(cars)
 #3 Dividing the data into a training part and a test part
 
 ```{r}
-set.seed(4352345)
+set.seed(1235)
 machine_sampling_vector <- createDataPartition(machine$PRP, p = 0.85, list = FALSE)
 machine_train <- machine[machine_sampling_vector,]
 machine_train_labels <- machine$PRP[machine_sampling_vector]
@@ -94,7 +94,7 @@ machine_train_features <- machine[, 1:6]
 ```
 
 ```{r}
-set.seed(232455)
+set.seed(2345)
 cars_sampling_vector <- createDataPartition(cars$Price, p = 0.85, list = FALSE)
 cars_train <- cars[cars_sampling_vector,]
 cars_train_labels <- cars$Price[cars_sampling_vector]
@@ -251,7 +251,7 @@ We can compute some figures manually, eg. the t-value and p-value of the MYCT va
 
 
 ```{r}
-q <- 5.210e-02 / 1.885e-02
+q <- 0.037404 / 0.016382
 q
 
 pt(q, df = 172, lower.tail = F) * 2
@@ -285,12 +285,6 @@ mean(machine_train$PRP)
 
 mean(cars_train$Price)
 ```
-
-We can compare this:
-
-+ RSE of machine dataset: 61,31 and mean 109,48
-+ RSE of cars dataset: 2.967,52 and mean 21.463,74
-
 
 
 #6.4 R^2^
@@ -416,10 +410,6 @@ k_machine <- length(machine_model2$coefficients) - 1
 sqrt(sum(machine_model2$residuals ^ 2) / (n_machine - k_machine - 1))
 ```
 
-Here we cas see the imporvement of RSE:
-
-+ machine_model1: 61,31
-+ machine_model2: 51,22
 
 
 #8.2.2 Compare MSE
@@ -435,11 +425,6 @@ machine_model2_predictions <- predict(machine_model2, machine_test)
 compute_mse(machine_model2_predictions, machine_test$PRP)
 ```
 
-
-Here we cas see the imporvement of MSE:
-
-+ machine_model1: 2.814,05
-+ machine_model2: 2.555,36
 
 
 #9 Future selection
@@ -480,21 +465,6 @@ compute_mse(machine_model3_predictions, machine_test$PRP)
 cars_model3_predictions <- predict(cars_model3, cars_test)
 compute_mse(cars_model3_predictions, cars_test$Price)
 ```
-
-
-Let's compare the results with the previous models:
-
-**Machine dataset:**
-
-+ MSE machine_model1_predictions: 2.814,05
-+ MSE machine_model2_predictions: 2.555,36
-+ MSE machine_model3_predictions: 2.555,36
-
-
-**Cars dataset:**
-
-+ MSE cars_model2_predictions: 6.572.315
-+ MSE cars_model3_predictions: 6.572.465
 
 
 
@@ -548,21 +518,13 @@ cars_lasso_predictions <- predict(cars_models_lasso, s = lambda_lasso, newx = ca
 compute_mse(cars_lasso_predictions, cars_test$Price)
 ```
 
-The lasso-model performs best. Here again an overview of the different cars model prediction MSEs:
 
-+ MSE cars_model2_predictions: 6.572.315
-+ MSE cars_model3_predictions: 6.572.465
-+ MSE cars_model_lasso_predictions: 6.491.539
 
 
 #11 Conclusion
 
 We have seen how to significantly improve the performance of linear models.
 
-Machine_model2_predictions as well as Machine_model3_predictions with MSE 2.555,36 proved to be the best for the machine data set. We achieved this result with the forward selection.
-
-
-In contrast to that cars_model_lasso_predictions with MSE 6.491.539 proved to be the best for the cars data set.
 
 
 
