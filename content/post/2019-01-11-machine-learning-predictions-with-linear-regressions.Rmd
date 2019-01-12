@@ -290,7 +290,7 @@ mean(cars_train$Price)
 
 We can see:
 
-+ RSE machine_train: 62,46 and mean 106,34
++ RSE machine_train: 61,18 and mean 109,02
 + RSE cars_train: 2.946,98 and mean 2.132,20
 
 
@@ -419,8 +419,8 @@ sqrt(sum(machine_model2$residuals ^ 2) / (n_machine - k_machine - 1))
 
 Here we cas see the imporvement of RSE:
 
-+ machine_model1: 58,43
-+ machine_model2: 57,81
++ machine_model1: 62,46
++ machine_model2: 60,93
 
 
 #8.2.2 Compare MSE
@@ -439,8 +439,8 @@ compute_mse(machine_model2_predictions, machine_test$PRP)
 
 Here we cas see the imporvement of MSE:
 
-+ machine_model1: 6.191,99
-+ machine_model2: 5.197,30
++ machine_model1: 2.425,2
++ machine_model2: 2.120,98
 
 
 #9 Future selection
@@ -487,9 +487,9 @@ Let's compare the results with the previous models:
 
 **Machine dataset:**
 
-+ MSE machine_model1_predictions: 6.191,99
-+ MSE machine_model2_predictions: 5.197,30
-+ MSE machine_model3_predictions: 5.057,91
++ MSE machine_model1_predictions: 2.425,2
++ MSE machine_model2_predictions: 2.120,98
++ MSE machine_model3_predictions: 1.569,73
 
 
 **Cars dataset:**
