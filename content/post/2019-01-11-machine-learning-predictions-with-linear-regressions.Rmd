@@ -288,10 +288,6 @@ mean(machine_train$PRP)
 mean(cars_train$Price)
 ```
 
-We can see:
-
-+ RSE machine_train: 61,18 and mean 109,02
-+ RSE cars_train: 2.946,98 and mean 2.132,20
 
 
 #6.4 R^2^

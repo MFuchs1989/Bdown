@@ -119,7 +119,7 @@ findCorrelation(machine_correlations)</code></pre>
 <pre class="r"><code>findCorrelation(machine_correlations, cutoff = 0.75)</code></pre>
 <pre><code>## [1] 3</code></pre>
 <pre class="r"><code>cor(machine_train$MMIN, machine_train$MMAX)</code></pre>
-<pre><code>## [1] 0.7967491</code></pre>
+<pre><code>## [1] 0.7560364</code></pre>
 <p>Ok we have three of them but 0.75 should not be problematic.</p>
 <pre class="r"><code>findLinearCombos(machine_correlations)</code></pre>
 <pre><code>## $linearCombos
@@ -179,24 +179,24 @@ cars_model1 &lt;- lm(Price ~ ., data = cars_train)</code></pre>
 ## lm(formula = PRP ~ ., data = machine_train)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -169.505  -13.873   -0.919   18.473  238.829 
+##     Min      1Q  Median      3Q     Max 
+## -175.05  -25.54    5.77   23.58  439.08 
 ## 
 ## Coefficients:
 ##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -2.563e+01  6.925e+00  -3.700  0.00029 ***
-## MYCT         2.398e-02  1.392e-02   1.723  0.08674 .  
-## MMIN         1.803e-02  1.466e-03  12.301  &lt; 2e-16 ***
-## MMAX         3.189e-03  5.653e-04   5.642 6.81e-08 ***
-## CACH         6.248e-01  1.104e-01   5.661 6.19e-08 ***
-## CHMIN        3.098e+00  7.226e-01   4.288 3.00e-05 ***
-## CHMAX        1.328e-01  2.361e-01   0.563  0.57442    
+## (Intercept) -4.404e+01  8.942e+00  -4.925 1.97e-06 ***
+## MYCT         3.578e-02  1.815e-02   1.971   0.0504 .  
+## MMIN         1.104e-02  2.265e-03   4.877 2.43e-06 ***
+## MMAX         5.735e-03  7.175e-04   7.992 1.84e-13 ***
+## CACH         7.693e-01  1.450e-01   5.306 3.41e-07 ***
+## CHMIN       -1.258e-01  8.803e-01  -0.143   0.8866    
+## CHMAX        1.145e+00  2.467e-01   4.642 6.82e-06 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 45.19 on 172 degrees of freedom
-## Multiple R-squared:  0.8999, Adjusted R-squared:  0.8964 
-## F-statistic: 257.7 on 6 and 172 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 59.15 on 172 degrees of freedom
+## Multiple R-squared:  0.8215, Adjusted R-squared:  0.8153 
+## F-statistic: 131.9 on 6 and 172 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>And here the summary for the cars_model1:</p>
 <pre class="r"><code>summary(cars_model1)</code></pre>
 <pre><code>## 
@@ -312,24 +312,24 @@ qqline(cars_residuals)</code></pre>
 ## lm(formula = PRP ~ ., data = machine_train)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -169.505  -13.873   -0.919   18.473  238.829 
+##     Min      1Q  Median      3Q     Max 
+## -175.05  -25.54    5.77   23.58  439.08 
 ## 
 ## Coefficients:
 ##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -2.563e+01  6.925e+00  -3.700  0.00029 ***
-## MYCT         2.398e-02  1.392e-02   1.723  0.08674 .  
-## MMIN         1.803e-02  1.466e-03  12.301  &lt; 2e-16 ***
-## MMAX         3.189e-03  5.653e-04   5.642 6.81e-08 ***
-## CACH         6.248e-01  1.104e-01   5.661 6.19e-08 ***
-## CHMIN        3.098e+00  7.226e-01   4.288 3.00e-05 ***
-## CHMAX        1.328e-01  2.361e-01   0.563  0.57442    
+## (Intercept) -4.404e+01  8.942e+00  -4.925 1.97e-06 ***
+## MYCT         3.578e-02  1.815e-02   1.971   0.0504 .  
+## MMIN         1.104e-02  2.265e-03   4.877 2.43e-06 ***
+## MMAX         5.735e-03  7.175e-04   7.992 1.84e-13 ***
+## CACH         7.693e-01  1.450e-01   5.306 3.41e-07 ***
+## CHMIN       -1.258e-01  8.803e-01  -0.143   0.8866    
+## CHMAX        1.145e+00  2.467e-01   4.642 6.82e-06 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 45.19 on 172 degrees of freedom
-## Multiple R-squared:  0.8999, Adjusted R-squared:  0.8964 
-## F-statistic: 257.7 on 6 and 172 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 59.15 on 172 degrees of freedom
+## Multiple R-squared:  0.8215, Adjusted R-squared:  0.8153 
+## F-statistic: 131.9 on 6 and 172 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>We can compute some figures manually, eg. the t-value and p-value of the MYCT variable:</p>
 <pre class="r"><code>q &lt;- 4.854e-02 / 1.940e-02
 q</code></pre>
@@ -344,21 +344,16 @@ q</code></pre>
 <pre class="r"><code>n_machine &lt;- nrow(machine_train)
 k_machine &lt;- length(machine_model1$coefficients) - 1
 sqrt(sum(machine_model1$residuals ^ 2) / (n_machine - k_machine - 1))</code></pre>
-<pre><code>## [1] 45.19116</code></pre>
+<pre><code>## [1] 59.15432</code></pre>
 <pre class="r"><code>n_cars &lt;- nrow(cars_train)
 k_cars &lt;- length(cars_model2$coefficients) - 1
 sqrt(sum(cars_model2$residuals ^ 2) / (n_cars - k_cars - 1))</code></pre>
 <pre><code>## [1] 2946.98</code></pre>
 <p>To interpret the RSE values for our two models, we neet to compare them with the mean of our output variables.</p>
 <pre class="r"><code>mean(machine_train$PRP)</code></pre>
-<pre><code>## [1] 102.4246</code></pre>
+<pre><code>## [1] 99.58659</code></pre>
 <pre class="r"><code>mean(cars_train$Price)</code></pre>
 <pre><code>## [1] 21320.2</code></pre>
-<p>We can see:</p>
-<ul>
-<li>RSE machine_train: 61,18 and mean 109,02</li>
-<li>RSE cars_train: 2.946,98 and mean 2.132,20</li>
-</ul>
 </div>
 <div id="r2" class="section level1">
 <h1>6.4 R<sup>2</sup></h1>
@@ -370,7 +365,7 @@ sqrt(sum(cars_model2$residuals ^ 2) / (n_cars - k_cars - 1))</code></pre>
 }
 
 compute_rsquared(machine_model1$fitted.values, machine_train$PRP)</code></pre>
-<pre><code>## [1] 0.8998781</code></pre>
+<pre><code>## [1] 0.8214819</code></pre>
 <pre class="r"><code>compute_rsquared(cars_model2$fitted.values, cars_train$Price)</code></pre>
 <pre><code>## [1] 0.9119826</code></pre>
 </div>
@@ -384,7 +379,7 @@ compute_rsquared(machine_model1$fitted.values, machine_train$PRP)</code></pre>
 }
 
 compute_adjusted_rsquared(machine_model1$fitted.values, machine_train$PRP, k_machine)</code></pre>
-<pre><code>## [1] 0.8963855</code></pre>
+<pre><code>## [1] 0.8152545</code></pre>
 <pre class="r"><code>compute_adjusted_rsquared(cars_model2$fitted.values, cars_train$Price, k_cars)</code></pre>
 <pre><code>## [1] 0.9101407</code></pre>
 </div>
@@ -402,9 +397,9 @@ cars_model2_predictions &lt;- predict(cars_model2, cars_test)</code></pre>
 <h1>7.1 MSE for the machine dataset</h1>
 <p>Now we can compare the training and the test MSE for both models</p>
 <pre class="r"><code>compute_mse(machine_model1$fitted.values, machine_train$PRP)</code></pre>
-<pre><code>## [1] 1962.377</code></pre>
+<pre><code>## [1] 3362.392</code></pre>
 <pre class="r"><code>compute_mse(machine_model1_predictions, machine_test$PRP)</code></pre>
-<pre><code>## [1] 23939.26</code></pre>
+<pre><code>## [1] 5808.325</code></pre>
 </div>
 <div id="mse-for-the-cars-dataset" class="section level1">
 <h1>7.2 MSE for the cars dataset</h1>
@@ -438,7 +433,7 @@ sedan_r2 &lt;- compute_rsquared(sedan_model$fitted.values, cars_train$sedan)
 <p>Outliers should always be taken into account in predictive models, as they can greatly influence the forecast, as the following example shows:</p>
 <pre class="r"><code>scatterplot(machine_model1$fitted.values, machine_model1$residuals, id = TRUE, xlab = &quot;Fitted Values&quot;, ylab = &quot;Residuals&quot;, main = &quot;Searching for outliers&quot;)</code></pre>
 <p><img src="/post/2019-01-11-machine-learning-predictions-with-linear-regressions_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
-<pre><code>## [1]  9 27</code></pre>
+<pre><code>## [1]  26 171</code></pre>
 <p>As we can see in the graphic line 172 is an outlier. Now we check what effect it has when we exclude line 172 from the training part.</p>
 <pre class="r"><code>machine_model2 &lt;- lm(PRP ~ ., data = machine_train[!(rownames(machine_train)) %in% c(171),])
 
@@ -450,31 +445,31 @@ summary(machine_model2)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -169.697  -14.031   -0.965   18.522  238.973 
+## -166.709  -17.419    0.437   17.283  225.428 
 ## 
 ## Coefficients:
 ##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -2.557e+01  6.997e+00  -3.655 0.000342 ***
-## MYCT         2.393e-02  1.398e-02   1.712 0.088759 .  
-## MMIN         1.805e-02  1.500e-03  12.031  &lt; 2e-16 ***
-## MMAX         3.188e-03  5.671e-04   5.622 7.54e-08 ***
-## CACH         6.255e-01  1.112e-01   5.624 7.49e-08 ***
-## CHMIN        3.073e+00  8.289e-01   3.707 0.000283 ***
-## CHMAX        1.327e-01  2.368e-01   0.560 0.576078    
+## (Intercept) -16.983072   6.554647  -2.591   0.0104 *  
+## MYCT          0.015396   0.012759   1.207   0.2292    
+## MMIN          0.013280   0.001589   8.358 2.13e-14 ***
+## MMAX          0.003516   0.000527   6.671 3.38e-10 ***
+## CACH          0.759000   0.101176   7.502 3.28e-12 ***
+## CHMIN         2.788463   0.651144   4.282 3.08e-05 ***
+## CHMAX        -0.013699   0.192396  -0.071   0.9433    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 45.32 on 171 degrees of freedom
-## Multiple R-squared:  0.8973, Adjusted R-squared:  0.8937 
-## F-statistic: 249.1 on 6 and 171 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 41.28 on 171 degrees of freedom
+## Multiple R-squared:  0.8712, Adjusted R-squared:  0.8666 
+## F-statistic: 192.7 on 6 and 171 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div id="compare-rse" class="section level1">
 <h1>8.2.1 Compare RSE</h1>
 <pre class="r"><code>sqrt(sum(machine_model1$residuals ^ 2) / (n_machine - k_machine - 1))</code></pre>
-<pre><code>## [1] 45.19116</code></pre>
+<pre><code>## [1] 59.15432</code></pre>
 <pre class="r"><code>k_machine &lt;- length(machine_model2$coefficients) - 1
 sqrt(sum(machine_model2$residuals ^ 2) / (n_machine - k_machine - 1))</code></pre>
-<pre><code>## [1] 45.19063</code></pre>
+<pre><code>## [1] 41.16118</code></pre>
 <p>Here we cas see the imporvement of RSE:</p>
 <ul>
 <li>machine_model1: 62,46</li>
@@ -484,10 +479,10 @@ sqrt(sum(machine_model2$residuals ^ 2) / (n_machine - k_machine - 1))</code></pr
 <div id="compare-mse" class="section level1">
 <h1>8.2.2 Compare MSE</h1>
 <pre class="r"><code>compute_mse(machine_model1_predictions, machine_test$PRP)</code></pre>
-<pre><code>## [1] 23939.26</code></pre>
+<pre><code>## [1] 5808.325</code></pre>
 <pre class="r"><code>machine_model2_predictions &lt;- predict(machine_model2, machine_test)
 compute_mse(machine_model2_predictions, machine_test$PRP)</code></pre>
-<pre><code>## [1] 23946.04</code></pre>
+<pre><code>## [1] 12405.41</code></pre>
 <p>Here we cas see the imporvement of MSE:</p>
 <ul>
 <li>machine_model1: 2.425,2</li>
@@ -504,62 +499,55 @@ cars_model_null &lt;- lm(Price ~ 1, data = cars_train)</code></pre>
 <div id="forward-selection" class="section level1">
 <h1>9.1 Forward selection</h1>
 <pre class="r"><code>machine_model3 &lt;- step(machine_model_null, scope = list(lower = machine_model_null, upper = machine_model2), direction = &quot;forward&quot;)</code></pre>
-<pre><code>## Start:  AIC=1757.74
+<pre><code>## Start:  AIC=1684.09
 ## PRP ~ 1
 ## 
 ##         Df Sum of Sq     RSS    AIC
-## + MMIN   1   2748493  672625 1470.2
-## + MMAX   1   2411920 1009197 1542.4
-## + CHMIN  1   1685382 1735736 1639.0
-## + CACH   1   1505223 1915894 1656.5
-## + CHMAX  1    633330 2787787 1723.3
-## + MYCT   1    384799 3036319 1738.5
-## &lt;none&gt;               3421118 1757.7
+## + MMIN   1   1561728  700173 1477.4
+## + MMAX   1   1533336  728564 1484.4
+## + CACH   1   1109182 1152718 1566.1
+## + CHMIN  1    916200 1345701 1593.7
+## + CHMAX  1    335231 1926669 1657.5
+## + MYCT   1    310685 1951215 1659.8
+## &lt;none&gt;               2261900 1684.1
 ## 
-## Step:  AIC=1470.21
+## Step:  AIC=1477.36
 ## PRP ~ MMIN
 ## 
 ##         Df Sum of Sq    RSS    AIC
-## + CACH   1    182226 490398 1416.0
-## + CHMIN  1    172936 499689 1419.3
-## + MMAX   1    139717 532908 1430.8
-## + CHMAX  1    124122 548503 1435.9
-## &lt;none&gt;               672625 1470.2
-## + MYCT   1      4763 667862 1471.0
+## + CACH   1    236777 463396 1405.9
+## + CHMIN  1    232296 467876 1407.6
+## + MMAX   1    186885 513287 1424.1
+## + CHMAX  1    148492 551681 1436.9
+## + MYCT   1     11893 688280 1476.3
+## &lt;none&gt;               700173 1477.4
 ## 
-## Step:  AIC=1415.97
+## Step:  AIC=1405.89
 ## PRP ~ MMIN + CACH
 ## 
 ##         Df Sum of Sq    RSS    AIC
-## + MMAX   1     97027 393372 1378.7
-## + CHMIN  1     67806 422593 1391.5
-## + CHMAX  1     30926 459473 1406.4
-## &lt;none&gt;               490398 1416.0
-## + MYCT   1        24 490374 1418.0
+## + MMAX   1    132285 331111 1348.1
+## + CHMIN  1     94265 369131 1367.4
+## + CHMAX  1     36297 427099 1393.4
+## &lt;none&gt;               463396 1405.9
+## + MYCT   1       951 462445 1407.5
 ## 
-## Step:  AIC=1378.73
+## Step:  AIC=1348.06
 ## PRP ~ MMIN + CACH + MMAX
 ## 
 ##         Df Sum of Sq    RSS    AIC
-## + CHMIN  1     35738 357633 1363.8
-## + CHMAX  1      8515 384856 1376.8
-## &lt;none&gt;               393372 1378.7
-## + MYCT   1      4025 389347 1378.9
+## + CHMIN  1     37158 293952 1328.9
+## + CHMAX  1      6023 325087 1346.8
+## &lt;none&gt;               331111 1348.1
+## + MYCT   1      1636 329475 1349.2
 ## 
-## Step:  AIC=1363.78
+## Step:  AIC=1328.87
 ## PRP ~ MMIN + CACH + MMAX + CHMIN
 ## 
 ##         Df Sum of Sq    RSS    AIC
-## + MYCT   1    5731.6 351902 1362.9
-## &lt;none&gt;               357633 1363.8
-## + CHMAX  1     357.5 357276 1365.6
-## 
-## Step:  AIC=1362.9
-## PRP ~ MMIN + CACH + MMAX + CHMIN + MYCT
-## 
-##         Df Sum of Sq    RSS    AIC
-## &lt;none&gt;               351902 1362.9
-## + CHMAX  1    644.63 351257 1364.6</code></pre>
+## &lt;none&gt;               293952 1328.9
+## + MYCT   1   2533.89 291418 1329.3
+## + CHMAX  1     61.12 293891 1330.8</code></pre>
 </div>
 <div id="backward-selection" class="section level1">
 <h1>9.2 Backward selection</h1>
@@ -649,7 +637,7 @@ cars_model_null &lt;- lm(Price ~ 1, data = cars_train)</code></pre>
 <p>Now we can again calculate the MSE for the best models selected by the feature selection:</p>
 <pre class="r"><code>machine_model3_predictions &lt;- predict(machine_model3, machine_test)
 compute_mse(machine_model3_predictions, machine_test$PRP)</code></pre>
-<pre><code>## [1] 25213.86</code></pre>
+<pre><code>## [1] 12670.05</code></pre>
 <pre class="r"><code>cars_model3_predictions &lt;- predict(cars_model3, cars_test)
 compute_mse(cars_model3_predictions, cars_test$Price)</code></pre>
 <pre><code>## [1] 7262383</code></pre>
