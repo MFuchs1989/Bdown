@@ -641,12 +641,12 @@ compute_mse(cars_model3_predictions, cars_test$Price)</code></pre>
 <ul>
 <li>MSE machine_model1_predictions: 2.814,05</li>
 <li>MSE machine_model2_predictions: 2.555,36</li>
-<li>MSE machine_model3_predictions: 2.700,02</li>
+<li>MSE machine_model3_predictions: 2.555,36</li>
 </ul>
 <p><strong>Cars dataset:</strong></p>
 <ul>
 <li>MSE cars_model2_predictions: 6.572.315</li>
-<li>MSE cars_model3_predictions: 6.281.559</li>
+<li>MSE cars_model3_predictions: 6.572.465</li>
 </ul>
 </div>
 <div id="regularization" class="section level1">
@@ -681,13 +681,13 @@ compute_mse(cars_lasso_predictions, cars_test$Price)</code></pre>
 <p>The lasso-model performs best. Here again an overview of the different cars model prediction MSEs:</p>
 <ul>
 <li>MSE cars_model2_predictions: 6.572.315</li>
-<li>MSE cars_model3_predictions: 6.281.559</li>
-<li>MSE cars_model_lasso_predictions: 7.173.818</li>
+<li>MSE cars_model3_predictions: 6.572.465</li>
+<li>MSE cars_model_lasso_predictions: 6.491.539</li>
 </ul>
 </div>
 <div id="conclusion" class="section level1">
 <h1>11 Conclusion</h1>
 <p>We have seen how to significantly improve the performance of linear models.</p>
-<p>Machine_model3_predictions with MSE 5.057,91 proved to be the best for the machine data set. We achieved this result with the forward selection.</p>
-<p>In contrast to that cars_model_lasso_predictions with MSE 7.173.818 proved to be the best for the cars data set.</p>
+<p>Machine_model2_predictions as well as Machine_model3_predictions with MSE 2.555,36 proved to be the best for the machine data set. We achieved this result with the forward selection.</p>
+<p>In contrast to that cars_model_lasso_predictions with MSE 6.491.539 proved to be the best for the cars data set.</p>
 </div>
