@@ -488,13 +488,13 @@ Let's compare the results with the previous models:
 
 + MSE machine_model1_predictions: 2.814,05
 + MSE machine_model2_predictions: 2.555,36
-+ MSE machine_model3_predictions: 2.700,02
++ MSE machine_model3_predictions: 2.555,36
 
 
 **Cars dataset:**
 
 + MSE cars_model2_predictions: 6.572.315
-+ MSE cars_model3_predictions: 6.281.559
++ MSE cars_model3_predictions: 6.572.465
 
 
 
@@ -551,18 +551,18 @@ compute_mse(cars_lasso_predictions, cars_test$Price)
 The lasso-model performs best. Here again an overview of the different cars model prediction MSEs:
 
 + MSE cars_model2_predictions: 6.572.315
-+ MSE cars_model3_predictions: 6.281.559
-+ MSE cars_model_lasso_predictions: 7.173.818
++ MSE cars_model3_predictions: 6.572.465
++ MSE cars_model_lasso_predictions: 6.491.539
 
 
 #11 Conclusion
 
 We have seen how to significantly improve the performance of linear models.
 
-Machine_model3_predictions with MSE 5.057,91 proved to be the best for the machine data set. We achieved this result with the forward selection.
+Machine_model2_predictions as well as Machine_model3_predictions with MSE 2.555,36 proved to be the best for the machine data set. We achieved this result with the forward selection.
 
 
-In contrast to that cars_model_lasso_predictions with MSE 7.173.818 proved to be the best for the cars data set.
+In contrast to that cars_model_lasso_predictions with MSE 6.491.539 proved to be the best for the cars data set.
 
 
 
