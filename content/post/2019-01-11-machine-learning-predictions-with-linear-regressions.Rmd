@@ -253,7 +253,7 @@ We can compute some figures manually, eg. the t-value and p-value of the MYCT va
 
 
 ```{r}
-q <- 5.210e-02 / 1.885e-02
+q <- 4.854e-02 / 1.940e-02
 q
 
 pt(q, df = 172, lower.tail = F) * 2
@@ -290,7 +290,7 @@ mean(cars_train$Price)
 
 We can see:
 
-+ RSE machine_train: 60,95 and mean 102,51
++ RSE machine_train: 62,46 and mean 106,34
 + RSE cars_train: 2.946,98 and mean 2.132,20
 
 
