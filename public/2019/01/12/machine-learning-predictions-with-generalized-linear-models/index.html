@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Machine Learning - Predictions with Generalized Linear Models - Michael Fuchs</title>
+<meta property="og:title" content="Machine Learning - Predictions with Generalized Linear Models - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+    <li><a href="https://twitter.com/Stat_Michael">Twitter</a></li>
+    
+    <li><a href="https://www.xing.com/profile/Michael_Fuchs426/cv?sc_o=mxb_p">XING</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">8 min read</span>
+    
+
+    <h1 class="article-title">Machine Learning - Predictions with Generalized Linear Models</h1>
+
+    
+    <span class="article-date">2019/01/12</span>
+    
+
+    <div class="article-content">
+      <pre class="r"><code>library(tidyverse)
+library(caret)
+library(glmnet)
+library(ROCR)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Load and prepare the dataset</li>
+<li>3 Train the model</li>
+<li>4 Manual calculation of some key figures</li>
+<li>4.1 p value of Thal7</li>
+<li>4.2 Model deviance</li>
+<li>4.3 Null deviance</li>
+<li>4.4 Pseudo R<sup>2</sup></li>
+<li>4.5 Model deviance residuals</li>
+<li>5 Test set performance</li>
+<li>6 Regularization with lasso</li>
+<li>6.1 Classification accuracy for the train set</li>
+<li>6.2 Classification accuracy for the test set</li>
+<li>7 Classification metrics</li>
+<li>8 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>In my last post (<a href="https://michael-fuchs.netlify.com/2019/01/11/machine-learning-predictions-with-linear-regressions/">“Machine Learning - Predictions with linear regressions”</a>) I treated the topic of predicting numerical values using regression models. However, regression models are also suitable for making classifications. This can be done by means of so-called logistic regression models. Logistic regression belongs to a class of models known as Generalized Linear Models.</p>
+<p>Subsequently, logistical regression will be used to determine the presence of heart disease.</p>
+<p>For this post the dataset <em>Statlog (Heart)</em> from the UCI- Machine Learning Repository platform <a href="http://archive.ics.uci.edu/ml/datasets/statlog+(heart)">“UCI”</a> was used.</p>
+</div>
+<div id="load-and-prepare-the-dataset" class="section level1">
+<h1>2 Load and prepare the dataset</h1>
+<pre class="r"><code>url = &quot;http://archive.ics.uci.edu/ml/machine-learning-databases/statlog/heart/heart.dat&quot;
+heart = read.table(url)</code></pre>
+<pre class="r"><code>names(heart) &lt;- c(&quot;AGE&quot;, &quot;SEX&quot;, &quot;CHESTPAIN&quot;, &quot;RESTBP&quot;, &quot;CHOL&quot;, 
+                  &quot;SUGAR&quot;, &quot;ECG&quot;, &quot;MAXHR&quot;, &quot;ANGINA&quot;, &quot;DEP&quot;, &quot;EXERCISE&quot;, &quot;FLUOR&quot;, 
+                  &quot;THAL&quot;, &quot;OUTPUT&quot;)
+glimpse(heart)</code></pre>
+<pre><code>## Observations: 270
+## Variables: 14
+## $ AGE       &lt;dbl&gt; 70, 67, 57, 64, 74, 65, 56, 59, 60, 63, 59, 53, 44, ...
+## $ SEX       &lt;dbl&gt; 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1...
+## $ CHESTPAIN &lt;dbl&gt; 4, 3, 2, 4, 2, 4, 3, 4, 4, 4, 4, 4, 3, 1, 4, 4, 4, 4...
+## $ RESTBP    &lt;dbl&gt; 130, 115, 124, 128, 120, 120, 130, 110, 140, 150, 13...
+## $ CHOL      &lt;dbl&gt; 322, 564, 261, 263, 269, 177, 256, 239, 293, 407, 23...
+## $ SUGAR     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1...
+## $ ECG       &lt;dbl&gt; 2, 2, 0, 0, 2, 0, 2, 2, 2, 2, 0, 2, 2, 0, 2, 0, 0, 2...
+## $ MAXHR     &lt;dbl&gt; 109, 160, 141, 105, 121, 140, 142, 142, 170, 154, 16...
+## $ ANGINA    &lt;dbl&gt; 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1...
+## $ DEP       &lt;dbl&gt; 2.4, 1.6, 0.3, 0.2, 0.2, 0.4, 0.6, 1.2, 1.2, 4.0, 0....
+## $ EXERCISE  &lt;dbl&gt; 2, 2, 1, 2, 1, 1, 2, 2, 2, 2, 2, 1, 1, 2, 1, 2, 2, 3...
+## $ FLUOR     &lt;dbl&gt; 3, 0, 0, 1, 1, 0, 1, 1, 2, 3, 0, 0, 0, 2, 1, 0, 2, 0...
+## $ THAL      &lt;dbl&gt; 3, 7, 7, 7, 3, 7, 6, 7, 7, 7, 7, 7, 3, 3, 3, 3, 7, 7...
+## $ OUTPUT    &lt;int&gt; 2, 1, 2, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 2, 1, 1, 2, 2...</code></pre>
+<p>The <em>Chestpain</em>, <em>Thal</em> and <em>ECG</em> features are all categorical features. Therefore we have to convert them as well as the dependent variable <em>Output</em> (we need class labes of 0 and 1).</p>
+<pre class="r"><code>heart$CHESTPAIN = factor(heart$CHESTPAIN)
+heart$ECG = factor(heart$ECG)
+heart$THAL = factor(heart$THAL)
+heart$EXERCISE = factor(heart$EXERCISE)
+heart$OUTPUT = heart$OUTPUT - 1</code></pre>
+</div>
+<div id="train-the-model" class="section level1">
+<h1>3 Train the model</h1>
+<pre class="r"><code>set.seed(987954)
+heart_sampling_vector &lt;- 
+  createDataPartition(heart$OUTPUT, p = 0.85, list = FALSE)
+heart_train &lt;- heart[heart_sampling_vector,]
+heart_train_labels &lt;- heart$OUTPUT[heart_sampling_vector]
+heart_test &lt;- heart[-heart_sampling_vector,]
+heart_test_labels &lt;- heart$OUTPUT[-heart_sampling_vector]
+
+heart_model &lt;- glm(OUTPUT ~ ., data = heart_train, family = binomial(&quot;logit&quot;))
+summary(heart_model)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = OUTPUT ~ ., family = binomial(&quot;logit&quot;), data = heart_train)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.7137  -0.4421  -0.1382   0.3588   2.8118  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -7.946051   3.477686  -2.285 0.022321 *  
+## AGE         -0.020538   0.029580  -0.694 0.487482    
+## SEX          1.641327   0.656291   2.501 0.012387 *  
+## CHESTPAIN2   1.308530   1.000913   1.307 0.191098    
+## CHESTPAIN3   0.560233   0.865114   0.648 0.517255    
+## CHESTPAIN4   2.356442   0.820521   2.872 0.004080 ** 
+## RESTBP       0.026588   0.013357   1.991 0.046529 *  
+## CHOL         0.008105   0.004790   1.692 0.090593 .  
+## SUGAR       -1.263606   0.732414  -1.725 0.084480 .  
+## ECG1         1.352751   3.287293   0.412 0.680699    
+## ECG2         0.563430   0.461872   1.220 0.222509    
+## MAXHR       -0.013585   0.012873  -1.055 0.291283    
+## ANGINA       0.999906   0.525996   1.901 0.057305 .  
+## DEP          0.196349   0.282891   0.694 0.487632    
+## EXERCISE2    0.743530   0.560700   1.326 0.184815    
+## EXERCISE3    0.946718   1.165567   0.812 0.416655    
+## FLUOR        1.310240   0.308348   4.249 2.15e-05 ***
+## THAL6        0.304117   0.995464   0.306 0.759983    
+## THAL7        1.717886   0.510986   3.362 0.000774 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 315.90  on 229  degrees of freedom
+## Residual deviance: 140.36  on 211  degrees of freedom
+## AIC: 178.36
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+<div id="manual-calculation-of-some-key-figures" class="section level1">
+<h1>4 Manual calculation of some key figures</h1>
+</div>
+<div id="p-value-of-thal7" class="section level1">
+<h1>4.1 p value of Thal7</h1>
+<pre class="r"><code>pnorm(3.362 , lower.tail = F) * 2</code></pre>
+<pre><code>## [1] 0.0007738012</code></pre>
+</div>
+<div id="model-deviance" class="section level1">
+<h1>4.2 Model deviance</h1>
+<pre class="r"><code>log_likelihoods &lt;- function(y_labels, y_probs) {
+  y_a &lt;- as.numeric(y_labels)
+  y_p &lt;- as.numeric(y_probs)
+  y_a * log(y_p) + (1 - y_a) * log(1 - y_p)
+}
+
+dataset_log_likelihood &lt;- function(y_labels, y_probs) {
+  sum(log_likelihoods(y_labels, y_probs))
+}
+
+# ---
+
+deviances &lt;- function(y_labels, y_probs) {
+  -2 * log_likelihoods(y_labels, y_probs)
+}
+
+dataset_deviance &lt;- function(y_labels, y_probs) {
+  sum(deviances(y_labels, y_probs))
+}
+
+
+model_deviance &lt;- function(model, data, output_column) {
+    y_labels = data[[output_column]]
+    y_probs = predict(model, newdata = data, type = &quot;response&quot;)
+    dataset_deviance(y_labels, y_probs)
+}
+
+model_deviance(heart_model, data = heart_train, output_column = &quot;OUTPUT&quot;)</code></pre>
+<pre><code>## [1] 140.3561</code></pre>
+</div>
+<div id="null-deviance" class="section level1">
+<h1>4.3 Null deviance</h1>
+<pre class="r"><code>null_deviance &lt;- function(data, output_column) {
+  y_labels &lt;- data[[output_column]]
+  y_probs &lt;- mean(data[[output_column]])
+  dataset_deviance(y_labels, y_probs)
+}
+
+null_deviance(data = heart_train, output_column = &quot;OUTPUT&quot;)</code></pre>
+<pre><code>## [1] 315.9023</code></pre>
+</div>
+<div id="pseudo-r2" class="section level1">
+<h1>4.4 Pseudo R<sup>2</sup></h1>
+<pre class="r"><code>model_pseudo_r_squared &lt;- function(model, data, output_column) {
+  1 - ( model_deviance(model, data, output_column) / 
+          null_deviance(data, output_column) )
+}
+
+model_pseudo_r_squared(heart_model, data = heart_train, output_column = &quot;OUTPUT&quot;)</code></pre>
+<pre><code>## [1] 0.5556977</code></pre>
+<pre class="r"><code>model_chi_squared_p_value &lt;-  function(model, data, output_column) {
+  null_df &lt;- nrow(data) - 1
+  model_df &lt;- nrow(data) - length(model$coefficients)
+  difference_df &lt;- null_df - model_df
+  null_deviance &lt;- null_deviance(data, output_column)
+  m_deviance &lt;- model_deviance(model, data, output_column)
+  difference_deviance &lt;- null_deviance - m_deviance
+  pchisq(difference_deviance, difference_df,lower.tail = F)
+}
+
+model_chi_squared_p_value(heart_model, data = heart_train, output_column = &quot;OUTPUT&quot;)</code></pre>
+<pre><code>## [1] 7.294219e-28</code></pre>
+<p>Our logistic mode is said to expain roughly 56% of the null deviance with an p value of &lt; .001.</p>
+</div>
+<div id="model-deviance-residuals" class="section level1">
+<h1>4.5 Model deviance residuals</h1>
+<pre class="r"><code>model_deviance_residuals &lt;- function(model, data, output_column) {
+  y_labels = data[[output_column]]
+  y_probs = predict(model, newdata = data, type = &quot;response&quot;)
+  residual_sign = sign(y_labels - y_probs)
+  residuals = sqrt(deviances(y_labels, y_probs))
+  residual_sign * residuals
+}
+summary(model_deviance_residuals(heart_model, data = heart_train, output_column = &quot;OUTPUT&quot;))</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -2.71369 -0.44214 -0.13823 -0.02765  0.35875  2.81178</code></pre>
+</div>
+<div id="test-set-performance" class="section level1">
+<h1>5 Test set performance</h1>
+<pre class="r"><code>train_predictions &lt;- predict(heart_model, newdata = heart_train, type = &quot;response&quot;)
+train_class_predictions &lt;- as.numeric(train_predictions &gt; 0.5)
+mean(train_class_predictions == heart_train$OUTPUT)</code></pre>
+<pre><code>## [1] 0.8869565</code></pre>
+<p>The classification accuracy on the training set is 89%.</p>
+<pre class="r"><code>test_predictions = predict(heart_model, newdata = heart_test, type = &quot;response&quot;)
+test_class_predictions = as.numeric(test_predictions &gt; 0.5)
+mean(test_class_predictions == heart_test$OUTPUT)</code></pre>
+<pre><code>## [1] 0.775</code></pre>
+<p>The classification accuracy on the test set is 78%.</p>
+</div>
+<div id="regularization-with-lasso" class="section level1">
+<h1>6 Regularization with lasso</h1>
+<pre class="r"><code>heart_train_mat &lt;- model.matrix(OUTPUT ~ ., heart_train)[,-1]
+lambdas &lt;- 10 ^ seq(8, -4, length = 250)
+heart_models_lasso &lt;- glmnet(heart_train_mat, heart_train$OUTPUT, alpha = 1, lambda = lambdas, family = &quot;binomial&quot;)
+lasso.cv &lt;- cv.glmnet(heart_train_mat, heart_train$OUTPUT, 
+                      alpha = 1,lambda = lambdas, family = &quot;binomial&quot;)
+lambda_lasso &lt;- lasso.cv$lambda.min
+lambda_lasso</code></pre>
+<pre><code>## [1] 0.01181107</code></pre>
+<pre class="r"><code>predict(heart_models_lasso, type = &quot;coefficients&quot;, s = lambda_lasso)</code></pre>
+<pre><code>## 19 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
+##                        1
+## (Intercept) -4.702476656
+## AGE          .          
+## SEX          0.982354604
+## CHESTPAIN2   0.050583269
+## CHESTPAIN3   .          
+## CHESTPAIN4   1.481502102
+## RESTBP       0.012612051
+## CHOL         0.003912907
+## SUGAR       -0.536400517
+## ECG1         .          
+## ECG2         0.321026773
+## MAXHR       -0.010563953
+## ANGINA       0.795431862
+## DEP          0.213059195
+## EXERCISE2    0.320076517
+## EXERCISE3    0.012296570
+## FLUOR        0.925047313
+## THAL6        0.066580841
+## THAL7        1.484011300</code></pre>
+<p>We can see that a number of our features have effectively been removed from the model because their coefficients are zero. Let’s use this new model to measure the classification accuracy on our training and test sets. We observe that in both cases, we get slighty better performance.</p>
+</div>
+<div id="classification-accuracy-for-the-train-set" class="section level1">
+<h1>6.1 Classification accuracy for the train set</h1>
+<pre class="r"><code>lasso_train_predictions &lt;- predict(heart_models_lasso, s = lambda_lasso, newx = heart_train_mat, type = &quot;response&quot;)
+lasso_train_class_predictions &lt;- as.numeric(lasso_train_predictions &gt; 0.5)
+mean(lasso_train_class_predictions == heart_train$OUTPUT)</code></pre>
+<pre><code>## [1] 0.8913043</code></pre>
+</div>
+<div id="classification-accuracy-for-the-test-set" class="section level1">
+<h1>6.2 Classification accuracy for the test set</h1>
+<pre class="r"><code>heart_test_mat &lt;- model.matrix(OUTPUT ~ ., heart_test)[,-1]
+lasso_test_predictions &lt;- predict(heart_models_lasso, s = lambda_lasso, newx = heart_test_mat, type = &quot;response&quot;)
+lasso_test_class_predictions &lt;- as.numeric(lasso_test_predictions &gt; 0.5)
+mean(lasso_test_class_predictions == heart_test$OUTPUT)</code></pre>
+<pre><code>## [1] 0.775</code></pre>
+</div>
+<div id="classification-metrics" class="section level1">
+<h1>7 Classification metrics</h1>
+<p>In our case a binary confusion matrix can be used to compute a number of other useful performance metrics for our data, such as precision, recall and the specificity.</p>
+<pre class="r"><code>confusion_matrix &lt;- table(predicted = train_class_predictions, actual = heart_train$OUTPUT)
+confusion_matrix</code></pre>
+<pre><code>##          actual
+## predicted   0   1
+##         0 118  16
+##         1  10  86</code></pre>
+<pre class="r"><code>precision &lt;- confusion_matrix[2, 2] / sum(confusion_matrix[2,])
+precision</code></pre>
+<pre><code>## [1] 0.8958333</code></pre>
+<pre class="r"><code>recall &lt;- confusion_matrix[2, 2] / sum(confusion_matrix[,2])
+recall</code></pre>
+<pre><code>## [1] 0.8431373</code></pre>
+<pre class="r"><code>(f = 2 * precision * recall / (precision + recall))</code></pre>
+<pre><code>## [1] 0.8686869</code></pre>
+<p>Recall is also known as the true positive rate.</p>
+<pre class="r"><code>specificity &lt;- confusion_matrix[1,1]/sum(confusion_matrix[1,])
+specificity</code></pre>
+<pre><code>## [1] 0.880597</code></pre>
+<p>Specificity is the false negative rate.</p>
+<p>Ideally, what we would like is a visual way to assess the effect of changing the threshold (we have used 0.5 so far) on our performance metrics, and the precision recall curve is one such useful plot.</p>
+<pre class="r"><code>train_predictions &lt;- predict(heart_model, newdata = heart_train, type = &quot;response&quot;)
+pred &lt;- prediction(train_predictions, heart_train$OUTPUT)
+perf &lt;- performance(pred, measure = &quot;prec&quot;, x.measure = &quot;rec&quot;)
+plot(perf)</code></pre>
+<p><img src="/post/2019-01-12-machine-learning-predictions-with-generalized-linear-models_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>The plot shows us, that, to obtain values of recall above 0.8, we’ll have to sacrifice precision quite abruptly. Therefore it is usefull to create a data frame of cutoff values, which are the threshold values for which precision and recall change in our data, along with their corresponding precision and recall values.</p>
+<p>For example, we want to find a suitable threshold so that we have at least 90% recall and 80% precision.</p>
+<pre class="r"><code>thresholds &lt;- data.frame(cutoffs = perf@alpha.values[[1]], recall = perf@x.values[[1]], precision = perf@y.values[[1]])
+subset(thresholds,(recall &gt; 0.9) &amp; (precision &gt; 0.8))</code></pre>
+<pre><code>##       cutoffs    recall precision
+## 112 0.3491857 0.9019608 0.8288288
+## 113 0.3472740 0.9019608 0.8214286
+## 114 0.3428354 0.9019608 0.8141593
+## 115 0.3421438 0.9019608 0.8070175</code></pre>
+<p>As we can see, a threshold of 0.35 will satisfy our requirements.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>8 Conclusion</h1>
+<p>We have seen how it is possible to make classifications with a logistic regression and to increase the predictive accuracy of this models.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

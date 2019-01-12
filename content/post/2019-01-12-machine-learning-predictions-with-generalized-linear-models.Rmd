@@ -1,0 +1,323 @@
+---
+title: Machine Learning - Predictions with Generalized Linear Models
+author: Michael Fuchs
+date: '2019-01-12'
+slug: machine-learning-predictions-with-generalized-linear-models
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(caret)
+library(glmnet)
+library(ROCR)
+```
+
+
+#Table of Content
+
++ 1 Introduction
++ 2 Load and prepare the dataset
++ 3 Train the model
++ 4 Manual calculation of some key figures
++ 4.1 p value of Thal7 
++ 4.2 Model deviance
++ 4.3 Null deviance
++ 4.4 Pseudo R^2^
++ 4.5 Model deviance residuals
++ 5 Test set performance
++ 6 Regularization with lasso
++ 6.1 Classification accuracy for the train set
++ 6.2 Classification accuracy for the test set
++ 7 Classification metrics
++ 8 Conclusion
+
+
+#1 Introduction
+
+In my last post (["Machine Learning - Predictions with linear regressions"](https://michael-fuchs.netlify.com/2019/01/11/machine-learning-predictions-with-linear-regressions/)) I treated the topic of predicting numerical values using regression models. However, regression models are also suitable for making classifications. This can be done by means of so-called logistic regression models. Logistic regression belongs to a class of models known as Generalized Linear Models. 
+
+Subsequently, logistical regression will be used to determine the presence of heart disease.
+
+
+For this post the dataset *Statlog (Heart)* from the UCI- Machine Learning Repository platform ["UCI"](http://archive.ics.uci.edu/ml/datasets/statlog+(heart)) was used.
+
+
+#2 Load and prepare the dataset
+
+
+```{r}
+url = "http://archive.ics.uci.edu/ml/machine-learning-databases/statlog/heart/heart.dat"
+heart = read.table(url)
+```
+```{r}
+names(heart) <- c("AGE", "SEX", "CHESTPAIN", "RESTBP", "CHOL", 
+                  "SUGAR", "ECG", "MAXHR", "ANGINA", "DEP", "EXERCISE", "FLUOR", 
+                  "THAL", "OUTPUT")
+glimpse(heart)
+```
+
+
+The *Chestpain*, *Thal* and *ECG* features are all categorical features. Therefore we have to convert them as well as the dependent variable *Output* (we need class labes of 0 and 1). 
+
+```{r}
+heart$CHESTPAIN = factor(heart$CHESTPAIN)
+heart$ECG = factor(heart$ECG)
+heart$THAL = factor(heart$THAL)
+heart$EXERCISE = factor(heart$EXERCISE)
+heart$OUTPUT = heart$OUTPUT - 1
+```
+
+
+#3 Train the model
+
+```{r}
+set.seed(987954)
+heart_sampling_vector <- 
+  createDataPartition(heart$OUTPUT, p = 0.85, list = FALSE)
+heart_train <- heart[heart_sampling_vector,]
+heart_train_labels <- heart$OUTPUT[heart_sampling_vector]
+heart_test <- heart[-heart_sampling_vector,]
+heart_test_labels <- heart$OUTPUT[-heart_sampling_vector]
+
+heart_model <- glm(OUTPUT ~ ., data = heart_train, family = binomial("logit"))
+summary(heart_model)
+```
+
+
+#4 Manual calculation of some key figures
+
+
+#4.1 p value of Thal7 
+
+
+```{r}
+pnorm(3.362 , lower.tail = F) * 2
+```
+
+
+
+#4.2 Model deviance
+
+
+```{r}
+log_likelihoods <- function(y_labels, y_probs) {
+  y_a <- as.numeric(y_labels)
+  y_p <- as.numeric(y_probs)
+  y_a * log(y_p) + (1 - y_a) * log(1 - y_p)
+}
+
+dataset_log_likelihood <- function(y_labels, y_probs) {
+  sum(log_likelihoods(y_labels, y_probs))
+}
+
+# ---
+
+deviances <- function(y_labels, y_probs) {
+  -2 * log_likelihoods(y_labels, y_probs)
+}
+
+dataset_deviance <- function(y_labels, y_probs) {
+  sum(deviances(y_labels, y_probs))
+}
+
+
+model_deviance <- function(model, data, output_column) {
+    y_labels = data[[output_column]]
+    y_probs = predict(model, newdata = data, type = "response")
+    dataset_deviance(y_labels, y_probs)
+}
+
+model_deviance(heart_model, data = heart_train, output_column = "OUTPUT")
+```
+
+
+#4.3 Null deviance
+
+
+```{r}
+null_deviance <- function(data, output_column) {
+  y_labels <- data[[output_column]]
+  y_probs <- mean(data[[output_column]])
+  dataset_deviance(y_labels, y_probs)
+}
+
+null_deviance(data = heart_train, output_column = "OUTPUT")
+```
+
+
+
+#4.4 Pseudo R^2^
+
+```{r}
+model_pseudo_r_squared <- function(model, data, output_column) {
+  1 - ( model_deviance(model, data, output_column) / 
+          null_deviance(data, output_column) )
+}
+
+model_pseudo_r_squared(heart_model, data = heart_train, output_column = "OUTPUT")
+
+model_chi_squared_p_value <-  function(model, data, output_column) {
+  null_df <- nrow(data) - 1
+  model_df <- nrow(data) - length(model$coefficients)
+  difference_df <- null_df - model_df
+  null_deviance <- null_deviance(data, output_column)
+  m_deviance <- model_deviance(model, data, output_column)
+  difference_deviance <- null_deviance - m_deviance
+  pchisq(difference_deviance, difference_df,lower.tail = F)
+}
+
+model_chi_squared_p_value(heart_model, data = heart_train, output_column = "OUTPUT")
+```
+
+Our logistic mode is said to expain roughly 56% of the null deviance with an p value of < .001.
+
+
+#4.5 Model deviance residuals
+
+```{r}
+model_deviance_residuals <- function(model, data, output_column) {
+  y_labels = data[[output_column]]
+  y_probs = predict(model, newdata = data, type = "response")
+  residual_sign = sign(y_labels - y_probs)
+  residuals = sqrt(deviances(y_labels, y_probs))
+  residual_sign * residuals
+}
+summary(model_deviance_residuals(heart_model, data = heart_train, output_column = "OUTPUT"))
+```
+
+
+
+#5 Test set performance
+
+```{r}
+train_predictions <- predict(heart_model, newdata = heart_train, type = "response")
+train_class_predictions <- as.numeric(train_predictions > 0.5)
+mean(train_class_predictions == heart_train$OUTPUT)
+```
+
+The classification accuracy on the training set is 89%.
+
+
+```{r}
+test_predictions = predict(heart_model, newdata = heart_test, type = "response")
+test_class_predictions = as.numeric(test_predictions > 0.5)
+mean(test_class_predictions == heart_test$OUTPUT)
+```
+
+The classification accuracy on the test set is 78%.
+
+
+#6 Regularization with lasso
+
+```{r}
+heart_train_mat <- model.matrix(OUTPUT ~ ., heart_train)[,-1]
+lambdas <- 10 ^ seq(8, -4, length = 250)
+heart_models_lasso <- glmnet(heart_train_mat, heart_train$OUTPUT, alpha = 1, lambda = lambdas, family = "binomial")
+lasso.cv <- cv.glmnet(heart_train_mat, heart_train$OUTPUT, 
+                      alpha = 1,lambda = lambdas, family = "binomial")
+lambda_lasso <- lasso.cv$lambda.min
+lambda_lasso
+```
+
+```{r}
+predict(heart_models_lasso, type = "coefficients", s = lambda_lasso)
+```
+
+We can see that a number of our features have effectively been removed from the model because their coefficients are zero. Let's use this new model to measure the classification accuracy on our training and test sets. We observe that in both cases, we get slighty better performance.
+
+
+#6.1 Classification accuracy for the train set
+
+
+```{r}
+lasso_train_predictions <- predict(heart_models_lasso, s = lambda_lasso, newx = heart_train_mat, type = "response")
+lasso_train_class_predictions <- as.numeric(lasso_train_predictions > 0.5)
+mean(lasso_train_class_predictions == heart_train$OUTPUT)
+```
+
+#6.2 Classification accuracy for the test set
+
+
+```{r}
+heart_test_mat <- model.matrix(OUTPUT ~ ., heart_test)[,-1]
+lasso_test_predictions <- predict(heart_models_lasso, s = lambda_lasso, newx = heart_test_mat, type = "response")
+lasso_test_class_predictions <- as.numeric(lasso_test_predictions > 0.5)
+mean(lasso_test_class_predictions == heart_test$OUTPUT)
+```
+
+
+
+#7 Classification metrics
+
+In our case a binary confusion matrix can be used to compute a number of other useful performance metrics for our data, such as precision, recall and the specificity.
+
+```{r}
+confusion_matrix <- table(predicted = train_class_predictions, actual = heart_train$OUTPUT)
+confusion_matrix
+```
+
+```{r}
+precision <- confusion_matrix[2, 2] / sum(confusion_matrix[2,])
+precision
+```
+```{r}
+recall <- confusion_matrix[2, 2] / sum(confusion_matrix[,2])
+recall
+```
+```{r}
+(f = 2 * precision * recall / (precision + recall))
+```
+
+Recall is also known as the true positive rate.
+
+```{r}
+specificity <- confusion_matrix[1,1]/sum(confusion_matrix[1,])
+specificity
+```
+
+Specificity is the false negative rate. 
+
+
+Ideally, what we would like is a visual way to assess the effect of changing the threshold (we have used 0.5 so far) on our performance metrics, and the precision recall curve is one such useful plot. 
+
+
+```{r}
+train_predictions <- predict(heart_model, newdata = heart_train, type = "response")
+pred <- prediction(train_predictions, heart_train$OUTPUT)
+perf <- performance(pred, measure = "prec", x.measure = "rec")
+plot(perf)
+```
+
+The plot shows us, that, to obtain values of recall above 0.8, we'll have to sacrifice precision quite abruptly. Therefore it is usefull to create a data frame of cutoff values, which are the threshold values for which precision and recall change in our data, along with their corresponding precision and recall values.
+
+For example, we want to find a suitable threshold so that we have at least 90% recall and 80% precision.
+
+```{r}
+thresholds <- data.frame(cutoffs = perf@alpha.values[[1]], recall = perf@x.values[[1]], precision = perf@y.values[[1]])
+subset(thresholds,(recall > 0.9) & (precision > 0.8))
+```
+
+As we can see, a threshold of 0.35 will satisfy our requirements.
+
+
+#8 Conclusion
+
+We have seen how it is possible to make classifications with a logistic regression and to increase the predictive accuracy of this models.
+
+
+
+
+
+
+
+
+

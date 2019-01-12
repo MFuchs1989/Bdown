@@ -6,10 +6,19 @@
     <description>Recent content in R Markdown on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 11 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 12 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Machine Learning - Predictions with Generalized Linear Models</title>
+      <link>/2019/01/12/machine-learning-predictions-with-generalized-linear-models/</link>
+      <pubDate>Sat, 12 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/01/12/machine-learning-predictions-with-generalized-linear-models/</guid>
+      <description>library(tidyverse)library(caret)library(glmnet)library(ROCR)Table of Content1 Introduction2 Load and prepare the dataset3 Train the model4 Manual calculation of some key figures4.1 p value of Thal74.2 Model deviance4.3 Null deviance4.4 Pseudo R24.5 Model deviance residuals5 Test set performance6 Regularization with lasso6.1 Classification accuracy for the train set6.2 Classification accuracy for the test set7 Classification metrics8 Conclusion1 IntroductionIn my last post (“Machine Learning - Predictions with linear regressions”) I treated the topic of predicting numerical values using regression models.</description>
+    </item>
     
     <item>
       <title>Machine Learning - Predictions with linear regressions</title>
