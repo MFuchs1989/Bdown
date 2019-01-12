@@ -219,7 +219,8 @@ findCorrelation(cars_cor)</code></pre>
 ## $remove
 ## [1] 15 18</code></pre>
 <p>Here we are advised to drop the <em>coupe</em> and <em>wagon</em> columns, which are the 15th and 18th features, respectively, because they are exact linear combinations of other features. Note that the division into a training part and a test part must be redone.</p>
-<pre class="r"><code>cars &lt;- cars[,c(-15, -18)]
+<pre class="r"><code>set.seed(623356)
+cars &lt;- cars[,c(-15, -18)]
 cars_sampling_vector &lt;- createDataPartition(cars$Price, p = 0.85, list = FALSE)
 cars_train &lt;- cars[cars_sampling_vector,]
 cars_train_labels &lt;- cars$Price[cars_sampling_vector]
@@ -265,32 +266,32 @@ cars_model1 &lt;- lm(Price ~ ., data = cars_train)</code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -9350.5 -1619.9   143.6  1468.4 13706.7 
+## -9589.3 -1557.6   154.4  1399.5 14022.9 
 ## 
 ## Coefficients: (1 not defined because of singularities)
 ##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -9.181e+02  1.098e+03  -0.836   0.4035    
-## Mileage     -1.865e-01  1.408e-02 -13.239  &lt; 2e-16 ***
-## Cylinder     3.628e+03  1.245e+02  29.130  &lt; 2e-16 ***
-## Doors        1.564e+03  2.860e+02   5.469 6.39e-08 ***
-## Cruise       2.212e+02  3.244e+02   0.682   0.4955    
-## Sound        5.519e+02  2.592e+02   2.130   0.0336 *  
-## Leather      6.758e+02  2.733e+02   2.473   0.0137 *  
-## Buick        1.213e+03  5.918e+02   2.050   0.0407 *  
-## Cadillac     1.350e+04  6.700e+02  20.155  &lt; 2e-16 ***
-## Chevy       -4.342e+02  4.662e+02  -0.931   0.3520    
-## Pontiac     -1.191e+03  5.239e+02  -2.274   0.0233 *  
-## Saab         1.228e+04  5.994e+02  20.493  &lt; 2e-16 ***
+## (Intercept) -1.152e+03  1.105e+03  -1.043 0.297402    
+## Mileage     -1.832e-01  1.347e-02 -13.593  &lt; 2e-16 ***
+## Cylinder     3.710e+03  1.218e+02  30.461  &lt; 2e-16 ***
+## Doors        1.448e+03  2.873e+02   5.040 5.99e-07 ***
+## Cruise       1.209e+02  3.213e+02   0.376 0.706786    
+## Sound        3.945e+02  2.530e+02   1.559 0.119489    
+## Leather      9.677e+02  2.692e+02   3.595 0.000348 ***
+## Buick        1.335e+03  5.963e+02   2.239 0.025473 *  
+## Cadillac     1.346e+04  6.724e+02  20.010  &lt; 2e-16 ***
+## Chevy       -4.512e+02  4.793e+02  -0.941 0.346859    
+## Pontiac     -1.008e+03  5.311e+02  -1.899 0.058021 .  
+## Saab         1.259e+04  6.023e+02  20.903  &lt; 2e-16 ***
 ## Saturn              NA         NA      NA       NA    
-## convertible  1.097e+04  6.079e+02  18.046  &lt; 2e-16 ***
-## hatchback   -6.388e+03  6.691e+02  -9.548  &lt; 2e-16 ***
-## sedan       -4.521e+03  4.895e+02  -9.237  &lt; 2e-16 ***
+## convertible  1.048e+04  5.857e+02  17.889  &lt; 2e-16 ***
+## hatchback   -6.356e+03  6.570e+02  -9.674  &lt; 2e-16 ***
+## sedan       -4.300e+03  4.907e+02  -8.764  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 2941 on 669 degrees of freedom
-## Multiple R-squared:  0.9128, Adjusted R-squared:  0.911 
-## F-statistic: 500.1 on 14 and 669 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 2888 on 669 degrees of freedom
+## Multiple R-squared:  0.9163, Adjusted R-squared:  0.9146 
+## F-statistic: 523.1 on 14 and 669 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Please note the following message from the output: “Coefficients: (1 not defined because of singularities)”. This occurs because we still have features whose effect on the output is indiscernible form other features due to underlying dependencies. We can identify this variable using the <em>alias</em> function.</p>
 <pre class="r"><code>alias(cars_model1)</code></pre>
 <pre><code>## Model :
@@ -312,31 +313,31 @@ summary(cars_model2)</code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -9350.5 -1619.9   143.6  1468.4 13706.7 
+## -9589.3 -1557.6   154.4  1399.5 14022.9 
 ## 
 ## Coefficients:
 ##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -9.181e+02  1.098e+03  -0.836   0.4035    
-## Mileage     -1.865e-01  1.408e-02 -13.239  &lt; 2e-16 ***
-## Cylinder     3.628e+03  1.245e+02  29.130  &lt; 2e-16 ***
-## Doors        1.564e+03  2.860e+02   5.469 6.39e-08 ***
-## Cruise       2.212e+02  3.244e+02   0.682   0.4955    
-## Sound        5.519e+02  2.592e+02   2.130   0.0336 *  
-## Leather      6.758e+02  2.733e+02   2.473   0.0137 *  
-## Buick        1.213e+03  5.918e+02   2.050   0.0407 *  
-## Cadillac     1.350e+04  6.700e+02  20.155  &lt; 2e-16 ***
-## Chevy       -4.342e+02  4.662e+02  -0.931   0.3520    
-## Pontiac     -1.191e+03  5.239e+02  -2.274   0.0233 *  
-## Saab         1.228e+04  5.994e+02  20.493  &lt; 2e-16 ***
-## convertible  1.097e+04  6.079e+02  18.046  &lt; 2e-16 ***
-## hatchback   -6.388e+03  6.691e+02  -9.548  &lt; 2e-16 ***
-## sedan       -4.521e+03  4.895e+02  -9.237  &lt; 2e-16 ***
+## (Intercept) -1.152e+03  1.105e+03  -1.043 0.297402    
+## Mileage     -1.832e-01  1.347e-02 -13.593  &lt; 2e-16 ***
+## Cylinder     3.710e+03  1.218e+02  30.461  &lt; 2e-16 ***
+## Doors        1.448e+03  2.873e+02   5.040 5.99e-07 ***
+## Cruise       1.209e+02  3.213e+02   0.376 0.706786    
+## Sound        3.945e+02  2.530e+02   1.559 0.119489    
+## Leather      9.677e+02  2.692e+02   3.595 0.000348 ***
+## Buick        1.335e+03  5.963e+02   2.239 0.025473 *  
+## Cadillac     1.346e+04  6.724e+02  20.010  &lt; 2e-16 ***
+## Chevy       -4.512e+02  4.793e+02  -0.941 0.346859    
+## Pontiac     -1.008e+03  5.311e+02  -1.899 0.058021 .  
+## Saab         1.259e+04  6.023e+02  20.903  &lt; 2e-16 ***
+## convertible  1.048e+04  5.857e+02  17.889  &lt; 2e-16 ***
+## hatchback   -6.356e+03  6.570e+02  -9.674  &lt; 2e-16 ***
+## sedan       -4.300e+03  4.907e+02  -8.764  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 2941 on 669 degrees of freedom
-## Multiple R-squared:  0.9128, Adjusted R-squared:  0.911 
-## F-statistic: 500.1 on 14 and 669 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 2888 on 669 degrees of freedom
+## Multiple R-squared:  0.9163, Adjusted R-squared:  0.9146 
+## F-statistic: 523.1 on 14 and 669 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Perfect!</p>
 </div>
 <div id="how-to-check-some-summary-outputs-individually" class="section level1">
@@ -348,9 +349,9 @@ summary(cars_model2)</code></pre>
 <p>A residual is simply the error our model makes for a paritcular observation.</p>
 <pre class="r"><code>summary(cars_model2$residuals)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-## -9350.5 -1619.9   143.6     0.0  1468.4 13706.7</code></pre>
+## -9589.3 -1557.6   154.4     0.0  1399.5 14022.9</code></pre>
 <pre class="r"><code>mean(cars_train$Price)</code></pre>
-<pre><code>## [1] 21352.79</code></pre>
+<pre><code>## [1] 21361.44</code></pre>
 <p>With this information we can say that the average selling price of a car in our training data is around 21k Dollar, and 50% of our predictions are roughly within +- 1.6k of the correct value.</p>
 <p>A useful way to graphically compare the quantiles of the distributions of two quantitative variables is the quantile-quantile diagram.</p>
 <pre class="r"><code>par(mfrow = c(2, 1))
@@ -408,12 +409,12 @@ sqrt(sum(machine_model1$residuals ^ 2) / (n_machine - k_machine - 1))</code></pr
 <pre class="r"><code>n_cars &lt;- nrow(cars_train)
 k_cars &lt;- length(cars_model2$coefficients) - 1
 sqrt(sum(cars_model2$residuals ^ 2) / (n_cars - k_cars - 1))</code></pre>
-<pre><code>## [1] 2940.903</code></pre>
+<pre><code>## [1] 2887.982</code></pre>
 <p>To interpret the RSE values for our two models, we neet to compare them with the mean of our output variables.</p>
 <pre class="r"><code>mean(machine_train$PRP)</code></pre>
 <pre><code>## [1] 103.9777</code></pre>
 <pre class="r"><code>mean(cars_train$Price)</code></pre>
-<pre><code>## [1] 21352.79</code></pre>
+<pre><code>## [1] 21361.44</code></pre>
 </div>
 <div id="r2" class="section level1">
 <h1>6.4 R<sup>2</sup></h1>
@@ -427,7 +428,7 @@ sqrt(sum(cars_model2$residuals ^ 2) / (n_cars - k_cars - 1))</code></pre>
 compute_rsquared(machine_model1$fitted.values, machine_train$PRP)</code></pre>
 <pre><code>## [1] 0.8812897</code></pre>
 <pre class="r"><code>compute_rsquared(cars_model2$fitted.values, cars_train$Price)</code></pre>
-<pre><code>## [1] 0.9127819</code></pre>
+<pre><code>## [1] 0.9163022</code></pre>
 </div>
 <div id="adjusted-r2" class="section level1">
 <h1>6.5 Adjusted R<sup>2</sup></h1>
@@ -441,7 +442,7 @@ compute_rsquared(machine_model1$fitted.values, machine_train$PRP)</code></pre>
 compute_adjusted_rsquared(machine_model1$fitted.values, machine_train$PRP, k_machine)</code></pre>
 <pre><code>## [1] 0.8771486</code></pre>
 <pre class="r"><code>compute_adjusted_rsquared(cars_model2$fitted.values, cars_train$Price, k_cars)</code></pre>
-<pre><code>## [1] 0.9109568</code></pre>
+<pre><code>## [1] 0.9145506</code></pre>
 </div>
 <div id="test-set-performance-with-the-mse" class="section level1">
 <h1>7 Test set performance with the MSE</h1>
@@ -464,9 +465,9 @@ cars_model2_predictions &lt;- predict(cars_model2, cars_test)</code></pre>
 <div id="mse-for-the-cars-dataset" class="section level1">
 <h1>7.2 MSE for the cars dataset</h1>
 <pre class="r"><code>compute_mse(cars_model2$fitted.values, cars_train$Price)</code></pre>
-<pre><code>## [1] 8459244</code></pre>
+<pre><code>## [1] 8157535</code></pre>
 <pre class="r"><code>compute_mse(cars_model2_predictions, cars_test$Price)</code></pre>
-<pre><code>## [1] 7435036</code></pre>
+<pre><code>## [1] 9311883</code></pre>
 </div>
 <div id="problems-with-linear-regression" class="section level1">
 <h1>8 Problems with linear regression</h1>
@@ -477,16 +478,16 @@ cars_model2_predictions &lt;- predict(cars_model2, cars_test)</code></pre>
 <p>Multicollinearity is a problem of regression analysis and occurs when two or more explanatory variables have a very strong correlation with each other. We can check this with the <em>vif</em> function.</p>
 <pre class="r"><code>vif(cars_model2)</code></pre>
 <pre><code>##     Mileage    Cylinder       Doors      Cruise       Sound     Leather 
-##    1.009825    2.355386    4.637142    1.542094    1.156094    1.200365 
+##    1.007771    2.321707    4.765664    1.543048    1.145750    1.203352 
 ##       Buick    Cadillac       Chevy     Pontiac        Saab convertible 
-##    2.511953    3.343887    4.101078    3.201689    3.398267    1.646958 
+##    2.678895    3.406432    4.539426    3.454623    3.527183    1.693388 
 ##   hatchback       sedan 
-##    2.442945    4.508837</code></pre>
+##    2.573742    4.659400</code></pre>
 <p>These values can also be calculated manually by us. Here is the example for the calculation of the value for the variable Sedan</p>
 <pre class="r"><code>sedan_model &lt;- lm(sedan ~ .-Price -Saturn, data = cars_train)
 sedan_r2 &lt;- compute_rsquared(sedan_model$fitted.values, cars_train$sedan)
 1 / (1-sedan_r2)</code></pre>
-<pre><code>## [1] 4.508837</code></pre>
+<pre><code>## [1] 4.6594</code></pre>
 </div>
 <div id="outliers" class="section level1">
 <h1>8.2 Outliers</h1>
@@ -609,67 +610,67 @@ cars_model_null &lt;- lm(Price ~ 1, data = cars_train)</code></pre>
 <div id="backward-selection" class="section level1">
 <h1>9.2 Backward selection</h1>
 <pre class="r"><code>cars_model3 &lt;- step(cars_model2, scope = list(lower=cars_model_null, upper=cars_model2), direction = &quot;backward&quot;)</code></pre>
-<pre><code>## Start:  AIC=10940.33
+<pre><code>## Start:  AIC=10915.49
 ## Price ~ (Mileage + Cylinder + Doors + Cruise + Sound + Leather + 
 ##     Buick + Cadillac + Chevy + Pontiac + Saab + Saturn + convertible + 
 ##     hatchback + sedan) - Saturn
 ## 
 ##               Df  Sum of Sq        RSS   AIC
-## - Cruise       1    4022790 5.7901e+09 10939
-## - Chevy        1    7501733 5.7936e+09 10939
-## &lt;none&gt;                      5.7861e+09 10940
-## - Buick        1   36364758 5.8225e+09 10943
-## - Sound        1   39220973 5.8253e+09 10943
-## - Pontiac      1   44713215 5.8308e+09 10944
-## - Leather      1   52873056 5.8390e+09 10944
-## - Doors        1  258707640 6.0448e+09 10968
-## - sedan        1  737912637 6.5240e+09 11020
-## - hatchback    1  788393991 6.5745e+09 11026
-## - Mileage      1 1515908233 7.3020e+09 11098
-## - convertible  1 2816610815 8.6027e+09 11210
-## - Cadillac     1 3513553718 9.2997e+09 11263
-## - Saab         1 3632046993 9.4182e+09 11272
-## - Cylinder     1 7339057544 1.3125e+10 11499
+## - Cruise       1    1181248 5.5809e+09 10914
+## - Chevy        1    7391004 5.5871e+09 10914
+## &lt;none&gt;                      5.5798e+09 10916
+## - Sound        1   20269142 5.6000e+09 10916
+## - Pontiac      1   30070942 5.6098e+09 10917
+## - Buick        1   41817666 5.6216e+09 10919
+## - Leather      1  107804490 5.6876e+09 10927
+## - Doors        1  211881543 5.7916e+09 10939
+## - sedan        1  640630689 6.2204e+09 10988
+## - hatchback    1  780597430 6.3604e+09 11003
+## - Mileage      1 1540985936 7.1207e+09 11080
+## - convertible  1 2669145625 8.2489e+09 11181
+## - Cadillac     1 3339526423 8.9193e+09 11234
+## - Saab         1 3644349610 9.2241e+09 11257
+## - Cylinder     1 7739056530 1.3319e+10 11509
 ## 
-## Step:  AIC=10938.8
+## Step:  AIC=10913.63
 ## Price ~ Mileage + Cylinder + Doors + Sound + Leather + Buick + 
 ##     Cadillac + Chevy + Pontiac + Saab + convertible + hatchback + 
 ##     sedan
 ## 
 ##               Df  Sum of Sq        RSS   AIC
-## - Chevy        1    6761715 5.7969e+09 10938
-## &lt;none&gt;                      5.7901e+09 10939
-## - Sound        1   38914290 5.8291e+09 10941
-## - Pontiac      1   42246600 5.8324e+09 10942
-## - Buick        1   42667596 5.8328e+09 10942
-## - Leather      1   51088061 5.8412e+09 10943
-## - Doors        1  254999022 6.0451e+09 10966
-## - sedan        1  734488672 6.5246e+09 11018
-## - hatchback    1  793667693 6.5838e+09 11025
-## - Mileage      1 1518868019 7.3090e+09 11096
-## - convertible  1 2821979851 8.6121e+09 11208
-## - Cadillac     1 3566561226 9.3567e+09 11265
-## - Saab         1 4310876467 1.0101e+10 11317
-## - Cylinder     1 8402375301 1.4193e+10 11550
+## - Chevy        1    7068262 5.5880e+09 10912
+## &lt;none&gt;                      5.5809e+09 10914
+## - Sound        1   20226528 5.6012e+09 10914
+## - Pontiac      1   29131373 5.6101e+09 10915
+## - Buick        1   45719503 5.6267e+09 10917
+## - Leather      1  106867432 5.6878e+09 10925
+## - Doors        1  212269116 5.7932e+09 10937
+## - sedan        1  641888105 6.2228e+09 10986
+## - hatchback    1  784481473 6.3654e+09 11002
+## - Mileage      1 1539848631 7.1208e+09 11078
+## - convertible  1 2683334859 8.2643e+09 11180
+## - Cadillac     1 3370662505 8.9516e+09 11235
+## - Saab         1 4202244537 9.7832e+09 11296
+## - Cylinder     1 8850061397 1.4431e+10 11561
 ## 
-## Step:  AIC=10937.6
+## Step:  AIC=10912.5
 ## Price ~ Mileage + Cylinder + Doors + Sound + Leather + Buick + 
 ##     Cadillac + Pontiac + Saab + convertible + hatchback + sedan
 ## 
 ##               Df  Sum of Sq        RSS   AIC
-## &lt;none&gt;                      5.7969e+09 10938
-## - Sound        1   33933043 5.8308e+09 10940
-## - Pontiac      1   45139187 5.8420e+09 10941
-## - Leather      1   46832743 5.8437e+09 10941
-## - Buick        1  115993493 5.9129e+09 10949
-## - Doors        1  250556890 6.0475e+09 10964
-## - sedan        1  728248820 6.5252e+09 11016
-## - hatchback    1  809056787 6.6060e+09 11025
-## - Mileage      1 1517178586 7.3141e+09 11095
-## - convertible  1 2815799202 8.6127e+09 11206
-## - Cadillac     1 6313488284 1.2110e+10 11440
-## - Saab         1 7748516145 1.3545e+10 11516
-## - Cylinder     1 8578503587 1.4375e+10 11557</code></pre>
+## &lt;none&gt;                      5.5880e+09 10912
+## - Sound        1   17106778 5.6051e+09 10913
+## - Pontiac      1   26681590 5.6147e+09 10914
+## - Leather      1  101105975 5.6891e+09 10923
+## - Buick        1  134526639 5.7225e+09 10927
+## - Doors        1  208787967 5.7968e+09 10936
+## - sedan        1  636350108 6.2244e+09 10984
+## - hatchback    1  800217650 6.3882e+09 11002
+## - Mileage      1 1536843839 7.1248e+09 11077
+## - convertible  1 2678406604 8.2664e+09 11178
+## - Cadillac     1 6319378433 1.1907e+10 11428
+## - Saab         1 8043385025 1.3631e+10 11520
+## - Cylinder     1 8991994597 1.4580e+10 11566</code></pre>
 </div>
 <div id="comparing-the-calculated-mse" class="section level1">
 <h1>9.3 Comparing the calculated MSE</h1>
@@ -679,7 +680,7 @@ compute_mse(machine_model3_predictions, machine_test$PRP)</code></pre>
 <pre><code>## [1] 18304.05</code></pre>
 <pre class="r"><code>cars_model3_predictions &lt;- predict(cars_model3, cars_test)
 compute_mse(cars_model3_predictions, cars_test$Price)</code></pre>
-<pre><code>## [1] 7516471</code></pre>
+<pre><code>## [1] 9390804</code></pre>
 </div>
 <div id="regularization" class="section level1">
 <h1>10 Regularization</h1>
@@ -697,19 +698,19 @@ plot(cars_models_lasso, xvar = &quot;lambda&quot;, main = &quot;Lasso&quot;)</co
 <pre class="r"><code>ridge.cv &lt;- cv.glmnet(cars_train_mat, cars_train$Price, alpha = 0)
 lambda_ridge &lt;- ridge.cv$lambda.min
 lambda_ridge</code></pre>
-<pre><code>## [1] 723.8485</code></pre>
+<pre><code>## [1] 714.9694</code></pre>
 <pre class="r"><code>lasso.cv &lt;- cv.glmnet(cars_train_mat, cars_train$Price, alpha = 1)
 lambda_lasso &lt;- lasso.cv$lambda.min
 lambda_lasso</code></pre>
-<pre><code>## [1] 10.74892</code></pre>
+<pre><code>## [1] 10.61707</code></pre>
 <p>Again we’ll compare the new MSE:</p>
 <pre class="r"><code>cars_test_mat &lt;- model.matrix(Price ~ . -Saturn, cars_test)[,-1]
 cars_ridge_predictions &lt;- predict(cars_models_ridge, s = lambda_ridge, newx = cars_test_mat)
 compute_mse(cars_ridge_predictions, cars_test$Price)</code></pre>
-<pre><code>## [1] 8051375</code></pre>
+<pre><code>## [1] 9936394</code></pre>
 <pre class="r"><code>cars_lasso_predictions &lt;- predict(cars_models_lasso, s = lambda_lasso, newx = cars_test_mat)
 compute_mse(cars_lasso_predictions, cars_test$Price)</code></pre>
-<pre><code>## [1] 7454139</code></pre>
+<pre><code>## [1] 9361155</code></pre>
 </div>
 <div id="conclusion" class="section level1">
 <h1>11 Conclusion</h1>
