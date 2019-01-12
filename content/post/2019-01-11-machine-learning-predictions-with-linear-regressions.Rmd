@@ -160,7 +160,6 @@ findLinearCombos(cars)
 Here we are advised to drop the *coupe* and *wagon* columns, which are the 15th and 18th features, respectively, because they are exact linear combinations of other features. Note that the division into a training part and a test part must be redone.
 
 ```{r}
-set.seed(623356)
 cars <- cars[,c(-15, -18)]
 cars_sampling_vector <- createDataPartition(cars$Price, p = 0.85, list = FALSE)
 cars_train <- cars[cars_sampling_vector,]
@@ -252,7 +251,7 @@ We can compute some figures manually, eg. the t-value and p-value of the MYCT va
 
 
 ```{r}
-q <- 0.037404 / 0.016382
+q <- 4.261e-02 / 1.652e-02
 q
 
 pt(q, df = 172, lower.tail = F) * 2
