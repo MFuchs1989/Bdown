@@ -550,8 +550,8 @@ compute_mse(machine_model2_predictions, machine_test$PRP)</code></pre>
 <pre><code>## [1] 2555.355</code></pre>
 <p>Here we cas see the imporvement of MSE:</p>
 <ul>
-<li>machine_model1: 2.425,2</li>
-<li>machine_model2: 2.120,98</li>
+<li>machine_model1: 2.814,05</li>
+<li>machine_model2: 2.555,36</li>
 </ul>
 </div>
 <div id="future-selection" class="section level1">
@@ -701,14 +701,14 @@ compute_mse(cars_model3_predictions, cars_test$Price)</code></pre>
 <p>Let’s compare the results with the previous models:</p>
 <p><strong>Machine dataset:</strong></p>
 <ul>
-<li>MSE machine_model1_predictions: 2.425,2</li>
-<li>MSE machine_model2_predictions: 2.120,98</li>
-<li>MSE machine_model3_predictions: 1.569,73</li>
+<li>MSE machine_model1_predictions: 2.814,05</li>
+<li>MSE machine_model2_predictions: 2.555,36</li>
+<li>MSE machine_model3_predictions: 2.700,02</li>
 </ul>
 <p><strong>Cars dataset:</strong></p>
 <ul>
-<li>MSE cars_model2_predictions: 7.180.150</li>
-<li>MSE cars_model3_predictions: 7.262.383</li>
+<li>MSE cars_model2_predictions: 6.572.315</li>
+<li>MSE cars_model3_predictions: 6.281.559</li>
 </ul>
 </div>
 <div id="regularization" class="section level1">
@@ -742,8 +742,8 @@ compute_mse(cars_lasso_predictions, cars_test$Price)</code></pre>
 <pre><code>## [1] 6491539</code></pre>
 <p>The lasso-model performs best. Here again an overview of the different cars model prediction MSEs:</p>
 <ul>
-<li>MSE cars_model2_predictions: 7.180.150</li>
-<li>MSE cars_model3_predictions: 7.262.383</li>
+<li>MSE cars_model2_predictions: 6.572.315</li>
+<li>MSE cars_model3_predictions: 6.281.559</li>
 <li>MSE cars_model_lasso_predictions: 7.173.818</li>
 </ul>
 </div>

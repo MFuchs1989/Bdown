@@ -438,8 +438,8 @@ compute_mse(machine_model2_predictions, machine_test$PRP)
 
 Here we cas see the imporvement of MSE:
 
-+ machine_model1: 2.425,2
-+ machine_model2: 2.120,98
++ machine_model1: 2.814,05
++ machine_model2: 2.555,36
 
 
 #9 Future selection
@@ -486,15 +486,15 @@ Let's compare the results with the previous models:
 
 **Machine dataset:**
 
-+ MSE machine_model1_predictions: 2.425,2
-+ MSE machine_model2_predictions: 2.120,98
-+ MSE machine_model3_predictions: 1.569,73
++ MSE machine_model1_predictions: 2.814,05
++ MSE machine_model2_predictions: 2.555,36
++ MSE machine_model3_predictions: 2.700,02
 
 
 **Cars dataset:**
 
-+ MSE cars_model2_predictions: 7.180.150
-+ MSE cars_model3_predictions: 7.262.383
++ MSE cars_model2_predictions: 6.572.315
++ MSE cars_model3_predictions: 6.281.559
 
 
 
@@ -550,8 +550,8 @@ compute_mse(cars_lasso_predictions, cars_test$Price)
 
 The lasso-model performs best. Here again an overview of the different cars model prediction MSEs:
 
-+ MSE cars_model2_predictions: 7.180.150
-+ MSE cars_model3_predictions: 7.262.383
++ MSE cars_model2_predictions: 6.572.315
++ MSE cars_model3_predictions: 6.281.559
 + MSE cars_model_lasso_predictions: 7.173.818
 
 
