@@ -494,7 +494,7 @@ sedan_r2 &lt;- compute_rsquared(sedan_model$fitted.values, cars_train$sedan)
 <pre class="r"><code>scatterplot(machine_model1$fitted.values, machine_model1$residuals, id = TRUE, xlab = &quot;Fitted Values&quot;, ylab = &quot;Residuals&quot;, main = &quot;Searching for outliers&quot;)</code></pre>
 <p><img src="/post/2019-01-11-machine-learning-predictions-with-linear-regressions_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
 <pre><code>## [1]   8 171</code></pre>
-<p>As we can see in the graphic line 172 is an outlier. Now we check what effect it has when we exclude line 172 from the training part.</p>
+<p>As we can see in the graphic line 171 is an outlier. Now we check what effect it has when we exclude line 171 from the training part.</p>
 <pre class="r"><code>machine_model2 &lt;- lm(PRP ~ ., data = machine_train[!(rownames(machine_train)) %in% c(171),])
 
 summary(machine_model2)</code></pre>

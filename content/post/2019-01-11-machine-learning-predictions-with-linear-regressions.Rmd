@@ -393,7 +393,7 @@ scatterplot(machine_model1$fitted.values, machine_model1$residuals, id = TRUE, x
 ```
 
 
-As we can see in the graphic line 172 is an outlier. Now we check what effect it has when we exclude line 172 from the training part.
+As we can see in the graphic line 171 is an outlier. Now we check what effect it has when we exclude line 171 from the training part.
 ```{r}
 machine_model2 <- lm(PRP ~ ., data = machine_train[!(rownames(machine_train)) %in% c(171),])
 
