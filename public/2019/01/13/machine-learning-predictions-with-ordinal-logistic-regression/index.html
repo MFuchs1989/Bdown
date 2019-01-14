@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.46" />
+
+
+<title>Machine Learning - Predictions with ordinal logistic regression - Michael Fuchs</title>
+<meta property="og:title" content="Machine Learning - Predictions with ordinal logistic regression - Michael Fuchs">
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdn.bootcss.com/highlight.js/9.11.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/MFuchs.png"
+         width="50"
+         height="50"
+         alt="MFuchs">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/MFuchs1989/Bdown">GitHub</a></li>
+    
+    <li><a href="https://www.linkedin.com/in/michael-fuchs-139172131/">LinkedIn</a></li>
+    
+    <li><a href="https://twitter.com/Stat_Michael">Twitter</a></li>
+    
+    <li><a href="https://www.xing.com/profile/Michael_Fuchs426/cv?sc_o=mxb_p">XING</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">5 min read</span>
+    
+
+    <h1 class="article-title">Machine Learning - Predictions with ordinal logistic regression</h1>
+
+    
+    <span class="article-date">2019/01/13</span>
+    
+
+    <div class="article-content">
+      <pre class="r"><code>library(tidyverse)
+library(ROCR)
+library(MASS)
+library(caret)
+library(nnet)</code></pre>
+<div id="table-of-content" class="section level1">
+<h1>Table of Content</h1>
+<ul>
+<li>1 Introduction</li>
+<li>2 Load and prepare the dataset</li>
+<li>3 Prepare a training and test set</li>
+<li>4 Some descriptive key figures</li>
+<li>5 Conclusion</li>
+</ul>
+</div>
+<div id="introduction" class="section level1">
+<h1>1 Introduction</h1>
+<p>In my last publication, <a href="https://michael-fuchs.netlify.com/2019/01/12/machine-learning-predictions-with-generalized-linear-models//">“Machine Learning - Predictions with Generalized Linear Models”</a>, the topic was discussed, how classifications can be made using generalized linear regressions. In the following, for example, a classification of an ordinal-scaled dependent variable shall be made.</p>
+<p>For this post the dataset <em>Wine+Quality</em> from the UCI- Machine Learning Repository platform <a href="http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/">“UCI”</a>) was used.</p>
+</div>
+<div id="load-and-prepare-the-dataset" class="section level1">
+<h1>2 Load and prepare the dataset</h1>
+<p>Under the link above, two CSV files are stored. One for red wines and one for white whines. For the following examination, both data sets are loaded and combined into one.</p>
+<pre class="r"><code>red &lt;- read.csv(url(&quot;http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv&quot;), sep = &quot;;&quot;)
+white &lt;- read.csv(url(&quot;http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv&quot;), sep = &quot;;&quot;)</code></pre>
+<pre class="r"><code>wine &lt;- rbind(red, white)
+glimpse(wine)</code></pre>
+<pre><code>## Observations: 6,497
+## Variables: 12
+## $ fixed.acidity        &lt;dbl&gt; 7.4, 7.8, 7.8, 11.2, 7.4, 7.4, 7.9, 7.3, ...
+## $ volatile.acidity     &lt;dbl&gt; 0.700, 0.880, 0.760, 0.280, 0.700, 0.660,...
+## $ citric.acid          &lt;dbl&gt; 0.00, 0.00, 0.04, 0.56, 0.00, 0.00, 0.06,...
+## $ residual.sugar       &lt;dbl&gt; 1.9, 2.6, 2.3, 1.9, 1.9, 1.8, 1.6, 1.2, 2...
+## $ chlorides            &lt;dbl&gt; 0.076, 0.098, 0.092, 0.075, 0.076, 0.075,...
+## $ free.sulfur.dioxide  &lt;dbl&gt; 11, 25, 15, 17, 11, 13, 15, 15, 9, 17, 15...
+## $ total.sulfur.dioxide &lt;dbl&gt; 34, 67, 54, 60, 34, 40, 59, 21, 18, 102, ...
+## $ density              &lt;dbl&gt; 0.9978, 0.9968, 0.9970, 0.9980, 0.9978, 0...
+## $ pH                   &lt;dbl&gt; 3.51, 3.20, 3.26, 3.16, 3.51, 3.51, 3.30,...
+## $ sulphates            &lt;dbl&gt; 0.56, 0.68, 0.65, 0.58, 0.56, 0.56, 0.46,...
+## $ alcohol              &lt;dbl&gt; 9.4, 9.8, 9.8, 9.8, 9.4, 9.4, 9.4, 10.0, ...
+## $ quality              &lt;int&gt; 5, 5, 5, 6, 5, 5, 5, 7, 7, 5, 5, 5, 5, 5,...</code></pre>
+<p>For simplicity I will contract the original output variable (<em>quality</em>) to a three point scale from 0 to 2.</p>
+<pre class="r"><code>wine$quality &lt;- factor(ifelse(wine$quality &lt; 5, 0, ifelse(wine$quality &gt; 6, 2, 1)))</code></pre>
+</div>
+<div id="prepare-a-training-and-test-set" class="section level1">
+<h1>3 Prepare a training and test set</h1>
+<pre class="r"><code>set.seed(7644)
+wine_sampling_vector &lt;- createDataPartition(wine$quality, p = 0.80, list = FALSE)
+wine_train &lt;- wine[wine_sampling_vector,]
+wine_test &lt;- wine[-wine_sampling_vector,]
+
+
+wine_model &lt;- polr(quality ~ ., data = wine_train, Hess = T)
+summary(wine_model)</code></pre>
+<pre><code>## Call:
+## polr(formula = quality ~ ., data = wine_train, Hess = T)
+## 
+## Coefficients:
+##                           Value Std. Error   t value
+## fixed.acidity         2.348e-01   0.037587    6.2462
+## volatile.acidity     -3.212e+00   0.298033  -10.7778
+## citric.acid          -1.694e-01   0.326327   -0.5191
+## residual.sugar        1.330e-01   0.009488   14.0204
+## chlorides            -1.843e+00   1.363609   -1.3518
+## free.sulfur.dioxide   1.514e-02   0.002996    5.0523
+## total.sulfur.dioxide -5.786e-03   0.001078   -5.3674
+## density              -1.804e+02   0.531508 -339.3469
+## pH                    1.355e+00   0.258374    5.2457
+## sulphates             2.111e+00   0.264873    7.9694
+## alcohol               6.359e-01   0.036506   17.4192
+## 
+## Intercepts:
+##     Value     Std. Error t value  
+## 0|1 -170.1699    0.5449  -312.2988
+## 1|2 -164.5075    0.5674  -289.9221
+## 
+## Residual Deviance: 5668.121 
+## AIC: 5694.121</code></pre>
+<p>Our model summary shows us that we have three output classes and we have two intercepts. Let’s count the the number of samples by the output score and then express these as relative frequencies.</p>
+<pre class="r"><code>prop.table(table(wine$quality))</code></pre>
+<pre><code>## 
+##          0          1          2 
+## 0.03786363 0.76558412 0.19655225</code></pre>
+<p>Class 1, which corresponds to average wines, is by far the most requent. In fact, a simple baseline model that always predicts this category would be correct 76,56% of the time.</p>
+</div>
+<div id="some-descriptive-key-figures" class="section level1">
+<h1>4 Some descriptive key figures</h1>
+<p>Now, let’s look at the fit on the training data and the corresponding confusion matrix.</p>
+<pre class="r"><code>wine_predictions &lt;- predict(wine_model, wine_train)
+mean(wine_predictions == wine_train$quality)</code></pre>
+<pre><code>## [1] 0.7814964</code></pre>
+<pre class="r"><code>table(predicted = wine_predictions,actual = wine_train$quality)</code></pre>
+<pre><code>##          actual
+## predicted    0    1    2
+##         0    0    0    0
+##         1  193 3834  793
+##         2    4  146  229</code></pre>
+<p>Our model performs only marginally better on the training data than our baseline model. We can see why this is the case: it predicts the average class (1) very often.</p>
+<p>Now we want to try this again with the test set.</p>
+<pre class="r"><code>wine_test_predictions &lt;- predict(wine_model, wine_test)
+mean(wine_test_predictions == wine_test$quality)</code></pre>
+<pre><code>## [1] 0.779661</code></pre>
+<pre class="r"><code>table(predicted = wine_test_predictions, actual = wine_test$quality)</code></pre>
+<pre><code>##          actual
+## predicted   0   1   2
+##         0   0   2   0
+##         1  49 959 202
+##         2   0  33  53</code></pre>
+<p>As you can see, we get a pretty much identical situation. It seems that our model is not a particularly good choise for this dataset. Probably we have to check if is wheather the proportional odds assumption is valid. One simple test that is easy to do, however, is to train a second model using multinomial logistic regression. Then we can compare the AIC value of our two models.</p>
+<pre class="r"><code>wine_model2 &lt;- multinom(quality ~ ., data = wine_train, maxit = 1000)</code></pre>
+<pre><code>## # weights:  39 (24 variable)
+## initial  value 5711.685289 
+## iter  10 value 3616.269493
+## iter  20 value 2797.070604
+## iter  30 value 2782.640097
+## iter  40 value 2778.448036
+## iter  50 value 2767.613495
+## iter  50 value 2767.613493
+## final  value 2767.613493 
+## converged</code></pre>
+<pre class="r"><code>wine_predictions2 &lt;- predict(wine_model2, wine_test)
+mean(wine_predictions2 == wine_test$quality)</code></pre>
+<pre><code>## [1] 0.7858243</code></pre>
+<pre class="r"><code>table(predicted = wine_predictions2, actual = wine_test$quality)</code></pre>
+<pre><code>##          actual
+## predicted   0   1   2
+##         0   1   1   0
+##         1  48 949 185
+##         2   0  44  70</code></pre>
+<p>Now we have to check their AIC values:</p>
+<pre class="r"><code>AIC(wine_model)</code></pre>
+<pre><code>## [1] 5694.121</code></pre>
+<pre class="r"><code>AIC(wine_model2)</code></pre>
+<pre><code>## [1] 5583.227</code></pre>
+</div>
+<div id="conclusion" class="section level1">
+<h1>5 Conclusion</h1>
+<p>The AIC is lower in the multinomial logistic regression model, which suggests that we might be better of working with that model.</p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/r.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.11.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

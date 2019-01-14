@@ -6,10 +6,19 @@
     <description>Recent content in R on Michael Fuchs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 12 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 13 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Machine Learning - Predictions with ordinal logistic regression</title>
+      <link>/2019/01/13/machine-learning-predictions-with-ordinal-logistic-regression/</link>
+      <pubDate>Sun, 13 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/01/13/machine-learning-predictions-with-ordinal-logistic-regression/</guid>
+      <description>library(tidyverse)library(ROCR)library(MASS)library(caret)library(nnet)Table of Content1 Introduction2 Load and prepare the dataset3 Prepare a training and test set4 Some descriptive key figures5 Conclusion1 IntroductionIn my last publication, “Machine Learning - Predictions with Generalized Linear Models”, the topic was discussed, how classifications can be made using generalized linear regressions. In the following, for example, a classification of an ordinal-scaled dependent variable shall be made.</description>
+    </item>
     
     <item>
       <title>Machine Learning - Predictions with Generalized Linear Models</title>

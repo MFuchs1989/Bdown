@@ -1,0 +1,153 @@
+---
+title: Machine Learning - Predictions with ordinal logistic regression
+author: Michael Fuchs
+date: '2019-01-13'
+slug: machine-learning-predictions-with-ordinal-logistic-regression
+categories:
+  - R
+tags:
+  - R Markdown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r results='hide', message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ROCR)
+library(MASS)
+library(caret)
+library(nnet)
+```
+
+
+#Table of Content
+
++ 1 Introduction
++ 2 Load and prepare the dataset
++ 3 Prepare a training and test set
++ 4 Some descriptive key figures
++ 5 Conclusion
+
+
+#1 Introduction
+
+In my last publication, ["Machine Learning - Predictions with Generalized Linear Models"](https://michael-fuchs.netlify.com/2019/01/12/machine-learning-predictions-with-generalized-linear-models//), the topic was discussed, how classifications can be made using generalized linear regressions. In the following, for example, a classification of an ordinal-scaled dependent variable shall be made.
+
+For this post the dataset *Wine+Quality* from the UCI- Machine Learning Repository platform ["UCI"](http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/)) was used.
+
+
+#2 Load and prepare the dataset
+
+Under the link above, two CSV files are stored. One for red wines and one for white whines. For the following examination, both data sets are loaded and combined into one.
+
+```{r}
+red <- read.csv(url("http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv"), sep = ";")
+white <- read.csv(url("http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv"), sep = ";")
+```
+
+
+
+```{r}
+wine <- rbind(red, white)
+glimpse(wine)
+```
+
+For simplicity I will contract the original output variable (*quality*) to a three point scale from 0 to 2.
+
+```{r}
+wine$quality <- factor(ifelse(wine$quality < 5, 0, ifelse(wine$quality > 6, 2, 1)))
+```
+
+
+#3 Prepare a training and test set
+
+
+```{r}
+set.seed(7644)
+wine_sampling_vector <- createDataPartition(wine$quality, p = 0.80, list = FALSE)
+wine_train <- wine[wine_sampling_vector,]
+wine_test <- wine[-wine_sampling_vector,]
+
+
+wine_model <- polr(quality ~ ., data = wine_train, Hess = T)
+summary(wine_model)
+```
+
+Our model summary shows us that we have three output classes and we have two intercepts. Let's count the the number of samples by the output score and then express these as relative frequencies.
+
+```{r}
+prop.table(table(wine$quality))
+```
+
+Class 1, which corresponds to average wines, is by far the most requent. In fact, a simple baseline model that always predicts this category would be correct 76,56% of the time. 
+
+
+
+#4 Some descriptive key figures
+
+Now, let's look at the fit on the training data and the corresponding confusion matrix.
+
+
+```{r}
+wine_predictions <- predict(wine_model, wine_train)
+mean(wine_predictions == wine_train$quality)
+
+table(predicted = wine_predictions,actual = wine_train$quality)
+```
+
+Our model performs only marginally better on the training data than our baseline model. We can see why this is the case: it predicts the average class (1) very often. 
+
+Now we want to try this again with the test set.
+
+
+```{r}
+wine_test_predictions <- predict(wine_model, wine_test)
+mean(wine_test_predictions == wine_test$quality)
+
+
+table(predicted = wine_test_predictions, actual = wine_test$quality)
+```
+
+As you can see, we get a pretty much identical situation. It seems that our model is not a particularly good choise for this dataset. Probably we have to check if is wheather the proportional odds assumption is valid. One simple test that is easy to do, however, is to train a second model using multinomial logistic regression. Then we can compare the AIC value of our two models.
+
+
+```{r}
+wine_model2 <- multinom(quality ~ ., data = wine_train, maxit = 1000)
+wine_predictions2 <- predict(wine_model2, wine_test)
+mean(wine_predictions2 == wine_test$quality)
+
+table(predicted = wine_predictions2, actual = wine_test$quality)
+```
+
+
+Now we have to check their AIC values:
+
+```{r}
+AIC(wine_model)
+AIC(wine_model2)
+```
+
+
+#5 Conclusion
+
+The AIC is lower in the multinomial logistic regression model, which suggests that we might be better of working with that model.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
