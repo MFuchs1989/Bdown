@@ -164,7 +164,7 @@ summary(simple.reg)
 
 Wir erhalten ein höchst signifikantes Ergebnis von p < .001 was bedeutet, dass die Lebenserwartung einen Einfluss auf den Glücklichkeitsgrad hat. 
 
-Der standartistierte Regressionskoeffizient Beta kann mit der *lm.beta* Funktion berechnet werden. 
+Der standardisierte Regressionskoeffizient Beta kann mit der *lm.beta* Funktion berechnet werden. 
 ```{r}
 lm.beta(simple.reg)
 ```
