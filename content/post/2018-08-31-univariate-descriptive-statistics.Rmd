@@ -270,13 +270,13 @@ norm(world$Birthrate)
 
 Interpretation:
 
-Ein skewness Wert größer Null deutet auf eine rechtsschiefe Verteilung hin.
-Ein skewness Wert kleiner Null deutet auf eine linksschiefe Verteilung hin.
-Ein skewness Wert von Null bedeutet, dass die Verteilung symmetrisch ist.
++ Ein Schiefe-Wert größer Null deutet auf eine rechtsschiefe bzw. linkssteile Verteilung hin.
++ Ein Schiefe-Wert kleiner Null deutet auf eine linksschiefe bzw. rechtssteile Verteilung hin.
++ Ein Schiefe-Wert von Null bedeutet, dass die Verteilung symmetrisch ist.
 
-Ein kurtosis Wert größer Null deutet auf eine spitze Verteilung hin.
-Ein kurtosis Wert kleiner Null deutet auf eine flache Verteilung hin.
-Ein kurtosis Wert von Null deutet auf eine Normalverteilung hin.
++ Ein Kurtosis-Wert größer Null deutet auf eine spitze Verteilung (leptokurtisch) hin.
++ Ein Kurtosis-Wert kleiner Null deutet auf eine flache Verteilung (platykurtisch) hin.
++ Ein Kurtosis-Wert von Null deutet auf eine Normalverteilung hin.
 
 
 
