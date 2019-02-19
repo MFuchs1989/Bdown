@@ -40,7 +40,8 @@ tags:
 <pre class="r"><code>library(ppcor)
 library(tidyverse)
 library(psych)
-library(car)</code></pre>
+library(car)
+library(QuantPsyc)</code></pre>
 <pre class="r"><code>happiness.report &lt;- read_csv(&quot;World_Happiness_Report.csv&quot;)</code></pre>
 </div>
 <div id="preparation" class="section level1">
@@ -148,11 +149,15 @@ summary(simple.reg) </code></pre>
 ## F-statistic: 240.8 on 1 and 153 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><strong>Call</strong> zeigt nochmal die Modellgleichung auf.</p>
 <p><strong>Residuals</strong> beinhaltet 5 statistische Kennwerte für die Residuen.</p>
-<p><strong>Coefficients</strong>. In diesem Abschnitt wird für jeden Regressionskoeffizienten (<em>Estimate</em>) der Standardfehler (<em>Std. Error</em>), die empirische Prüfgröße (<em>t value</em>) und der p-Wert (<em>Pr(&gt;|t|)</em>) angegeben.</p>
+<p><strong>Coefficients</strong>. In diesem Abschnitt wird für jeden Regressionskoeffizienten b (<em>Estimate</em>) der Standardfehler (<em>Std. Error</em>), die empirische Prüfgröße (<em>t value</em>) und der p-Wert (<em>Pr(&gt;|t|)</em>) angegeben.</p>
 <p><strong>Residual standard error</strong> ist der Standardschätzfehler. Dieser sagt uns, um wie viele Einheiten der abhängigen Variablen wir uns mit der Regression im Durchschnitt verschätzen.</p>
 <p><strong>Degrees of freedom</strong> sind die Freiheitsgrade. Sie sind definiert mit <em>df=N-k-1</em>, wobei N die Stichprobengröße und k die Anzahl der Prädiktoren ist.</p>
 <p><strong>Multiple R-squared</strong>. Der Determinationskoeffizient R<sup>2</sup> mit dem adjustierten R<sup>2</sup> sowie dem dazugehörigen F-Test.</p>
 <p>Wir erhalten ein höchst signifikantes Ergebnis von p &lt; .001 was bedeutet, dass die Lebenserwartung einen Einfluss auf den Glücklichkeitsgrad hat.</p>
+<p>Der standartistierte Regressionskoeffizient Beta kann mit der <em>lm.beta</em> Funktion berechnet werden.</p>
+<pre class="r"><code>lm.beta(simple.reg)</code></pre>
+<pre><code>## happiness$Life.exp 
+##          0.7819506</code></pre>
 </div>
 <div id="confidence-interval" class="section level2">
 <h2>3.4 Confidence interval</h2>
@@ -354,7 +359,7 @@ voll-klein</code></pre>
 <p>Die ersten vier Annahmen können in R mit verschiedenen Diagrammen graphisch geprüft werden. Dies soll exemplarisch mit der multiplen Regression (Punkt 4) durchgeführt werden.</p>
 <pre class="r"><code>par(mfrow= c(2,2))
 plot(mult.reg)</code></pre>
-<p><img src="/post/2018-09-21-regression-analysis_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="/post/2018-09-21-regression-analysis_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p><strong>Korrekte Spezifikation des Modells</strong></p>
 <p>Hier wird der Frage nachgegangen, ob das Modell alle relevanten und keine überflüssigen Prädiktoren enthält. Das Diagramm “Residuals vs Fitted” (links oben) zeigt die vorhergesagten Werte (<em>fitted values</em>) auf der x-Achse und die unstandardisierten Residuen (<em>residuals</em>) auf der y-Achse. Die rote Linie ist die Lowess-Linie. Dieser Grafik kann entnommen werden, ob das Modell korrekt spezifiziert wurde. Dies ist der Fall, wenn die Werte möglichst unsystematisch verteilt sind und die rote Lowess-Linie möglichst parallel zur x-Achse verläuft. Das Diagramm gibt allerdings keine Aussage darüber, ob wichtige Kontrollvariablen im Modell fehlen.</p>
 <p><strong>Normalverteilung der Residuen</strong></p>

@@ -46,6 +46,7 @@ library(ppcor)
 library(tidyverse)
 library(psych)
 library(car)
+library(QuantPsyc)
 ```
 ```{r results='hide', message=FALSE, warning=FALSE}
 happiness.report <- read_csv("World_Happiness_Report.csv")
@@ -152,7 +153,7 @@ summary(simple.reg)
 
 **Residuals** beinhaltet 5 statistische Kennwerte für die Residuen. 
 
-**Coefficients**. In diesem Abschnitt wird für jeden Regressionskoeffizienten (*Estimate*) der Standardfehler (*Std. Error*), die empirische Prüfgröße (*t value*) und der p-Wert (*Pr(>|t|)*) angegeben.
+**Coefficients**. In diesem Abschnitt wird für jeden Regressionskoeffizienten b (*Estimate*) der Standardfehler (*Std. Error*), die empirische Prüfgröße (*t value*) und der p-Wert (*Pr(>|t|)*) angegeben.
 
 **Residual standard error** ist der Standardschätzfehler. Dieser sagt uns, um wie viele Einheiten der abhängigen Variablen wir uns mit der Regression im Durchschnitt verschätzen. 
 
@@ -163,6 +164,10 @@ summary(simple.reg)
 
 Wir erhalten ein höchst signifikantes Ergebnis von p < .001 was bedeutet, dass die Lebenserwartung einen Einfluss auf den Glücklichkeitsgrad hat. 
 
+Der standartistierte Regressionskoeffizient Beta kann mit der *lm.beta* Funktion berechnet werden. 
+```{r}
+lm.beta(simple.reg)
+```
 
 ##3.4 Confidence interval
 
