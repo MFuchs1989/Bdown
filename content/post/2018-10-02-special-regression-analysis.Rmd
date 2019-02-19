@@ -121,8 +121,11 @@ affairs$affairs.normal <- as.numeric(affairs$affairs)
 
 m.mod <- mediate(affairs.normal ~ age.cen + (education.cen), data = affairs)
 mediate(y = affairs.normal ~ age.cen + (education.cen), data = affairs)
-summary(mediate(y = affairs.normal ~ age.cen + (education.cen), data = affairs))
 ```
+```{r}
+summary(m.mod)
+```
+
 
 **Ergebnisse:**
 
@@ -132,9 +135,9 @@ summary(mediate(y = affairs.normal ~ age.cen + (education.cen), data = affairs))
 + Direkter Effekt age -> affairs: b = 0,03, se = 0,01, p = .018
 + Indirekter Effekt age -> affairs: b = 0, 95% KI = [-0,01 - 0]
 
-Der Sobel Test überprüft anschließend noch den indirekten Effekt auf signifikanz.
+Der Sobel Test überprüft anschließend noch den indirekten Effekt auf Signifikanz. Wichtig bei der mediation.test() Funktion ist die Reihenfolge: Mediatorvariable, Prädiktor, Kriterium.
 ```{r}
-mediation.test(education.cen, age.cen, affairs.normal)
+mediation.test(affairs$education.cen, affairs$age.cen, affairs$affairs.normal)
 ```
 
 Mit p = .707 liegt keine signifikante Mediation vor.
