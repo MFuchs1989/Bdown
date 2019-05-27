@@ -77,8 +77,8 @@ Mit dem Befehl filter() bekommen wir von R genau definierte Zeilen aus dem zugru
 + '<='
 + '>='
 
-+ "&"" heißt "und"
-+ "|"" heißt "oder"
++ "&" heißt "und"
++ "|" heißt "oder"
 
 Als anschauliches Beispiel wollen wir nun wissen, wie viele deutsche Olympiateilnahmen es bisher gab.
 ```{r}
