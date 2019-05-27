@@ -358,7 +358,7 @@ Die Berechnung der Toleranz basiert auf dem VIF und erfolgt mit folgendem modifi
 1/vif(mult.reg)
 ```
 
-Multikollinearität ist also für beide Prädiktoren gegeben. 
+Multikollinearität ist also für beide Prädiktoren nicht gegeben. 
 
 
 **Unabhängigkeit der Residuen**
