@@ -33,7 +33,7 @@ flight.head()
 
 
 
-![](/post/2019-08-12-python-test_files/Michael Fuchs.jpg){width=200px height=100px}
+![](https://images.app.goo.gl/2WSMpjodq7juiR1P8)
 
 
 
