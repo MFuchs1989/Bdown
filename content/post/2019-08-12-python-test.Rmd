@@ -1,12 +1,11 @@
 ---
-title: Python Test
-author: Michael Fuchs
+title: "Python Test"
+author: "Michael Fuchs"
 date: '2019-08-12'
+output: pdf_document
 slug: python-test
-categories:
-  - R
-tags:
-  - R Markdown
+tags: R Markdown
+categories: R
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -33,7 +32,8 @@ flight.head()
 ```
 
 
-![My picture](static/Post1.png)
+![My](static/img/Post1.png)
+
 
 
 
