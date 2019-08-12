@@ -33,9 +33,4 @@ flight.head()
 
 
 
-![](https://images.app.goo.gl/2WSMpjodq7juiR1P8)
-
-
-
-
 
