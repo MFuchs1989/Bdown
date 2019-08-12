@@ -18,7 +18,8 @@
       
       <guid>/2019/08/12/python-test/</guid>
       <description>Hi das ist ein Python Test …
-library(tidyverse)red &amp;lt;- read.csv(url(&amp;quot;http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv&amp;quot;), sep = &amp;quot;;&amp;quot;)flight.head()</description>
+library(tidyverse)red &amp;lt;- read.csv(url(&amp;quot;http://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-red.csv&amp;quot;), sep = &amp;quot;;&amp;quot;)flight.head()My picture
+</description>
     </item>
     
     <item>

@@ -33,6 +33,11 @@ flight.head()
 ```
 
 
+![My picture](static/Post1.png)
+
+
+
+
 
 
 
