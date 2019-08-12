@@ -32,7 +32,8 @@ red <- read.csv(url("http://archive.ics.uci.edu/ml/machine-learning-databases/wi
 flight.head()
 ```
 
-![](pictures/Post1/Post1.jpg)
+
+
 
 
 
