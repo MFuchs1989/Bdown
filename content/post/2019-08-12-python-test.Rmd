@@ -32,14 +32,8 @@ flight.head()
 ```
 
 
-![My](static/img/Post1.png)
 
-
-
-
-
-
-
+![](/post/2019-08-12-python-test_files/Michael Fuchs.jpg){width=200px height=100px}
 
 
 
