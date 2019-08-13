@@ -34,16 +34,6 @@ flight.head()
 
 
 
-![hi](static/Post1.png)
-
-
-
-
-![alt-Text-for-figure](C:/Users/Michi/Desktop/LearnPython/Post1.png)
-
-
-
-
 
 
 ![](/post/2019-08-12-python-test_files/Post1.png)
