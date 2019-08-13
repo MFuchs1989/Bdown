@@ -112,7 +112,9 @@ Both Linear Discriminant Analysis and Principal Component Analysis are linear tr
 
 
 
+# Source
 
+Burger, S. V. (2018). Introduction to Machine Learning with R: Rigorous Mathematical Analysis. " O'Reilly Media, Inc.".
 
 
 

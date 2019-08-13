@@ -115,5 +115,7 @@ Principal component analysis (PCA) and factor analysis factor analysis are simil
 Principal component analysis is used to reduce the data to a smaller number of components. Factor analysis is used to determine the constructs underlying the data.
 
 
+# Source
 
+Burger, S. V. (2018). Introduction to Machine Learning with R: Rigorous Mathematical Analysis. " O'Reilly Media, Inc.".
 
