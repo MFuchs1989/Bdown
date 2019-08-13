@@ -134,3 +134,7 @@ RMSE = 0.37
 This should be a brief demonstration of how regression models can be trained and their predictive power improved.
 
 
+
+# Source
+
+Burger, S. V. (2018). Introduction to Machine Learning with R: Rigorous Mathematical Analysis. " O'Reilly Media, Inc.".
