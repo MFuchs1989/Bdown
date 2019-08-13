@@ -258,7 +258,9 @@ Das untere Limit liegt bei 14,55% erklärten Varianzanteil und das obere Limit b
 In diesem Post wurde die Funktionsweise der zweifaktoriellen Varianzanalyse dargelegt. Es wurden auf die Unterschiede zur ANOVA eingegangen sowie auf die graphische Darstellung von Haupt- und Interaktionseffekte. 
 
 
+# Source
 
+Luhmann, M. (2011). R für Einsteiger.
 
 
 

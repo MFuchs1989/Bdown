@@ -337,7 +337,9 @@ In diesem Post wurden verschiedene Möglichkeiten vorgestellt, einzelne Variable
 
 
 
+# Source
 
+Luhmann, M. (2011). R für Einsteiger.
 
 
 

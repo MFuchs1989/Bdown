@@ -339,6 +339,8 @@ Wir sehen, wenn wir die Outlier nicht weiter berücksichtigen, gibt es doch eine
 Wie wir im letzten Abschnitt gesehen haben, ist es zwingend notwendig nicht nur die Voraussetzungen für die statistischen Tests zu beachten, sondern auch die Verteilung der Variablen. Dies kann im Zweifel einen erheblichen Unterschied bei den Ergebnissen und den daraus gezogenen Schlussfolgerungen machen. 
 
 
+# Source
 
+Luhmann, M. (2011). R für Einsteiger.
 
 

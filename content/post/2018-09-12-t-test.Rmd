@@ -256,7 +256,9 @@ Um eine Teststärke von 0,8 bei einem Signifikanzlevel von 0,05 und einer Effekt
 Der Vergleich von Mittelwerten zweier Gruppen kommt in der Statistik sehr häufig vor. In diesem Post wurde gezeigt, wie ein t-Test oder Welch-Test für unabhängige Stichproben durchgeführt wird. Es wurde auf die Voraussetzungen des t-Tests eingegangen sowie die Berechnung der Effekt- und der Teststärke. War die Teststärke nicht ausreichend, wurde im Nachgang die erforderte Gruppengröße berechnet. 
 
 
+# Source
 
+Luhmann, M. (2011). R für Einsteiger.
 
 
 

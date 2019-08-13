@@ -250,7 +250,9 @@ cor(Automobile_data$cylinders.numeric, Automobile_data$Power.grouped.num, use = 
 In diesem Post wurden mehrere Möglichkeiten gezeigt, wie der Zusammenhang bivariater Variablen, je nach Skalenniveau, beschrieben werden kann. 
 
 
+# Source
 
+Luhmann, M. (2011). R für Einsteiger.
 
 
 
