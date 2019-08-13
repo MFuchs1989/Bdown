@@ -2,7 +2,8 @@
 title: "Python Test"
 author: "Michael Fuchs"
 date: '2019-08-12'
-output: pdf_document
+output:
+  html_document: default
 slug: python-test
 tags: R Markdown
 categories: R
@@ -30,6 +31,25 @@ red <- read.csv(url("http://archive.ics.uci.edu/ml/machine-learning-databases/wi
 ```{r, eval=F, echo=T}
 flight.head()
 ```
+
+
+
+![hi](static/Post1.png)
+
+
+
+
+![alt-Text-for-figure](C:/Users/Michi/Desktop/LearnPython/Post1.png)
+
+
+
+
+
+
+![](/post/2019-08-12-python-test_files/Post1.png)
+
+
+
 
 
 
