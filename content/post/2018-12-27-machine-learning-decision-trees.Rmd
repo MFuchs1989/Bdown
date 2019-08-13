@@ -227,4 +227,6 @@ Due to their structure, decision trees are easy to understand, interpret and vis
 On the other hand, too complex trees can be created that do not generalize the data well. This is called over-fitting. Small variations in the data can also make the trees unstable, creating a tree that does not solve the problem. This phenomenon is called variance.
 
 
+# Source
 
+Burger, S. V. (2018). Introduction to Machine Learning with R: Rigorous Mathematical Analysis. " O'Reilly Media, Inc.".

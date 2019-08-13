@@ -102,7 +102,9 @@ By selecting a suitable complexity, one obtains a model which can predict the da
 
 
 
+# Source
 
+Burger, S. V. (2018). Introduction to Machine Learning with R: Rigorous Mathematical Analysis. " O'Reilly Media, Inc.".
 
 
 

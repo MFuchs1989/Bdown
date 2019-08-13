@@ -112,11 +112,11 @@ text(fit3, use.n = TRUE, all=TRUE, cex=.8)</code></pre>
 <p>You can extract all these values programmatically from the model’s <em>cptable</em>, as follows:</p>
 <pre class="r"><code>fit3$cptable</code></pre>
 <pre><code>##           CP nsplit rel error    xerror       xstd
-## 1 0.62288527      0 1.0000000 1.0265666 0.17567028
-## 2 0.13206061      1 0.3771147 0.5359849 0.10579037
-## 3 0.02544094      2 0.2450541 0.3733914 0.08334338
-## 4 0.01772069      3 0.2196132 0.3880904 0.08375941
-## 5 0.01000000      4 0.2018925 0.3714978 0.08352939</code></pre>
+## 1 0.62288527      0 1.0000000 1.0295681 0.17828009
+## 2 0.13206061      1 0.3771147 0.5311535 0.10538275
+## 3 0.02544094      2 0.2450541 0.3769875 0.08448195
+## 4 0.01772069      3 0.2196132 0.3727303 0.08512904
+## 5 0.01000000      4 0.2018925 0.3498613 0.07613958</code></pre>
 <p>You can see that the error is minimized at tree size 3. Now let’s prune the previously created tree.</p>
 <pre class="r"><code>fit3.pruned &lt;- prune(fit3, cp = fit3$cptable[which.min(fit3$cptable[,&quot;xerror&quot;]), &quot;CP&quot;])</code></pre>
 <pre class="r"><code>par(mfrow = c(1, 2))
@@ -187,4 +187,8 @@ plot(fit7)</code></pre>
 <p>Advantages and disadvantages of decision trees:</p>
 <p>Due to their structure, decision trees are easy to understand, interpret and visualize. In doing so, a variable check or feature selection is implicitly performed. Both numerical and non-numerical data can be processed simultaneously relatively little effort on the part of the user for the data preparation requires.</p>
 <p>On the other hand, too complex trees can be created that do not generalize the data well. This is called over-fitting. Small variations in the data can also make the trees unstable, creating a tree that does not solve the problem. This phenomenon is called variance.</p>
+</div>
+<div id="source" class="section level1">
+<h1>Source</h1>
+<p>Burger, S. V. (2018). Introduction to Machine Learning with R: Rigorous Mathematical Analysis. &quot; O’Reilly Media, Inc.“.</p>
 </div>
