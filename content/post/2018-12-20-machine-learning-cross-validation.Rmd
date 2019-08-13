@@ -109,3 +109,7 @@ mean(errors[2:11])
 
 In this case, we can see that cross-validation (RMSE: 10.01) is worse than simple sampling (RMSE: 8.45).
 
+
+# Source
+
+Burger, S. V. (2018). Introduction to Machine Learning with R: Rigorous Mathematical Analysis. " O'Reilly Media, Inc.".
