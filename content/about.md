@@ -7,7 +7,7 @@ date: "2016-05-05T21:48:51-07:00"
 <img src = "/post/MFuchs.png", width = "600", height = "800">
 
 
-R enthusiastic !
+R and Python enthusiastic !
 
 Always hungry for more and deeper knowledge..
 
