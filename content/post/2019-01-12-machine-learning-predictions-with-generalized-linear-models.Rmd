@@ -314,6 +314,9 @@ As we can see, a threshold of 0.35 will satisfy our requirements.
 We have seen how it is possible to make classifications with a logistic regression and to increase the predictive accuracy of this models.
 
 
+# Source 
+
+Miller, J. D., & Forte, R. M. (2017). Mastering Predictive Analytics with R. Packt Publishing Ltd.
 
 
 

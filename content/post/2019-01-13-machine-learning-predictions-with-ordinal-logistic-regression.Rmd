@@ -137,6 +137,9 @@ The AIC is lower in the multinomial logistic regression model, which suggests th
 
 
 
+# Source 
+
+Miller, J. D., & Forte, R. M. (2017). Mastering Predictive Analytics with R. Packt Publishing Ltd.
 
 
 
