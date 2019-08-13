@@ -90,7 +90,9 @@ Fällt das Kronabachs Alpha bei der Itemanalyse nicht gut aus (Werte unter 0,7),
 
 
 
+# Source
 
+Luhmann, M. (2011). R für Einsteiger.
 
 
 

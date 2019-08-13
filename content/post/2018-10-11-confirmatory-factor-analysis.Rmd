@@ -95,3 +95,7 @@ Bei der ["exploratorischen Faktorenanalyse"](https://michael-fuchs.netlify.com/2
 
 Bei der konfirmatorischen Faktorenanalyse existiert hingegen schon eine konkrete Vorstellung über die mögliche Anzahl an Faktoren/latente Variablen. Mittels der konfirmatorischen Faktorenanalyse soll nun die vorgegebene Faktorenstruktur auf ihre Konsistenz mit den vorhandenen Daten ermittelt werden. Es handelt sich um ein strukturüberprüfendes Verfahren.
 
+
+# Source
+
+Luhmann, M. (2011). R für Einsteiger.

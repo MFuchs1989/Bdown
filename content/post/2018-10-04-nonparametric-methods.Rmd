@@ -150,7 +150,9 @@ Die Prüfgröße des Kruskal-Wallis-Test ist chi^2^ verteilt. Wir erhalten ein s
 Zwar kommt es bei einer repräsentativen Studie eher selten dazu, dass die unabhängige Variable nicht normalverteilt ist bzw. die Stichprobengröße (pro Gruppe!) unter 30 fällt aber streng genommen ist eine Variable, die durch die Verwendung einer Likert-Skala erhoben wurde, nicht intervallskaliert. Demnach müssten, bei Verwendung solcher Variablen, nonparametrische Verfahren eingesetzt werden.   
 
 
+# Source
 
+Luhmann, M. (2011). R für Einsteiger.
 
 
 
