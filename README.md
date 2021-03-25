@@ -1,6 +1,6 @@
 # Bdown
 
-This is a blog post using R (R-Studio).
+This is a collection of blog posts written in R.
 URL: https://michael-fuchs.netlify.com/
 
 Main topics are:
