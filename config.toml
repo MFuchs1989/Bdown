@@ -37,6 +37,9 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     MathJaxCDN = "//cdn.bootcss.com"
     MathJaxVersion = "2.7.1"
 
+    # path to the favicon, under "static"
+    favicon = "MFuchs.ico"
+
     [params.logo]
     url = "MFuchs.png"
     width = 50
