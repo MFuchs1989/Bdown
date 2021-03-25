@@ -19,14 +19,11 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     name = "LinkedIn"
     url = "https://www.linkedin.com/in/michael-fuchs-139172131/"
 [[menu.main]]
-    name = "XING"
-    url = "https://www.xing.com/profile/Michael_Fuchs426/cv?sc_o=mxb_p"
+    name = "Python-Blog"
+    url = "https://michael-fuchs-python.netlify.app/"
 [[menu.main]]
-    name = "Twitter"
-    url = "https://twitter.com/Stat_Michael"
-[[menu.main]]
-    name = "zum Python-Blog"
-    url = "https://michael-fuchs-python.netlify.com/"
+    name = "SQL-Blog"
+    url = "https://michael-fuchs-sql.netlify.app/"
 
 [params]
     description = "A website built through Hugo and blogdown."
